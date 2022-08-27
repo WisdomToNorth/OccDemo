@@ -13,7 +13,7 @@ public:
         double dr_ms = std::chrono::duration<double, std::micro>(t2 - t1).count() / 1000;
         if (cout_)
         {
-            std::cout << "time from start: " << dr_ms << std::endl;
+            std::cout << "time from start: " << dr_ms << "ms\n" << std::endl;
         }
         return dr_ms;
     }
@@ -24,7 +24,7 @@ public:
         t2 = t3;
         if (cout_)
         {
-            std::cout << "time from last: " << dr_ms << std::endl;
+            std::cout << "time from last: " << dr_ms << "ms\n" << std::endl;
         }
         return dr_ms;
     }

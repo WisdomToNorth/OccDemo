@@ -28,7 +28,7 @@ public:
     }
     void mergeTest(const KBox&)
     {
-        Sleep(1);
+        //Sleep(1);
     }
     double X()const { return center_.x; }
     double Y()const { return center_.y; }

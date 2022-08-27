@@ -35,7 +35,7 @@ void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
         TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(WW);
         vecset.emplace_back(myFaceProfile);
 
-        if (testsize < 30)
+        if (testsize < 1000)
         {
             gp_Pnt cur(box.X(), box.Y(), 0);
             Handle(AIS_TextLabel) text = new AIS_TextLabel();
@@ -70,6 +70,24 @@ void generateTestData(std::vector<KBox>& buffer, int testrow, int testcol, int d
             KBox l_box(stx, sty, x_size, y_size);
             buffer.emplace_back(l_box);
         }
+        if (testrow > 500 && !(i % 100))std::cout << "50000 has generate..." << std::endl;
     }
 }
+
+void printvecvec(std::vector<std::vector<int>>& vec)
+{
+    std::cout << '[';
+    for (auto& a : vec)
+    {
+        std::cout << '[';
+        for (auto b = a.cbegin(); b != a.cend(); ++b)
+        {
+            std::cout << *b;
+            if (b != --a.cend())std::cout << ", ";
+        }
+        std::cout << ']';
+    }
+    std::cout << "]\n";
+}
+
 }

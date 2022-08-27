@@ -477,7 +477,7 @@ void OccView::drawtestdata(const std::vector<TopoDS_Face>& all_face_,
     {
         Handle(AIS_Shape) shape = new AIS_Shape(all_face_[i]);
         myContext->Display(shape, false);
-        if (!all_labels[i].IsNull())myContext->Display(all_labels[i], false);
+        if (all_labels.size()>i&&!all_labels[i].IsNull())myContext->Display(all_labels[i], false);
     }
     myView->Update();
     myView->FitAll();

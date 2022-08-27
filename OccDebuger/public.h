@@ -13,6 +13,6 @@ void drawData(const std::vector<KBox> &buff, std::vector<TopoDS_Face>& vecset,
     std::vector<Handle(AIS_TextLabel)>& labs);
 
 void generateTestData(std::vector<KBox>& buffer, int testrow, int testcol, int distance);
-
+void printvecvec(std::vector<std::vector<int>>& vec);
 
 }
