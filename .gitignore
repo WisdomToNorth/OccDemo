@@ -1,0 +1,58 @@
+# Prerequisites
+*.d
+
+
+#vs
+*.log
+*.exp
+*.tlog
+*.cbt
+*.stash
+*.db
+*.ipch
+*.recipe
+*.idx
+*.suo
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.user
+*.cbt
+*.stash
+
+#svn
+*.svn-base
+.svn/*
+*/x64/
+*/x64/*
+x64/*
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+/.vs/*
+/x64/*
