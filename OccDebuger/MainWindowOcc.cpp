@@ -62,8 +62,14 @@ MainWindowOcc::~MainWindowOcc()
 
 void MainWindowOcc::on_actionGenerate_triggered()
 {
-    if (buf_.size() > 0)return;
-    qDebug() << "generating...";
+    if (buf_.size() > 0)
+    {
+        std::vector<KBox> newbuf;
+        buf_.swap(newbuf);
+    }
+    qDebug() << "\n\n-------------\n\
+-------------\ngenerating...";
+    K_Timer timer;
     int rowcnt = row_spin_->value();
     int colcnt = col_spin_->value();
     int dis = distance_spin_->value();
@@ -72,7 +78,7 @@ void MainWindowOcc::on_actionGenerate_triggered()
     {
         on_actionview_triggered();
     }
-    qDebug() << "generate done!";
+    timer.timeFromBegin("generate data");
 }
 
 void MainWindowOcc::on_actionOri_triggered()
@@ -152,6 +158,7 @@ void MainWindowOcc::on_actionFitAll_triggered()
 
 void MainWindowOcc::on_actionview_triggered()
 {
+    viewer_->removeAll();
     std::vector<TopoDS_Face> vecset;
     std::vector<Handle(AIS_TextLabel)> labs;
     drawData(buf_, vecset, labs);
@@ -162,7 +169,6 @@ void MainWindowOcc::generateTestData(std::vector<KBox>& buffer,
     int testrow, int testcol, int distance)
 {
     if (testcol == 0)testcol = testrow;
-    //buf_.resize(testrow*testcol);
 
     std::default_random_engine e;
     std::uniform_real_distribution<double> sizeu(0.8, 1);

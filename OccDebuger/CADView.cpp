@@ -44,9 +44,8 @@ OccView::OccView(QWidget* parent)
     myYmin(0),
     myXmax(0),
     myYmax(0),
-    myCurrentMode(CurAction3d_DynamicPanning),
-    myDegenerateModeIsOn(Standard_True),
-    myRectBand(NULL)
+    cur_mode_(CurAction3d_DynamicPanning),
+    rectband_(NULL)
 {
     // No Background
     setBackgroundRole(QPalette::NoRole);
@@ -87,29 +86,29 @@ void OccView::init()
     //#endif
 
         // Create V3dViewer and V3d_View
-    myViewer = new V3d_Viewer(GetGraphicDriver());
+    viewer_ = new V3d_Viewer(GetGraphicDriver());
 
-    myView = myViewer->CreateView();
+    view_ = viewer_->CreateView();
 
-    myView->SetWindow(wind);
+    view_->SetWindow(wind);
     if (!wind->IsMapped()) wind->Map();
 
     // Create AISInteractiveContext
-    myContext = new AIS_InteractiveContext(myViewer);
+    context_ = new AIS_InteractiveContext(viewer_);
 
     // Set up lights etc
-    myViewer->SetDefaultLights();
-    myViewer->SetLightOn();
+    viewer_->SetDefaultLights();
+    viewer_->SetLightOn();
 
     //渐变色背景
     Quantity_Color blue = Quantity_Color(30 / 255.0, 30 / 255.0, 30 / 255.0, Quantity_TOC_RGB);
-    myView->SetBackgroundColor(blue);
+    view_->SetBackgroundColor(blue);
     //设置显示模式
-    myContext->SetDisplayMode(AIS_Shaded, Standard_True);
-    myView->MustBeResized();
-    myView->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_GOLD, 0.08, V3d_ZBUFFER);
+    context_->SetDisplayMode(AIS_Shaded, Standard_True);
+    view_->MustBeResized();
+    view_->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_GOLD, 0.08, V3d_ZBUFFER);
 
-    myContext->SetDisplayMode(AIS_Shaded, Standard_True);
+    context_->SetDisplayMode(AIS_Shaded, Standard_True);
     setViewCube();
 }
 
@@ -139,15 +138,15 @@ void OccView::setViewCube()
     myDatumColor->ShadingAspect(Prs3d_DP_ZAxis)->SetTransparency(transp_num);
     aisViewCube->Attributes()->SetDatumAspect(myDatumColor);
 
-    m_aViewCube = aisViewCube;
+    viewcube_ = aisViewCube;
 
-    myContext->Display(m_aViewCube, false);  // 显示模型
+    context_->Display(viewcube_, false);  // 显示模型
 
 }
 
 const Handle(AIS_InteractiveContext)& OccView::getContext() const
 {
-    return myContext;
+    return context_;
 }
 
 /*!
@@ -160,27 +159,33 @@ QPaintEngine* OccView::paintEngine() const
 
 void OccView::paintEvent(QPaintEvent* /*theEvent*/)
 {
-    myView->Redraw();
+    view_->Redraw();
 }
 
 void OccView::resizeEvent(QResizeEvent* /*theEvent*/)
 {
-    if (!myView.IsNull())
+    if (!view_.IsNull())
     {
-        myView->MustBeResized();
+        view_->MustBeResized();
     }
 }
 
 void OccView::fitAll(void)
 {
-    myView->FitAll();
-    myView->ZFitAll();
-    myView->Redraw();
+    view_->FitAll();
+    view_->ZFitAll();
+    view_->Redraw();
 }
 
 void OccView::reset(void)
 {
-    myView->Reset();
+    view_->Reset();
+
+}
+void OccView::removeAll(void)
+{
+    context_->RemoveAll(true);
+    setViewCube();
 }
 
 void OccView::mousePressEvent(QMouseEvent* theEvent)
@@ -191,7 +196,7 @@ void OccView::mousePressEvent(QMouseEvent* theEvent)
     }
     else if (theEvent->button() == Qt::MidButton)
     {
-        myCurrentMode = CurAction3d_DynamicPanning;
+        cur_mode_ = CurAction3d_DynamicPanning;
         onMButtonDown((theEvent->buttons() | theEvent->modifiers()), theEvent->pos());
     }
     else if (theEvent->button() == Qt::RightButton)
@@ -202,7 +207,7 @@ void OccView::mousePressEvent(QMouseEvent* theEvent)
 
 void OccView::mouseReleaseEvent(QMouseEvent* theEvent)
 {
-    myCurrentMode = CurAction3d_Nothing;
+    cur_mode_ = CurAction3d_Nothing;
     if (theEvent->button() == Qt::LeftButton)
     {
         onLButtonUp(theEvent->buttons() | theEvent->modifiers(), theEvent->pos());
@@ -246,9 +251,9 @@ void OccView::onMButtonDown(const int /*theFlags*/, const QPoint thePoint)
     myXmax = thePoint.x();
     myYmax = thePoint.y();
 
-    if (myCurrentMode == CurAction3d_DynamicRotation)
+    if (cur_mode_ == CurAction3d_DynamicRotation)
     {
-        myView->StartRotation(thePoint.x(), thePoint.y());
+        view_->StartRotation(thePoint.x(), thePoint.y());
     }
 }
 
@@ -259,9 +264,9 @@ void OccView::onRButtonDown(const int /*theFlags*/, const QPoint thePoint)
     myXmax = thePoint.x();
     myYmax = thePoint.y();
 
-    if (myCurrentMode == CurAction3d_DynamicRotation)
+    if (cur_mode_ == CurAction3d_DynamicRotation)
     {
-        myView->StartRotation(thePoint.x(), thePoint.y());
+        view_->StartRotation(thePoint.x(), thePoint.y());
     }
 }
 
@@ -283,7 +288,7 @@ void OccView::onMouseWheel(const int /*theFlags*/, const int theDelta, const QPo
         aY -= aFactor;
     }
 
-    myView->Zoom(thePoint.x(), thePoint.y(), aX, aY);
+    view_->Zoom(thePoint.x(), thePoint.y(), aX, aY);
 }
 
 void OccView::addItemInPopup(QMenu* /*theMenu*/)
@@ -297,9 +302,9 @@ void OccView::popup(const int /*x*/, const int /*y*/)
 void OccView::onLButtonUp(const int theFlags, const QPoint thePoint)
 {
     // Hide the QRubberBand
-    if (myRectBand)
+    if (rectband_)
     {
-        myRectBand->hide();
+        rectband_->hide();
     }
 
     // Ctrl for multi selection.
@@ -353,18 +358,18 @@ void OccView::onMouseMove(const int theFlags, const QPoint thePoint)
     // Middle button.
     if (theFlags & Qt::MidButton)
     {
-        switch (myCurrentMode)
+        switch (cur_mode_)
         {
         case CurAction3d_DynamicRotation:
-            myView->Rotation(thePoint.x(), thePoint.y());
+            view_->Rotation(thePoint.x(), thePoint.y());
             break;
 
         case CurAction3d_DynamicZooming:
-            myView->Zoom(myXmin, myYmin, thePoint.x(), thePoint.y());
+            view_->Zoom(myXmin, myYmin, thePoint.x(), thePoint.y());
             break;
 
         case CurAction3d_DynamicPanning:
-            myView->Pan(thePoint.x() - myXmax, myYmax - thePoint.y());
+            view_->Pan(thePoint.x() - myXmax, myYmax - thePoint.y());
             myXmax = thePoint.x();
             myYmax = thePoint.y();
             break;
@@ -378,14 +383,14 @@ void OccView::onMouseMove(const int theFlags, const QPoint thePoint)
 
 void OccView::dragEvent(const int x, const int y)
 {
-    myContext->Select(myXmin, myYmin, x, y, myView, Standard_True);
+    context_->Select(myXmin, myYmin, x, y, view_, Standard_True);
 
     emit selectionChanged();
 }
 
 void OccView::multiDragEvent(const int x, const int y)
 {
-    myContext->ShiftSelect(myXmin, myYmin, x, y, myView, Standard_True);
+    context_->ShiftSelect(myXmin, myYmin, x, y, view_, Standard_True);
 
     emit selectionChanged();
 
@@ -396,7 +401,7 @@ void OccView::inputEvent(const int x, const int y)
     Q_UNUSED(x);
     Q_UNUSED(y);
 
-    myContext->Select(Standard_True);
+    context_->Select(Standard_True);
 
     emit selectionChanged();
 }
@@ -406,19 +411,19 @@ void OccView::multiInputEvent(const int x, const int y)
     Q_UNUSED(x);
     Q_UNUSED(y);
 
-    myContext->ShiftSelect(Standard_True);
+    context_->ShiftSelect(Standard_True);
 
     emit selectionChanged();
 }
 
 void OccView::moveEvent(const int x, const int y)
 {
-    myContext->MoveTo(x, y, myView, Standard_True);
+    context_->MoveTo(x, y, view_, Standard_True);
 }
 
 void OccView::multiMoveEvent(const int x, const int y)
 {
-    myContext->MoveTo(x, y, myView, Standard_True);
+    context_->MoveTo(x, y, view_, Standard_True);
 }
 
 void OccView::drawRubberBand(const int minX, const int minY, const int maxX, const int maxY)
@@ -432,17 +437,17 @@ void OccView::drawRubberBand(const int minX, const int minY, const int maxX, con
     aRect.setWidth(abs(maxX - minX));
     aRect.setHeight(abs(maxY - minY));
 
-    if (!myRectBand)
+    if (!rectband_)
     {
-        myRectBand = new QRubberBand(QRubberBand::Rectangle, this);
+        rectband_ = new QRubberBand(QRubberBand::Rectangle, this);
 
         // setStyle is important, set to windows style will just draw
         // rectangle frame, otherwise will draw a solid rectangle.
-        myRectBand->setStyle(QStyleFactory::create("windows"));
+        rectband_->setStyle(QStyleFactory::create("windows"));
     }
 
-    myRectBand->setGeometry(aRect);
-    myRectBand->show();
+    rectband_->setGeometry(aRect);
+    rectband_->show();
 }
 
 void OccView::panByMiddleButton(const QPoint& thePoint)
@@ -455,7 +460,7 @@ void OccView::panByMiddleButton(const QPoint& thePoint)
     aCenterX = aSize.width() / 2;
     aCenterY = aSize.height() / 2;
 
-    myView->Pan(aCenterX - thePoint.x(), thePoint.y() - aCenterY);
+    view_->Pan(aCenterX - thePoint.x(), thePoint.y() - aCenterY);
 }
 
 void OccView::drawtestdata(const std::vector<TopoDS_Face>& all_face_,
@@ -465,11 +470,15 @@ void OccView::drawtestdata(const std::vector<TopoDS_Face>& all_face_,
     for (int i = 0; i < cnt; ++i)
     {
         Handle(AIS_Shape) shape = new AIS_Shape(all_face_[i]);
-        myContext->Display(shape, false);
-        if (!all_labels[i].IsNull())myContext->Display(all_labels[i], false);
+        context_->Display(shape, false);
     }
-    myView->Update();
-    myView->FitAll();
+    int textcnt = all_labels.size();
+    for (int j = 0; j < textcnt; ++j)
+    {
+        context_->Display(all_labels[j], false);
+    }
+    view_->Update();
+    view_->FitAll();
 }
 
 void OccView::keyPressEvent(QKeyEvent* event)
@@ -482,6 +491,6 @@ void OccView::keyPressEvent(QKeyEvent* event)
     }
     else if (event->key() == Qt::Key_0)
     {
-        myContext->RemoveAll(true);
+        context_->RemoveAll(true);
     }
 }

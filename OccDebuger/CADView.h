@@ -52,7 +52,7 @@ public slots:
     //! operations for the view.
     void fitAll(void);
     void reset(void);
-
+    void removeAll();
 protected:
     virtual QPaintEngine* paintEngine() const;
 
@@ -95,13 +95,13 @@ protected:
 private:
 
     //! the occ viewer.
-    Handle(V3d_Viewer) myViewer;
-    Handle(AIS_ViewCube) m_aViewCube;
+    Handle(V3d_Viewer) viewer_;
+    Handle(AIS_ViewCube) viewcube_;
     //! the occ view.
-    Handle(V3d_View) myView;
+    Handle(V3d_View) view_;
 
     //! the occ context.
-    Handle(AIS_InteractiveContext) myContext;
+    Handle(AIS_InteractiveContext) context_;
 
     //! save the mouse position.
     Standard_Integer myXmin;
@@ -110,13 +110,10 @@ private:
     Standard_Integer myYmax;
 
     //! the mouse current mode.
-    CurrentAction3d myCurrentMode;
-
-    //! save the degenerate mode state.
-    Standard_Boolean myDegenerateModeIsOn;
+    CurrentAction3d cur_mode_;
 
     //! rubber rectangle for the mouse selection.
-    QRubberBand* myRectBand;
+    QRubberBand* rectband_;
 
 };
 
