@@ -51,8 +51,8 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     distance_spin_->setAlignment(Qt::AlignRight);
     row_spin_->setMaximum(1000);
     col_spin_->setMaximum(1000);
-    row_spin_->setValue(100);
-    col_spin_->setValue(100);
+    row_spin_->setValue(200);
+    col_spin_->setValue(200);
 
     distance_spin_->setValue(2);
     ui->gridLayout->addWidget(viewer_);
@@ -118,7 +118,7 @@ void MainWindowOcc::on_actionopt1_triggered()
     K_Timer timer;
     UnionFind unionfinder(n);
 
-    caculateUnion(0, n, unionfinder);
+    caculateUnion(0, n * n, unionfinder);
     unionfinder.update();
 
     timer.timeFromBegin("union single thread build");
@@ -131,7 +131,7 @@ void MainWindowOcc::on_actionopt1_triggered()
         // std::cout << '{';
         for (auto& num : cur)
         {
-            // std::cout << ' ' << num << ' ';
+            //   std::cout << ' ' << num << ' ';
             curset.push_back(buf_[num]);
         }
         // std::cout << "}\n";
@@ -173,11 +173,12 @@ std::pair<int, int> getLoc(int num)
 
 void MainWindowOcc::caculateUnion(int l_start, int l_end, UnionFind& finder)
 {
-    std::cout << "start: " << l_start << " l_end: " << l_end << std::endl;
     int cntall = buf_.size();
+    int cal_cnt = l_end - l_start;
+    std::pair<int, int> loc = getLoc(l_start + 1);
 
-    std::pair<int, int> loc = getLoc(cntall);
     int m = loc.first, n = loc.second;
+    //std::cout << "\n\n\nloc :" << m << " and" << n << "\n" << std::endl;
     for (int i = m; i < cntall; ++i)
     {
         for (int j = 0; j < m + 1; ++j)
@@ -186,9 +187,17 @@ void MainWindowOcc::caculateUnion(int l_start, int l_end, UnionFind& finder)
             n = 0;
             if (!buf_[i].isOut(buf_[j]))
             {
+                //std::cout << "Merge:" << i << " and " << j << std::endl;
                 finder.merge(i, j);
             }
+            cal_cnt -= 1;
+            if (cal_cnt == 0)
+            {
+                //finder.printUnion();
+                return;
+            }
         };
+
         m++;
     }
 }
@@ -196,8 +205,10 @@ void MainWindowOcc::caculateUnion(int l_start, int l_end, UnionFind& finder)
 void MainWindowOcc::on_actionopt2_triggered()
 {
     std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
-    int n = buf_.size();
+    int temp = buf_.size();
+    int n = (temp - 1 + 1) * (temp - 1) / 2;
     std::cout << "data size: " << n << "\ncaculating..." << std::endl;
+
     int num_of_thread = getThreadCount(n);
     int block_size = n / num_of_thread;
     std::cout << "num of thread: " << num_of_thread << std::endl;
@@ -205,21 +216,25 @@ void MainWindowOcc::on_actionopt2_triggered()
     //这里多线程的划分也可以优化，按平面区域分块划分，使各子并查集的重合性尽可能小
     //此处，假设x、y都为偶数，这样恰好可以被四等分。分四线程计算
     std::vector<std::thread> threads(num_of_thread - 1);
-    std::vector<UnionFind> unionfinders(num_of_thread - 1, UnionFind(n));
+    std::vector<UnionFind> unionfinders;
+    for (int tt = 0; tt < num_of_thread; ++tt)
+    {
+        unionfinders.emplace_back(UnionFind(temp));
+    }
 
     int l_start = 0;
     for (int thread_index = 0; thread_index < num_of_thread - 1; ++thread_index)
     {
         int l_end = l_start + block_size;
         threads[thread_index] = std::thread(std::mem_fn(&MainWindowOcc::caculateUnion), this,
-            l_start, l_end, std::ref(unionfinders[thread_index]));
+            l_start, l_end, std::ref(unionfinders[thread_index + 1]));
         l_start = l_end;
     }
-    this->caculateUnion(l_start, n, std::ref(unionfinders[num_of_thread - 2]));
+    this->caculateUnion(l_start, n, std::ref(unionfinders[0]));
     std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
 
     std::cout << "All thread join, begin to combine!" << std::endl;
-    for (int numofunion = 1; numofunion < num_of_thread - 1; ++numofunion)
+    for (int numofunion = 1; numofunion < num_of_thread; ++numofunion)
     {
         unionfinders[0].merge(unionfinders[numofunion]);
     }
@@ -231,13 +246,13 @@ void MainWindowOcc::on_actionopt2_triggered()
         if ((*it).second.size() == 1)continue;
         std::unordered_set<int> cur((*it).second);
         std::vector<KBox> curset;
-        //std::cout << '{';
+        // std::cout << '{';
         for (auto& num : cur)
         {
-            //std::cout << ' ' << num << ' ';
+            //    std::cout << ' ' << num << ' ';
             curset.push_back(buf_[num]);
         }
-        //std::cout << "}\n";
+        //  std::cout << "}\n";
         curset[0].mergeTest(curset);
         ++cnt;
     }

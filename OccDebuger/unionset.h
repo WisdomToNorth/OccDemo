@@ -50,12 +50,21 @@ public:
     void merge(UnionFind& rhs)
     {
         //O(N)
-        for (auto it = rhs.final_set_.begin(); it != rhs.final_set_.end(); ++it)
+        ////std::cout << "#############\n";
+        for (int i = 0; i < count_; ++i)
         {
-            merge(this->find((*it).first), rhs.find((*it).first));
+            //std::cout << "##:" << this->find(i) << "  ##:" << rhs.find(i) << std::endl;
+            merge(this->find(i), rhs.find(i));
         }
     }
-
+    void printUnion()
+    {
+        std::cout << "#############\n";
+        for (int i = 0; i < count_; ++i)
+        {
+            std::cout << "##:" << this->find(i);
+        }
+    }
     int isConnected(int _a, int _b)
     {
         return find(_a) == find(_b);
