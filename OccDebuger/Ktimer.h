@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <chrono>
 #include <iostream>
+#include <string>
 
 class K_Timer
 {
@@ -9,13 +10,13 @@ public:
         t1(std::chrono::steady_clock::now()),
         t2(std::chrono::steady_clock::now())
     {    }
-    double timeFromBegin(bool cout_ = true)
+    double timeFromBegin(const std::string& str, bool cout_ = true)
     {
         t2 = std::chrono::steady_clock::now();
         double dr_ms = std::chrono::duration<double, std::micro>(t2 - t1).count() / 1000;
         if (cout_)
         {
-            std::cout << "time from start: " << dr_ms << std::endl;
+            std::cout << "time of " << str << ": " << dr_ms << " ms" << std::endl;
         }
         return dr_ms;
     }
@@ -26,7 +27,7 @@ public:
         t2 = t3;
         if (cout_)
         {
-            std::cout << "time from last: " << dr_ms << std::endl;
+            std::cout << "time from last: " << dr_ms << " ms" << std::endl;
         }
         return dr_ms;
     }

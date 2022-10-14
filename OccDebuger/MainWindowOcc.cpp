@@ -13,6 +13,8 @@
 #include "CADView.h"
 #include "Ktimer.h"
 #include "public.h"
+#include "data.h"
+#include "unionset.h"
 
 MainWindowOcc::MainWindowOcc(QWidget* parent)
     : QMainWindow(parent)
@@ -45,8 +47,9 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     row_spin_->setAlignment(Qt::AlignRight);
     col_spin_->setAlignment(Qt::AlignRight);
     distance_spin_->setAlignment(Qt::AlignRight);
-    row_spin_->setValue(4);
-    col_spin_->setValue(4);
+    row_spin_->setValue(20);
+    col_spin_->setValue(20);
+
     distance_spin_->setValue(2);
     ui->gridLayout->addWidget(viewer_);
 
@@ -71,42 +74,80 @@ void MainWindowOcc::on_actionGenerate_triggered()
     }
     qDebug() << "generate done!";
 }
+
 void MainWindowOcc::on_actionOri_triggered()
 {
+    std::cout << "\n\n-----------origin method------------" << std::endl;
     int n = buf_.size();
     std::cout << "data size: " <<
         n << "\ncaculating..." << std::endl;
 
     int cnt = 0;
-    int cntisout = 0;
+    K_Timer timer;
     for (int i = 0; i < n; ++i)
     {
         for (int j = i + 1; j < n; ++j)
         {
-            buf_[i].mergeTest(buf_[j]);
-            ++cnt;
             if (!buf_[i].isOut(buf_[j]))
             {
-                qDebug() << i << " " << j;
-                //cntisout++;
+                buf_[i].mergeTest(buf_[j]);
+                //std::cout << "{ " << i << "  " << j << " }\n";
+                ++cnt;
             }
         }
     }
-    std::cout << "cnt : " << cnt << std::endl;
-    //std::cout << "cnt is out : " << cntisout << std::endl;
+    timer.timeFromBegin("Origin method");
+    std::cout << "merge cnt : " << cnt << std::endl;
 }
 
 void MainWindowOcc::on_actionopt1_triggered()
 {
+    std::cout << "\n\n-----------unionset single thread------------" << std::endl;
+    int n = buf_.size();
+    std::cout << "data size: " <<
+        n << "\ncaculating..." << std::endl;
+    K_Timer timer;
+    UnionFind unionfinder(n);
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = i + 1; j < n; ++j)
+        {
+            if (!buf_[i].isOut(buf_[j]))
+            {
+                unionfinder.merge(i, j);
+            }
+        }
+    }
+    unionfinder.update();
 
+    int cnt = 0;
+    for (auto it = unionfinder.final_set_.begin(); it != unionfinder.final_set_.end(); ++it)
+    {
+        if ((*it).second.size() == 1)continue;
+        std::unordered_set<int> cur((*it).second);
+        std::vector<KBox> curset;
+        std::cout << '{';
+        for (auto& num : cur)
+        {
+            std::cout << ' ' << num << ' ';
+            curset.push_back(buf_[num]);
+        }
+        std::cout << "}\n";
+        curset[0].mergeTest(curset);
+        ++cnt;
+    }
+    timer.timeFromBegin("union single thread");
+    std::cout << "merge count: " << cnt << std::endl;
 }
+
 void MainWindowOcc::on_actionopt2_triggered()
 {
 
 }
+
 void MainWindowOcc::on_actionFitAll_triggered()
 {
-
+    viewer_->fitAll();
 }
 
 void MainWindowOcc::on_actionview_triggered()
@@ -117,9 +158,12 @@ void MainWindowOcc::on_actionview_triggered()
     viewer_->drawtestdata(vecset, labs);
 }
 
-void MainWindowOcc::generateTestData(std::vector<KBox>& buffer, int testrow, int testcol, int distance)
+void MainWindowOcc::generateTestData(std::vector<KBox>& buffer,
+    int testrow, int testcol, int distance)
 {
     if (testcol == 0)testcol = testrow;
+    //buf_.resize(testrow*testcol);
+
     std::default_random_engine e;
     std::uniform_real_distribution<double> sizeu(0.8, 1);
     std::uniform_real_distribution<double> v(0.5, 1);

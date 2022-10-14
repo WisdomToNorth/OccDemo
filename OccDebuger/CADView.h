@@ -50,11 +50,8 @@ signals:
 
 public slots:
     //! operations for the view.
-    void pan(void);
     void fitAll(void);
     void reset(void);
-    void zoom(void);
-    void rotate(void);
 
 protected:
     virtual QPaintEngine* paintEngine() const;

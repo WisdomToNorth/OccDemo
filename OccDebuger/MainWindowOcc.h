@@ -41,6 +41,5 @@ private:
     QSpinBox* col_spin_;
     QSpinBox* distance_spin_;
 
-    QLineEdit* test_data_size_;
     std::vector<KBox> buf_;
 };

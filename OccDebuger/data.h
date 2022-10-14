@@ -1,7 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include <iostream>
 #include <Windows.h>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 struct KPt
 {
@@ -13,6 +15,7 @@ struct KPt
 class KBox
 {
 public:
+    KBox() :center_(KPt(0, 0)) {}
     KBox(double x, double y, double sizex, double sizey) :
         center_(KPt(x, y)), size_x(sizex), size_y(sizey)
     {}
@@ -30,58 +33,19 @@ public:
     {
         Sleep(1);
     }
+    void mergeTest(std::vector<KBox>& set)
+    {
+        Sleep(1);
+    }
+    void mergeTest(std::unordered_set<KBox>& set)
+    {
+        Sleep(1);
+    }
     double X()const { return center_.x; }
     double Y()const { return center_.y; }
     double size_x;
     double size_y;
+
 private:
     KPt center_;
-
-};
-
-
-class UnionFind {
-public:
-    // int n;
-    std::unordered_map<int, int> father;
-    void init(int n)
-    {
-        for (int a = 0; a < n; ++a)
-        {
-            father[a] = a;
-        }
-    }
-    int find(int _num)
-    {
-
-        int a = father[_num];
-        while (father[a] != a)
-        {
-            a = father[a];
-
-        }
-        //int temp = father[_num];
-        while (_num != a)
-        {
-            int temp = father[_num];
-            father[_num] = a;
-            _num = father[temp];
-        }
-        return a;
-    }
-    int merge(int _a, int _b)
-    {
-        int a = find(_a);
-        int b = find(_b);
-        if (a != b)
-        {
-            father[a] = b;
-        }
-        return b;//·µ»Ø¸¸½Úµã
-    }
-    int isConnected(int _a, int _b)
-    {
-        if (find(_a) == find(_b))return true;
-        else return false;
-    }
 };

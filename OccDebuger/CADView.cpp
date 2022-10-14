@@ -44,7 +44,7 @@ OccView::OccView(QWidget* parent)
     myYmin(0),
     myXmax(0),
     myYmax(0),
-    myCurrentMode(CurAction3d_DynamicRotation),
+    myCurrentMode(CurAction3d_DynamicPanning),
     myDegenerateModeIsOn(Standard_True),
     myRectBand(NULL)
 {
@@ -139,14 +139,7 @@ void OccView::setViewCube()
     myDatumColor->ShadingAspect(Prs3d_DP_ZAxis)->SetTransparency(transp_num);
     aisViewCube->Attributes()->SetDatumAspect(myDatumColor);
 
-    ////下面几句当上边存在时是生效的，暂时不知道为啥不能直接用。
-    //const Handle_Prs3d_DatumAspect& datumAspect = aisViewCube->Attributes()->DatumAspect();
-    //datumAspect->ShadingAspect(Prs3d_DP_XAxis)->SetColor(Quantity_NOC_RED2);
-    //datumAspect->ShadingAspect(Prs3d_DP_YAxis)->SetColor(Quantity_NOC_GREEN2);
-    //datumAspect->ShadingAspect(Prs3d_DP_ZAxis)->SetColor(Quantity_NOC_GREEN2);
-
     m_aViewCube = aisViewCube;
-
 
     myContext->Display(m_aViewCube, false);  // 显示模型
 
@@ -190,21 +183,6 @@ void OccView::reset(void)
     myView->Reset();
 }
 
-void OccView::pan(void)
-{
-    myCurrentMode = CurAction3d_DynamicPanning;
-}
-
-void OccView::zoom(void)
-{
-    myCurrentMode = CurAction3d_DynamicZooming;
-}
-
-void OccView::rotate(void)
-{
-    myCurrentMode = CurAction3d_DynamicRotation;
-}
-
 void OccView::mousePressEvent(QMouseEvent* theEvent)
 {
     if (theEvent->button() == Qt::LeftButton)
@@ -213,6 +191,7 @@ void OccView::mousePressEvent(QMouseEvent* theEvent)
     }
     else if (theEvent->button() == Qt::MidButton)
     {
+        myCurrentMode = CurAction3d_DynamicPanning;
         onMButtonDown((theEvent->buttons() | theEvent->modifiers()), theEvent->pos());
     }
     else if (theEvent->button() == Qt::RightButton)
@@ -223,6 +202,7 @@ void OccView::mousePressEvent(QMouseEvent* theEvent)
 
 void OccView::mouseReleaseEvent(QMouseEvent* theEvent)
 {
+    myCurrentMode = CurAction3d_Nothing;
     if (theEvent->button() == Qt::LeftButton)
     {
         onLButtonUp(theEvent->buttons() | theEvent->modifiers(), theEvent->pos());
@@ -235,6 +215,7 @@ void OccView::mouseReleaseEvent(QMouseEvent* theEvent)
     {
         onRButtonUp(theEvent->buttons() | theEvent->modifiers(), theEvent->pos());
     }
+
 }
 
 void OccView::mouseMoveEvent(QMouseEvent* theEvent)
@@ -271,9 +252,17 @@ void OccView::onMButtonDown(const int /*theFlags*/, const QPoint thePoint)
     }
 }
 
-void OccView::onRButtonDown(const int /*theFlags*/, const QPoint /*thePoint*/)
+void OccView::onRButtonDown(const int /*theFlags*/, const QPoint thePoint)
 {
+    myXmin = thePoint.x();
+    myYmin = thePoint.y();
+    myXmax = thePoint.x();
+    myYmax = thePoint.y();
 
+    if (myCurrentMode == CurAction3d_DynamicRotation)
+    {
+        myView->StartRotation(thePoint.x(), thePoint.y());
+    }
 }
 
 void OccView::onMouseWheel(const int /*theFlags*/, const int theDelta, const QPoint thePoint)
@@ -490,78 +479,6 @@ void OccView::keyPressEvent(QKeyEvent* event)
     }
     else if (event->key() == Qt::Key_2)//opt
     {
-        //int cnt = all_face_.size();
-        //UnionFind finder;
-        //finder.init(cnt);
-        //qDebug() << "###########opt##########\ncalculate start!";
-        //auto t0 = std::chrono::steady_clock::now();
-        //vector<Bnd_OBB> faces_obb;//初始化obb vector
-        //for (int i = 0; i < cnt; ++i)
-        //{
-        //    Bnd_OBB box_obb;
-        //    BRepBndLib ret;
-
-        //    ret.AddOBB(all_face_[i], box_obb, true, true, true);
-        //    //box_obb.Enlarge(EnlargeGap);
-        //    faces_obb.emplace_back(box_obb);
-        //}
-        //qDebug() << "convert done!";
-        //for (int i = 0; i < cnt; ++i)
-        //{
-        //    for (int j = i + 1; j < cnt; ++j)
-        //    {
-        //        if (!faces_obb[i].IsOut(faces_obb[j]))
-        //        {
-        //            finder.merge(i, j);
-        //        }
-        //    }
-        //}
-        //qDebug() << "merge done!";
-        //std::unordered_map<int, int> aux;
-        //int unionsize = 0;
-        //for (int i = 0; i < cnt; ++i)
-        //{
-        //    if (!aux.count(finder.find(i)))
-        //    {
-        //        unionsize++;
-        //        aux[finder.find(i)] = unionsize;
-        //    }
-        //}
-        //qDebug() << "classfied size: " << unionsize;
-        //vector<vector<TopoDS_Face>> l_merge_mark_vec(unionsize + 1, vector<TopoDS_Face>());
-        //for (int i = 0; i < cnt; ++i)
-        //{
-        //    l_merge_mark_vec[aux[finder.find(i)]].emplace_back(all_face_[i]);
-        //}
-        //if (cnt < 1000)
-        //{
-        //    vector<vector<int>> checkvec(unionsize + 1, vector<int>());
-        //    for (int i = 0; i < cnt; ++i)
-        //    {
-        //        checkvec[aux[finder.find(i)]].emplace_back(i);
-        //    }
-        //    printvecvec(checkvec);
-        //}
-
-        //qDebug() << "vec init done!";
-        //auto t1 = std::chrono::steady_clock::now();
-        //for (auto& vec : l_merge_mark_vec)
-        //{
-        //    int cursize = vec.size();
-        //    for (int i = 0; i < cursize; ++i)
-        //    {
-        //        for (int j = i + 1; j < cursize; ++j)
-        //        {
-        //            auto fused = BRepAlgoAPI_Fuse(all_face_[i], all_face_[j]);
-        //        }
-        //    }
-        //}
-        //qDebug() << "all done!";
-        //auto t2 = std::chrono::steady_clock::now();
-        //double dr_us = std::chrono::duration<double, std::micro>(t2 - t0).count();
-        //double dr_us_merge = std::chrono::duration<double, std::micro>(t2 - t1).count();
-        //qDebug() << "all time:" << dr_us / 1000;
-        //qDebug() << "merge time:" << dr_us_merge / 1000;
     }
     else if (event->key() == Qt::Key_0)
     {

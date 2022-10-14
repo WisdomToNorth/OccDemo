@@ -103,6 +103,7 @@
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="public.h" />
     <ClInclude Include="publictools.h" />
+    <ClInclude Include="unionset.h" />
     <QtMoc Include="CADView.h" />
     <ClInclude Include="data.h" />
   </ItemGroup>
