@@ -13,14 +13,13 @@
 #include "CADView.h"
 #include "Ktimer.h"
 #include "public.h"
-using std::vector;
 
-MainWindowOcc::MainWindowOcc(QWidget *parent)
+MainWindowOcc::MainWindowOcc(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindowOccClass())
 {
     ui->setupUi(this);
-    mview = new OccView(this);
+    viewer_ = new OccView(this);
 
     auto screenRect = QGuiApplication::screens();
     auto width = screenRect[0]->geometry().width();
@@ -28,156 +27,114 @@ MainWindowOcc::MainWindowOcc(QWidget *parent)
     auto scwidth = width * 4 / 5;
     auto scheight = height * 4 / 5;
     this->setGeometry(width * 1 / 10, height / 10, scwidth, scheight);
-    ui->gridLayout->addWidget(mview);
-    
+
+    row_spin_ = new QSpinBox();
+    col_spin_ = new QSpinBox();
+    distance_spin_ = new QSpinBox();
+    QLabel* label_row = new QLabel("row");
+    QLabel* label_col = new QLabel("col");
+    QLabel* label_dis = new QLabel("distance");
+    ui->mainToolBar->addWidget(label_row);
+    ui->mainToolBar->addWidget(row_spin_);
+    ui->mainToolBar->addSeparator();
+    ui->mainToolBar->addWidget(label_col);
+    ui->mainToolBar->addWidget(col_spin_);
+    ui->mainToolBar->addSeparator();
+    ui->mainToolBar->addWidget(label_dis);
+    ui->mainToolBar->addWidget(distance_spin_);
+    row_spin_->setAlignment(Qt::AlignRight);
+    col_spin_->setAlignment(Qt::AlignRight);
+    distance_spin_->setAlignment(Qt::AlignRight);
+    row_spin_->setValue(4);
+    col_spin_->setValue(4);
+    distance_spin_->setValue(2);
+    ui->gridLayout->addWidget(viewer_);
 
 }
 
 MainWindowOcc::~MainWindowOcc()
 {
-    delete mview;
-    mview = nullptr;
     delete ui;
-
 }
+
 void MainWindowOcc::on_actionGenerate_triggered()
 {
     if (buf_.size() > 0)return;
-    K_Timer ti;
-    qDebug() << "[generating...]";
-    int rowcnt = 200;
-    int colcnt = rowcnt;
-    DataUtil::generateTestData(buf_, rowcnt, colcnt,2);
+    qDebug() << "generating...";
+    int rowcnt = row_spin_->value();
+    int colcnt = col_spin_->value();
+    int dis = distance_spin_->value();
+    generateTestData(buf_, rowcnt, colcnt, dis);
     if (rowcnt * colcnt < 1000)
     {
         on_actionview_triggered();
     }
-    std::cout<<"generate time: "<<ti.timeFromBegin(false)<<"ms"<<std::endl;
+    qDebug() << "generate done!";
 }
-
 void MainWindowOcc::on_actionOri_triggered()
 {
     int n = buf_.size();
-    std::cout << "\n##########worst##########\n" << "data size: " <<
-        n << "\n\n[caculating...]" << std::endl;
-    K_Timer ticker;
-    int cnt = 0;
-    int cntisout = 0;
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = i+1; j < n; ++j)
-        {
-            buf_[i].mergeTest(buf_[j]);
-            ++cnt;
-            if (!buf_[i].isOut(buf_[j]))
-            {
-                //qDebug() << i << " " << j;
-            }
-        }
-    }
-    std::cout << "caculate cnt: " << cnt << std::endl;
-    ticker.timeFromBegin();
-}
+    std::cout << "data size: " <<
+        n << "\ncaculating..." << std::endl;
 
-void MainWindowOcc::on_actionopt1_triggered()
-{
-    int n = buf_.size();
-    std::cout << "\n##########worst##########\n" << "data size: " <<
-        n << "\n\n[caculating..]" << std::endl;
-    K_Timer ticker;
     int cnt = 0;
     int cntisout = 0;
     for (int i = 0; i < n; ++i)
     {
         for (int j = i + 1; j < n; ++j)
         {
+            buf_[i].mergeTest(buf_[j]);
+            ++cnt;
             if (!buf_[i].isOut(buf_[j]))
             {
-                ++cnt;
-                buf_[i].mergeTest(buf_[j]);
+                qDebug() << i << " " << j;
+                //cntisout++;
             }
         }
     }
-    std::cout << "caculate cnt: " << cnt << std::endl;
-    ticker.timeFromBegin();
+    std::cout << "cnt : " << cnt << std::endl;
+    //std::cout << "cnt is out : " << cntisout << std::endl;
 }
 
+void MainWindowOcc::on_actionopt1_triggered()
+{
+
+}
 void MainWindowOcc::on_actionopt2_triggered()
 {
-    int cnt = buf_.size();
-    UnionFind finder;
-    finder.init(cnt);
-    std::cout << "\n##########opt2##########\n" << "data size: " <<
-        cnt << "\n\n[caculating...]" << std::endl;
-    K_Timer ticker;
-    for (int i = 0; i < cnt; ++i)
-    {
-        for (int j = i + 1; j < cnt; ++j)
-        {
-            if (!buf_[i].isOut(buf_[j]))
-            {
-                finder.merge(i,j);
-            }
-        }
-    }
-    std::cout << "union init done: " << ticker.timeFromLastSee(false)<<std::endl;
 
-    std::unordered_map<int, int> aux;
-    int unionsize = 0;
-    for (int i = 0; i < cnt; ++i)
-    {
-        if (!aux.count(finder.find(i)))
-        {
-            unionsize++;
-            aux[finder.find(i)] = unionsize;
-        }
-    }
-    
-    vector<vector<KBox>> l_merge_mark_vec(unionsize + 1, vector<KBox>());
-    for (int i = 0; i < cnt; ++i)
-    {
-        l_merge_mark_vec[aux[finder.find(i)]].emplace_back(buf_[i]);
-    }
-    if (cnt < 1000)
-    {
-        vector<vector<int>> checkvec(unionsize + 1, vector<int>());
-        for (int i = 0; i < cnt; ++i)
-        {
-            checkvec[aux[finder.find(i)]].emplace_back(i);
-        }
-        DataUtil::printvecvec(checkvec);
-    }
-    std::cout << "build map done: " << ticker.timeFromLastSee(false) << std::endl;
-    std::cout << "classfied size: " << unionsize <<"\n\n[Start merge...]"<< std::endl;
-
-    int merge_cnt = 0;
-    for (auto& vec : l_merge_mark_vec)
-    {
-        int cursize = vec.size();
-        for (int i = 0; i < cursize; ++i)
-        {
-            for (int j = i + 1; j < cursize; ++j)
-            {
-                ++merge_cnt;
-                vec[i].mergeTest(vec[j]);
-                //std::cout << "merge " << i << " and " << j << std::endl;
-            }
-        }
-        //std::cout << std::endl;
-    }
-    std::cout << "caculate cnt: " << merge_cnt << std::endl;
-    std::cout << "merge time: " << ticker.timeFromLastSee(false) << std::endl;
-    ticker.timeFromBegin();
-   
 }
 void MainWindowOcc::on_actionFitAll_triggered()
 {
 
 }
+
 void MainWindowOcc::on_actionview_triggered()
 {
     std::vector<TopoDS_Face> vecset;
     std::vector<Handle(AIS_TextLabel)> labs;
-    DataUtil::drawData(buf_, vecset, labs);
-    mview->drawtestdata(vecset, labs);
+    drawData(buf_, vecset, labs);
+    viewer_->drawtestdata(vecset, labs);
+}
+
+void MainWindowOcc::generateTestData(std::vector<KBox>& buffer, int testrow, int testcol, int distance)
+{
+    if (testcol == 0)testcol = testrow;
+    std::default_random_engine e;
+    std::uniform_real_distribution<double> sizeu(0.8, 1);
+    std::uniform_real_distribution<double> v(0.5, 1);
+    e.seed(1);
+    for (int i = 0; i < testcol; ++i)
+    {
+        for (int j = 0; j < testrow; ++j)
+        {
+            double loc_random = v(e);
+            double stx = i * distance * loc_random;
+            double sty = j * distance * loc_random;
+            double x_size = sizeu(e);
+            double y_size = x_size;
+            KBox l_box(stx, sty, x_size, y_size);
+            buffer.emplace_back(l_box);
+        }
+    }
 }

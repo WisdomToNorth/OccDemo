@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <vector>
 using namespace std;
 void printvecvec(vector<vector<int>> vec)
 {
     std::cout << '[';
-    for (auto a : vec)
+    for (const auto& a : vec)
     {
         std::cout << '[';
         for (auto b = a.cbegin(); b != a.cend(); ++b)

@@ -477,7 +477,7 @@ void OccView::drawtestdata(const std::vector<TopoDS_Face>& all_face_,
     {
         Handle(AIS_Shape) shape = new AIS_Shape(all_face_[i]);
         myContext->Display(shape, false);
-        if (all_labels.size()>i&&!all_labels[i].IsNull())myContext->Display(all_labels[i], false);
+        if (!all_labels[i].IsNull())myContext->Display(all_labels[i], false);
     }
     myView->Update();
     myView->FitAll();
@@ -487,31 +487,9 @@ void OccView::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_1)
     {
-        myView->FitAll();
-        myView->ZFitAll();
     }
-    else if (event->key() == Qt::Key_2)
+    else if (event->key() == Qt::Key_2)//opt
     {
-
-    }
-    else if (event->key() == Qt::Key_3)
-    {
-
-    }
-    else if (event->key() == Qt::Key_4)
-    {
-
-    }
-    else if (event->key() == Qt::Key_5)
-    {
-    }
-    else if (event->key() == Qt::Key_6)//origin
-    {
-       
-    }
-    else if (event->key() == Qt::Key_7)//opt
-    {
-
         //int cnt = all_face_.size();
         //UnionFind finder;
         //finder.init(cnt);
