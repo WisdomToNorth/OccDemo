@@ -6,6 +6,7 @@
 #include <qlabel.h>
 
 #include "data.h"
+#include "unionset.h"
 
 #include "ui_MainWindowOcc.h"
 
@@ -26,6 +27,7 @@ public:
 private:
     void generateTestData(std::vector<KBox>& buffer,
         int testrow, int testcol = 0, int distance = 3);
+    void caculateUnion(int l_start, int l_end, UnionFind& finder);
 
 private slots:
     void on_actionGenerate_triggered();

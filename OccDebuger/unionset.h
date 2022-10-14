@@ -1,4 +1,5 @@
-﻿#include <unordered_map>
+﻿#pragma once
+#include <unordered_map>
 #include <unordered_set>
 
 class UnionFind
@@ -48,21 +49,10 @@ public:
 
     void merge(UnionFind& rhs)
     {
-        this->update();
-        rhs.update();
-        //update rank
         //O(N)
-        for (auto r = rhs.rank_.begin(); r != rhs.rank_.end(); ++r)
-        {
-            rank_[(*r).first] = (*r).second;//直接将旧的更新为新的
-        }
-        //O(N^2)
         for (auto it = rhs.final_set_.begin(); it != rhs.final_set_.end(); ++it)
         {
-            for (auto this_it = final_set_.begin(); this_it != final_set_.end(); ++this_it)
-            {
-                merge((*it).first, (*this_it).first);
-            }
+            merge(this->find((*it).first), rhs.find((*it).first));
         }
     }
 

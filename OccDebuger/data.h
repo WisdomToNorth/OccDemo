@@ -31,15 +31,15 @@ public:
     }
     void mergeTest(const KBox&)
     {
-        Sleep(1);
+        //Sleep(1);
     }
-    void mergeTest(std::vector<KBox>& set)
+    void mergeTest(std::vector<KBox>&)
     {
-        Sleep(1);
+        //Sleep(1);
     }
-    void mergeTest(std::unordered_set<KBox>& set)
+    void mergeTest(std::unordered_set<KBox>&)
     {
-        Sleep(1);
+        // Sleep(1);
     }
     double X()const { return center_.x; }
     double Y()const { return center_.y; }
