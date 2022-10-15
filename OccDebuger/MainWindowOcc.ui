@@ -148,14 +148,6 @@ QSpinBox
     font: bold;
     background: rgb(59, 59, 59);
 }
-QDoubleSpinBox
-{
-    color: white;
-    font-size: 24px;
-    font:&quot;consolas&quot;;
-    font: bold;
-    background: rgb(59, 59, 59);
-}
 QLabel {
     color: white;
     font-size: 24px;

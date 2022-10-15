@@ -122,17 +122,12 @@ void MainWindowOcc::on_actionOri_triggered()
 void MainWindowOcc::on_actionopt1_triggered()
 {
     std::cout << "\n\n-----------unionset single thread------------" << std::endl;
-    unsigned long long n = buf_.size();
+    unsigned long n = buf_.size();
     std::cout << "data size: " << n << "\ncaculating..." << std::endl;
-
     K_Timer timer;
     UnionFind unionfinder(n);
-    unsigned long long temp1 = n / unsigned long long(2);
-    unsigned long long temp2 = n - unsigned long long(1);
-    std::cout << "temp2: " << temp2 << std::endl;
-    unsigned long long caculatecnt = temp1 * temp2;
-    std::cout << "caculate count: " << caculatecnt << std::endl;
-    caculateUnion(1, caculatecnt + unsigned long long(1), unionfinder);
+    unsigned long caculatecnt= (n) * (n - 1) / 2;
+    caculateUnion(1, caculatecnt+1, unionfinder);
     unionfinder.update();
 
     timer.timeFromBegin("union single thread build");
@@ -156,17 +151,17 @@ void MainWindowOcc::on_actionopt1_triggered()
     std::cout << "merge count: " << cnt << std::endl;
 }
 
-unsigned long long MainWindowOcc::getThreadCount(unsigned long long datasize)
+unsigned long MainWindowOcc::getThreadCount(unsigned long datasize)
 {
     if (thread_spin_->value() > 0)
     {
         return thread_spin_->value();
     }
-    unsigned long long const min_per_thread = 25;
-    unsigned long long const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
-    unsigned long long const hardware_thread = std::thread::hardware_concurrency();
-    unsigned long long const temp = hardware_thread != 0 ? hardware_thread : 2;
-    unsigned long long const num_thrads = temp < max_thread ? temp : max_thread;
+    unsigned long const min_per_thread = 25;
+    unsigned long const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
+    unsigned long const hardware_thread = std::thread::hardware_concurrency();
+    unsigned long const temp = hardware_thread != 0 ? hardware_thread : 2;
+    unsigned long const num_thrads = temp < max_thread ? temp : max_thread;
 
     return num_thrads;
 }
@@ -175,10 +170,10 @@ unsigned long long MainWindowOcc::getThreadCount(unsigned long long datasize)
 // 2, 3
 // 4, 5, 6
 // 7, 8, 9, 10
-std::pair<int, int> MainWindowOcc::getLoc(unsigned long long num)
+std::pair<int, int> MainWindowOcc::getLoc(unsigned long num)
 {
     int m = 0, n = 0;
-    unsigned long long testnum1 = std::floor(pow(2 * num, 0.5));//6
+    unsigned long testnum1 = std::floor(pow(2 * num, 0.5));//6
     if (!((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) >= 2 * num)))
     {
         testnum1 = std::ceil(pow(2 * num, 0.5));
@@ -197,11 +192,11 @@ std::pair<int, int> MainWindowOcc::getLoc(unsigned long long num)
 3|4 5 6
 4|7 8 9 10
 */
-void MainWindowOcc::caculateUnion(unsigned long long l_start, unsigned long long l_end, UnionFind& finder)
+void MainWindowOcc::caculateUnion(unsigned long l_start, unsigned long l_end, UnionFind& finder)
 {
-    unsigned long long cal_cnt = l_end - l_start;
+    unsigned long cal_cnt = l_end - l_start;
     std::pair<int, int> loc = getLoc(l_start);
-    //std::cout << "caculate count: " << cal_cnt << std::endl;
+
     int m = loc.first, n = loc.second;
     //std::cout << "\n\n\nloc :" << m << "#" << n << "#" << cal_cnt << ' ' << std::endl;
     for (int i = m + 1; i < buf_.size(); ++i)//
@@ -230,17 +225,16 @@ void MainWindowOcc::caculateUnion(unsigned long long l_start, unsigned long long
 void MainWindowOcc::on_actionopt2_triggered()
 {
     std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
-    unsigned long long datacount = buf_.size();
-    unsigned long long n = (datacount / unsigned long long(2)) * (datacount - unsigned long long(1));
-
+    unsigned long datacount = buf_.size();
+    unsigned long n = (datacount) * (datacount - 1) / 2;
     std::cout << "data size: " << datacount << "\ncaculating..." << std::endl;
-    std::cout << "caculate count: " << n << std::endl;
-    unsigned long long num_of_thread = getThreadCount(n);
-    unsigned long long block_size = n / num_of_thread;
+
+    unsigned long num_of_thread = getThreadCount(n);
+    unsigned long block_size = n / num_of_thread;
     std::cout << "num of thread: " << num_of_thread << std::endl;
     K_Timer timer;
-
-    //这里多线程的划分可能也可以优化，按平面区域分块划分，使各子并查集的重合性尽可能小
+    //这里多线程的划分也可以优化，按平面区域分块划分，使各子并查集的重合性尽可能小
+    //此处，假设x、y都为偶数，这样恰好可以被四等分。分四线程计算
     std::vector<std::thread> threads(num_of_thread - 1);
     std::vector<UnionFind> unionfinders(num_of_thread, UnionFind(datacount));
 
@@ -252,7 +246,7 @@ void MainWindowOcc::on_actionopt2_triggered()
             l_start, l_end, std::ref(unionfinders[thread_index + 1]));
         l_start = l_end;
     }
-    this->caculateUnion(l_start, n + unsigned long long(1), std::ref(unionfinders[0]));
+    this->caculateUnion(l_start, n + 1, std::ref(unionfinders[0]));
     std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
     std::cout << "All thread join, begin to combine!" << std::endl;
     for (int numofunion = 1; numofunion < num_of_thread; ++numofunion)
