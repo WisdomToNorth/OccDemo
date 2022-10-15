@@ -55,8 +55,8 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     thread_spin_->setAlignment(Qt::AlignRight);
     distance_spin_->setAlignment(Qt::AlignRight);
 
-    row_spin_->setMaximum(1000);
-    col_spin_->setMaximum(1000);
+    row_spin_->setMaximum(300);
+    col_spin_->setMaximum(300);
     thread_spin_->setMinimum(0);
     thread_spin_->setMaximum(64);
     thread_spin_->setValue(0);
