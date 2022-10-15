@@ -51,7 +51,7 @@ public:
     {
         //O(N)
         ////std::cout << "#############\n";
-        for (int i = 0; i < count_; ++i)
+        for (int i = 0; i < parent_.size(); ++i)
         {
             //std::cout << "##:" << this->find(i) << "  ##:" << rhs.find(i) << std::endl;
             merge(this->find(i), rhs.find(i));
@@ -59,11 +59,12 @@ public:
     }
     void printUnion()
     {
-        std::cout << "#############\n";
-        for (int i = 0; i < count_; ++i)
+        std::cout << "\n~~" << count_ << "~~";
+        for (int i = 0; i < parent_.size(); ++i)
         {
             std::cout << "##:" << this->find(i);
         }
+        std::cout << "&&&&\n";
     }
     int isConnected(int _a, int _b)
     {

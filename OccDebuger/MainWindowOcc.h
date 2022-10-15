@@ -41,7 +41,7 @@ private:
     OccView* viewer_;
     QSpinBox* row_spin_;
     QSpinBox* col_spin_;
-    QSpinBox* distance_spin_;
+    QDoubleSpinBox* distance_spin_;
 
     std::vector<KBox> buf_;
 };
