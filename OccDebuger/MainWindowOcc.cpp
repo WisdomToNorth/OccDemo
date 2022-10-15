@@ -55,8 +55,8 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     thread_spin_->setAlignment(Qt::AlignRight);
     distance_spin_->setAlignment(Qt::AlignRight);
 
-    row_spin_->setMaximum(215);//data size is ^2 of this, data^2 equal to int max
-    col_spin_->setMaximum(215);
+    row_spin_->setMaximum(1000);
+    col_spin_->setMaximum(1000);
     thread_spin_->setMinimum(0);
     thread_spin_->setMaximum(64);
     thread_spin_->setValue(0);
@@ -122,12 +122,12 @@ void MainWindowOcc::on_actionOri_triggered()
 void MainWindowOcc::on_actionopt1_triggered()
 {
     std::cout << "\n\n-----------unionset single thread------------" << std::endl;
-    int n = buf_.size();
+    unsigned long n = buf_.size();
     std::cout << "data size: " << n << "\ncaculating..." << std::endl;
     K_Timer timer;
     UnionFind unionfinder(n);
-
-    caculateUnion(0, n * n, unionfinder);
+    unsigned long caculatecnt= (n) * (n - 1) / 2;
+    caculateUnion(1, caculatecnt+1, unionfinder);
     unionfinder.update();
 
     timer.timeFromBegin("union single thread build");
@@ -140,7 +140,7 @@ void MainWindowOcc::on_actionopt1_triggered()
         //std::cout << '{';
         for (auto& num : cur)
         {
-           // std::cout << ' ' << num << ' ';
+            // std::cout << ' ' << num << ' ';
             curset.push_back(buf_[num]);
         }
         //std::cout << "}\n";
@@ -151,17 +151,17 @@ void MainWindowOcc::on_actionopt1_triggered()
     std::cout << "merge count: " << cnt << std::endl;
 }
 
-int MainWindowOcc::getThreadCount(int datasize)
+unsigned long MainWindowOcc::getThreadCount(unsigned long datasize)
 {
     if (thread_spin_->value() > 0)
     {
         return thread_spin_->value();
     }
-    int min_per_thread = 25;
-    int max_thread = (datasize + min_per_thread - 1) / min_per_thread;
-    int hardware_thread = std::thread::hardware_concurrency();
-    int temp = hardware_thread != 0 ? hardware_thread : 2;
-    int num_thrads = temp < max_thread ? temp : max_thread;
+    unsigned long const min_per_thread = 25;
+    unsigned long const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
+    unsigned long const hardware_thread = std::thread::hardware_concurrency();
+    unsigned long const temp = hardware_thread != 0 ? hardware_thread : 2;
+    unsigned long const num_thrads = temp < max_thread ? temp : max_thread;
 
     return num_thrads;
 }
@@ -170,14 +170,14 @@ int MainWindowOcc::getThreadCount(int datasize)
 // 2, 3
 // 4, 5, 6
 // 7, 8, 9, 10
-std::pair<int, int> getLoc(int num)
+std::pair<int, int> MainWindowOcc::getLoc(unsigned long num)
 {
     int m = 0, n = 0;
-    int testnum1 = std::floor(pow(2 * num, 0.5));//6
+    unsigned long testnum1 = std::floor(pow(2 * num, 0.5));//6
     if (!((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) >= 2 * num)))
     {
         testnum1 = std::ceil(pow(2 * num, 0.5));
-        assert((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) > 2 * num));
+        //assert((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) > 2 * num));
     }
     m = testnum1 - 1;
     n = num - testnum1 * (testnum1 - 1) / 2 - 1;
@@ -192,10 +192,10 @@ std::pair<int, int> getLoc(int num)
 3|4 5 6
 4|7 8 9 10
 */
-void MainWindowOcc::caculateUnion(int l_start, int l_end, UnionFind& finder)
+void MainWindowOcc::caculateUnion(unsigned long l_start, unsigned long l_end, UnionFind& finder)
 {
-    int cal_cnt = l_end - l_start;
-    std::pair<int, int> loc = getLoc(l_start + 1);
+    unsigned long cal_cnt = l_end - l_start;
+    std::pair<int, int> loc = getLoc(l_start);
 
     int m = loc.first, n = loc.second;
     //std::cout << "\n\n\nloc :" << m << "#" << n << "#" << cal_cnt << ' ' << std::endl;
@@ -208,7 +208,6 @@ void MainWindowOcc::caculateUnion(int l_start, int l_end, UnionFind& finder)
             // std::cout << "cal:" << i << " and " << j << std::endl;
             if (!buf_[i].isOut(buf_[j]))
             {
-
                 finder.merge(i, j);
             }
             cal_cnt -= 1;
@@ -219,17 +218,19 @@ void MainWindowOcc::caculateUnion(int l_start, int l_end, UnionFind& finder)
         };
         m++;
     }
+    assert(cal_cnt == 0);
+
 }
 
 void MainWindowOcc::on_actionopt2_triggered()
 {
     std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
-    int temp = buf_.size();
-    int n = (temp) * (temp - 1) / 2;
+    unsigned long temp = buf_.size();
+    unsigned long n = (temp) * (temp - 1) / 2;
     std::cout << "data size: " << temp << "\ncaculating..." << std::endl;
 
-    int num_of_thread = getThreadCount(n);
-    int block_size = n / num_of_thread;
+    unsigned long num_of_thread = getThreadCount(n);
+    unsigned long block_size = n / num_of_thread;
     std::cout << "num of thread: " << num_of_thread << std::endl;
     K_Timer timer;
     //这里多线程的划分也可以优化，按平面区域分块划分，使各子并查集的重合性尽可能小
@@ -261,10 +262,10 @@ void MainWindowOcc::on_actionopt2_triggered()
         if ((*it).second.size() == 1)continue;
         std::unordered_set<int> cur((*it).second);
         std::vector<KBox> curset;
-       // std::cout << '{';
+        // std::cout << '{';
         for (auto& num : cur)
         {
-          //  std::cout << ' ' << num << ' ';
+            //  std::cout << ' ' << num << ' ';
             curset.push_back(buf_[num]);
         }
         //std::cout << "}\n";
