@@ -27,9 +27,9 @@ public:
 private:
     void generateTestData(std::vector<KBox>& buffer,
         int testrow, int testcol = 0, int distance = 3);
-    void caculateUnion(unsigned long l_start, unsigned long l_end, UnionFind& finder);
-    static std::pair<int, int> getLoc(unsigned long num);
-    unsigned long getThreadCount(unsigned long datasize);
+    void caculateUnion(unsigned long long l_start, unsigned long long l_end, UnionFind& finder);
+    static std::pair<int, int> getLoc(unsigned long long num);
+    unsigned long long getThreadCount(unsigned long long datasize);
 private slots:
     void on_actionGenerate_triggered();
     void on_actionOri_triggered();
