@@ -225,9 +225,9 @@ void MainWindowOcc::caculateUnion(unsigned long l_start, unsigned long l_end, Un
 void MainWindowOcc::on_actionopt2_triggered()
 {
     std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
-    unsigned long temp = buf_.size();
-    unsigned long n = (temp) * (temp - 1) / 2;
-    std::cout << "data size: " << temp << "\ncaculating..." << std::endl;
+    unsigned long datacount = buf_.size();
+    unsigned long n = (datacount) * (datacount - 1) / 2;
+    std::cout << "data size: " << datacount << "\ncaculating..." << std::endl;
 
     unsigned long num_of_thread = getThreadCount(n);
     unsigned long block_size = n / num_of_thread;
@@ -236,9 +236,9 @@ void MainWindowOcc::on_actionopt2_triggered()
     //这里多线程的划分也可以优化，按平面区域分块划分，使各子并查集的重合性尽可能小
     //此处，假设x、y都为偶数，这样恰好可以被四等分。分四线程计算
     std::vector<std::thread> threads(num_of_thread - 1);
-    std::vector<UnionFind> unionfinders(num_of_thread, UnionFind(temp));
+    std::vector<UnionFind> unionfinders(num_of_thread, UnionFind(datacount));
 
-    int l_start = 1;
+    int l_start = 1;//代表任务数，从1到n，使用尾后index，所以n+1
     for (int thread_index = 0; thread_index < num_of_thread - 1; ++thread_index)
     {
         int l_end = l_start + block_size;
