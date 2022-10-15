@@ -29,6 +29,7 @@ private:
         int testrow, int testcol = 0, int distance = 3);
     void caculateUnion(int l_start, int l_end, UnionFind& finder);
 
+    int getThreadCount(int datasize);
 private slots:
     void on_actionGenerate_triggered();
     void on_actionOri_triggered();
@@ -41,6 +42,7 @@ private:
     OccView* viewer_;
     QSpinBox* row_spin_;
     QSpinBox* col_spin_;
+    QSpinBox* thread_spin_;
     QDoubleSpinBox* distance_spin_;
 
     std::vector<KBox> buf_;

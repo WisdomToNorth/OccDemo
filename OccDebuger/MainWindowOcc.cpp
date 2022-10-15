@@ -34,24 +34,32 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
 
     row_spin_ = new QSpinBox();
     col_spin_ = new QSpinBox();
+    thread_spin_ = new QSpinBox();
     distance_spin_ = new QDoubleSpinBox();
-    QLabel* label_row = new QLabel("row");
-    QLabel* label_col = new QLabel("col");
-    QLabel* label_dis = new QLabel("distance");
+    QLabel* label_row = new QLabel(" row");
+    QLabel* label_col = new QLabel(" col");
+    QLabel* label_thread = new QLabel(" thread");
+    QLabel* label_dis = new QLabel(" distance");
     ui->mainToolBar->addWidget(label_row);
     ui->mainToolBar->addWidget(row_spin_);
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addWidget(label_col);
     ui->mainToolBar->addWidget(col_spin_);
+    ui->mainToolBar->addWidget(label_thread);
+    ui->mainToolBar->addWidget(thread_spin_);
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addWidget(label_dis);
     ui->mainToolBar->addWidget(distance_spin_);
     row_spin_->setAlignment(Qt::AlignRight);
     col_spin_->setAlignment(Qt::AlignRight);
+    thread_spin_->setAlignment(Qt::AlignRight);
     distance_spin_->setAlignment(Qt::AlignRight);
 
     row_spin_->setMaximum(215);//data size is ^2 of this, data^2 equal to int max
     col_spin_->setMaximum(215);
+    thread_spin_->setMinimum(0);
+    thread_spin_->setMaximum(64);
+    thread_spin_->setValue(0);
     row_spin_->setValue(30);
     col_spin_->setValue(30);
 
@@ -143,8 +151,12 @@ void MainWindowOcc::on_actionopt1_triggered()
     std::cout << "merge count: " << cnt << std::endl;
 }
 
-int getThreadCount(int datasize)
+int MainWindowOcc::getThreadCount(int datasize)
 {
+    if (thread_spin_->value() > 0)
+    {
+        return thread_spin_->value();
+    }
     int min_per_thread = 25;
     int max_thread = (datasize + min_per_thread - 1) / min_per_thread;
     int hardware_thread = std::thread::hardware_concurrency();
@@ -187,7 +199,7 @@ void MainWindowOcc::caculateUnion(int l_start, int l_end, UnionFind& finder)
 
     int m = loc.first, n = loc.second;
     //std::cout << "\n\n\nloc :" << m << "#" << n << "#" << cal_cnt << ' ' << std::endl;
-    for (int i = m + 1; i < buf_.size(); ++i)
+    for (int i = m + 1; i < buf_.size(); ++i)//
     {
         for (int j = 0; j < m + 1; ++j)
         {
@@ -205,7 +217,6 @@ void MainWindowOcc::caculateUnion(int l_start, int l_end, UnionFind& finder)
                 return;
             }
         };
-
         m++;
     }
 }
