@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>C:\OpenSource\opencascade\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenSource\opencascade\vc14\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\OpenSource\opencascade-7.6.0\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\OpenSource\opencascade-7.6.0\libd;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

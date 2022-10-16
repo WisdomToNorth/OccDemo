@@ -151,7 +151,7 @@ void MainWindowOcc::on_actionopt1_triggered()
     std::cout << "merge count: " << cnt << std::endl;
 }
 
-unsigned long MainWindowOcc::getThreadCount(unsigned long datasize)
+unsigned long long MainWindowOcc::getThreadCount(unsigned long long datasize)
 {
     if (thread_spin_->value() > 0)
     {
@@ -170,18 +170,21 @@ unsigned long MainWindowOcc::getThreadCount(unsigned long datasize)
 // 2, 3
 // 4, 5, 6
 // 7, 8, 9, 10
-std::pair<int, int> MainWindowOcc::getLoc(unsigned long num)
+std::pair<int, int> MainWindowOcc::getLoc(unsigned long long num)
 {
-    int m = 0, n = 0;
-    unsigned long testnum = std::floor(pow(2 * num, 0.5));//6
+    unsigned long long m = 0, n = 0;
+    unsigned long long testnum = std::floor(pow(2 * num, 0.5));//6
     if (!((testnum/2 * (testnum - 1) <  num) && (testnum/2 * (testnum + 1) >=  num)))
     {
-        //testnum = std::ceil(pow(2 * num, 0.5));
+        testnum = std::ceil(pow(2 * num, 0.5));
         testnum += 1;
-        //assert((testnum * (testnum - 1) < 2 * num) && (testnum * (testnum + 1) > 2 * num));
+        assert((testnum/2 * (testnum - 1) < num) && (testnum/2 * (testnum + 1) >  num));
     }
-    m = testnum - 1;
+    m =  testnum - 1;
     n = num - testnum / 2 * (testnum - 1) ;
+    std::cout << "\n\ntestnum :" << m << "#" <<
+        n << "$" << std::endl;
+
     return { m,n };//m,n从0开始数
 }
 
@@ -193,14 +196,14 @@ std::pair<int, int> MainWindowOcc::getLoc(unsigned long num)
 3|4 5 6
 4|7 8 9 10
 */
-void MainWindowOcc::caculateUnion(unsigned long l_start, unsigned long l_end, UnionFind& finder)
+void MainWindowOcc::caculateUnion(unsigned long long l_start, unsigned long long l_end, UnionFind& finder)
 {
     unsigned long cal_cnt = l_end - l_start;
     std::pair<int, int> loc = getLoc(l_start);
 
     int m = loc.first, n = loc.second;
-    std::cout << "\n\nloc :" << m << "#" <<
-        n << "#" << cal_cnt << ' ' << std::endl;
+    //std::cout << "\n\nloc :" << m << "#" <<
+    //    n << "#" << cal_cnt << ' ' << std::endl;
     for (int i = m + 1; i < buf_.size(); ++i)//
     {
         for (int j = 0; j < m + 1; ++j)
