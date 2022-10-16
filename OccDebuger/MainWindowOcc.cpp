@@ -181,7 +181,7 @@ std::pair<int, int> MainWindowOcc::getLoc(unsigned long num)
         //assert((testnum * (testnum - 1) < 2 * num) && (testnum * (testnum + 1) > 2 * num));
     }
     m = testnum - 1;
-    n = num - testnum / 2 * (testnum - 1) - 1;
+    n = num - testnum / 2 * (testnum - 1) ;
     return { m,n };//m,n从0开始数
 }
 
@@ -199,7 +199,8 @@ void MainWindowOcc::caculateUnion(unsigned long l_start, unsigned long l_end, Un
     std::pair<int, int> loc = getLoc(l_start);
 
     int m = loc.first, n = loc.second;
-    //std::cout << "\caculate_cnt\caculate_cnt\nloc :" << m << "#" << caculate_cnt << "#" << cal_cnt << ' ' << std::endl;
+    std::cout << "\n\nloc :" << m << "#" <<
+        n << "#" << cal_cnt << ' ' << std::endl;
     for (int i = m + 1; i < buf_.size(); ++i)//
     {
         for (int j = 0; j < m + 1; ++j)
@@ -207,6 +208,7 @@ void MainWindowOcc::caculateUnion(unsigned long l_start, unsigned long l_end, Un
             j = j + n;//第一次进入循环时，初始化j的位置，后续将n置零
             n = 0;
             // std::cout << "cal:" << i << " and " << j << std::endl;
+            assert(i < buf_.size() && j < buf_.size());
             if (!buf_[i].isOut(buf_[j]))
             {
                 finder.merge(i, j);
