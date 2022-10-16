@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include <unordered_map>
 #include <unordered_set>
-
+#include <mutex>
 class UnionFind
 {
+    //std::mutex locker;
 public:
     //如果使用vector，则必须连续编号
     std::unordered_map<int, int> parent_;

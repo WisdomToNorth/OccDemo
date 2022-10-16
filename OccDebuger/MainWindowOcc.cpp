@@ -60,12 +60,12 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     thread_spin_->setMinimum(0);
     thread_spin_->setMaximum(64);
     thread_spin_->setValue(0);
-    row_spin_->setValue(30);
-    col_spin_->setValue(30);
+    row_spin_->setValue(200);
+    col_spin_->setValue(200);
 
     distance_spin_->setValue(1.5);
     ui->gridLayout->addWidget(viewer_);
-
+    on_actionGenerate_triggered();
 }
 
 MainWindowOcc::~MainWindowOcc()
@@ -80,8 +80,7 @@ void MainWindowOcc::on_actionGenerate_triggered()
         std::vector<KBox> newbuf;
         buf_.swap(newbuf);
     }
-    qDebug() << "\n\n-------------\n\
--------------\ngenerating...";
+    std::cout << "\n\n-------------\n-------------\ngenerating...";
     K_Timer timer;
     int rowcnt = row_spin_->value();
     int colcnt = col_spin_->value();
@@ -110,7 +109,7 @@ void MainWindowOcc::on_actionOri_triggered()
             if (!buf_[i].isOut(buf_[j]))
             {
                 buf_[i].mergeTest(buf_[j]);
-                //std::cout << "{ " << thread_index << "  " << j << " }\n";
+                //std::cout << "{ " << thread_index << "  " << j << " }\caculate_cnt";
                 ++cnt;
             }
         }
@@ -122,12 +121,13 @@ void MainWindowOcc::on_actionOri_triggered()
 void MainWindowOcc::on_actionopt1_triggered()
 {
     std::cout << "\n\n-----------unionset single thread------------" << std::endl;
-    unsigned long n = buf_.size();
-    std::cout << "data size: " << n << "\ncaculating..." << std::endl;
+    unsigned long data_count = buf_.size();
+    std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
     K_Timer timer;
-    UnionFind unionfinder(n);
-    unsigned long caculatecnt= (n) * (n - 1) / 2;
-    caculateUnion(1, caculatecnt+1, unionfinder);
+    UnionFind unionfinder(data_count);
+    unsigned long caculate_cnt= (data_count/ 2) * (data_count - 1) ;
+    std::cout << "caculate_cnt: " << caculate_cnt << std::endl;
+    caculateUnion(1, caculate_cnt+1, unionfinder);
     unionfinder.update();
 
     timer.timeFromBegin("union single thread build");
@@ -143,7 +143,7 @@ void MainWindowOcc::on_actionopt1_triggered()
             // std::cout << ' ' << num << ' ';
             curset.push_back(buf_[num]);
         }
-        //std::cout << "}\n";
+        //std::cout << "}\caculate_cnt";
         curset[0].mergeTest(curset);
         ++cnt;
     }
@@ -173,14 +173,15 @@ unsigned long MainWindowOcc::getThreadCount(unsigned long datasize)
 std::pair<int, int> MainWindowOcc::getLoc(unsigned long num)
 {
     int m = 0, n = 0;
-    unsigned long testnum1 = std::floor(pow(2 * num, 0.5));//6
-    if (!((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) >= 2 * num)))
+    unsigned long testnum = std::floor(pow(2 * num, 0.5));//6
+    if (!((testnum/2 * (testnum - 1) <  num) && (testnum/2 * (testnum + 1) >=  num)))
     {
-        testnum1 = std::ceil(pow(2 * num, 0.5));
-        //assert((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) > 2 * num));
+        //testnum = std::ceil(pow(2 * num, 0.5));
+        testnum += 1;
+        //assert((testnum * (testnum - 1) < 2 * num) && (testnum * (testnum + 1) > 2 * num));
     }
-    m = testnum1 - 1;
-    n = num - testnum1 * (testnum1 - 1) / 2 - 1;
+    m = testnum - 1;
+    n = num - testnum / 2 * (testnum - 1) - 1;
     return { m,n };//m,n从0开始数
 }
 
@@ -198,7 +199,7 @@ void MainWindowOcc::caculateUnion(unsigned long l_start, unsigned long l_end, Un
     std::pair<int, int> loc = getLoc(l_start);
 
     int m = loc.first, n = loc.second;
-    //std::cout << "\n\n\nloc :" << m << "#" << n << "#" << cal_cnt << ' ' << std::endl;
+    //std::cout << "\caculate_cnt\caculate_cnt\nloc :" << m << "#" << caculate_cnt << "#" << cal_cnt << ' ' << std::endl;
     for (int i = m + 1; i < buf_.size(); ++i)//
     {
         for (int j = 0; j < m + 1; ++j)
@@ -225,18 +226,20 @@ void MainWindowOcc::caculateUnion(unsigned long l_start, unsigned long l_end, Un
 void MainWindowOcc::on_actionopt2_triggered()
 {
     std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
-    unsigned long datacount = buf_.size();
-    unsigned long n = (datacount) * (datacount - 1) / 2;
-    std::cout << "data size: " << datacount << "\ncaculating..." << std::endl;
+    unsigned long data_count = buf_.size();
+    unsigned long caculate_cnt = (data_count/ 2) * (data_count - 1) ;
+    std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
+    std::cout << "caculate cnt:" << caculate_cnt << std::endl;
 
-    unsigned long num_of_thread = getThreadCount(n);
-    unsigned long block_size = n / num_of_thread;
+    unsigned long num_of_thread = getThreadCount(caculate_cnt);
+    unsigned long block_size = caculate_cnt / num_of_thread;
     std::cout << "num of thread: " << num_of_thread << std::endl;
+
     K_Timer timer;
     //这里多线程的划分也可以优化，按平面区域分块划分，使各子并查集的重合性尽可能小
     //此处，假设x、y都为偶数，这样恰好可以被四等分。分四线程计算
     std::vector<std::thread> threads(num_of_thread - 1);
-    std::vector<UnionFind> unionfinders(num_of_thread, UnionFind(datacount));
+    std::vector<UnionFind> unionfinders(num_of_thread, UnionFind(data_count));
 
     int l_start = 1;//代表任务数，从1到n，使用尾后index，所以n+1
     for (int thread_index = 0; thread_index < num_of_thread - 1; ++thread_index)
@@ -246,7 +249,7 @@ void MainWindowOcc::on_actionopt2_triggered()
             l_start, l_end, std::ref(unionfinders[thread_index + 1]));
         l_start = l_end;
     }
-    this->caculateUnion(l_start, n + 1, std::ref(unionfinders[0]));
+    this->caculateUnion(l_start, caculate_cnt + 1, std::ref(unionfinders[0]));
     std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
     std::cout << "All thread join, begin to combine!" << std::endl;
     for (int numofunion = 1; numofunion < num_of_thread; ++numofunion)
@@ -268,7 +271,7 @@ void MainWindowOcc::on_actionopt2_triggered()
             //  std::cout << ' ' << num << ' ';
             curset.push_back(buf_[num]);
         }
-        //std::cout << "}\n";
+        //std::cout << "}\caculate_cnt";
         curset[0].mergeTest(curset);
         ++cnt;
     }
