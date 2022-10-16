@@ -60,9 +60,8 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     thread_spin_->setMinimum(0);
     thread_spin_->setMaximum(64);
     thread_spin_->setValue(0);
-    row_spin_->setValue(200);
-    col_spin_->setValue(200);
-
+    row_spin_->setValue(30);
+    col_spin_->setValue(30);
     distance_spin_->setValue(1.5);
     ui->gridLayout->addWidget(viewer_);
     on_actionGenerate_triggered();
@@ -125,9 +124,9 @@ void MainWindowOcc::on_actionopt1_triggered()
     std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
     K_Timer timer;
     UnionFind unionfinder(data_count);
-    unsigned long caculate_cnt= (data_count/ 2) * (data_count - 1) ;
+    unsigned long caculate_cnt = (data_count) * (data_count - 1) / 2;
     std::cout << "caculate_cnt: " << caculate_cnt << std::endl;
-    caculateUnion(1, caculate_cnt+1, unionfinder);
+    caculateUnion(1, caculate_cnt + 1, unionfinder);
     unionfinder.update();
 
     timer.timeFromBegin("union single thread build");
@@ -172,20 +171,19 @@ unsigned long long MainWindowOcc::getThreadCount(unsigned long long datasize)
 // 7, 8, 9, 10
 std::pair<int, int> MainWindowOcc::getLoc(unsigned long long num)
 {
-    unsigned long long m = 0, n = 0;
-    unsigned long long testnum = std::floor(pow(2 * num, 0.5));//6
-    if (!((testnum/2 * (testnum - 1) <  num) && (testnum/2 * (testnum + 1) >=  num)))
+    unsigned long long testnum1 = std::floor(pow(2 * num, 0.5));//6
+    //std::cout << "\ntestnum: " << testnum1 << std::endl;
+    if (!((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) >= 2 * num)))
     {
-        testnum = std::ceil(pow(2 * num, 0.5));
-        testnum += 1;
-        assert((testnum/2 * (testnum - 1) < num) && (testnum/2 * (testnum + 1) >  num));
+        testnum1 += 1;
     }
-    m =  testnum - 1;
-    n = num - testnum / 2 * (testnum - 1) ;
-    std::cout << "\n\ntestnum :" << m << "#" <<
-        n << "$" << std::endl;
-
-    return { m,n };//m,n从0开始数
+    assert((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) >= 2 * num));
+    unsigned long long m = testnum1 - 1;
+    unsigned long long n = num - testnum1 * (testnum1 - 1) / 2 - 1;
+    int a = static_cast<int>(m) + 1;
+    int b = static_cast<int>(n);
+    //std::cout << "loc: " << a << " * " << b << " &" << std::endl;
+    return { a,b };//m,n从0开始数
 }
 
 /*
@@ -200,31 +198,33 @@ void MainWindowOcc::caculateUnion(unsigned long long l_start, unsigned long long
 {
     unsigned long cal_cnt = l_end - l_start;
     std::pair<int, int> loc = getLoc(l_start);
-
+    int cal_real_cnt = 0;
     int m = loc.first, n = loc.second;
-    //std::cout << "\n\nloc :" << m << "#" <<
-    //    n << "#" << cal_cnt << ' ' << std::endl;
-    for (int i = m + 1; i < buf_.size(); ++i)//
+    //std::cout << "\nloc :" << m << "#" << n << "#" << cal_cnt << "//" << std::endl;
+    for (int i = m; i < buf_.size(); ++i)//
     {
-        for (int j = 0; j < m + 1; ++j)
+        for (int j = 0; j < m; ++j)
         {
             j = j + n;//第一次进入循环时，初始化j的位置，后续将n置零
             n = 0;
             // std::cout << "cal:" << i << " and " << j << std::endl;
-            assert(i < buf_.size() && j < buf_.size());
+            cal_real_cnt++;
             if (!buf_[i].isOut(buf_[j]))
             {
                 finder.merge(i, j);
             }
-            cal_cnt -= 1;
-            if (cal_cnt == 0)
+
+            //cal_cnt -= 1;
+            if (cal_cnt == cal_real_cnt)
             {
+                std::cout << "cal_real_cnt: " << cal_real_cnt << std::endl;
                 return;
             }
         };
         m++;
     }
-    assert(cal_cnt == 0);
+    //std::cout << "cal_real_cnt: " << cal_real_cnt << std::endl;
+    assert(cal_cnt == cal_real_cnt);
 
 }
 
@@ -232,7 +232,7 @@ void MainWindowOcc::on_actionopt2_triggered()
 {
     std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
     unsigned long data_count = buf_.size();
-    unsigned long caculate_cnt = (data_count/ 2) * (data_count - 1) ;
+    unsigned long caculate_cnt = (data_count) * (data_count - 1) / 2;
     std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
     std::cout << "caculate cnt:" << caculate_cnt << std::endl;
 
