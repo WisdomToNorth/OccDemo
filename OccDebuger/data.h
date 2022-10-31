@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 struct KPt
 {
@@ -15,7 +17,7 @@ struct KPt
 class KBox
 {
 public:
-    KBox() :center_(KPt(0, 0)) {}
+    //KBox() :center_(KPt(0, 0)) {}
     KBox(double x, double y, double sizex, double sizey) :
         center_(KPt(x, y)), size_x(sizex), size_y(sizey)
     {}
@@ -31,16 +33,13 @@ public:
     }
     void mergeTest(const KBox&)
     {
-        //Sleep(1);
+        std::this_thread::sleep_for(std::chrono::nanoseconds(100));
     }
     void mergeTest(std::vector<KBox>&)
     {
-        //Sleep(1);
+        std::this_thread::sleep_for(std::chrono::nanoseconds(100));
     }
-    void mergeTest(std::unordered_set<KBox>&)
-    {
-        // Sleep(1);
-    }
+
     double X()const { return center_.x; }
     double Y()const { return center_.y; }
     double size_x;
