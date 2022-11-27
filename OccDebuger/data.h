@@ -25,19 +25,18 @@ public:
     {
         double cx = (size_x + rhs.size_x) * 0.5;
         double cy = (size_y + rhs.size_y) * 0.5;
-        //std::cout << "Cx:" << cx<<std::endl;
-        //std::cout << "Cy:" << cy << std::endl<<std::endl;
+
         if (abs(rhs.center_.x - center_.x) > cx || abs(rhs.center_.y - center_.y) > cy)
             return true;
         else return false;
     }
     void mergeTest(const KBox&)
     {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
     }
     void mergeTest(std::vector<KBox>&)
     {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
     }
 
     double X()const { return center_.x; }

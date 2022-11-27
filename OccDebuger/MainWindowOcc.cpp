@@ -140,7 +140,7 @@ void MainWindowOcc::on_actionopt1_triggered()
         for (auto& num : cur)
         {
             // std::cout << ' ' << num << ' ';
-            curset.push_back(buf_[num]);
+            curset.emplace_back(buf_[num]);
         }
         //std::cout << "}\caculate_cnt";
         curset[0].mergeTest(curset);
@@ -156,9 +156,9 @@ unsigned long long MainWindowOcc::getThreadCount(unsigned long long datasize)
     {
         return thread_spin_->value();
     }
-    unsigned long long  const min_per_thread = 25;
-    unsigned long long  const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
-    unsigned long long  const hardware_thread = std::thread::hardware_concurrency();
+    unsigned long long const min_per_thread = 25;
+    unsigned long long const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
+    unsigned long long const hardware_thread = std::thread::hardware_concurrency();
     unsigned long long const temp = hardware_thread != 0 ? hardware_thread : 2;
     unsigned long long const num_thrads = temp < max_thread ? temp : max_thread;
 
@@ -171,9 +171,11 @@ unsigned long long MainWindowOcc::getThreadCount(unsigned long long datasize)
 // 7, 8, 9, 10
 std::pair<int, int> MainWindowOcc::getLoc(unsigned long long num)
 {
-    unsigned long long testnum1 = std::floor(pow(2 * num, 0.5));//6
+    unsigned long long testnum1 = std::floor(sqrt(2 * num));//6
     //std::cout << "\ntestnum: " << testnum1 << std::endl;
-    if (!((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) >= 2 * num)))
+    unsigned long long testnum1_cache = testnum1 * testnum1;
+    //if (!((testnum1 * (testnum1 - 1) < 2 * num) && (testnum1 * (testnum1 + 1) >= 2 * num)))
+    if (!((testnum1_cache - testnum1 < 2 * num) && (testnum1_cache + testnum1 >= 2 * num)))
     {
         testnum1 += 1;
     }
@@ -182,6 +184,7 @@ std::pair<int, int> MainWindowOcc::getLoc(unsigned long long num)
     unsigned long long n = num - testnum1 * (testnum1 - 1) / 2 - 1;
     int a = static_cast<int>(m) + 1;
     int b = static_cast<int>(n);
+
     //std::cout << "loc: " << a << " * " << b << " &" << std::endl;
     return { a,b };//m,n从0开始数
 }
@@ -208,13 +211,13 @@ void MainWindowOcc::caculateUnion(unsigned long long l_start, unsigned long long
             j = j + n;//第一次进入循环时，初始化j的位置，后续将n置零
             n = 0;
             // std::cout << "cal:" << i << " and " << j << std::endl;
-            cal_real_cnt++;
+
             if (!buf_[i].isOut(buf_[j]))
             {
                 finder.merge(i, j);
             }
 
-            //cal_cnt -= 1;
+            cal_real_cnt++;
             if (cal_cnt == cal_real_cnt)
             {
                 //std::cout << "cal_real_cnt: " << cal_real_cnt << std::endl;
@@ -236,7 +239,7 @@ void MainWindowOcc::on_actionopt2_triggered()
     std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
     std::cout << "caculate cnt:" << caculate_cnt << std::endl;
 
-    unsigned long long num_of_thread = getThreadCount(caculate_cnt);  
+    unsigned long long num_of_thread = getThreadCount(caculate_cnt);
     std::cout << "num of thread: " << num_of_thread << std::endl;
     unsigned long long block_size = caculate_cnt / num_of_thread;
 
@@ -248,9 +251,11 @@ void MainWindowOcc::on_actionopt2_triggered()
     std::vector<UnionFind> unionfinders(num_of_thread, UnionFind(data_count));
 
     unsigned long long l_start = 1;//代表任务数，从1到n，使用尾后index，所以n+1
-    for (int thread_index = 0; thread_index < num_of_thread - 1; ++thread_index)
+    for (unsigned long long thread_index = 0; thread_index < num_of_thread - 1; ++thread_index)
     {
         unsigned long long l_end = l_start + block_size;
+        //threads[thread_index] = std::thread(std::mem_fn(&MainWindowOcc::caculateUnion), this,
+        //    l_start, l_end, std::ref(unionfinders[thread_index + 1]));  
         threads[thread_index] = std::thread(std::mem_fn(&MainWindowOcc::caculateUnion), this,
             l_start, l_end, std::ref(unionfinders[thread_index + 1]));
         l_start = l_end;
@@ -266,16 +271,17 @@ void MainWindowOcc::on_actionopt2_triggered()
 
     timer.timeFromBegin("union mutil thread build");
     int cnt = 0;
-    for (auto it = unionfinders[0].final_set_.begin(); it != unionfinders[0].final_set_.end(); ++it)
+    for (auto it = unionfinders[0].final_set_.begin();
+        it != unionfinders[0].final_set_.end(); ++it)
     {
         if ((*it).second.size() == 1)continue;
         std::unordered_set<int> cur((*it).second);
         std::vector<KBox> curset;
         // std::cout << '{';
-        for (auto& num : cur)
+        for (const auto& num : cur)
         {
             //  std::cout << ' ' << num << ' ';
-            curset.push_back(buf_[num]);
+            curset.emplace_back(buf_[num]);
         }
         //std::cout << "}\caculate_cnt";
         curset[0].mergeTest(curset);
@@ -297,7 +303,16 @@ void MainWindowOcc::on_actionview_triggered()
     std::vector<TopoDS_Face> vecset;
     std::vector<Handle(AIS_TextLabel)> labs;
     drawData(buf_, vecset, labs);
-    viewer_->drawtestdata(vecset, labs);
+
+    viewer_->drawTestData(vecset);
+    viewer_->drawTestLabelData(labs);
+
+    //std::thread t1(&OccView::drawTestData, viewer_, std::ref(vecset));
+    //std::thread t2(&OccView::drawTestLabelData, viewer_, std::ref(labs));
+    //t1.join();
+    //t2.join();
+    viewer_->fitAll();
+    viewer_->update();
 }
 
 void MainWindowOcc::generateTestData(std::vector<KBox>& buffer,

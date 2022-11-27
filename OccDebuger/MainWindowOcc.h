@@ -30,6 +30,7 @@ private:
     void caculateUnion(unsigned long long l_start, unsigned long long l_end, UnionFind& finder);
     static std::pair<int, int> getLoc(unsigned long long num);
     unsigned long long getThreadCount(unsigned long long datasize);
+
 private slots:
     void on_actionGenerate_triggered();
     void on_actionOri_triggered();
@@ -37,6 +38,7 @@ private slots:
     void on_actionopt2_triggered();
     void on_actionFitAll_triggered();
     void on_actionview_triggered();
+
 private:
     Ui::MainWindowOccClass* ui;
     OccView* viewer_;

@@ -463,8 +463,7 @@ void OccView::panByMiddleButton(const QPoint& thePoint)
     view_->Pan(aCenterX - thePoint.x(), thePoint.y() - aCenterY);
 }
 
-void OccView::drawtestdata(const std::vector<TopoDS_Face>& all_face_,
-    const std::vector<Handle(AIS_TextLabel)>& all_labels)
+void OccView::drawTestData(const std::vector<TopoDS_Face>& all_face_)
 {
     int cnt = all_face_.size();
     for (int i = 0; i < cnt; ++i)
@@ -472,13 +471,15 @@ void OccView::drawtestdata(const std::vector<TopoDS_Face>& all_face_,
         Handle(AIS_Shape) shape = new AIS_Shape(all_face_[i]);
         context_->Display(shape, false);
     }
+}
+
+void OccView::drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels)
+{
     int textcnt = all_labels.size();
     for (int j = 0; j < textcnt; ++j)
     {
         context_->Display(all_labels[j], false);
     }
-    view_->Update();
-    view_->FitAll();
 }
 
 void OccView::keyPressEvent(QKeyEvent* event)

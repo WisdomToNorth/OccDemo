@@ -54,18 +54,18 @@ void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
         TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(WW);
         vecset.emplace_back(myFaceProfile);
 
-        if (testsize < 1000)//小于1000时显示标号
-        {
-            gp_Pnt cur(box.X(), box.Y(), 0);
-            Handle(AIS_TextLabel) text = new AIS_TextLabel();
-            text->SetPosition(cur);
-            QString str;
-            str += QString::number(cnt);
-            //+ '#' + QString::number(box.size_x)
-            //+ '#'+QString::number(box.size_y);
-            text->SetText(str.toStdString().c_str());
-            labs.emplace_back(text);
-            ++cnt;
-        }
+        //if (testsize < 1000)//小于1000时显示标号
+        //{
+        gp_Pnt cur(box.X(), box.Y(), 0);
+        Handle(AIS_TextLabel) text = new AIS_TextLabel();
+        text->SetPosition(cur);
+        QString str;
+        str += QString::number(cnt);
+        //+ '#' + QString::number(box.size_x)
+        //+ '#'+QString::number(box.size_y);
+        text->SetText(str.toStdString().c_str());
+        labs.emplace_back(text);
+        ++cnt;
+        // }
     }
 }

@@ -1,15 +1,4 @@
-﻿/*
-*    Copyright (c) 2018 Shing Liu All Rights Reserved.
-*
-*           File : OccView.h
-*         Author : Shing Liu(eryar@163.com)
-*           Date : 2018-01-09 21:00
-*        Version : OpenCASCADE7.2.0 & Qt5.7.1
-*
-*    Description : Adapte OpenCASCADE view for Qt.
-*/
-
-#ifndef _OCCVIEW_H_
+﻿#ifndef _OCCVIEW_H_
 #define _OCCVIEW_H_
 
 #include <QWidget>
@@ -43,8 +32,8 @@ public:
     OccView(QWidget* parent);
 
     const Handle(AIS_InteractiveContext)& getContext() const;
-    void drawtestdata(const std::vector<TopoDS_Face>& all_face_,
-        const std::vector<Handle(AIS_TextLabel)>& all_labels);
+    void drawTestData(const std::vector<TopoDS_Face>& all_face_);
+    void drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels);
 signals:
     void selectionChanged(void);
 
