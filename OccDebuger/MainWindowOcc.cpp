@@ -197,7 +197,8 @@ std::pair<int, int> MainWindowOcc::getLoc(unsigned long long num)
 3|4 5 6
 4|7 8 9 10
 */
-void MainWindowOcc::caculateUnion(unsigned long long l_start, unsigned long long l_end, UnionFind& finder)
+void MainWindowOcc::caculateUnion(unsigned long long l_start,
+    unsigned long long l_end, UnionFind& finder)
 {
     unsigned long long cal_cnt = l_end - l_start;
     std::pair<int, int> loc = getLoc(l_start);

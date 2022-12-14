@@ -64,6 +64,8 @@ void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
         //+ '#' + QString::number(box.size_x)
         //+ '#'+QString::number(box.size_y);
         text->SetText(str.toStdString().c_str());
+        text->SetColor(Quantity_NOC_BLACK);
+        text->SetFont("consolas");
         labs.emplace_back(text);
         ++cnt;
         // }

@@ -32,11 +32,11 @@ public:
     }
     void mergeTest(const KBox&)
     {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
     void mergeTest(std::vector<KBox>&)
     {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     double X()const { return center_.x; }
