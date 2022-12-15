@@ -134,7 +134,7 @@ void MainWindowOcc::on_actionopt1_triggered()
     unionfinder.update();
 
     timer.timeFromBegin("union single thread build");
-    int cnt = handleUnionFinder(unionfinder);
+    int cnt = handleUnionFinder(unionfinder, false);
 
     timer.timeFromBegin("union single all");
     std::cout << "merge count: " << cnt << std::endl;
@@ -146,7 +146,7 @@ unsigned long long MainWindowOcc::getThreadCount(unsigned long long datasize)
     {
         return thread_spin_->value();
     }
-    unsigned long long const min_per_thread = 25;
+    unsigned long long const min_per_thread = 10;
     unsigned long long const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
     unsigned long long const hardware_thread = std::thread::hardware_concurrency();
     unsigned long long const temp = hardware_thread != 0 ? hardware_thread : 2;
@@ -262,33 +262,54 @@ void MainWindowOcc::on_actionopt2_triggered()
 
     timer.timeFromBegin("union mutil thread build");
 
-    int cnt = handleUnionFinder(unionfinders[0]);
+    int cnt = handleUnionFinder(unionfinders[0], true);
 
     timer.timeFromBegin("union multi all");
     std::cout << "merge count: " << cnt << std::endl;
 
 }
 
-int MainWindowOcc::handleUnionFinder(const UnionFind& finder)
+
+int MainWindowOcc::handleUnionFinder(const UnionFind& finder, bool use_multi)
 {
-    int cnt = 0;
-    for (auto it = finder.final_set_.begin();
-        it != finder.final_set_.end(); ++it)
+    //int cnt = 0;
+    if (!use_multi)
     {
-        if ((*it).second.size() == 1)continue;
-        std::unordered_set<int> cur((*it).second);
-        std::vector<KBox> curset;
-        // std::cout << '{';
-        for (const auto& num : cur)
-        {
-            //  std::cout << ' ' << num << ' ';
-            curset.emplace_back(buf_[num]);
-        }
-        //std::cout << "}\caculate_cnt";
-        curset[0].mergeTest(curset);
-        ++cnt;
+        return cal_set_fuc(finder.final_set_.begin(), finder.final_set_.end(), 0);
     }
-    return cnt;
+    else
+    {
+        const std::vector<std::pair<int, std::unordered_set<int>>>& final_set
+            = finder.final_set_;
+
+        unsigned long long caculate_cnt = final_set.size();
+        std::cout << "\nfinal set size: " << final_set.size() << std::endl;
+        unsigned long long num_of_thread = getThreadCount(caculate_cnt);
+        std::cout << "num of thread: " << num_of_thread << std::endl;
+        unsigned long long block_size = caculate_cnt / num_of_thread;
+        std::vector<std::thread> threads(num_of_thread - 1);
+        std::vector<int> threads_res(num_of_thread - 1);
+
+        auto l_start = final_set.begin();
+        int cnt = 0;
+        for (unsigned long long thread_index = 0; thread_index < num_of_thread - 1; ++thread_index)
+        {
+            auto l_end = l_start + block_size;
+
+            threads[thread_index] = std::thread([=, &cnt]//涉及迭代器，貌似需要使用赋值
+                {
+                    cnt += cal_set_fuc(l_start, l_end, thread_index);
+            // std::cout << " result:" << temp << std::endl;
+                });
+
+            l_start = l_end;
+        }
+        cnt += cal_set_fuc(l_start, finder.final_set_.end(), num_of_thread);
+
+        std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
+
+        return cnt;// std::accumulate(threads_res.begin(), threads_res.end(), cnt);
+    }
 }
 
 void MainWindowOcc::on_actionFitAll_triggered()

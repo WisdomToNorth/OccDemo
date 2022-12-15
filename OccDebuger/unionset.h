@@ -9,7 +9,7 @@ public:
     //如果使用vector，则必须连续编号
     std::unordered_map<int, int> parent_;
     std::unordered_map<int, int> rank_;
-    std::unordered_map<int, std::unordered_set<int>> final_set_;
+    std::vector<std::pair<int, std::unordered_set<int>>> final_set_;
     int count_;
 
 public:
@@ -74,10 +74,15 @@ public:
 
     void update()
     {
+        std::unordered_map<int, std::unordered_set<int>> final_set;
         //O(N)
         for (auto it = parent_.begin(); it != parent_.end(); ++it)
         {
-            final_set_[find((*it).first)].insert((*it).first);
+            final_set[find((*it).first)].insert((*it).first);
+        }
+        for (auto sit = final_set.begin(); sit != final_set.end(); ++sit)
+        {
+            final_set_.emplace_back((*sit).first, (*sit).second);
         }
     }
 };
