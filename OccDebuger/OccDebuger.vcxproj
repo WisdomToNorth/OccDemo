@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClCompile Include="CADView.cpp" />
     <ClCompile Include="data.cpp" />
+    <ClCompile Include="global.cpp" />
     <ClCompile Include="MainWindowOcc.cpp" />
     <ClCompile Include="public.cpp" />
     <QtRcc Include="OccDebuger.qrc" />
@@ -101,6 +102,7 @@
     <QtMoc Include="MainWindowOcc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="global.h" />
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="public.h" />
     <ClInclude Include="publictools.h" />

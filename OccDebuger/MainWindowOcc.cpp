@@ -16,13 +16,17 @@
 #include "Ktimer.h"
 #include "public.h"
 #include "data.h"
-
+#include "global.h"
 
 MainWindowOcc::MainWindowOcc(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindowOccClass())
 {
     ui->setupUi(this);
+    auto con = getUIConfig();
+    this->setStyleSheet(G_GetUiStyleSheet(con));
+
+
     viewer_ = new OccView(this);
 
     auto screenRect = QGuiApplication::screens();
@@ -83,7 +87,7 @@ void MainWindowOcc::on_actionGenerate_triggered()
     K_Timer timer;
     int rowcnt = row_spin_->value();
     int colcnt = col_spin_->value();
-    int dis = distance_spin_->value();
+    double dis = distance_spin_->value();
     generateTestData(buf_, rowcnt, colcnt, dis);
     if (rowcnt * colcnt < 1000)
     {
@@ -130,22 +134,8 @@ void MainWindowOcc::on_actionopt1_triggered()
     unionfinder.update();
 
     timer.timeFromBegin("union single thread build");
-    int cnt = 0;
-    for (auto it = unionfinder.final_set_.begin(); it != unionfinder.final_set_.end(); ++it)
-    {
-        if ((*it).second.size() == 1)continue;
-        std::unordered_set<int> cur((*it).second);
-        std::vector<KBox> curset;
-        //std::cout << '{';
-        for (auto& num : cur)
-        {
-            // std::cout << ' ' << num << ' ';
-            curset.emplace_back(buf_[num]);
-        }
-        //std::cout << "}\caculate_cnt";
-        curset[0].mergeTest(curset);
-        ++cnt;
-    }
+    int cnt = handleUnionFinder(unionfinder);
+
     timer.timeFromBegin("union single all");
     std::cout << "merge count: " << cnt << std::endl;
 }
@@ -271,9 +261,19 @@ void MainWindowOcc::on_actionopt2_triggered()
     unionfinders[0].update();
 
     timer.timeFromBegin("union mutil thread build");
+
+    int cnt = handleUnionFinder(unionfinders[0]);
+
+    timer.timeFromBegin("union multi all");
+    std::cout << "merge count: " << cnt << std::endl;
+
+}
+
+int MainWindowOcc::handleUnionFinder(const UnionFind& finder)
+{
     int cnt = 0;
-    for (auto it = unionfinders[0].final_set_.begin();
-        it != unionfinders[0].final_set_.end(); ++it)
+    for (auto it = finder.final_set_.begin();
+        it != finder.final_set_.end(); ++it)
     {
         if ((*it).second.size() == 1)continue;
         std::unordered_set<int> cur((*it).second);
@@ -288,9 +288,7 @@ void MainWindowOcc::on_actionopt2_triggered()
         curset[0].mergeTest(curset);
         ++cnt;
     }
-    timer.timeFromBegin("union multi all");
-    std::cout << "merge count: " << cnt << std::endl;
-
+    return cnt;
 }
 
 void MainWindowOcc::on_actionFitAll_triggered()
@@ -308,22 +306,16 @@ void MainWindowOcc::on_actionview_triggered()
     viewer_->drawTestData(vecset);
     viewer_->drawTestLabelData(labs);
 
-    //std::thread t1(&OccView::drawTestData, viewer_, std::ref(vecset));
-    //std::thread t2(&OccView::drawTestLabelData, viewer_, std::ref(labs));
-    //t1.join();
-    //t2.join();
     viewer_->fitAll();
     viewer_->update();
 }
 
 void MainWindowOcc::generateTestData(std::vector<KBox>& buffer,
-    int testrow, int testcol, int distance)
+    int testrow, int testcol, double distance)
 {
-    if (testcol == 0)testcol = testrow;
-
     std::default_random_engine e;
     std::uniform_real_distribution<double> sizeu(0.8, 1);
-    std::uniform_real_distribution<double> v(0.5, 1);
+    std::uniform_real_distribution<double> v(0.6, 0.95);
     e.seed(1);
     for (int i = 0; i < testcol; ++i)
     {
