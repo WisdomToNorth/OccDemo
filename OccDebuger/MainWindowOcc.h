@@ -36,7 +36,6 @@ private:
     template <typename Iterator>
     int cal_set_fuc(Iterator first, Iterator last, const int index)
     {
-
         int cnt = 0;
         unsigned long const length = std::distance(first, last);
         if (!length)

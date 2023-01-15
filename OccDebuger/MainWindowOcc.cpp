@@ -299,7 +299,6 @@ int MainWindowOcc::handleUnionFinder(const UnionFind& finder, bool use_multi)
             threads[thread_index] = std::thread([=, &cnt]//涉及迭代器，貌似需要使用赋值
                 {
                     cnt += cal_set_fuc(l_start, l_end, thread_index);
-            // std::cout << " result:" << temp << std::endl;
                 });
 
             l_start = l_end;
@@ -308,7 +307,7 @@ int MainWindowOcc::handleUnionFinder(const UnionFind& finder, bool use_multi)
 
         std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
 
-        return cnt;// std::accumulate(threads_res.begin(), threads_res.end(), cnt);
+        return cnt;
     }
 }
 

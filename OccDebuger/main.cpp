@@ -7,38 +7,54 @@
 #include <vector>
 #include <unordered_map>
 #include <map>
+#include <algorithm>
+
+#include "publicClass.h"
+
+using namespace std;
+
+class Solution
+{
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals)
+    {
+        size_t n = intervals.size();
+        sort(intervals.begin(), intervals.end(), [](vector<int>& fir, vector<int>& sec)
+            {
+                return fir.front() < sec.front();
+            });
+        vector<vector<int>> res;
+        size_t i = 0;
+        while (i < n)
+        {
+            int left = intervals[i].front();
+            int right = intervals[i].back();
+            while (i + 1 < n && intervals[i + 1].front() <= right)
+            {
+                right = max(right, intervals[i + 1].back());
+                i += 1;
+            }
+            std::vector<int> temp{ left,right };
+            res.emplace_back(temp);
+            i += 1;
+        }
+        return res;
+    }
+};
+
+
 
 int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
-    MainWindowOcc w;
-    w.show();
+    Solution s;
+    vector<vector<int>> vec{ {1,3},{2,6},{8,10},{15,18} };
+    vector<vector<int>> vec2{ {1,4},{0,4} };
+    printvecvec(s.merge(vec));
+    printvecvec(s.merge(vec2));
 
-    return a.exec();
+    //QApplication a(argc, argv);
+    //MainWindowOcc w;
+    //w.show();
 
-
-    std::vector<std::pair<int, std::unordered_set<int>>> te;
-    std::vector<std::pair<int, std::unordered_set<int>>> tt;
-    auto b = te.begin();
-    auto c = tt.begin();
-    b;
-    c += 1;
-    //auto testfuc = [](const std::vector<int>& vec, std::vector<int>::iterator it,
-    //    int cnt, const std::string& name)
-    //{
-
-    //    while (cnt--)
-    //    {
-    //        if (it == vec.end())break;
-    //        std::string info = "\nname: " + name + ':' + std::to_string(*it) + '\n';
-    //        std::cout << info;
-    //        ++it;
-    //    }
-    //};
-    //std::vector<int> test_vec{ 1,2,3,4,5,6,7,8,9,10,11,12,13,14 };
-    //for (std::vector<int>::iterator it = test_vec.begin(); it != test_vec.end(); ++it)
-    //{
-    //    testfuc(test_vec, it, 3, std::to_string(*it + 1));
-    //}
-
+    //return a.exec();
 }

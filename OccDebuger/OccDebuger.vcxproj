@@ -60,6 +60,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -105,7 +110,9 @@
     <ClInclude Include="global.h" />
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="public.h" />
+    <ClInclude Include="publicClass.h" />
     <ClInclude Include="publictools.h" />
+    <ClInclude Include="testdata.h" />
     <ClInclude Include="unionset.h" />
     <QtMoc Include="CADView.h" />
     <ClInclude Include="data.h" />
