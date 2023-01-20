@@ -41,12 +41,13 @@
 void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
     std::vector<Handle(AIS_TextLabel)>& labs)
 {
-    int testsize = buff.size();
-    int cnt = 0;
+    size_t testsize = buff.size();
     gp_Dir dir = gp_Dir(0, 0, 1);
     gp_Dir dirx = gp_Dir(1, 0, 0);
-    for (const auto& box : buff)
+
+    for (auto i = 0; i < testsize; ++i)
     {
+        const KBox& box = buff[i];
         gp_Pnt loc(box.X(), box.Y(), 0);
         gp_Elips ge(gp_Ax2(loc, dir, dirx), box.size_x * 0.5, box.size_y * 0.5);
         TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(ge);
@@ -54,20 +55,13 @@ void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
         TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(WW);
         vecset.emplace_back(myFaceProfile);
 
-        //if (testsize < 1000)//小于1000时显示标号
-        //{
         gp_Pnt cur(box.X(), box.Y(), 0);
         Handle(AIS_TextLabel) text = new AIS_TextLabel();
         text->SetPosition(cur);
-        QString str;
-        str += QString::number(cnt);
-        //+ '#' + QString::number(box.size_x)
-        //+ '#'+QString::number(box.size_y);
-        text->SetText(str.toStdString().c_str());
+        text->SetText(QString::number(i).toStdString().c_str());
         text->SetColor(Quantity_NOC_BLACK);
         text->SetFont("consolas");
         labs.emplace_back(text);
-        ++cnt;
-        // }
     }
+
 }

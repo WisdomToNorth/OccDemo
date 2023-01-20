@@ -88,9 +88,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CADView.cpp" />
+    <ClCompile Include="CustomQlistWidget.cpp" />
     <ClCompile Include="data.cpp" />
+    <ClCompile Include="iwConsole.cpp" />
+    <ClCompile Include="iwLog.cpp" />
     <ClCompile Include="MainWindowOcc.cpp" />
     <ClCompile Include="public.cpp" />
+    <ClCompile Include="robotlogger.cpp" />
     <QtRcc Include="OccDebuger.qrc" />
     <QtUic Include="MainWindowOcc.ui" />
     <ClCompile Include="main.cpp" />
@@ -101,9 +105,14 @@
     <QtMoc Include="MainWindowOcc.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="iwConsole.h" />
+    <QtMoc Include="CustomQlistWidget.h" />
+    <ClInclude Include="iwLog.h" />
+    <ClInclude Include="iwSingleton.h" />
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="public.h" />
     <ClInclude Include="publictools.h" />
+    <ClInclude Include="RobotLogger.h" />
     <ClInclude Include="unionset.h" />
     <QtMoc Include="CADView.h" />
     <ClInclude Include="data.h" />

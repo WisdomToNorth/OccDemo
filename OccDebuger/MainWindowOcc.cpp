@@ -16,7 +16,8 @@
 #include "Ktimer.h"
 #include "public.h"
 #include "data.h"
-
+#include "CustomQlistWidget.h"
+#include "RobotLogger.h"
 
 MainWindowOcc::MainWindowOcc(QWidget* parent)
     : QMainWindow(parent)
@@ -63,7 +64,15 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     row_spin_->setValue(300);
     col_spin_->setValue(300);
     distance_spin_->setValue(1.5);
-    ui->gridLayout->addWidget(viewer_);
+
+    ui->gridLayout_view->addWidget(viewer_);
+    iwCustomQListWidget* console_widget = ConsoleInit(this, this, false);
+    ui->gridLayout_Console->addWidget(console_widget);
+
+    QList<int> console_size;
+    console_size << 3500 << 1000;
+    ui->splitter->setSizes(console_size);
+    ConsoleLog("Hello!");
     on_actionGenerate_triggered();
 }
 
@@ -79,17 +88,18 @@ void MainWindowOcc::on_actionGenerate_triggered()
         std::vector<KBox> newbuf;
         buf_.swap(newbuf);
     }
-    std::cout << "\n\n-------------\n-------------\ngenerating...";
+    ConsoleLog("generating...");
     K_Timer timer;
     int rowcnt = row_spin_->value();
     int colcnt = col_spin_->value();
     int dis = distance_spin_->value();
     generateTestData(buf_, rowcnt, colcnt, dis);
+
     if (rowcnt * colcnt < 1000)
     {
         on_actionview_triggered();
     }
-    timer.timeFromBegin("generate data");
+    ConsoleLog("generate data cost " + QString::number(timer.timeFromBegin(false)) + " ms.");
 }
 
 void MainWindowOcc::on_actionOri_triggered()
@@ -308,26 +318,22 @@ void MainWindowOcc::on_actionview_triggered()
     viewer_->drawTestData(vecset);
     viewer_->drawTestLabelData(labs);
 
-    //std::thread t1(&OccView::drawTestData, viewer_, std::ref(vecset));
-    //std::thread t2(&OccView::drawTestLabelData, viewer_, std::ref(labs));
-    //t1.join();
-    //t2.join();
     viewer_->fitAll();
     viewer_->update();
 }
 
 void MainWindowOcc::generateTestData(std::vector<KBox>& buffer,
-    int testrow, int testcol, int distance)
+    int _row_size, int _col_size, int distance)
 {
-    if (testcol == 0)testcol = testrow;
+    if (_col_size == 0)_col_size = _row_size;
 
     std::default_random_engine e;
     std::uniform_real_distribution<double> sizeu(0.8, 1);
     std::uniform_real_distribution<double> v(0.5, 1);
     e.seed(1);
-    for (int i = 0; i < testcol; ++i)
+    for (int i = 0; i < _col_size; ++i)
     {
-        for (int j = 0; j < testrow; ++j)
+        for (int j = 0; j < _row_size; ++j)
         {
             double loc_random = v(e);
             double stx = i * distance * loc_random;
@@ -338,4 +344,6 @@ void MainWindowOcc::generateTestData(std::vector<KBox>& buffer,
             buffer.emplace_back(l_box);
         }
     }
+    ConsoleLog("Size: " + QString::number(_row_size * distance) + " * " +
+        QString::number(_col_size * distance));
 }

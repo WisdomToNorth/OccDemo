@@ -49,6 +49,18 @@
     <ClCompile Include="MainWindowOcc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="iwConsole.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="iwLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomQlistWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="robotlogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CADView.h">
@@ -56,6 +68,12 @@
     </QtMoc>
     <QtMoc Include="MainWindowOcc.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="iwConsole.h">
+      <Filter>Source Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomQlistWidget.h">
+      <Filter>Source Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +96,15 @@
     </ClInclude>
     <ClInclude Include="unionset.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iwSingleton.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iwLog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotLogger.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
