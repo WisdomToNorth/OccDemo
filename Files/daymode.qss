@@ -1,0 +1,243 @@
+QWidget {
+    background-color: rgb(235, 242, 246);
+    border-color: rgb(20, 0, 56);
+    color: rgb(7, 1, 29);
+    font: 12pt "consolas";
+}
+
+QAbstractItemView {
+    show-decoration-selected: 1;
+    /*子界面颜色，如logwidget颜色*/
+    background: rgb(231, 233, 235);
+    selection-background-color:rgb(59, 59, 59);
+}
+
+QAbstractItemView::item:hover {
+    background: rgb(174, 174, 174);
+}
+
+QComboBox {
+    background: rgb(184, 194, 200);
+    min-height: 25px;
+}
+
+QComboBox:editable {
+    background: rgb(169, 169, 169);
+    min-height: 25px;
+}
+
+QComboBox::selection{
+    color:blue
+}
+
+QComboBox:disabled {
+    background: rgb(255, 255, 255);
+    min-height: 25px;
+}
+
+QCheckBox {
+    min-height: 25px;
+}
+
+QDoubleSpinBox {
+    background: rgb(215, 217, 218);
+}
+
+QFileDialog {
+    background: rgb(215, 217, 218);
+}
+
+QFrame[frameShape="5"] {
+    color: rgb(204, 204, 204);
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+QGroupBox {
+    border: 1px solid rgb(215, 217, 218);
+    margin-top: 4ex;
+    font-weight: bold;
+}
+
+QHeaderView::section {
+    background-color:rgb(215, 217, 218);
+    border: -1px;
+    top: -2px;
+    left: 1px;
+}
+
+QLineEdit {
+    background: rgb(215, 217, 218);
+}
+
+QLabel {
+    /* font: 9pt "Tahoma";*/
+}
+
+QMenu {
+    background: rgb(215, 217, 218);
+    border: 1px solid rgb(215, 217, 218);
+}
+
+QMenu::separator {
+    background: rgb(215, 217, 218);
+    height: 1px;
+}
+
+QMenu::item {
+    padding: 8px 12px;
+    /*设置菜单项文字上下和左右的内边距，效果就是菜单中的条目左右上下有了间隔*/
+    margin: 4px 3px;
+    /*设置菜单项的外边距*/
+    border-bottom: 1px solid rgb(215, 217, 218);
+    /*为菜单项之间添加横线间隔*/
+}
+
+QMenu::item:selected {
+    background-color: rgb(171, 200, 216);
+    clolr:gray
+
+}
+
+QProgressBar {
+    background: rgb(231, 231, 231);
+}
+
+QTabWidget::pane {
+    border: 2px solid rgb(215, 217, 218);
+}
+
+QTabWidget::tab-bar {
+    alignment: center;
+}
+
+QTabBar::tab {
+    background: rgb(215, 217, 218);
+    min-width: 30px;
+    min-height: 10px;
+    /* font-size: 9pt; */
+}
+
+/* 标签被选中时或鼠标悬浮时 */
+QTabBar::tab:selected,
+QTabBar::tab:hover {
+    background: rgb(208, 225, 235);
+}
+
+/* 标签被选中时 */
+QTabBar::tab:selected {
+    border: 2px solid rgb(235, 248, 255);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 2px;
+}
+
+QTreeView {
+    background-color: rgb(236, 236, 236);
+    alternate-background-color:rgb(195, 195, 195);
+}
+
+QSpinBox {
+    background: rgb(215, 217, 218);
+}
+
+QPlainTextEdit{
+    background-color: rgb(231, 233, 235);;
+}
+
+QPushButton {
+    background-color: rgb(224, 228, 230);
+}
+
+QPushButton:hover {
+    background-color: rgb(125, 181, 255)
+}
+
+QPushButton:pressed {
+    background-color: rgb(0, 110, 255)
+}
+
+QPushButton:disabled {
+    background-color: rgb(222, 222, 222);
+    color:rgb(124, 124, 124)
+}
+
+QStatusBar {
+    background-color: rgb(225, 225, 225);
+}
+
+QTextEdit {
+    background: rgb(215, 217, 218);
+}
+
+QToolBar {
+    background-color: rgb(197, 207, 217);
+    border: none;
+    padding: 1px;
+}
+
+QToolButton {
+    color: rgb(10, 0, 37);
+    font-size: 18px;
+    font: "consolas";
+    font: bold;
+    background: rgb(197, 207, 217);
+}
+
+QToolButton:pressed {
+    background: rgb(112, 128, 141);
+}
+
+QScrollBar:vertical {
+    width: 8px;
+    background: rgba(27, 122, 177, 0);
+    margin: 0px, 0px, 0px, 0px;
+    padding-top: 9px;
+    /* 留出9px给上面和下面的箭头*/
+    padding-bottom: 9px;
+}
+
+QScrollBar::handle:vertical {
+    width: 8px;
+    background: rgba(0, 24, 159, 0.25);
+    border-radius: 4px;
+    /*滚动条两端变成椭圆*/
+    min-height: 20;
+}
+
+QScrollBar::handle:vertical:hover {
+    width: 8px;
+    background: rgba(96, 156, 239, 0.5);
+
+    min-height: 20;
+}
+
+QScrollBar::add-line:vertical {
+    height: 9px;
+    width: 8px;
+    subcontrol-position: bottom;
+}
+
+QScrollBar::sub-line:vertical {
+    height: 9px;
+    width: 8px;
+    subcontrol-position: top;
+}
+
+QScrollBar::add-line:vertical:hover {
+    height: 9px;
+    width: 8px;
+    subcontrol-position: bottom;
+}
+
+QScrollBar::sub-line:vertical:hover {
+    height: 9px;
+    width: 8px;
+    subcontrol-position: top;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: rgba(43, 103, 140, 0.1);
+    border-radius: 4px;
+}

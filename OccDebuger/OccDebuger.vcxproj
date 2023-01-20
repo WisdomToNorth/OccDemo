@@ -60,6 +60,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -92,6 +97,7 @@
     <ClCompile Include="data.cpp" />
     <ClCompile Include="iwConsole.cpp" />
     <ClCompile Include="iwLog.cpp" />
+    <ClCompile Include="global.cpp" />
     <ClCompile Include="MainWindowOcc.cpp" />
     <ClCompile Include="public.cpp" />
     <ClCompile Include="robotlogger.cpp" />
@@ -111,6 +117,7 @@
     <ClInclude Include="iwSingleton.h" />
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="public.h" />
+    <ClInclude Include="publicClass.h" />
     <ClInclude Include="publictools.h" />
     <ClInclude Include="RobotLogger.h" />
     <ClInclude Include="unionset.h" />
