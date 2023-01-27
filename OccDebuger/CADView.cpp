@@ -180,8 +180,8 @@ void OccView::fitAll(void)
 void OccView::reset(void)
 {
     view_->Reset();
-
 }
+
 void OccView::removeAll(void)
 {
     context_->RemoveAll(true);
