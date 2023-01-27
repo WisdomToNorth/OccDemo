@@ -35,7 +35,7 @@
 #include <TopoDS_Face.hxx>
 #include <AIS_TextLabel.hxx>
 
-#include <qstring.h>
+#include <QString>
 
 
 void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,

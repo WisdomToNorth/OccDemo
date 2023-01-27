@@ -15,7 +15,6 @@
 #include "CADView.h"
 #include "Ktimer.h"
 #include "public.h"
-#include "data.h"
 #include "CustomQlistWidget.h"
 #include "RobotLogger.h"
 #include "global.h"
@@ -123,7 +122,7 @@ void MainWindowOcc::on_actionOri_triggered()
             if (!buf_[i].isOut(buf_[j]))
             {
                 buf_[i].mergeTest(buf_[j]);
-                //std::cout << "{ " << thread_index << "  " << j << " }\caculate_cnt";
+
                 ++cnt;
             }
         }

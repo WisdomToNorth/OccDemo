@@ -1,125 +1,88 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Form Files">
-      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
-      <Extensions>ui</Extensions>
-    </Filter>
-    <Filter Include="Translation Files">
-      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
-      <Extensions>ts</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="OccDebuger.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
-    <None Include="OccDebuger.ico">
-      <Filter>Resource Files</Filter>
-    </None>
-    <ResourceCompile Include="OccDebuger.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="public.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CADView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindowOcc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-<<<<<<< HEAD
+    <ClCompile Include="CADView.cpp" />
+    <ClCompile Include="global.cpp" />
+    <ClCompile Include="MainWindowOcc.cpp" />
+    <ClCompile Include="public.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="iwConsole.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Consolelog</Filter>
     </ClCompile>
     <ClCompile Include="iwLog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CustomQlistWidget.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Consolelog</Filter>
     </ClCompile>
     <ClCompile Include="robotlogger.cpp">
-=======
-    <ClCompile Include="global.cpp">
->>>>>>> 812178ebc42f2e3eae94ffa1acd16ce305facf02
-      <Filter>Source Files</Filter>
+      <Filter>Consolelog</Filter>
     </ClCompile>
+    <ClCompile Include="CustomQlistWidget.cpp">
+      <Filter>Consolelog</Filter>
+    </ClCompile>
+    <ClCompile Include="K_box.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiUniset.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="CADView.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="MainWindowOcc.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="iwConsole.h">
-      <Filter>Source Files</Filter>
-    </QtMoc>
-    <QtMoc Include="CustomQlistWidget.h">
-      <Filter>Source Files</Filter>
-    </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="MainWindowOcc.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ktimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="publictools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="public.h" />
+    <ClInclude Include="publicClass.h" />
     <ClInclude Include="unionset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="iwSingleton.h">
-      <Filter>Source Files</Filter>
+      <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="iwLog.h">
-      <Filter>Source Files</Filter>
+      <Filter>Consolelog</Filter>
+    </ClInclude>
+    <ClInclude Include="iwSingleton.h">
+      <Filter>Consolelog</Filter>
     </ClInclude>
     <ClInclude Include="RobotLogger.h">
-      <Filter>Source Files</Filter>
-=======
-    <ClInclude Include="global.h">
-      <Filter>Header Files</Filter>
+      <Filter>Consolelog</Filter>
     </ClInclude>
-    <ClInclude Include="public.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="publictools.h">
+      <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="publicClass.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Ktimer.h">
+      <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="testdata.h">
-      <Filter>Header Files</Filter>
->>>>>>> 812178ebc42f2e3eae94ffa1acd16ce305facf02
+    <ClInclude Include="K_box.h">
+      <Filter>DataStructure</Filter>
     </ClInclude>
+    <ClInclude Include="MultiUniset.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OccDebuger.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="MainWindowOcc.h" />
+    <QtMoc Include="CADView.h" />
+    <QtMoc Include="iwConsole.h">
+      <Filter>Consolelog</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomQlistWidget.h">
+      <Filter>Consolelog</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="OccDebuger.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="MainWindowOcc.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OccDebuger.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="DataStructure">
+      <UniqueIdentifier>{d6436bb5-a17d-4bec-9060-2f84372ba83c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataSet">
+      <UniqueIdentifier>{707a0249-c28d-4ba0-8801-ff1cd4823f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Consolelog">
+      <UniqueIdentifier>{09cdbec3-6863-4d65-a3af-a4873ca30766}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{321affaa-2ba9-4ec9-baa9-68d568a4807d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

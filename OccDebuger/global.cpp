@@ -1,5 +1,5 @@
 ﻿#include "global.h"
-#include<thread>
+#include <thread>
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -19,11 +19,8 @@
 
 Handle(AIS_InteractiveContext) G_Context = nullptr;
 
-
-
 unsigned long long G_CoreCount(unsigned long long datasize)
 {
-
     unsigned long long const min_per_thread = 25;
     unsigned long long const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
     unsigned long long const hardware_thread = std::thread::hardware_concurrency();
@@ -53,6 +50,7 @@ bool makeDirAndFile(const QString path, bool isFile)
     if (!succ) return false;
     return true;
 }
+
 QString loadQString(const std::string& path)
 {
     QFile file(QString::fromStdString(path));
@@ -83,7 +81,6 @@ QString G_GetDocumentsPath()
 
 QJsonObject loadJson(const std::string& path)
 {
-
     QFile file(QString::fromStdString(path));
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -102,7 +99,8 @@ QJsonObject loadJson(const std::string& path)
     {
         return jsonDoc.object();
     }
-    else {
+    else
+    {
         std::cout << "json error!" << jsonError.errorString().toStdString();
         return QJsonObject();
     }

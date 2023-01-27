@@ -24,7 +24,7 @@
 #include <unordered_set>
 
 #include "public.h"
-#include "data.h"
+
 //#ifdef WNT
 #include <WNT_Window.hxx>
 
@@ -292,12 +292,10 @@ void OccView::onMouseWheel(const int /*theFlags*/, const int theDelta, const QPo
 }
 
 void OccView::addItemInPopup(QMenu* /*theMenu*/)
-{
-}
+{}
 
 void OccView::popup(const int /*x*/, const int /*y*/)
-{
-}
+{}
 
 void OccView::onLButtonUp(const int theFlags, const QPoint thePoint)
 {

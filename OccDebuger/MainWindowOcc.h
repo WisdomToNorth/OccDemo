@@ -5,7 +5,7 @@
 #include <qspinbox.h>
 #include <qlabel.h>
 
-#include "data.h"
+#include "K_box.h"
 #include "unionset.h"
 
 #include "ui_MainWindowOcc.h"
