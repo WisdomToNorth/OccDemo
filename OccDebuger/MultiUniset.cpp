@@ -14,7 +14,6 @@
 
 #include "CADView.h"
 #include "Ktimer.h"
-#include "public.h"
 #include "CustomQlistWidget.h"
 #include "RobotLogger.h"
 #include "global.h"

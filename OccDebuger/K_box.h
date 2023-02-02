@@ -7,6 +7,9 @@
 #include <chrono>
 #include <thread>
 
+#include <AIS_TextLabel.hxx>
+#include <TopoDS_Face.hxx>
+
 struct KPt
 {
     double x;
@@ -47,3 +50,7 @@ public:
 private:
     KPt center_;
 };
+
+void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
+    std::vector<Handle(AIS_TextLabel)>& labs);
+

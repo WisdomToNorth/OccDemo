@@ -4,7 +4,6 @@
     <ClCompile Include="CADView.cpp" />
     <ClCompile Include="global.cpp" />
     <ClCompile Include="MainWindowOcc.cpp" />
-    <ClCompile Include="public.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="iwConsole.cpp">
       <Filter>Consolelog</Filter>
@@ -24,7 +23,6 @@
     <ClCompile Include="MultiUniset.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="public.h" />
     <ClInclude Include="publicClass.h" />
     <ClInclude Include="unionset.h">
       <Filter>DataStructure</Filter>
@@ -48,6 +46,9 @@
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="MultiUniset.h" />
+    <ClInclude Include="k_search.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OccDebuger.rc" />

@@ -42,6 +42,7 @@ public slots:
     void fitAll(void);
     void reset(void);
     void removeAll();
+
 protected:
     virtual QPaintEngine* paintEngine() const;
 

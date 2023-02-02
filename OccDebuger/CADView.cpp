@@ -23,8 +23,6 @@
 #include <gp_Trsf.hxx>
 #include <unordered_set>
 
-#include "public.h"
-
 //#ifdef WNT
 #include <WNT_Window.hxx>
 
@@ -124,9 +122,9 @@ void OccView::setViewCube()
 
     aisViewCube->SetTransformPersistence(
         new Graphic3d_TransformPers(
-            Graphic3d_TMF_TriedronPers,
-            Aspect_TOTP_LEFT_UPPER,
-            Graphic3d_Vec2i(85, 85)));
+        Graphic3d_TMF_TriedronPers,
+        Aspect_TOTP_LEFT_UPPER,
+        Graphic3d_Vec2i(85, 85)));
     //m_gfxScene.addObject(aisViewCube);
 
     const Handle_Prs3d_DatumAspect myDatumColor = new Prs3d_DatumAspect();
@@ -339,7 +337,6 @@ void OccView::onMouseMove(const int theFlags, const QPoint thePoint)
     if (theFlags & Qt::LeftButton)
     {
         drawRubberBand(myXmin, myYmin, thePoint.x(), thePoint.y());
-
         dragEvent(thePoint.x(), thePoint.y());
     }
 
