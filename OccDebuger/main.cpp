@@ -9,13 +9,12 @@
 #include <map>
 #include <algorithm>
 
-#include "publicClass.h"
+#include "lc_struct.h"
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv [])
 {
-
     QApplication a(argc, argv);
     MainWindowOcc w;
     w.show();

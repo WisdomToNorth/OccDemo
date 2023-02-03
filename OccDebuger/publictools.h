@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-void printvecvec(vector<vector<int>> vec)
+void printVec2D(vector<vector<int>> vec)
 {
     std::cout << '[';
     for (const auto& a : vec)

@@ -10,17 +10,11 @@
 #include <AIS_TextLabel.hxx>
 #include <TopoDS_Face.hxx>
 
-struct KPt
-{
-    double x;
-    double y;
-    KPt(double _x, double _y) :x(_x), y(_y) {};
-};
+#include "K_Pnt.h"
 
 class KBox
 {
 public:
-    //KBox() :center_(KPt(0, 0)) {}
     KBox(double x, double y, double sizex, double sizey) :
         center_(KPt(x, y)), size_x(sizex), size_y(sizey)
     {}

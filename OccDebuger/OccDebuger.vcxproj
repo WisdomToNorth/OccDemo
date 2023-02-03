@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="CADView.cpp" />
     <ClCompile Include="CustomQlistWidget.cpp" />
+    <ClCompile Include="fun_for_lc.cpp" />
     <ClCompile Include="K_box.cpp" />
     <ClCompile Include="iwConsole.cpp" />
     <ClCompile Include="iwLog.cpp" />
@@ -113,11 +114,14 @@
   <ItemGroup>
     <QtMoc Include="iwConsole.h" />
     <QtMoc Include="CustomQlistWidget.h" />
+    <ClInclude Include="fun_for_lc.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="iwLog.h" />
     <ClInclude Include="iwSingleton.h" />
+    <ClInclude Include="K_Pnt.h" />
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="MultiUniset.h" />
-    <ClInclude Include="publicClass.h" />
+    <ClInclude Include="lc_struct.h" />
     <ClInclude Include="publictools.h" />
     <ClInclude Include="RobotLogger.h" />
     <ClInclude Include="k_search.h" />
