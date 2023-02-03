@@ -12,6 +12,8 @@
 
 #include "fun_for_lc.h"
 
+namespace KDebugger
+{
 using std::cout; using std::endl; using std::vector; using std::string;
 using std::queue;
 
@@ -115,4 +117,5 @@ int getValue(char ch)
     case 'M': return 1000;
     default: return 0;
     }
+}
 }

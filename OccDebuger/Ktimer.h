@@ -2,11 +2,14 @@
 #include <chrono>
 #include <iostream>
 #include <string>
+
+namespace KDebugger
+{
 class K_Timer
 {
 public:
     K_Timer() :t1(std::chrono::steady_clock::now()), t2(t1)
-    {    }
+    {}
     double timeFromBegin(bool cout_ = true)
     {
         t2 = std::chrono::steady_clock::now();
@@ -32,3 +35,4 @@ private:
     std::chrono::steady_clock::time_point t1;
     std::chrono::steady_clock::time_point t2;
 };
+}

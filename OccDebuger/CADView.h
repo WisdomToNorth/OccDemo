@@ -9,7 +9,8 @@
 #include <AIS_TextLabel.hxx>
 class QMenu;
 class QRubberBand;
-
+namespace KDebugger
+{
 //! Adapted a QWidget for OpenCASCADE viewer.
 class OccView : public QWidget
 {
@@ -106,5 +107,5 @@ private:
     QRubberBand* rectband_;
 
 };
-
+}
 #endif // _OCCVIEW_H_

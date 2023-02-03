@@ -122,7 +122,6 @@
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="MultiUniset.h" />
     <ClInclude Include="lc_struct.h" />
-    <ClInclude Include="publictools.h" />
     <ClInclude Include="RobotLogger.h" />
     <ClInclude Include="k_search.h" />
     <ClInclude Include="unionset.h" />

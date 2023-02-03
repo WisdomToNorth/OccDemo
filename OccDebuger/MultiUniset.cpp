@@ -1,4 +1,4 @@
-#include "MultiUniset.h"
+ï»¿#include "MultiUniset.h"
 
 #include <iostream>
 #include <chrono>
@@ -18,6 +18,8 @@
 #include "RobotLogger.h"
 #include "global.h"
 
+namespace KDebugger
+{
 void MultiUniset::reGenerateData(int rowcnt, int colcnt, double dis)
 {
     if (buf_.size() > 0)
@@ -96,12 +98,12 @@ void MultiUniset::multiCoreUnionSet(int user_set_num)
 
 
     K_Timer timer;
-    //ÕâÀï¶àÏß³ÌµÄ»®·ÖÒ²¿ÉÒÔÓÅ»¯£¬°´Æ½ÃæÇøÓò·Ö¿é»®·Ö£¬Ê¹¸÷×Ó²¢²é¼¯µÄÖØºÏĞÔ¾¡¿ÉÄÜĞ¡
-    //´Ë´¦£¬¼ÙÉèx¡¢y¶¼ÎªÅ¼Êı£¬ÕâÑùÇ¡ºÃ¿ÉÒÔ±»ËÄµÈ·Ö¡£·ÖËÄÏß³Ì¼ÆËã
+    //Ã•Ã¢Ã€Ã¯Â¶Ã ÃÃŸÂ³ÃŒÂµÃ„Â»Â®Â·Ã–Ã’Â²Â¿Ã‰Ã’Ã”Ã“Ã…Â»Â¯Â£Â¬Â°Â´Ã†Â½ÃƒÃ¦Ã‡Ã¸Ã“Ã²Â·Ã–Â¿Ã©Â»Â®Â·Ã–Â£Â¬ÃŠÂ¹Â¸Ã·Ã—Ã“Â²Â¢Â²Ã©Â¼Â¯ÂµÃ„Ã–Ã˜ÂºÃÃÃ”Â¾Â¡Â¿Ã‰Ã„ÃœÃÂ¡
+    //Â´Ã‹Â´Â¦Â£Â¬Â¼Ã™Ã‰Ã¨xÂ¡Â¢yÂ¶Â¼ÃÂªÃ…Â¼ÃŠÃ½Â£Â¬Ã•Ã¢Ã‘Ã¹Ã‡Â¡ÂºÃƒÂ¿Ã‰Ã’Ã”Â±Â»Ã‹Ã„ÂµÃˆÂ·Ã–Â¡Â£Â·Ã–Ã‹Ã„ÃÃŸÂ³ÃŒÂ¼Ã†Ã‹Ã£
     std::vector<std::thread> threads(num_of_thread - 1);
     std::vector<UnionFind> unionfinders(num_of_thread, UnionFind(data_count));
 
-    unsigned long long l_start = 1;//´ú±íÈÎÎñÊı£¬´Ó1µ½n£¬Ê¹ÓÃÎ²ºóindex£¬ËùÒÔn+1
+    unsigned long long l_start = 1;//Â´ÃºÂ±Ã­ÃˆÃÃÃ±ÃŠÃ½Â£Â¬Â´Ã“1ÂµÂ½nÂ£Â¬ÃŠÂ¹Ã“ÃƒÃÂ²ÂºÃ³indexÂ£Â¬Ã‹Ã¹Ã’Ã”n+1
     for (unsigned long long thread_index = 0; thread_index < num_of_thread - 1; ++thread_index)
     {
         unsigned long long l_end = l_start + block_size;
@@ -176,7 +178,7 @@ std::pair<int, int> MultiUniset::getLoc(unsigned long long num)
     int b = static_cast<int>(n);
 
     //std::cout << "loc: " << a << " * " << b << " &" << std::endl;
-    return { a,b };//m,n´Ó0¿ªÊ¼Êı
+    return { a,b };//m,nÂ´Ã“0Â¿ÂªÃŠÂ¼ÃŠÃ½
 }
 
 /*
@@ -199,7 +201,7 @@ void MultiUniset::caculateUnion(unsigned long long l_start,
     {
         for (int j = 0; j < m; ++j)
         {
-            j = j + n;//µÚÒ»´Î½øÈëÑ­»·Ê±£¬³õÊ¼»¯jµÄÎ»ÖÃ£¬ºóĞø½«nÖÃÁã
+            j = j + n;//ÂµÃšÃ’Â»Â´ÃÂ½Ã¸ÃˆÃ«Ã‘Â­Â»Â·ÃŠÂ±Â£Â¬Â³ÃµÃŠÂ¼Â»Â¯jÂµÃ„ÃÂ»Ã–ÃƒÂ£Â¬ÂºÃ³ÃÃ¸Â½Â«nÃ–ÃƒÃÃ£
             n = 0;
             // std::cout << "cal:" << i << " and " << j << std::endl;
 
@@ -289,7 +291,7 @@ int MultiUniset::handleUnionFinder(const UnionFind& finder, bool use_multi)
         {
             auto l_end = l_start + block_size;
 
-            threads[thread_index] = std::thread([=, &cnt]//Éæ¼°µü´úÆ÷£¬Ã²ËÆĞèÒªÊ¹ÓÃ¸³Öµ
+            threads[thread_index] = std::thread([=, &cnt]//Ã‰Ã¦Â¼Â°ÂµÃ¼Â´ÃºÃ†Ã·Â£Â¬ÃƒÂ²Ã‹Ã†ÃÃ¨Ã’ÂªÃŠÂ¹Ã“ÃƒÂ¸Â³Ã–Âµ
                 {
                     cnt += handleUnionSetResult(l_start, l_end, thread_index);
                 });
@@ -330,4 +332,5 @@ void MultiUniset::generateTestData(std::vector<KBox>& buffer,
     }
     ConsoleLog("Size: " + QString::number(_row_size * distance) + " * " +
         QString::number(_col_size * distance));
+}
 }

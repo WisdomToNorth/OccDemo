@@ -20,7 +20,6 @@
     <ClCompile Include="MultiUniset.cpp">
       <Filter>UnionSet</Filter>
     </ClCompile>
-    <ClCompile Include="fun_for_lc.cpp" />
     <ClCompile Include="CADView.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -30,9 +29,11 @@
     <ClCompile Include="MainWindowOcc.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="fun_for_lc.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lc_struct.h" />
     <ClInclude Include="iwLog.h">
       <Filter>UI\Consolelog</Filter>
     </ClInclude>
@@ -41,9 +42,6 @@
     </ClInclude>
     <ClInclude Include="RobotLogger.h">
       <Filter>UI\Consolelog</Filter>
-    </ClInclude>
-    <ClInclude Include="publictools.h">
-      <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="Ktimer.h">
       <Filter>Tools</Filter>
@@ -63,9 +61,14 @@
     <ClInclude Include="MultiUniset.h">
       <Filter>UnionSet</Filter>
     </ClInclude>
-    <ClInclude Include="fun_for_lc.h" />
     <ClInclude Include="global.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="lc_struct.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="fun_for_lc.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

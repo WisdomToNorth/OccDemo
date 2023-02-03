@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+namespace KDebugger
+{
 struct TreeNode
 {
     int val;
@@ -39,3 +41,4 @@ struct ListNode
     ListNode(int x, ListNode* next) : val(x), next(next) {}
 
 };
+}

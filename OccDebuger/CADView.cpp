@@ -27,6 +27,9 @@
 #include <WNT_Window.hxx>
 
 #include <Xw_Window.hxx>
+
+namespace KDebugger
+{
 //#endif
 using std::vector;
 
@@ -122,9 +125,9 @@ void OccView::setViewCube()
 
     aisViewCube->SetTransformPersistence(
         new Graphic3d_TransformPers(
-        Graphic3d_TMF_TriedronPers,
-        Aspect_TOTP_LEFT_UPPER,
-        Graphic3d_Vec2i(85, 85)));
+            Graphic3d_TMF_TriedronPers,
+            Aspect_TOTP_LEFT_UPPER,
+            Graphic3d_Vec2i(85, 85)));
     //m_gfxScene.addObject(aisViewCube);
 
     const Handle_Prs3d_DatumAspect myDatumColor = new Prs3d_DatumAspect();
@@ -489,4 +492,6 @@ void OccView::keyPressEvent(QKeyEvent* event)
     {
         context_->RemoveAll(true);
     }
+}
+
 }

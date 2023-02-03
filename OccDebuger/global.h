@@ -5,6 +5,8 @@
 #include <vector>
 #include <QString>
 
+namespace KDebugger
+{
 extern Handle(AIS_InteractiveContext) G_Context;
 
 unsigned long long G_CoreCount(unsigned long long datasize);
@@ -22,3 +24,4 @@ Appearance switchUIConfig();
 QString G_GetUiStyleSheet(Appearance preset);
 QString G_GetAppPath();
 QString G_GetDocumentsPath();
+}

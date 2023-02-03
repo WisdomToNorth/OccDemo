@@ -2,7 +2,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <mutex>
-
+namespace KDebugger
+{
 class UnionFind
 {
     //std::mutex locker;
@@ -84,3 +85,4 @@ public:
         }
     }
 };
+}

@@ -1,9 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include <vector>
 #include "K_box.h"
 #include "unionset.h"
 
+namespace KDebugger
+{
 class OccView;
 class MultiUniset
 {
@@ -35,3 +37,4 @@ private:
     std::vector<KBox> buf_;
 };
 
+}

@@ -12,6 +12,8 @@
 
 #include "K_Pnt.h"
 
+namespace KDebugger
+{
 class KBox
 {
 public:
@@ -48,3 +50,4 @@ private:
 void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
     std::vector<Handle(AIS_TextLabel)>& labs);
 
+}

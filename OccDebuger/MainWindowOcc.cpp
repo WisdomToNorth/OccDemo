@@ -18,6 +18,8 @@
 #include "RobotLogger.h"
 #include "global.h"
 
+namespace KDebugger
+{
 MainWindowOcc::MainWindowOcc(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindowOccClass())
@@ -125,4 +127,5 @@ void MainWindowOcc::on_actionOri_triggered()
 void MainWindowOcc::on_actionopt1_triggered()
 {
     unionset_->oneCoreUnionSet();
+}
 }

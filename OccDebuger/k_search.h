@@ -7,6 +7,8 @@
 
 #include "K_Pnt.h"
 
+namespace KDebugger
+{
 struct KRegion
 {
     KRegion(const KPt& lb, const KPt& ru) :left_bottom_(lb), right_up_(ru) {}
@@ -349,4 +351,5 @@ void searchKDTree(std::vector<KPt>& res, BinSearchNode* root,
             searchKDTree(res, root->right_, right_region, region);
         }
     }
+}
 }
