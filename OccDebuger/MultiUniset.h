@@ -4,11 +4,11 @@
 #include "K_box.h"
 #include "unionset.h"
 
-class OccView;
+class CadView;
 class MultiUniset
 {
 public:
-    MultiUniset(OccView* view) :viewer_(view) {}
+    MultiUniset(CadView* view) :viewer_(view) { }
 
     void reGenerateData(int rowcnt, int colcnt, double dis);
     void badWay();
@@ -30,7 +30,7 @@ public:
 
 private:
 
-    OccView* viewer_;
+    CadView* viewer_;
 
     std::vector<KBox> buf_;
 };

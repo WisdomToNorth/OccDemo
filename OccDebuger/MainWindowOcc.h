@@ -13,7 +13,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowOccClass; };
 QT_END_NAMESPACE
 
-class OccView;
+
 class MyThread;
 class MultiUniset;
 class MainWindowOcc : public QMainWindow
@@ -36,7 +36,7 @@ private slots:
 
 private:
     Ui::MainWindowOccClass* ui;
-    OccView* viewer_;
+    CadView* viewer_;
     QSpinBox* row_spin_;
     QSpinBox* col_spin_;
     QSpinBox* thread_spin_;

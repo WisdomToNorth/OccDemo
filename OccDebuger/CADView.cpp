@@ -1,474 +1,337 @@
-﻿#include "CADView.h"
+﻿/****************************************************************************
+** Copyright 2022 by KangYucheng.
+** All Rights Reserved.
+**
+** This file is part of RobotConfig software. No part of this file may be
+** reproduced in any form or means, without the prior written consent of KangYucheng.
+****************************************************************************/
 
-#include <QMenu>
-#include <QMouseEvent>
-#include <QRubberBand>
-#include <QStyleFactory>
-#include <qdebug.h>
-#include <Prs3d_DatumAspect.hxx>
+#include "CadView.h"
+
+#include <AIS_InteractiveContext.hxx>
 #include <V3d_View.hxx>
+#include <V3d_Viewer.hxx>
 #include <AIS_ViewCube.hxx>
-#include <Aspect_Handle.hxx>
-#include <Aspect_DisplayConnection.hxx>
-#include <TopoDS_Face.hxx>
-#include <BRepAlgoAPI_Algo.hxx>
-#include <BRepAlgoAPI_Fuse.hxx>
+#include <AIS_InteractiveContext.hxx>
 #include <OpenGl_GraphicDriver.hxx>
-#include <AIS_Shape.hxx>
-#include <Bnd_Box2d.hxx>
+#include <V3d_View.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
 #include <AIS_TextLabel.hxx>
-#include <BRepAdaptor_Surface.hxx>
-#include <Bnd_OBB.hxx>
-#include <BRepBndLib.hxx>
-#include <gp_Trsf.hxx>
-#include <unordered_set>
+#include <Prs3d_DatumAspect.hxx>
+#include <Prs3d_PlaneAspect.hxx>
+#include <AIS_Shape.hxx>
 
-//#ifdef WNT
-#include <WNT_Window.hxx>
+#include <qclipboard.h>
+#include <QTimer>
+#include <QMenuBar>
+#include <QAction>
+#include <QGuiApplication>
+#include <qinputdialog.h>
+#include <QApplication>
+#include <qmutex.h>
+#include <qpointer.h>
+#include <qcursor.h>
+#include <qdebug.h>
+#include <qscreen.h>
 
-#include <Xw_Window.hxx>
-//#endif
-using std::vector;
 
-static Handle(Graphic3d_GraphicDriver)& GetGraphicDriver()
+namespace
 {
-    static Handle(Graphic3d_GraphicDriver) aGraphicDriver;
-    return aGraphicDriver;
+static QCursor* defCursor = NULL;
+static QCursor* handCursor = NULL;
+static QCursor* panCursor = NULL;
+static QCursor* globPanCursor = NULL;
+static QCursor* zoomCursor = NULL;
+static QCursor* rotCursor = NULL;
 }
-
-OccView::OccView(QWidget* parent)
-    : QWidget(parent),
-    myXmin(0),
-    myYmin(0),
-    myXmax(0),
-    myYmax(0),
-    cur_mode_(CurAction3d_DynamicPanning),
-    rectband_(NULL)
+CadView::CadView(QWidget* parent)
+    : QWidget(parent)
 {
-    // No Background
+    setFocusPolicy(Qt::StrongFocus); // 窗口将通过鼠标点击、按tab键等方式获取焦点
     setBackgroundRole(QPalette::NoRole);
-
-    // set focus policy to threat QContextMenuEvent from keyboard  
-    setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
+    // set focus policy to threat QContextMenuEvent from keyboard
     setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_NoSystemBackground);
 
-    // Enable the mouse tracking, by default the mouse tracking is disabled.
-    setMouseTracking(true);
-
-    init();
+    initContext();
+    initCursors();
 }
 
-void OccView::init()
-{
-    // Create Aspect_DisplayConnection
-    Handle(Aspect_DisplayConnection) aDisplayConnection =
-        new Aspect_DisplayConnection();
+CadView::~CadView()
+{ }
 
-    // Get graphic driver if it exists, otherwise initialise it
-    if (GetGraphicDriver().IsNull())
+void CadView::initCursors()
+{
+    if (!defCursor)
+        defCursor = new QCursor(Qt::ArrowCursor);
+    if (!handCursor)
+        handCursor = new QCursor(Qt::PointingHandCursor);
+    if (!panCursor)
+        panCursor = new QCursor(Qt::SizeAllCursor);
+    if (!globPanCursor)
+        globPanCursor = new QCursor(Qt::CrossCursor);
+    if (!zoomCursor)
+        zoomCursor = new QCursor(Qt::SizeHorCursor/*QPixmap(":/cursor_zoom.png").scaled(40, 40)*/);
+    if (!rotCursor)
+        rotCursor = new QCursor(Qt::SizeFDiagCursor/*QPixmap(":/cursor_rotate.png").scaled(30, 30)*/);
+}
+
+void CadView::initContext()
+{
+    //获取主屏幕分辨率
+    auto screenRect = QGuiApplication::screens();
+    auto width = screenRect[0]->geometry().width();
+    auto height = screenRect[0]->geometry().height();
+
+    this->setGeometry(width / 5, height / 5, width * 3 / 5, height * 3 / 5);//设置窗口默认大小
+
+    if (context_.IsNull())
     {
-        GetGraphicDriver() = new OpenGl_GraphicDriver(aDisplayConnection);
+        Handle(Aspect_DisplayConnection) m_display_donnection = new Aspect_DisplayConnection();
+        //创建OpenGL图形驱动
+        if (graphic_driver_.IsNull())
+        {
+            graphic_driver_ = new OpenGl_GraphicDriver(m_display_donnection);
+        }
+        //获取QWidget的窗口系统标识符
+        WId window_handle = (WId)winId();
+
+#ifdef _WIN32
+        //创建Windows NT 窗口
+        Handle(WNT_Window) wind = new WNT_Window((Aspect_Handle)window_handle);
+#else
+        Handle(Xw_Window) wind = new Xw_Window(m_display_donnection, (Aspect_Handle)window_handle);
+#endif
+
+        //创建3D查看器
+        v_viewer_ = new V3d_Viewer(graphic_driver_);
+        //创建视图
+        view_ = v_viewer_->CreateView();
+        view_->SetWindow(wind);
+        //打开窗口
+        if (!wind->IsMapped())
+        {
+            wind->Map();
+        }
+        context_ = new AIS_InteractiveContext(v_viewer_);  //创建交互式上下文
+        //配置查看器的光照
+        v_viewer_->SetDefaultLights();
+        v_viewer_->SetLightOn();
+
+        //显示直角坐标系，可以配置在窗口显示位置、文字颜色、大小、样式
+        view_->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_GOLD, 0.08, V3d_ZBUFFER);
+
+        //渐变色背景
+        Quantity_Color top_color = Quantity_Color(101 / 255.0, 101 / 255.0, 122 / 255.0, Quantity_TOC_RGB);
+        //Quantity_Color bottom_color = Quantity_Color(191 / 255.0, 193 / 255.0, 204 / 255.0, Quantity_TOC_RGB);
+        //view_->SetBgGradientColors(top_color, bottom_color, Aspect_GFM_VER);
+        view_->SetBackgroundColor(top_color);
+        //设置显示模式
+        context_->SetDisplayMode(AIS_Shaded, Standard_True);
+
+        Quantity_Color L_YELLOW = Quantity_Color(245 / 255.0, 180 / 255.0, 77 / 255.0, Quantity_TOC_RGB);//ownYellow
+        Quantity_Color L_BLUE = Quantity_Color(29 / 255.0, 166 / 255.0, 251 / 255.0, Quantity_TOC_RGB);
+        initDefaultHilightAttributes(Prs3d_TypeOfHighlight::Prs3d_TypeOfHighlight_Dynamic, 2, L_BLUE);
+        initDefaultHilightAttributes(Prs3d_TypeOfHighlight::Prs3d_TypeOfHighlight_LocalDynamic, 2, L_YELLOW);
+        initDefaultHilightAttributes(Prs3d_TypeOfHighlight::Prs3d_TypeOfHighlight_Selected, 2, Quantity_NOC_RED);
+        initDefaultHilightAttributes(Prs3d_TypeOfHighlight::Prs3d_TypeOfHighlight_LocalSelected, 2, Quantity_NOC_RED);
+
+        setBackgroundRole(QPalette::NoRole);  //无背景
+        setFocusPolicy(Qt::StrongFocus);
+        setAttribute(Qt::WA_PaintOnScreen);
+        setAttribute(Qt::WA_NoSystemBackground);
+        setMouseTracking(true);   //开启鼠标位置追踪
     }
-
-    // Get window handle. This returns something suitable for all platforms.
-    WId window_handle = (WId)winId();
-
-    // Create appropriate window for platform
-//#ifdef WNT
-    Handle(WNT_Window) wind = new WNT_Window((Aspect_Handle)window_handle);
-    //#elif defined(__APPLE__) && !defined(MACOSX_USE_GLX)
-    //    Handle(Cocoa_Window) wind = new Cocoa_Window((NSView*)window_handle);
-    //#else
-       // Handle(Xw_Window) wind = new Xw_Window(aDisplayConnection, (Window)window_handle);
-    //#endif
-
-        // Create V3dViewer and V3d_View
-    viewer_ = new V3d_Viewer(GetGraphicDriver());
-
-    view_ = viewer_->CreateView();
-
-    view_->SetWindow(wind);
-    if (!wind->IsMapped()) wind->Map();
-
-    // Create AISInteractiveContext
-    context_ = new AIS_InteractiveContext(viewer_);
-
-    // Set up lights etc
-    viewer_->SetDefaultLights();
-    viewer_->SetLightOn();
-
-    //渐变色背景
-    Quantity_Color blue = Quantity_Color(30 / 255.0, 30 / 255.0, 30 / 255.0, Quantity_TOC_RGB);
-    view_->SetBackgroundColor(blue);
-    //设置显示模式
-    context_->SetDisplayMode(AIS_Shaded, Standard_True);
-    view_->MustBeResized();
-    view_->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_GOLD, 0.08, V3d_ZBUFFER);
-
-    context_->SetDisplayMode(AIS_Shaded, Standard_True);
     setViewCube();
-}
 
-void OccView::setViewCube()
+    view_->Redraw();
+    view_->MustBeResized();
+};
+
+void CadView::setViewCube()
 {
-    auto aisViewCube = new AIS_ViewCube;
-    double transp_num = 0.75;//透明程度，1为完全透明
-    aisViewCube->SetBoxColor(Quantity_NOC_GRAY75);
-    //aisViewCube->SetFixedAnimationLoop(false);
-    aisViewCube->SetSize(62);
-    aisViewCube->SetFontHeight(14);
-    aisViewCube->SetBoxTransparency(transp_num);
+    auto ais_viewcube = new AIS_ViewCube();
+    double transp_num = 0.55;//透明程度，1为完全透明
+    ais_viewcube->SetBoxColor(Quantity_NOC_GRAY2);
+    //ais_viewcube->SetFixedAnimationLoop(false);
+    ais_viewcube->SetSize(62);
+    ais_viewcube->SetFontHeight(14);
+    ais_viewcube->SetBoxTransparency(transp_num);
 
-    aisViewCube->SetTransformPersistence(
+    ais_viewcube->SetTransformPersistence(
         new Graphic3d_TransformPers(
         Graphic3d_TMF_TriedronPers,
         Aspect_TOTP_LEFT_UPPER,
         Graphic3d_Vec2i(85, 85)));
-    //m_gfxScene.addObject(aisViewCube);
 
-    const Handle_Prs3d_DatumAspect myDatumColor = new Prs3d_DatumAspect();
-    myDatumColor->ShadingAspect(Prs3d_DP_XAxis)->SetColor(Quantity_NOC_GREEN2);
-    myDatumColor->ShadingAspect(Prs3d_DP_YAxis)->SetColor(Quantity_NOC_RED2);
-    myDatumColor->ShadingAspect(Prs3d_DP_ZAxis)->SetColor(Quantity_NOC_BLUE2);
-    myDatumColor->ShadingAspect(Prs3d_DP_XAxis)->SetTransparency(transp_num);
-    myDatumColor->ShadingAspect(Prs3d_DP_YAxis)->SetTransparency(transp_num);
-    myDatumColor->ShadingAspect(Prs3d_DP_ZAxis)->SetTransparency(transp_num);
-    aisViewCube->Attributes()->SetDatumAspect(myDatumColor);
+    const Handle_Prs3d_DatumAspect datum_color = new Prs3d_DatumAspect();
+    datum_color->ShadingAspect(Prs3d_DP_XAxis)->SetColor(Quantity_NOC_GREEN2);
+    datum_color->ShadingAspect(Prs3d_DP_YAxis)->SetColor(Quantity_NOC_RED2);
+    datum_color->ShadingAspect(Prs3d_DP_ZAxis)->SetColor(Quantity_NOC_BLUE2);
+    datum_color->ShadingAspect(Prs3d_DP_XAxis)->SetTransparency(transp_num);
+    datum_color->ShadingAspect(Prs3d_DP_YAxis)->SetTransparency(transp_num);
+    datum_color->ShadingAspect(Prs3d_DP_ZAxis)->SetTransparency(transp_num);
+    ais_viewcube->Attributes()->SetDatumAspect(datum_color);
 
-    viewcube_ = aisViewCube;
+    viewcube_ = ais_viewcube;
 
     context_->Display(viewcube_, false);  // 显示模型
-
 }
 
-const Handle(AIS_InteractiveContext)& OccView::getContext() const
-{
-    return context_;
-}
-
-/*!
-Get paint engine for the OpenGL viewer. [ virtual public ]
-*/
-QPaintEngine* OccView::paintEngine() const
+QPaintEngine* CadView::paintEngine()const
 {
     return 0;
 }
 
-void OccView::paintEvent(QPaintEvent* /*theEvent*/)
+void CadView::initDefaultHilightAttributes(Prs3d_TypeOfHighlight idx,
+    Standard_Real lineWidth_aspect, Quantity_Color theColor)
 {
-    view_->Redraw();
-}
+    //        Prs3d_TypeOfHighlight_Selected,       //!< entire object is selected
+    //        Prs3d_TypeOfHighlight_Dynamic,        //!< entire object is dynamically highlighted
+    //        Prs3d_TypeOfHighlight_LocalSelected,  //!< part of the object is selected
+    //        Prs3d_TypeOfHighlight_LocalDynamic,   //!< part of the object is dynamically highlighted
+    const Handle(Prs3d_Drawer)& drawer = context_->HighlightStyle(idx);
+    Standard_Real lineWidth = 5.0;
+    //Quantity_NameOfColor::Quantity_NOC_BROWN;//此处查看所有颜色
 
-void OccView::resizeEvent(QResizeEvent* /*theEvent*/)
-{
-    if (!view_.IsNull())
+    drawer->SetMethod(Aspect_TOHM_COLOR);
+    drawer->SetDisplayMode(0);
+    drawer->SetColor(theColor);
+
+    drawer->SetupOwnShadingAspect();
+    drawer->SetupOwnPointAspect();
+
+    drawer->SetLineAspect(new Prs3d_LineAspect(Quantity_NOC_BLACK, Aspect_TOL_SOLID, lineWidth));
+    *drawer->LineAspect()->Aspect() = *drawer->Link()->LineAspect()->Aspect();
+
+    drawer->SetWireAspect(new Prs3d_LineAspect(Quantity_NOC_BLACK, Aspect_TOL_SOLID, lineWidth));
+    *drawer->WireAspect()->Aspect() = *drawer->Link()->WireAspect()->Aspect();
+
+    drawer->SetPlaneAspect(new Prs3d_PlaneAspect());
+    *drawer->PlaneAspect()->EdgesAspect() = *drawer->Link()->PlaneAspect()->EdgesAspect();
+
+    drawer->SetFreeBoundaryAspect(new Prs3d_LineAspect(Quantity_NOC_BLACK, Aspect_TOL_SOLID, lineWidth));
+    *drawer->FreeBoundaryAspect()->Aspect() = *drawer->Link()->FreeBoundaryAspect()->Aspect();
+
+    drawer->SetUnFreeBoundaryAspect(new Prs3d_LineAspect(Quantity_NOC_BLACK, Aspect_TOL_SOLID, lineWidth));
+    *drawer->UnFreeBoundaryAspect()->Aspect() = *drawer->Link()->UnFreeBoundaryAspect()->Aspect();
+    drawer->SetDatumAspect(new Prs3d_DatumAspect());
+
+    drawer->ShadingAspect()->SetColor(theColor);
+    drawer->WireAspect()->SetColor(theColor);
+    drawer->LineAspect()->SetColor(theColor);
+    drawer->PlaneAspect()->ArrowAspect()->SetColor(theColor);
+    drawer->PlaneAspect()->IsoAspect()->SetColor(theColor);
+    drawer->PlaneAspect()->EdgesAspect()->SetColor(theColor);
+    drawer->FreeBoundaryAspect()->SetColor(theColor);
+    drawer->UnFreeBoundaryAspect()->SetColor(theColor);
+    drawer->PointAspect()->SetColor(theColor);
+    for (Standard_Integer it = 0; it < Prs3d_DP_None; ++it)
     {
-        view_->MustBeResized();
-    }
-}
-
-void OccView::fitAll(void)
-{
-    view_->FitAll();
-    view_->ZFitAll();
-    view_->Redraw();
-}
-
-void OccView::reset(void)
-{
-    view_->Reset();
-}
-
-void OccView::removeAll(void)
-{
-    context_->RemoveAll(true);
-    setViewCube();
-}
-
-void OccView::mousePressEvent(QMouseEvent* theEvent)
-{
-    if (theEvent->button() == Qt::LeftButton)
-    {
-        onLButtonDown((theEvent->buttons() | theEvent->modifiers()), theEvent->pos());
-    }
-    else if (theEvent->button() == Qt::MidButton)
-    {
-        cur_mode_ = CurAction3d_DynamicPanning;
-        onMButtonDown((theEvent->buttons() | theEvent->modifiers()), theEvent->pos());
-    }
-    else if (theEvent->button() == Qt::RightButton)
-    {
-        onRButtonDown((theEvent->buttons() | theEvent->modifiers()), theEvent->pos());
-    }
-}
-
-void OccView::mouseReleaseEvent(QMouseEvent* theEvent)
-{
-    cur_mode_ = CurAction3d_Nothing;
-    if (theEvent->button() == Qt::LeftButton)
-    {
-        onLButtonUp(theEvent->buttons() | theEvent->modifiers(), theEvent->pos());
-    }
-    else if (theEvent->button() == Qt::MidButton)
-    {
-        onMButtonUp(theEvent->buttons() | theEvent->modifiers(), theEvent->pos());
-    }
-    else if (theEvent->button() == Qt::RightButton)
-    {
-        onRButtonUp(theEvent->buttons() | theEvent->modifiers(), theEvent->pos());
-    }
-
-}
-
-void OccView::mouseMoveEvent(QMouseEvent* theEvent)
-{
-    onMouseMove(theEvent->buttons(), theEvent->pos());
-}
-
-void OccView::wheelEvent(QWheelEvent* theEvent)
-{
-    onMouseWheel(theEvent->buttons(), theEvent->delta(), theEvent->pos());
-}
-
-void OccView::onLButtonDown(const int /*theFlags*/, const QPoint thePoint)
-{
-    // Save the current mouse coordinate in min.
-    myXmin = thePoint.x();
-    myYmin = thePoint.y();
-    myXmax = thePoint.x();
-    myYmax = thePoint.y();
-
-}
-
-void OccView::onMButtonDown(const int /*theFlags*/, const QPoint thePoint)
-{
-    // Save the current mouse coordinate in min.
-    myXmin = thePoint.x();
-    myYmin = thePoint.y();
-    myXmax = thePoint.x();
-    myYmax = thePoint.y();
-
-    if (cur_mode_ == CurAction3d_DynamicRotation)
-    {
-        view_->StartRotation(thePoint.x(), thePoint.y());
-    }
-}
-
-void OccView::onRButtonDown(const int /*theFlags*/, const QPoint thePoint)
-{
-    myXmin = thePoint.x();
-    myYmin = thePoint.y();
-    myXmax = thePoint.x();
-    myYmax = thePoint.y();
-
-    if (cur_mode_ == CurAction3d_DynamicRotation)
-    {
-        view_->StartRotation(thePoint.x(), thePoint.y());
-    }
-}
-
-void OccView::onMouseWheel(const int /*theFlags*/, const int theDelta, const QPoint thePoint)
-{
-    Standard_Integer aFactor = 16;
-
-    Standard_Integer aX = thePoint.x();
-    Standard_Integer aY = thePoint.y();
-
-    if (theDelta > 0)
-    {
-        aX += aFactor;
-        aY += aFactor;
-    }
-    else
-    {
-        aX -= aFactor;
-        aY -= aFactor;
-    }
-
-    view_->Zoom(thePoint.x(), thePoint.y(), aX, aY);
-}
-
-void OccView::addItemInPopup(QMenu* /*theMenu*/)
-{}
-
-void OccView::popup(const int /*x*/, const int /*y*/)
-{}
-
-void OccView::onLButtonUp(const int theFlags, const QPoint thePoint)
-{
-    // Hide the QRubberBand
-    if (rectband_)
-    {
-        rectband_->hide();
-    }
-
-    // Ctrl for multi selection.
-    if (thePoint.x() == myXmin && thePoint.y() == myYmin)
-    {
-        if (theFlags & Qt::ControlModifier)
+        if (Handle(Prs3d_LineAspect) aLineAsp = drawer->DatumAspect()->LineAspect((Prs3d_DatumParts)it))
         {
-            multiInputEvent(thePoint.x(), thePoint.y());
+            aLineAsp->SetColor(theColor);
+        }
+    }
+
+    drawer->WireAspect()->SetWidth(lineWidth_aspect);
+    drawer->LineAspect()->SetWidth(lineWidth_aspect);
+    drawer->PlaneAspect()->EdgesAspect()->SetWidth(lineWidth_aspect);
+    drawer->FreeBoundaryAspect()->SetWidth(lineWidth_aspect);
+    drawer->UnFreeBoundaryAspect()->SetWidth(lineWidth_aspect);//辅助显示线框
+    drawer->PointAspect()->SetTypeOfMarker(Aspect_TOM_O_POINT);
+    drawer->PointAspect()->SetScale(lineWidth_aspect);
+
+    // the triangulation should be computed using main presentation attributes,
+    // and should not be overridden by highlighting
+    drawer->SetAutoTriangulation(Standard_False);
+
+}
+
+void CadView::paintEvent(QPaintEvent*)
+{
+    view_->InvalidateImmediate();
+    FlushViewEvents(context_, view_, true);
+};
+
+void CadView::resizeEvent(QResizeEvent*)
+{
+    view_->MustBeResized();
+};
+
+bool CadView::checkDetectedValid()
+{
+    if (!context_->HasDetected())
+    {
+        context_->ClearSelected(true);
+        return false;
+    }
+    else if (context_->DetectedInteractive()->IsKind(STANDARD_TYPE(AIS_ViewCube)))
+    {
+        context_->SelectDetected();
+        return false;
+    }
+    else return true;
+}
+//!覆写鼠标按键按下事件
+void CadView::mousePressEvent(QMouseEvent* event)
+{
+    if (event->buttons() & Qt::MiddleButton)//平移
+    {
+        context_action_mode_ = CurrentAction3dEnum::CurAction3d_DynamicPanning;
+        mouse_x_record_ = event->pos().x();
+        mouse_y_record_ = event->pos().y();
+        this->setCursor(*panCursor);
+    }
+    else if ((event->buttons() & Qt::LeftButton) && (event->buttons() & Qt::RightButton))  //旋转
+    {
+        context_action_mode_ = CurrentAction3dEnum::CurAction3d_DynamicRotation;
+        view_->StartRotation(event->pos().x(), event->pos().y());
+        this->setCursor(*rotCursor);
+    }
+    else if (event->buttons() == Qt::RightButton)
+    {
+        if (!checkDetectedValid())return;
+        if (rightClickCb)rightClickCb(event);
+    }
+    else if (event->buttons() & Qt::LeftButton)  //鼠标左键选择模型
+    {
+        if (!checkDetectedValid())return;
+
+        if (qApp->keyboardModifiers() == Qt::ControlModifier)
+        {
+            context_->SelectDetected(AIS_SelectionScheme_XOR);// 按下Shift键点击鼠标左键实现多选
         }
         else
         {
-            inputEvent(thePoint.x(), thePoint.y());
+            context_->SelectDetected(AIS_SelectionScheme::AIS_SelectionScheme_Replace);    // 单选模型
         }
+
+        view_->Update();
     }
+};
 
-}
-
-void OccView::onMButtonUp(const int /*theFlags*/, const QPoint thePoint)
+void CadView::fitAll()
 {
-    if (thePoint.x() == myXmin && thePoint.y() == myYmin)
-    {
-        panByMiddleButton(thePoint);
-    }
+    view_->FitAll();
 }
 
-void OccView::onRButtonUp(const int /*theFlags*/, const QPoint thePoint)
-{
-    popup(thePoint.x(), thePoint.y());
-}
-
-void OccView::onMouseMove(const int theFlags, const QPoint thePoint)
-{
-    // Draw the rubber band.
-    if (theFlags & Qt::LeftButton)
-    {
-        drawRubberBand(myXmin, myYmin, thePoint.x(), thePoint.y());
-        dragEvent(thePoint.x(), thePoint.y());
-    }
-
-    // Ctrl for multi selection.
-    if (theFlags & Qt::ControlModifier)
-    {
-        multiMoveEvent(thePoint.x(), thePoint.y());
-    }
-    else
-    {
-        moveEvent(thePoint.x(), thePoint.y());
-    }
-
-    // Middle button.
-    if (theFlags & Qt::MidButton)
-    {
-        switch (cur_mode_)
-        {
-        case CurAction3d_DynamicRotation:
-            view_->Rotation(thePoint.x(), thePoint.y());
-            break;
-
-        case CurAction3d_DynamicZooming:
-            view_->Zoom(myXmin, myYmin, thePoint.x(), thePoint.y());
-            break;
-
-        case CurAction3d_DynamicPanning:
-            view_->Pan(thePoint.x() - myXmax, myYmax - thePoint.y());
-            myXmax = thePoint.x();
-            myYmax = thePoint.y();
-            break;
-
-        default:
-            break;
-        }
-    }
-
-}
-
-void OccView::dragEvent(const int x, const int y)
-{
-    context_->Select(myXmin, myYmin, x, y, view_, Standard_True);
-
-    emit selectionChanged();
-}
-
-void OccView::multiDragEvent(const int x, const int y)
-{
-    context_->ShiftSelect(myXmin, myYmin, x, y, view_, Standard_True);
-
-    emit selectionChanged();
-
-}
-
-void OccView::inputEvent(const int x, const int y)
-{
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-
-    context_->Select(Standard_True);
-
-    emit selectionChanged();
-}
-
-void OccView::multiInputEvent(const int x, const int y)
-{
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-
-    context_->ShiftSelect(Standard_True);
-
-    emit selectionChanged();
-}
-
-void OccView::moveEvent(const int x, const int y)
-{
-    context_->MoveTo(x, y, view_, Standard_True);
-}
-
-void OccView::multiMoveEvent(const int x, const int y)
-{
-    context_->MoveTo(x, y, view_, Standard_True);
-}
-
-void OccView::drawRubberBand(const int minX, const int minY, const int maxX, const int maxY)
-{
-    QRect aRect;
-
-    // Set the rectangle correctly.
-    (minX < maxX) ? (aRect.setX(minX)) : (aRect.setX(maxX));
-    (minY < maxY) ? (aRect.setY(minY)) : (aRect.setY(maxY));
-
-    aRect.setWidth(abs(maxX - minX));
-    aRect.setHeight(abs(maxY - minY));
-
-    if (!rectband_)
-    {
-        rectband_ = new QRubberBand(QRubberBand::Rectangle, this);
-
-        // setStyle is important, set to windows style will just draw
-        // rectangle frame, otherwise will draw a solid rectangle.
-        rectband_->setStyle(QStyleFactory::create("windows"));
-    }
-
-    rectband_->setGeometry(aRect);
-    rectband_->show();
-}
-
-void OccView::panByMiddleButton(const QPoint& thePoint)
-{
-    Standard_Integer aCenterX = 0;
-    Standard_Integer aCenterY = 0;
-
-    QSize aSize = size();
-
-    aCenterX = aSize.width() / 2;
-    aCenterY = aSize.height() / 2;
-
-    view_->Pan(aCenterX - thePoint.x(), thePoint.y() - aCenterY);
-}
-
-void OccView::drawTestData(const std::vector<TopoDS_Face>& all_face_)
+void CadView::drawTestData(const std::vector<TopoDS_Face>& all_face_)
 {
     int cnt = all_face_.size();
     for (int i = 0; i < cnt; ++i)
     {
+        //Quantity_Color(101 / 255.0, 101 / 255.0, 122 / 255.0, Quantity_TOC_RGB);
+         // Quantity_Color(191 / 255.0, 193 / 255.0, 204 / 255.0, Quantity_TOC_RGB);
+
         Handle(AIS_Shape) shape = new AIS_Shape(all_face_[i]);
+        shape->SetColor(Quantity_Color(255 / 255.0, 153 / 255.0, 51 / 255.0, Quantity_TOC_RGB));
         context_->Display(shape, false);
     }
 }
 
-void OccView::drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels)
+void CadView::drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels)
 {
     int textcnt = all_labels.size();
     for (int j = 0; j < textcnt; ++j)
@@ -477,16 +340,138 @@ void OccView::drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_la
     }
 }
 
-void OccView::keyPressEvent(QKeyEvent* event)
+Handle(SelectMgr_EntityOwner) CadView::getDetectedObj()
 {
-    if (event->key() == Qt::Key_1)
+    if (detected_obj_.empty())return nullptr;
+    else
+        return detected_obj_.front();
+}
+
+//!覆写鼠标按键释放事件
+void CadView::mouseReleaseEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+    context_action_mode_ = CurrentAction3dEnum::CurAction3d_Nothing;
+    this->setCursor(*defCursor);
+};
+
+//! Map Qt buttons bitmask to virtual keys.
+static Aspect_VKeyMouse qtMouseButtons2VKeys(Qt::MouseButtons theButtons)
+{
+    Aspect_VKeyMouse mouse_button = Aspect_VKeyMouse_NONE;
+    if ((theButtons & Qt::LeftButton) != 0)
     {
+        mouse_button |= Aspect_VKeyMouse_LeftButton;
     }
-    else if (event->key() == Qt::Key_2)//opt
+    if ((theButtons & Qt::MiddleButton) != 0)
     {
+        mouse_button |= Aspect_VKeyMouse_MiddleButton;
     }
-    else if (event->key() == Qt::Key_0)
+    if ((theButtons & Qt::RightButton) != 0)
     {
-        context_->RemoveAll(true);
+        mouse_button |= Aspect_VKeyMouse_RightButton;
+    }
+    return mouse_button;
+}
+
+//!覆写鼠标移动事件
+void CadView::mouseMoveEvent(QMouseEvent* event)
+{
+    // 鼠标移动到模型时，模型高亮显示
+
+    //context_->MoveTo(event->pos().x(), event->pos().y(), mView, true);
+
+    const Graphic3d_Vec2i new_pos(event->pos().x(), event->pos().y());
+    if (!view_.IsNull() && UpdateMousePosition(new_pos, qtMouseButtons2VKeys(event->buttons()),
+        Aspect_VKeyFlags_NONE, false))
+    {
+        update();
+    }
+
+    switch (context_action_mode_)
+    {
+    case CadView::CurrentAction3dEnum::CurAction3d_Nothing:
+    {
+
+        if (event->buttons() == Qt::LeftButton)//位姿调整状态
+        {
+
+        }
+        else
+        {
+            this->setCursor(*defCursor);
+        }
+        break;
+    }
+    case CadView::CurrentAction3dEnum::CurAction3d_DynamicPanning:
+    {
+        view_->Pan(event->pos().x() - mouse_x_record_, mouse_y_record_ - event->pos().y());
+        mouse_x_record_ = event->pos().x();
+        mouse_y_record_ = event->pos().y();
+        break;
+    }
+    case CadView::CurrentAction3dEnum::CurAction3d_DynamicZooming:
+        break;
+    case CadView::CurrentAction3dEnum::CurAction3d_DynamicRotation:
+    {
+        view_->Rotation(event->pos().x(), event->pos().y());
+        break;
+    }
+    default:
+        break;
+    }
+    //......
+};
+
+//!覆写鼠标滚轮事件
+void CadView::wheelEvent(QWheelEvent* event)
+{
+    this->setCursor(*zoomCursor);
+    view_->StartZoomAtPoint(event->position().x(), event->position().y());
+    view_->ZoomAtPoint(0, 0, event->angleDelta().y() / zoom_scale_control_, 0);
+};
+
+void CadView::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Delete)
+    {
+        std::cout << "press delete";
+    }
+    else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Delete)
+    {
+
+    }
+    return QWidget::keyPressEvent(event);
+};
+
+void CadView::resetAll(bool redraw)
+{
+    context_->RemoveAll(false);
+    context_->Display(viewcube_, false);  // 显示模型
+    if (redraw)view_->Redraw();
+}
+
+void CadView::updateView(KUpdate cmd)
+{
+    switch (cmd)
+    {
+    case CadView::KUpdate::Redraw:
+    {
+        view_->Redraw(); break;
+    }
+    case CadView::KUpdate::ZFitAll:
+    {
+        view_->ZFitAll(); break;
+    }
+    case CadView::KUpdate::Fitall:
+    {
+        view_->FitAll(); break;
+    }
+    case CadView::KUpdate::MustResized:
+    {
+        view_->MustBeResized(); break;
+    }
+    default:
+        break;
     }
 }

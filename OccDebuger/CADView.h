@@ -1,110 +1,121 @@
-﻿#ifndef _OCCVIEW_H_
-#define _OCCVIEW_H_
+﻿/****************************************************************************
+** Copyright 2022 by KangYucheng.
+** All Rights Reserved.
+**
+** This file is part of RobotConfig software. No part of this file may be
+** reproduced in any form or means, without the prior written consent of KangYucheng.
+****************************************************************************/
+
+#pragma once
+#ifndef _CADVIEW_H_
+#define _CADVIEW_H_
+
+#include <functional>
 
 #include <QWidget>
+#include <QMouseEvent>
+#include <QWheelEvent>
 
-#include <AIS_InteractiveContext.hxx>
-#include <AIS_ViewCube.hxx>
+
+#ifdef _WIN32
+#include <WNT_Window.hxx>
+#include <QtOpenGL\QGLWidget>
+#else
+#undef None
+#include <Xw_Window.hxx>
+#include <QGLWidget>
+#endif
+
+//#include <Standard_Handle.hxx>
+//#include <AIS_InteractiveContext.hxx>
+#include <AIS_InteractiveObject.hxx>
+#include <AIS_ViewController.hxx>
+#include <Prs3d_TypeOfHighlight.hxx>
 #include <TopoDS_Face.hxx>
+#include <V3d_Viewer.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
 #include <AIS_TextLabel.hxx>
-class QMenu;
-class QRubberBand;
+// class AIS_InteractiveContext;
+// class AIS_InteractiveObject;
+#include <V3d_View.hxx>
 
-//! Adapted a QWidget for OpenCASCADE viewer.
-class OccView : public QWidget
+
+class QMenu;
+
+
+class ViewModel;
+
+class CadView : public QWidget, protected AIS_ViewController
 {
     Q_OBJECT
-
-public:
-    //! mouse actions.
-    enum CurrentAction3d
+private:
+    enum class CurrentAction3dEnum
     {
         CurAction3d_Nothing,
-        CurAction3d_DynamicZooming,
-        CurAction3d_WindowZooming,
         CurAction3d_DynamicPanning,
-        CurAction3d_GlobalPanning,
+        CurAction3d_DynamicZooming,
         CurAction3d_DynamicRotation
     };
 
-public:
-    //! constructor.
-    OccView(QWidget* parent);
 
-    const Handle(AIS_InteractiveContext)& getContext() const;
+    typedef std::function<void(const Handle(SelectMgr_EntityOwner)&)> leftButtonClickCallBack;
+    typedef std::function<void(QMouseEvent* event)> rightButtonClickCallBack;
+
+public:
+    enum class KUpdate
+    {
+        Redraw, ZFitAll, Fitall, MustResized
+    };
+
+    CadView(QWidget* parent = Q_NULLPTR);
+    ~CadView();
+    Handle(AIS_InteractiveContext) context_;
+    Handle(SelectMgr_EntityOwner) getDetectedObj();
     void drawTestData(const std::vector<TopoDS_Face>& all_face_);
     void drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels);
-signals:
-    void selectionChanged(void);
+    leftButtonClickCallBack processClickCb = NULL;
+    rightButtonClickCallBack rightClickCb = NULL;
+    void fitAll();
 
 public slots:
-    //! operations for the view.
-    void fitAll(void);
-    void reset(void);
-    void removeAll();
+    void updateView(KUpdate);
+    //void execCmd(CmdEnum _cmd);
+    void resetAll(bool);
 
 protected:
-    virtual QPaintEngine* paintEngine() const;
+    void paintEvent(QPaintEvent*)override;
+    void resizeEvent(QResizeEvent*)override;
+    void mousePressEvent(QMouseEvent* event)override;
+    void mouseReleaseEvent(QMouseEvent* event)override;
+    void mouseMoveEvent(QMouseEvent* event)override;
+    void wheelEvent(QWheelEvent* event)override;
+    void keyPressEvent(QKeyEvent* event)override;
+    QPaintEngine* paintEngine() const;//初始化界面相关
 
-    // Paint events.
-    virtual void paintEvent(QPaintEvent* theEvent);
-    virtual void resizeEvent(QResizeEvent* theEvent);
-
-    // Mouse events.
-    virtual void mousePressEvent(QMouseEvent* theEvent);
-    virtual void mouseReleaseEvent(QMouseEvent* theEvent);
-    virtual void mouseMoveEvent(QMouseEvent* theEvent);
-    virtual void wheelEvent(QWheelEvent* theEvent);
-    virtual void keyPressEvent(QKeyEvent* event);
-    // Button events.
-    virtual void onLButtonDown(const int theFlags, const QPoint thePoint);
-    virtual void onMButtonDown(const int theFlags, const QPoint thePoint);
-    virtual void onRButtonDown(const int theFlags, const QPoint thePoint);
-    virtual void onMouseWheel(const int theFlags, const int theDelta, const QPoint thePoint);
-    virtual void onLButtonUp(const int theFlags, const QPoint thePoint);
-    virtual void onMButtonUp(const int theFlags, const QPoint thePoint);
-    virtual void onRButtonUp(const int theFlags, const QPoint thePoint);
-    virtual void onMouseMove(const int theFlags, const QPoint thePoint);
-
-    // Popup menu.
-    virtual void addItemInPopup(QMenu* theMenu);
-
-protected:
-    void init(void);
+private:
+    void initContext();
+    void initDefaultHilightAttributes(Prs3d_TypeOfHighlight idx,
+        Standard_Real lineWidth_aspect = 5.0, Quantity_Color theColor = Quantity_NOC_LIGHTBLUE2);
+    void initCursors();
     void setViewCube();
-    void popup(const int x, const int y);
-    void dragEvent(const int x, const int y);
-    void inputEvent(const int x, const int y);
-    void moveEvent(const int x, const int y);
-    void multiMoveEvent(const int x, const int y);
-    void multiDragEvent(const int x, const int y);
-    void multiInputEvent(const int x, const int y);
-    void drawRubberBand(const int minX, const int minY, const int maxX, const int maxY);
-    void panByMiddleButton(const QPoint& thePoint);
+    bool checkDetectedValid();
+
+signals:
+    void cmdSignal(QMouseEvent* event);
 
 private:
 
-    //! the occ viewer.
-    Handle(V3d_Viewer) viewer_;
-    Handle(AIS_ViewCube) viewcube_;
-    //! the occ view.
-    Handle(V3d_View) view_;
+    Handle(AIS_InteractiveObject) viewcube_ = nullptr;
+    Handle(V3d_Viewer) v_viewer_ = nullptr;
+    Handle(Graphic3d_GraphicDriver) graphic_driver_ = nullptr;
+    Handle(V3d_View) view_ = nullptr;
 
-    //! the occ context.
-    Handle(AIS_InteractiveContext) context_;
+    CurrentAction3dEnum context_action_mode_;//!三维场景转换模式
+    std::vector<Handle(SelectMgr_EntityOwner)>detected_obj_;//存储点击过的对象，可能是点线面
 
-    //! save the mouse position.
-    Standard_Integer myXmin;
-    Standard_Integer myYmin;
-    Standard_Integer myXmax;
-    Standard_Integer myYmax;
-
-    //! the mouse current mode.
-    CurrentAction3d cur_mode_;
-
-    //! rubber rectangle for the mouse selection.
-    QRubberBand* rectband_;
-
+    int mouse_x_record_;    //!记录鼠标平移坐标X
+    int mouse_y_record_;    //!记录鼠标平移坐标Y
+    int zoom_scale_control_ = 4;
 };
 
-#endif // _OCCVIEW_H_
+#endif

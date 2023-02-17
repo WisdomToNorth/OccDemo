@@ -130,15 +130,15 @@ void MultiUniset::multiCoreUnionSet(int user_set_num)
 
 void MultiUniset::viewData()
 {
-    viewer_->removeAll();
+    viewer_->context_->RemoveAll(false);
     std::vector<TopoDS_Face> vecset;
     std::vector<Handle(AIS_TextLabel)> labs;
     drawData(buf_, vecset, labs);
 
     viewer_->drawTestData(vecset);
     viewer_->drawTestLabelData(labs);
-
     viewer_->fitAll();
+
     viewer_->update();
 }
 
@@ -176,7 +176,7 @@ std::pair<int, int> MultiUniset::getLoc(unsigned long long num)
     int b = static_cast<int>(n);
 
     //std::cout << "loc: " << a << " * " << b << " &" << std::endl;
-    return { a,b };//m,n从0开始数
+    return {a,b};//m,n从0开始数
 }
 
 /*

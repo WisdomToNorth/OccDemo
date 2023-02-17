@@ -27,7 +27,7 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     this->setStyleSheet(G_GetUiStyleSheet(con));
 
 
-    viewer_ = new OccView(this);
+    viewer_ = new CadView(this);
 
     unionset_ = new MultiUniset(viewer_);
 
