@@ -34,7 +34,8 @@
 #include <qdebug.h>
 #include <qscreen.h>
 
-
+namespace KDebugger
+{
 namespace
 {
 static QCursor* defCursor = NULL;
@@ -105,19 +106,19 @@ void CadView::initContext()
 #endif
 
         //创建3D查看器
-        v_viewer_ = new V3d_Viewer(graphic_driver_);
+        viewer_ = new V3d_Viewer(graphic_driver_);
         //创建视图
-        view_ = v_viewer_->CreateView();
+        view_ = viewer_->CreateView();
         view_->SetWindow(wind);
         //打开窗口
         if (!wind->IsMapped())
         {
             wind->Map();
         }
-        context_ = new AIS_InteractiveContext(v_viewer_);  //创建交互式上下文
+        context_ = new AIS_InteractiveContext(viewer_);  //创建交互式上下文
         //配置查看器的光照
-        v_viewer_->SetDefaultLights();
-        v_viewer_->SetLightOn();
+        viewer_->SetDefaultLights();
+        viewer_->SetLightOn();
 
         //显示直角坐标系，可以配置在窗口显示位置、文字颜色、大小、样式
         view_->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_GOLD, 0.08, V3d_ZBUFFER);
@@ -474,4 +475,7 @@ void CadView::updateView(KUpdate cmd)
     default:
         break;
     }
+}
+
+
 }

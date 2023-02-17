@@ -1,4 +1,4 @@
-#include "K_box.h"
+﻿#include "K_box.h"
 
 #include <chrono>
 #include <vector>
@@ -37,7 +37,8 @@
 
 #include <QString>
 
-
+namespace KDebugger
+{
 void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
     std::vector<Handle(AIS_TextLabel)>& labs)
 {
@@ -64,4 +65,5 @@ void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
         labs.emplace_back(text);
     }
 
+}
 }

@@ -13,8 +13,9 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowOccClass; };
 QT_END_NAMESPACE
 
-
-class MyThread;
+namespace KDebugger
+{
+class OccView;
 class MultiUniset;
 class MainWindowOcc : public QMainWindow
 {
@@ -44,3 +45,4 @@ private:
 
     MultiUniset* unionset_;
 };
+}

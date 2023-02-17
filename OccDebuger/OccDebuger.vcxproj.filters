@@ -1,73 +1,95 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="CADView.cpp" />
-    <ClCompile Include="global.cpp" />
-    <ClCompile Include="MainWindowOcc.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="iwConsole.cpp">
-      <Filter>Consolelog</Filter>
+      <Filter>UI\Consolelog</Filter>
     </ClCompile>
     <ClCompile Include="iwLog.cpp">
-      <Filter>Consolelog</Filter>
+      <Filter>UI\Consolelog</Filter>
     </ClCompile>
     <ClCompile Include="robotlogger.cpp">
-      <Filter>Consolelog</Filter>
+      <Filter>UI\Consolelog</Filter>
     </ClCompile>
     <ClCompile Include="CustomQlistWidget.cpp">
-      <Filter>Consolelog</Filter>
+      <Filter>UI\Consolelog</Filter>
     </ClCompile>
     <ClCompile Include="K_box.cpp">
-      <Filter>DataStructure</Filter>
+      <Filter>UnionSet</Filter>
     </ClCompile>
-    <ClCompile Include="MultiUniset.cpp" />
+    <ClCompile Include="MultiUniset.cpp">
+      <Filter>UnionSet</Filter>
+    </ClCompile>
+    <ClCompile Include="CADView.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="global.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindowOcc.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="fun_for_lc.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="publicClass.h" />
-    <ClInclude Include="unionset.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
     <ClInclude Include="iwLog.h">
-      <Filter>Consolelog</Filter>
+      <Filter>UI\Consolelog</Filter>
     </ClInclude>
     <ClInclude Include="iwSingleton.h">
-      <Filter>Consolelog</Filter>
+      <Filter>UI\Consolelog</Filter>
     </ClInclude>
     <ClInclude Include="RobotLogger.h">
-      <Filter>Consolelog</Filter>
-    </ClInclude>
-    <ClInclude Include="publictools.h">
-      <Filter>Tools</Filter>
+      <Filter>UI\Consolelog</Filter>
     </ClInclude>
     <ClInclude Include="Ktimer.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="K_box.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="MultiUniset.h" />
     <ClInclude Include="k_search.h">
       <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="K_Pnt.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="K_box.h">
+      <Filter>UnionSet</Filter>
+    </ClInclude>
+    <ClInclude Include="unionset.h">
+      <Filter>UnionSet</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiUniset.h">
+      <Filter>UnionSet</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="lc_struct.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="fun_for_lc.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OccDebuger.rc" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MainWindowOcc.h" />
-    <QtMoc Include="CADView.h" />
     <QtMoc Include="iwConsole.h">
-      <Filter>Consolelog</Filter>
+      <Filter>UI\Consolelog</Filter>
     </QtMoc>
     <QtMoc Include="CustomQlistWidget.h">
-      <Filter>Consolelog</Filter>
+      <Filter>UI\Consolelog</Filter>
+    </QtMoc>
+    <QtMoc Include="CADView.h">
+      <Filter>UI</Filter>
+    </QtMoc>
+    <QtMoc Include="MainWindowOcc.h">
+      <Filter>UI</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="OccDebuger.qrc" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="MainWindowOcc.ui" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OccDebuger.ico" />
@@ -76,14 +98,22 @@
     <Filter Include="DataStructure">
       <UniqueIdentifier>{d6436bb5-a17d-4bec-9060-2f84372ba83c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DataSet">
-      <UniqueIdentifier>{707a0249-c28d-4ba0-8801-ff1cd4823f3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Consolelog">
-      <UniqueIdentifier>{09cdbec3-6863-4d65-a3af-a4873ca30766}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Tools">
       <UniqueIdentifier>{321affaa-2ba9-4ec9-baa9-68d568a4807d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UnionSet">
+      <UniqueIdentifier>{c858a4c6-e1d3-4fef-a4ee-b7aee9406a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{1ba945c5-be17-47a0-8678-ba95ece7cd94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Consolelog">
+      <UniqueIdentifier>{09cdbec3-6863-4d65-a3af-a4873ca30766}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="MainWindowOcc.ui">
+      <Filter>UI</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

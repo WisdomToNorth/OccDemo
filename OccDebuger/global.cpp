@@ -17,6 +17,8 @@
 #include <QJsonParseError>
 #include <QApplication>
 
+namespace KDebugger
+{
 Handle(AIS_InteractiveContext) G_Context = nullptr;
 
 unsigned long long G_CoreCount(unsigned long long datasize)
@@ -159,4 +161,5 @@ QString G_GetUiStyleSheet(Appearance preset)
         return dayset;
     }
     }
+}
 }

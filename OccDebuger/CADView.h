@@ -41,9 +41,10 @@
 
 
 class QMenu;
-
-
-class ViewModel;
+class QRubberBand;
+namespace KDebugger
+{
+//! Adapted a QWidget for OpenCASCADE viewer.
 
 class CadView : public QWidget, protected AIS_ViewController
 {
@@ -106,7 +107,7 @@ signals:
 private:
 
     Handle(AIS_InteractiveObject) viewcube_ = nullptr;
-    Handle(V3d_Viewer) v_viewer_ = nullptr;
+    Handle(V3d_Viewer) viewer_ = nullptr;
     Handle(Graphic3d_GraphicDriver) graphic_driver_ = nullptr;
     Handle(V3d_View) view_ = nullptr;
 
@@ -117,5 +118,5 @@ private:
     int mouse_y_record_;    //!记录鼠标平移坐标Y
     int zoom_scale_control_ = 4;
 };
-
-#endif
+}
+#endif // _OCCVIEW_H_

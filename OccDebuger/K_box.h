@@ -10,17 +10,13 @@
 #include <AIS_TextLabel.hxx>
 #include <TopoDS_Face.hxx>
 
-struct KPt
-{
-    double x;
-    double y;
-    KPt(double _x, double _y) :x(_x), y(_y) {};
-};
+#include "K_Pnt.h"
 
+namespace KDebugger
+{
 class KBox
 {
 public:
-    //KBox() :center_(KPt(0, 0)) {}
     KBox(double x, double y, double sizex, double sizey) :
         center_(KPt(x, y)), size_x(sizex), size_y(sizey)
     {}
@@ -54,3 +50,4 @@ private:
 void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
     std::vector<Handle(AIS_TextLabel)>& labs);
 
+}

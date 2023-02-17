@@ -26,6 +26,8 @@
 #svn
 *.svn-base
 .svn/*
+
+.vscode/*
 */x64/
 */x64/*
 x64/*
