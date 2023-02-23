@@ -32,16 +32,16 @@ private:
 
     // 输入：树根, 两个数值, x, x', x<=x'
     // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
-    BinSearchNode* FindSplitNode(BinSearchNode* root,
+    const BinSearchNode* FindSplitNode(const BinSearchNode* root,
         int leftnum, int rightnum);
 
     // input: bin search tree, to-search-range [x,x']
     // output: vector<int> {numbers in to-search-range}
-    void oneDRangeQuery(BinSearchNode* root,
+    void oneDRangeQuery(const BinSearchNode* root,
         double l, double r, std::vector<KPt>& res);
 private:
     std::vector<KPt> buf_;
-
+    BinSearchNode* binsearch_1d_ = nullptr;
 };
 
 //BinSearchNode* buildKDTree(PntsSorted2D pnts, int cur_depth);

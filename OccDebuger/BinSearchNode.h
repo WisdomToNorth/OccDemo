@@ -27,9 +27,9 @@ struct BinSearchNode
             return true;
     }
 
-    bool belongToRangeInX(int l, int r)
+    bool belongToRangeInX(int l, int r)const
     {//todo: confirm boundry is right
-        return pnt_.x >= l && pnt_.x <= r;
+        return pnt_.x > l && pnt_.x <= r;
     }
 
     bool BinSearchNodeInRegion(const KRegion& region)

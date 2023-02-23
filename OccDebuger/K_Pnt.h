@@ -11,9 +11,9 @@ struct KPt
     double y;
     KPt(double _x, double _y) :x(_x), y(_y) {};
     KPt() :x(0), y(0) {};
-    void print()const;
 
 };
+void printPntVec(const std::vector<KPt>& pnts);
 
 struct KRegion
 {

@@ -117,7 +117,7 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
 void MainWindowOcc::on_actionkd_find1D_triggered()
 {
     if (!kdtree_)kdtree_ = new KDTree(data_generator_);
-    kdtree_->getOneDRange(1, 30.0);
+    kdtree_->getOneDRange(ui->dsb_low->value(), ui->dsb_high->value());
 }
 
 void MainWindowOcc::on_actionGenerate_triggered()

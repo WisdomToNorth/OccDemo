@@ -15,29 +15,15 @@ void KDTree::updateData()
     data_generator_->getPtData(buf_);
 }
 
-//
-//void KDTree::reportSubTreeInX(BinSearchNode* root, std::vector<double>& subnodes)//1D
-//{
-//    if (root->isLeaf())
-//    {
-//        subnodes.emplace_back(root->pnt_.x);
-//    }
-//    if (root->left_)
-//        reportSubTreeInX(root->left_, subnodes);
-//    if (root->right_)
-//        reportSubTreeInX(root->right_, subnodes);
-//}
-
 void KDTree::getOneDRange(double l, double r)
 {
-    BinSearchNode* binsearch_1d_ = buildBinSearchTree(buf_);
+    if (!binsearch_1d_)
+        binsearch_1d_ = buildBinSearchTree(buf_);
     std::vector<KPt> res;
     oneDRangeQuery(binsearch_1d_, l, r, res);
-    for (const auto& pnt : res)
-    {
-        pnt.print();
-    }
 
+    std::cout << "\nQuary res:\n";
+    printPntVec(res);
 }
 
 void KDTree::reportSubTree(BinSearchNode* root, std::vector<KPt>& subnodes)//1D
@@ -56,19 +42,27 @@ template<typename Iterator>
 BinSearchNode* KDTree::buildFromSortedVec(BinSearchNode* parent,
     const std::vector<KPt>& vec, Iterator it, int cnt)//1D
 {
+
+    assert(cnt > 0);
     if (cnt == 1)
     {
         parent->pnt_ = *it;
         return parent;
     }
-    int leftcnt = cnt / 2;
+    //计数的时候添加哨兵会更容易
+    // -,1,2,3
+    // -,1,2,3,4
+
+
+    int cnt_P1 = cnt + 1;
+    int leftcnt = cnt_P1 / 2;
     int rightcnt = cnt - leftcnt;
     auto mid_it = it;
-    std::advance(mid_it, leftcnt);
+    std::advance(mid_it, leftcnt - 1);
 
-    parent->pnt_ = *it;
-    parent->left_ = buildFromSortedVec(parent, vec, it, leftcnt);
-    parent->right_ = buildFromSortedVec(parent, vec, mid_it + 1, rightcnt);
+    parent->pnt_ = *mid_it;
+    parent->left_ = buildFromSortedVec(new BinSearchNode(), vec, it, leftcnt);
+    parent->right_ = buildFromSortedVec(new BinSearchNode(), vec, mid_it + 1, rightcnt);
     return parent;
 }
 
@@ -79,19 +73,20 @@ BinSearchNode* KDTree::buildBinSearchTree(std::vector<KPt>& vec)//1D
         {
             return pt1.x < pt2.x;
         });
+    std::cout << "\nAfter sort:" << std::endl;
+    printPntVec(vec);
+
     int n = vec.size();
     BinSearchNode* root = new BinSearchNode();
     return buildFromSortedVec(root, vec, vec.begin(), vec.size());
 }
 
-
-
 // 输入：树根, 两个数值, x, x', x<=x'
 // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
-BinSearchNode* KDTree::FindSplitNode(BinSearchNode* root,
+const BinSearchNode* KDTree::FindSplitNode(const BinSearchNode* root,
     int leftnum, int rightnum)//1D
 {
-    BinSearchNode* v = root;
+    const BinSearchNode* v = root;
     while (!v->isLeaf() &&
         (rightnum <= v->pnt_.x || leftnum > v->pnt_.x))
     {
@@ -105,10 +100,10 @@ BinSearchNode* KDTree::FindSplitNode(BinSearchNode* root,
 
 // input: bin search tree, to-search-range [x,x']
 // output: vector<int> {numbers in to-search-range}
-void KDTree::oneDRangeQuery(BinSearchNode* root,
+void KDTree::oneDRangeQuery(const BinSearchNode* root,
     double l, double r, std::vector<KPt>& res)
 {
-    BinSearchNode* v_split = FindSplitNode(root, l, r);
+    const BinSearchNode* v_split = FindSplitNode(root, l, r);
     if (v_split->isLeaf())
     {
         if (v_split->belongToRangeInX(l, r))
@@ -117,7 +112,7 @@ void KDTree::oneDRangeQuery(BinSearchNode* root,
     else
     {
         // find way to left
-        BinSearchNode* l_split = v_split;
+        const BinSearchNode* l_split = v_split;
         while (!l_split->isLeaf())
         {
             if (l_split->left_->pnt_.x >= l)
@@ -134,7 +129,7 @@ void KDTree::oneDRangeQuery(BinSearchNode* root,
             res.emplace_back(l_split->pnt_);
 
         // find way to right;
-        BinSearchNode* r_split = v_split;
+        const BinSearchNode* r_split = v_split;
         while (!r_split->isLeaf())
         {
             if (r_split->left_->pnt_.x < r)

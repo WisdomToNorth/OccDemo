@@ -5,11 +5,21 @@
 
 namespace KDebugger
 {
-void KPt::print()const
+
+void printPntVec(const std::vector<KPt>& pnts)
 {
-    std::cout << "\n{" << x << ", " << y << "}";
+    int n = pnts.size();
+    for (int i = 0; i < n; ++i)
+    {
+        std::cout << "{" << pnts[i].x << ", " << pnts[i].y << "}";
+        if (!((i + 1) % 5))
+        {
+            std::cout << "\n";
+        }
+        else
+            std::cout << '\t';
+    }
+
 }
-
-
 
 }
