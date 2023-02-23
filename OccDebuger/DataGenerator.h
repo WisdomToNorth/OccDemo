@@ -9,7 +9,7 @@ class DataObserver;
 class DataGenerator
 {
 public:
-    DataGenerator(CadView* view) :viewer_(view) {}
+    DataGenerator(CadView* view) :viewer_(view) { }
 
     void reGenerateData(int rowcnt, int colcnt, double dis, double radius, bool same_radius);
 

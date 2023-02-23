@@ -21,7 +21,7 @@ class KBox
 public:
     KBox(double x, double y, double sizex, double sizey) :
         center_(KPt(x, y)), size_x(sizex), size_y(sizey)
-    {}
+    { }
     bool isOut(const KBox& rhs)
     {
         double cx = (size_x + rhs.size_x) * 0.5;
@@ -45,9 +45,10 @@ public:
     const KPt& getPt()const { return center_; }
     double size_x;
     double size_y;
+    int val_;//label
 
-    static void generateViewData(const std::vector<KBox>& buff, std::vector<Handle(AIS_Shape)>& vecset,
-        std::vector<Handle(AIS_TextLabel)>& labs);
+    void show();
+
 private:
     KPt center_;
 };

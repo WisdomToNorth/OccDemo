@@ -41,6 +41,8 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
 
 
     viewer_ = new CadView(this);
+    G_Context = viewer_->getContext();
+
     data_generator_ = new DataGenerator(viewer_);
     ui->gridLayout_view->addWidget(viewer_);
 
@@ -73,7 +75,7 @@ void MainWindowOcc::setUpUI()
     console_size << 3500 << 1000;
     ui->splitter->setSizes(console_size);
     QList<int> console_size_vert;
-    console_size_vert << 1000 << 3000;
+    console_size_vert << 600 << 3000;
     ui->splitter_2->setSizes(console_size_vert);
 }
 

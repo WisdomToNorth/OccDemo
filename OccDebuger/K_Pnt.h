@@ -9,15 +9,16 @@ struct KPt
 {
     double x;
     double y;
-    KPt(double _x, double _y) :x(_x), y(_y) {};
-    KPt() :x(0), y(0) {};
-
+    KPt(double _x, double _y) :x(_x), y(_y) { };
+    KPt() :x(0), y(0) { };
+    void print()const;
+    void printX()const;
 };
 void printPntVec(const std::vector<KPt>& pnts);
 
 struct KRegion
 {
-    KRegion(const KPt& lb, const KPt& ru) :left_bottom_(lb), right_up_(ru) {}
+    KRegion(const KPt& lb, const KPt& ru) :left_bottom_(lb), right_up_(ru) { }
     KPt left_bottom_;
     KPt right_up_;
 };

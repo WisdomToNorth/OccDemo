@@ -37,35 +37,35 @@
 #include <AIS_Shape.hxx>
 #include <QString>
 
+#include "global.h"
+
 namespace KDebugger
 {
 
-void KBox::generateViewData(const std::vector<KBox>& buff, std::vector<Handle(AIS_Shape)>& vecset,
-    std::vector<Handle(AIS_TextLabel)>& labs)
+void KBox::show()
 {
-    size_t testsize = buff.size();
+    if (G_Context.IsNull()) return;
     gp_Dir dir = gp_Dir(0, 0, 1);
     gp_Dir dirx = gp_Dir(1, 0, 0);
 
-    for (auto i = 0; i < testsize; ++i)
-    {
-        const KBox& box = buff[i];
-        gp_Pnt loc(box.X(), box.Y(), 0);
-        gp_Elips ge(gp_Ax2(loc, dir, dirx), box.size_x * 0.5, box.size_y * 0.5);
-        TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(ge);
-        BRepBuilderAPI_MakeWire WW(e2);
-        TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(WW);
-        Handle(AIS_Shape) shp = new AIS_Shape(myFaceProfile);
-        vecset.emplace_back(shp);
+    const KBox& box = *this;
+    gp_Pnt loc(box.X(), box.Y(), 0);
+    gp_Elips ge(gp_Ax2(loc, dir, dirx), box.size_x * 0.5,
+        box.size_y * 0.5);
+    TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(ge);
+    BRepBuilderAPI_MakeWire WW(e2);
+    TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(WW);
+    Handle(AIS_Shape) shp = new AIS_Shape(myFaceProfile);
 
-        gp_Pnt cur(box.X(), box.Y(), 0);
-        Handle(AIS_TextLabel) text = new AIS_TextLabel();
-        text->SetPosition(cur);
-        text->SetText(QString::number(i).toStdString().c_str());
-        text->SetColor(Quantity_NOC_BLACK);
-        text->SetFont("consolas");
-        labs.emplace_back(text);
-    }
+    G_Context->Display(shp, false);
+    gp_Pnt cur(box.X(), box.Y(), 0);
+    Handle(AIS_TextLabel) text = new AIS_TextLabel();
+    text->SetPosition(cur);
+    text->SetText(this->val_);
+    text->SetColor(Quantity_NOC_BLACK);
+    text->SetFont("consolas");
+    G_Context->Display(text, false);
 
 }
+
 }

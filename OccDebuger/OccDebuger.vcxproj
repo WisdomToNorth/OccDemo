@@ -97,7 +97,7 @@
     <ClCompile Include="CustomQlistWidget.cpp" />
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
-    <ClCompile Include="fun_for_lc.cpp" />
+    <ClCompile Include="public_function.cpp" />
     <ClCompile Include="kd_search.cpp" />
     <ClCompile Include="K_box.cpp" />
     <ClCompile Include="iwConsole.cpp" />
@@ -122,7 +122,7 @@
     <ClInclude Include="BinSearchNode.h" />
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
-    <ClInclude Include="fun_for_lc.h" />
+    <ClInclude Include="public_function.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="iwLog.h" />
     <ClInclude Include="iwSingleton.h" />

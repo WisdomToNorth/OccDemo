@@ -72,6 +72,7 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
             }
             y_size = x_size;
             KBox l_box(stx, sty, x_size, y_size);
+            l_box.val_ = i * _row_size + j;
             buffer.emplace_back(l_box);
         }
     }
@@ -106,12 +107,11 @@ void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis,
 void DataGenerator::viewData()
 {
     viewer_->removeAll();
-    std::vector<Handle(AIS_Shape)> vecset;
-    std::vector<Handle(AIS_TextLabel)> labs;
-    KBox::generateViewData(buf_, vecset, labs);
+    for (auto& box : buf_)
+    {
+        box.show();
+    }
 
-    viewer_->drawTestData(vecset);
-    viewer_->drawTestLabelData(labs);
     viewer_->fitAll();
 
     viewer_->update();

@@ -64,7 +64,7 @@ public:
     void drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels);
     void fitAll();
     void removeAll();
-
+    Handle(AIS_InteractiveContext) getContext() { return context_; }
     leftButtonClickCallBack processClickCb = NULL;
     rightButtonClickCallBack rightClickCb = NULL;
 

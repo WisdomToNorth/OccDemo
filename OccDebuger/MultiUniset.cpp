@@ -1,4 +1,4 @@
-#include "MultiUniset.h"
+﻿#include "MultiUniset.h"
 
 #include <iostream>
 #include <chrono>
@@ -90,12 +90,12 @@ void MultiUniset::multiCoreUnionSet(int user_set_num)
 
 
     K_Timer timer;
-    //ÕâÀï¶àÏß³ÌµÄ»®·ÖÒ²¿ÉÒÔÓÅ»¯£¬°´Æ½ÃæÇøÓò·Ö¿é»®·Ö£¬Ê¹¸÷×Ó²¢²é¼¯µÄÖØºÏÐÔ¾¡¿ÉÄÜÐ¡
-    //´Ë´¦£¬¼ÙÉèx¡¢y¶¼ÎªÅ¼Êý£¬ÕâÑùÇ¡ºÃ¿ÉÒÔ±»ËÄµÈ·Ö¡£·ÖËÄÏß³Ì¼ÆËã
+    //这里多线程的划分也可以优化，按平面区域分块划分，使各子并查集的重合性尽可能小
+    //此处，假设x、y都为偶数，这样恰好可以被四等分。分四线程计算
     std::vector<std::thread> threads(num_of_thread - 1);
     std::vector<UnionFind> unionfinders(num_of_thread, UnionFind(data_count));
 
-    unsigned long long l_start = 1;//´ú±íÈÎÎñÊý£¬´Ó1µ½n£¬Ê¹ÓÃÎ²ºóindex£¬ËùÒÔn+1
+    unsigned long long l_start = 1;//代表任务数，从1到n，使用尾后index，所以n+1
     for (unsigned long long thread_index = 0; thread_index < num_of_thread - 1; ++thread_index)
     {
         unsigned long long l_end = l_start + block_size;
@@ -157,7 +157,7 @@ std::pair<int, int> MultiUniset::getLoc(unsigned long long num)
     int b = static_cast<int>(n);
 
     //std::cout << "loc: " << a << " * " << b << " &" << std::endl;
-    return { a,b };//m,n从0开始数
+    return {a,b};//m,n从0开始数
 }
 
 /*
@@ -180,7 +180,7 @@ void MultiUniset::caculateUnion(unsigned long long l_start,
     {
         for (int j = 0; j < m; ++j)
         {
-            j = j + n;//µÚÒ»´Î½øÈëÑ­»·Ê±£¬³õÊ¼»¯jµÄÎ»ÖÃ£¬ºóÐø½«nÖÃÁã
+            j = j + n;//第一次进入循环时，初始化j的位置，后续将n置零
             n = 0;
             // std::cout << "cal:" << i << " and " << j << std::endl;
 
@@ -270,7 +270,7 @@ int MultiUniset::handleUnionFinder(const UnionFind& finder, bool use_multi)
         {
             auto l_end = l_start + block_size;
 
-            threads[thread_index] = std::thread([=, &cnt]//Éæ¼°µü´úÆ÷£¬Ã²ËÆÐèÒªÊ¹ÓÃ¸³Öµ
+            threads[thread_index] = std::thread([=, &cnt]//涉及迭代器，貌似需要使用赋值
                 {
                     cnt += handleUnionSetResult(l_start, l_end, thread_index);
                 });

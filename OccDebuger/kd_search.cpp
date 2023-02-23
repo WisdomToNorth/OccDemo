@@ -18,7 +18,12 @@ void KDTree::updateData()
 void KDTree::getOneDRange(double l, double r)
 {
     if (!binsearch_1d_)
+    {
         binsearch_1d_ = buildBinSearchTree(buf_);
+        std::cout << "\n ####tree start####\n";
+        printBinSearchTree(binsearch_1d_, true);
+        std::cout << "\n ####tree end####\n";
+    }
     std::vector<KPt> res;
     oneDRangeQuery(binsearch_1d_, l, r, res);
 
@@ -26,7 +31,8 @@ void KDTree::getOneDRange(double l, double r)
     printPntVec(res);
 }
 
-void KDTree::reportSubTree(BinSearchNode* root, std::vector<KPt>& subnodes)//1D
+void KDTree::reportSubTree(BinSearchNode* root,
+    std::vector<KPt>& subnodes)//1D
 {
     if (root->isLeaf())
     {
@@ -95,6 +101,7 @@ const BinSearchNode* KDTree::FindSplitNode(const BinSearchNode* root,
         else
             v = v->right_;
     }
+    std::cout << "####spliter: " << v->pnt_.x << " " << v->pnt_.y << std::endl;
     return v;
 }
 
@@ -144,6 +151,7 @@ void KDTree::oneDRangeQuery(const BinSearchNode* root,
         }
         if (r_split->belongToRangeInX(l, r))
             res.emplace_back(r_split->pnt_);
+
     }
 }
 }

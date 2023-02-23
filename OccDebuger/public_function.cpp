@@ -10,7 +10,7 @@
 
 #include "lc_struct.h"
 
-#include "fun_for_lc.h"
+#include "public_function.h"
 
 namespace KDebugger
 {

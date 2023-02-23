@@ -20,7 +20,6 @@ enum class Appearance
 extern Appearance G_UI_Appearance;
 
 Appearance getUIConfig();
-Appearance switchUIConfig();
 QString G_GetUiStyleSheet(Appearance preset);
 QString G_GetAppPath();
 QString G_GetDocumentsPath();
