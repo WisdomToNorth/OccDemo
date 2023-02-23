@@ -1,12 +1,4 @@
-﻿/****************************************************************************
-** Copyright 2022 by KangYucheng.
-** All Rights Reserved.
-**
-** This file is part of RobotConfig software. No part of this file may be
-** reproduced in any form or means, without the prior written consent of KangYucheng.
-****************************************************************************/
-
-#include "CadView.h"
+﻿#include "CadView.h"
 
 #include <AIS_InteractiveContext.hxx>
 #include <V3d_View.hxx>
@@ -16,10 +8,13 @@
 #include <OpenGl_GraphicDriver.hxx>
 #include <V3d_View.hxx>
 #include <Graphic3d_GraphicDriver.hxx>
+#include <V3d_Viewer.hxx>
 #include <AIS_TextLabel.hxx>
 #include <Prs3d_DatumAspect.hxx>
 #include <Prs3d_PlaneAspect.hxx>
 #include <AIS_Shape.hxx>
+#include <AIS_InteractiveObject.hxx>
+#include <Prs3d_TypeOfHighlight.hxx>
 
 #include <qclipboard.h>
 #include <QTimer>
@@ -33,6 +28,9 @@
 #include <qcursor.h>
 #include <qdebug.h>
 #include <qscreen.h>
+#include <QMouseEvent>
+#include <QWheelEvent>
+
 
 namespace KDebugger
 {
@@ -60,7 +58,7 @@ CadView::CadView(QWidget* parent)
 }
 
 CadView::~CadView()
-{ }
+{}
 
 void CadView::initCursors()
 {
@@ -162,9 +160,9 @@ void CadView::setViewCube()
 
     ais_viewcube->SetTransformPersistence(
         new Graphic3d_TransformPers(
-        Graphic3d_TMF_TriedronPers,
-        Aspect_TOTP_LEFT_UPPER,
-        Graphic3d_Vec2i(85, 85)));
+            Graphic3d_TMF_TriedronPers,
+            Aspect_TOTP_LEFT_UPPER,
+            Graphic3d_Vec2i(85, 85)));
 
     const Handle_Prs3d_DatumAspect datum_color = new Prs3d_DatumAspect();
     datum_color->ShadingAspect(Prs3d_DP_XAxis)->SetColor(Quantity_NOC_GREEN2);
@@ -318,16 +316,21 @@ void CadView::fitAll()
     view_->FitAll();
 }
 
-void CadView::drawTestData(const std::vector<TopoDS_Face>& all_face_)
+void CadView::removeAll()
+{
+    this->context_->RemoveAll(false);
+    setViewCube();
+    view_->Redraw();
+}
+
+void CadView::drawTestData(const std::vector< Handle(AIS_Shape)>& all_face_)
 {
     int cnt = all_face_.size();
-    for (int i = 0; i < cnt; ++i)
+    for (auto& shape : all_face_)
     {
-        //Quantity_Color(101 / 255.0, 101 / 255.0, 122 / 255.0, Quantity_TOC_RGB);
-         // Quantity_Color(191 / 255.0, 193 / 255.0, 204 / 255.0, Quantity_TOC_RGB);
-
-        Handle(AIS_Shape) shape = new AIS_Shape(all_face_[i]);
-        shape->SetColor(Quantity_Color(255 / 255.0, 153 / 255.0, 51 / 255.0, Quantity_TOC_RGB));
+        //Handle(AIS_Shape) shape = new AIS_Shape(all_face_[i]);
+        shape->SetColor(Quantity_Color(255 / 255.0, 153 / 255.0,
+            51 / 255.0, Quantity_TOC_RGB));
         context_->Display(shape, false);
     }
 }

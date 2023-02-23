@@ -12,6 +12,8 @@
 
 #include "K_Pnt.h"
 
+class AIS_Shape;
+
 namespace KDebugger
 {
 class KBox
@@ -43,11 +45,12 @@ public:
     double size_x;
     double size_y;
 
+    static void generateViewData(const std::vector<KBox>& buff, std::vector<Handle(AIS_Shape)>& vecset,
+        std::vector<Handle(AIS_TextLabel)>& labs);
 private:
     KPt center_;
 };
 
-void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
-    std::vector<Handle(AIS_TextLabel)>& labs);
+
 
 }

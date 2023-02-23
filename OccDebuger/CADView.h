@@ -1,20 +1,10 @@
-﻿/****************************************************************************
-** Copyright 2022 by KangYucheng.
-** All Rights Reserved.
-**
-** This file is part of RobotConfig software. No part of this file may be
-** reproduced in any form or means, without the prior written consent of KangYucheng.
-****************************************************************************/
-
-#pragma once
+﻿#pragma once
 #ifndef _CADVIEW_H_
 #define _CADVIEW_H_
 
 #include <functional>
 
 #include <QWidget>
-#include <QMouseEvent>
-#include <QWheelEvent>
 
 
 #ifdef _WIN32
@@ -26,22 +16,21 @@
 #include <QGLWidget>
 #endif
 
-//#include <Standard_Handle.hxx>
-//#include <AIS_InteractiveContext.hxx>
-#include <AIS_InteractiveObject.hxx>
 #include <AIS_ViewController.hxx>
-#include <Prs3d_TypeOfHighlight.hxx>
-#include <TopoDS_Face.hxx>
-#include <V3d_Viewer.hxx>
-#include <Graphic3d_GraphicDriver.hxx>
-#include <AIS_TextLabel.hxx>
-// class AIS_InteractiveContext;
-// class AIS_InteractiveObject;
-#include <V3d_View.hxx>
-
 
 class QMenu;
 class QRubberBand;
+class AIS_Shape;
+class AIS_InteractiveContext;
+class QMouseEvent;
+class QWheelEvent;
+class AIS_TextLabel;
+class V3d_View;
+class V3d_Viewer;
+class AIS_InteractiveObject;
+class Graphic3d_GraphicDriver;
+enum Prs3d_TypeOfHighlight;
+
 namespace KDebugger
 {
 //! Adapted a QWidget for OpenCASCADE viewer.
@@ -72,15 +61,16 @@ public:
     ~CadView();
     Handle(AIS_InteractiveContext) context_;
     Handle(SelectMgr_EntityOwner) getDetectedObj();
-    void drawTestData(const std::vector<TopoDS_Face>& all_face_);
+    void drawTestData(const std::vector<Handle(AIS_Shape)>& all_face_);
     void drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels);
+    void fitAll();
+    void removeAll();
+
     leftButtonClickCallBack processClickCb = NULL;
     rightButtonClickCallBack rightClickCb = NULL;
-    void fitAll();
 
 public slots:
     void updateView(KUpdate);
-    //void execCmd(CmdEnum _cmd);
     void resetAll(bool);
 
 protected:

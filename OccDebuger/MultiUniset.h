@@ -3,23 +3,21 @@
 #include <vector>
 #include "K_box.h"
 #include "unionset.h"
+#include "DataObserver.h"
 
 namespace KDebugger
 {
-class CadView;
-class MultiUniset
+class DataGenerator;
+
+class MultiUniset :public DataObserver
 {
 public:
-    MultiUniset(CadView* view) :viewer_(view) { }
+    MultiUniset(DataGenerator* view);
 
-    void reGenerateData(int rowcnt, int colcnt, double dis);
+    void updateData()override;
     void badWay();
     void oneCoreUnionSet();
     void multiCoreUnionSet(int user_set_num);
-    void viewData();
-
-    void generateTestData(std::vector<KBox>& buffer,
-        int testrow, int testcol, double distance);
 
     void caculateUnion(unsigned long long l_start, unsigned long long l_end, UnionFind& finder);
     static std::pair<int, int> getLoc(unsigned long long num);
@@ -32,8 +30,7 @@ public:
 
 private:
 
-    CadView* viewer_;
-
+    DataGenerator* data_generator_;
     std::vector<KBox> buf_;
 };
 

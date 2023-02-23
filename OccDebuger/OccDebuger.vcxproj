@@ -94,6 +94,8 @@
   <ItemGroup>
     <ClCompile Include="CADView.cpp" />
     <ClCompile Include="CustomQlistWidget.cpp" />
+    <ClCompile Include="DataGenerator.cpp" />
+    <ClCompile Include="DataObserver.cpp" />
     <ClCompile Include="fun_for_lc.cpp" />
     <ClCompile Include="K_box.cpp" />
     <ClCompile Include="iwConsole.cpp" />
@@ -114,6 +116,8 @@
   <ItemGroup>
     <QtMoc Include="iwConsole.h" />
     <QtMoc Include="CustomQlistWidget.h" />
+    <ClInclude Include="DataGenerator.h" />
+    <ClInclude Include="DataObserver.h" />
     <ClInclude Include="fun_for_lc.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="iwLog.h" />

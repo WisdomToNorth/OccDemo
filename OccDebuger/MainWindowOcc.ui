@@ -47,10 +47,11 @@
      <string>File</string>
     </property>
     <addaction name="actionGenerate"/>
+    <addaction name="actionview"/>
     <addaction name="actionOri"/>
     <addaction name="actionopt1"/>
     <addaction name="actionopt2"/>
-    <addaction name="actionview"/>
+    <addaction name="actionkd_find1D"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -69,11 +70,9 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionGenerate"/>
-   <addaction name="actionOri"/>
-   <addaction name="actionopt1"/>
-   <addaction name="actionopt2"/>
    <addaction name="actionFitAll"/>
    <addaction name="actionview"/>
+   <addaction name="actionkd_find1D"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionGenerate">
@@ -83,7 +82,7 @@
   </action>
   <action name="actionOri">
    <property name="text">
-    <string>ori</string>
+    <string>unionfind_ori</string>
    </property>
   </action>
   <action name="actionFitAll">
@@ -93,17 +92,22 @@
   </action>
   <action name="actionopt1">
    <property name="text">
-    <string>opt1</string>
+    <string>unionfind_opt1</string>
    </property>
   </action>
   <action name="actionopt2">
    <property name="text">
-    <string>opt2</string>
+    <string>unionfind_opt2</string>
    </property>
   </action>
   <action name="actionview">
    <property name="text">
     <string>view</string>
+   </property>
+  </action>
+  <action name="actionkd_find1D">
+   <property name="text">
+    <string>kd_find1D</string>
    </property>
   </action>
  </widget>

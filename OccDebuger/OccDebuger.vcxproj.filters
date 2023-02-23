@@ -14,9 +14,6 @@
     <ClCompile Include="CustomQlistWidget.cpp">
       <Filter>UI\Consolelog</Filter>
     </ClCompile>
-    <ClCompile Include="K_box.cpp">
-      <Filter>UnionSet</Filter>
-    </ClCompile>
     <ClCompile Include="MultiUniset.cpp">
       <Filter>UnionSet</Filter>
     </ClCompile>
@@ -32,6 +29,11 @@
     <ClCompile Include="fun_for_lc.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="K_box.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="DataGenerator.cpp" />
+    <ClCompile Include="DataObserver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -52,9 +54,6 @@
     <ClInclude Include="K_Pnt.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="K_box.h">
-      <Filter>UnionSet</Filter>
-    </ClInclude>
     <ClInclude Include="unionset.h">
       <Filter>UnionSet</Filter>
     </ClInclude>
@@ -70,6 +69,11 @@
     <ClInclude Include="fun_for_lc.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="K_box.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="DataGenerator.h" />
+    <ClInclude Include="DataObserver.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OccDebuger.rc" />

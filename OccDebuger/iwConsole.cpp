@@ -1,12 +1,4 @@
-﻿/****************************************************************************
-** Copyright 2022 by KangYucheng.
-** All Rights Reserved.
-**
-** This file is part of RobotConfig software. No part of this file may be
-** reproduced in any form or means, without the prior written consent of KangYucheng.
-****************************************************************************/
-
-#include "iwConsole.h"
+﻿#include "iwConsole.h"
 
 //Local
 #include "MainwindowOcc.h"

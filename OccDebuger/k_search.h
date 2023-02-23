@@ -14,6 +14,7 @@ struct KRegion
     KRegion(const KPt& lb, const KPt& ru) :left_bottom_(lb), right_up_(ru) {}
     KPt left_bottom_;
     KPt right_up_;
+
 };
 
 struct PntsSorted2D
@@ -42,10 +43,10 @@ struct BinSearchNode
     {}
     BinSearchNode(const KPt& _pnt) : pnt_(_pnt) {}
 
-    KPt pnt_;
-    bool direction_; // 0 for hor; 1 for vert
     BinSearchNode* left_;
     BinSearchNode* right_;
+    KPt pnt_;
+    bool direction_; // 0 for hor; 1 for vert
 
     bool isLeaf()const
     {
@@ -89,7 +90,7 @@ void reportSubTreeInX(BinSearchNode* root, std::vector<int>& subnodes)//1D
         reportSubTreeInX(root->right_, subnodes);
 }
 
-void reportSubTree(BinSearchNode* root, std::vector<KPt>& subnodes)//1D
+void reportSubTree(BinSearchNode* root, std::vector<KPt>& subnodes)//2D
 {
     if (root->isLeaf())
     {
@@ -301,6 +302,7 @@ std::vector<PntsSorted2D> searchKDTreeFromRoot(BinSearchNode* root, const KRegio
 
     KRegion init_region(KPt(INT8_MIN, INT8_MIN), KPt(INT8_MAX, INT8_MAX));
     searchKDTree(res, root, init_region, region);
+    return res;
 }
 
 enum class ERegionCrossState

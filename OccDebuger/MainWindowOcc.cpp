@@ -11,18 +11,27 @@
 #include <qguiapplication.h>
 #include <qscreen.h>
 #include <qdebug.h>
+#include <qspinbox.h>
+#include <qlabel.h>
 
 #include "CADView.h"
 #include "Ktimer.h"
 #include "CustomQlistWidget.h"
 #include "RobotLogger.h"
 #include "global.h"
+#include "MultiUniset.h"
+#include "DataGenerator.h"
+
+#include "ui_MainWindowOcc.h"
+
 
 namespace KDebugger
 {
 MainWindowOcc::MainWindowOcc(QWidget* parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindowOccClass())
+    : QMainWindow(parent),
+    ui(new Ui::MainWindowOccClass()),
+    unionset_(nullptr)
+
 {
     ui->setupUi(this);
     auto con = getUIConfig();
@@ -30,8 +39,8 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
 
 
     viewer_ = new CadView(this);
+    datar_ = new DataGenerator(viewer_);
 
-    unionset_ = new MultiUniset(viewer_);
 
     auto screenRect = QGuiApplication::screens();
     auto width = screenRect[0]->geometry().width();
@@ -68,8 +77,8 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     thread_spin_->setMinimum(0);
     thread_spin_->setMaximum(64);
     thread_spin_->setValue(0);
-    row_spin_->setValue(300);
-    col_spin_->setValue(300);
+    row_spin_->setValue(30);
+    col_spin_->setValue(5);
     distance_spin_->setValue(1.5);
 
     ui->gridLayout_view->addWidget(viewer_);
@@ -85,7 +94,7 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
 
 MainWindowOcc::~MainWindowOcc()
 {
-    delete unionset_;
+    if (unionset_)  delete unionset_;
     delete ui;
 }
 
@@ -94,21 +103,41 @@ void MainWindowOcc::on_actionFitAll_triggered()
     viewer_->fitAll();
 }
 
+void MainWindowOcc::on_actionview_triggered()
+{
+    datar_->viewData();
+}
 
+//unionfind
+void MainWindowOcc::on_actionOri_triggered()
+{
+    if (!unionset_)
+        unionset_ = new MultiUniset(datar_);
+    unionset_->badWay();
+}
+//unionfind
+void MainWindowOcc::on_actionopt1_triggered()
+{
+    if (!unionset_)
+        unionset_ = new MultiUniset(datar_);
+    unionset_->oneCoreUnionSet();
+}
+//unionfind
 void MainWindowOcc::on_actionopt2_triggered()
 {
+    if (!unionset_)
+        unionset_ = new MultiUniset(datar_);
     int def = 0;
     if (thread_spin_->value() > 0)
     {
         def = thread_spin_->value();
     }
     unionset_->multiCoreUnionSet(def);
-
 }
 
-void MainWindowOcc::on_actionview_triggered()
+void MainWindowOcc::on_actionkd_find1D_triggered()
 {
-    unionset_->viewData();
+
 }
 
 void MainWindowOcc::on_actionGenerate_triggered()
@@ -116,16 +145,7 @@ void MainWindowOcc::on_actionGenerate_triggered()
     int rowcnt = row_spin_->value();
     int colcnt = col_spin_->value();
     double dis = distance_spin_->value();
-    unionset_->reGenerateData(rowcnt, colcnt, dis);
+    datar_->reGenerateData(rowcnt, colcnt, dis);
 }
 
-void MainWindowOcc::on_actionOri_triggered()
-{
-    unionset_->badWay();
-}
-
-void MainWindowOcc::on_actionopt1_triggered()
-{
-    unionset_->oneCoreUnionSet();
-}
 }

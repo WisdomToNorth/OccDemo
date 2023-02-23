@@ -34,12 +34,13 @@
 #include <BRepLib.hxx>
 #include <TopoDS_Face.hxx>
 #include <AIS_TextLabel.hxx>
-
+#include <AIS_Shape.hxx>
 #include <QString>
 
 namespace KDebugger
 {
-void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
+
+void KBox::generateViewData(const std::vector<KBox>& buff, std::vector<Handle(AIS_Shape)>& vecset,
     std::vector<Handle(AIS_TextLabel)>& labs)
 {
     size_t testsize = buff.size();
@@ -54,7 +55,8 @@ void drawData(const std::vector<KBox>& buff, std::vector<TopoDS_Face>& vecset,
         TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(ge);
         BRepBuilderAPI_MakeWire WW(e2);
         TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(WW);
-        vecset.emplace_back(myFaceProfile);
+        Handle(AIS_Shape) shp = new AIS_Shape(myFaceProfile);
+        vecset.emplace_back(shp);
 
         gp_Pnt cur(box.X(), box.Y(), 0);
         Handle(AIS_TextLabel) text = new AIS_TextLabel();
