@@ -6,7 +6,6 @@
 
 #include <QWidget>
 
-
 #ifdef _WIN32
 #include <WNT_Window.hxx>
 #include <QtOpenGL\QGLWidget>
@@ -59,7 +58,7 @@ public:
 
     CadView(QWidget* parent = Q_NULLPTR);
     ~CadView();
-    Handle(AIS_InteractiveContext) context_;
+
     Handle(SelectMgr_EntityOwner) getDetectedObj();
     void drawTestData(const std::vector<Handle(AIS_Shape)>& all_face_);
     void drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels);
@@ -95,7 +94,8 @@ signals:
     void cmdSignal(QMouseEvent* event);
 
 private:
-
+    friend class DataGenerator;
+    Handle(AIS_InteractiveContext) context_;
     Handle(AIS_InteractiveObject) viewcube_ = nullptr;
     Handle(V3d_Viewer) viewer_ = nullptr;
     Handle(Graphic3d_GraphicDriver) graphic_driver_ = nullptr;

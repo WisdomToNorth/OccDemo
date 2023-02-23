@@ -11,18 +11,18 @@
 #include "CADView.h"
 #include "Ktimer.h"
 #include "CustomQlistWidget.h"
-#include "RobotLogger.h"
+#include "KLogger.h"
 #include "global.h"
 #include "DataGenerator.h"
-#include "RobotLogger.h"
 
 namespace KDebugger
 {
 
-MultiUniset::MultiUniset(DataGenerator* view) :data_generator_(view)
+MultiUniset::MultiUniset(DataGenerator* view) :
+    DataObserver(view)
 {
-    view->addToObserverList(this);
     updateData();
+
 }
 
 void MultiUniset::updateData()

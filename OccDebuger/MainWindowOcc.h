@@ -9,12 +9,13 @@ QT_END_NAMESPACE
 
 class QSpinBox;
 class QDoubleSpinBox;
+
 namespace KDebugger
 {
 class CadView;
 class MultiUniset;
 class DataGenerator;
-
+class KDTree;
 class MainWindowOcc : public QMainWindow
 {
     Q_OBJECT
@@ -24,6 +25,7 @@ public:
     ~MainWindowOcc();
 
 private:
+    void setUpUI();
 
 private slots:
     //data
@@ -32,22 +34,21 @@ private slots:
     void on_actionview_triggered();
 
     //unionfind
-    void on_actionOri_triggered();
-    void on_actionopt1_triggered();
-    void on_actionopt2_triggered();
+    void on_act_unionfind_ori_triggered();
+    void on_act_unionfind_opt1_triggered();
+    void on_act_unionfind_opt2_triggered();
 
     //kdtree
     void on_actionkd_find1D_triggered();
 
 private:
     Ui::MainWindowOccClass* ui;
-    CadView* viewer_;
-    QSpinBox* row_spin_;
-    QSpinBox* col_spin_;
-    QSpinBox* thread_spin_;
-    QDoubleSpinBox* distance_spin_;
 
-    DataGenerator* datar_;
+    CadView* viewer_;
+
+    DataGenerator* data_generator_;
     MultiUniset* unionset_;
+    KDTree* kdtree_;
+
 };
 }

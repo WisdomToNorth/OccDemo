@@ -43,6 +43,7 @@ static QCursor* globPanCursor = NULL;
 static QCursor* zoomCursor = NULL;
 static QCursor* rotCursor = NULL;
 }
+
 CadView::CadView(QWidget* parent)
     : QWidget(parent)
 {

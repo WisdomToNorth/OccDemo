@@ -7,7 +7,6 @@
 
 namespace KDebugger
 {
-class DataGenerator;
 
 class MultiUniset :public DataObserver
 {
@@ -30,7 +29,7 @@ public:
 
 private:
 
-    DataGenerator* data_generator_;
+
     std::vector<KBox> buf_;
 };
 

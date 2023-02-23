@@ -48,12 +48,12 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(QtMsBuild)\Qt.props" />
-    <Import Project="opencascade_debug.props" />
+    <Import Project="..\props\opencascade_debug_7.7.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(QtMsBuild)\Qt.props" />
-    <Import Project="..\openCascade_x64_7.7release.props" />
+    <Import Project="..\props\openCascade_x64_release7.7.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
@@ -92,18 +92,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BinSearchNode.cpp" />
     <ClCompile Include="CADView.cpp" />
     <ClCompile Include="CustomQlistWidget.cpp" />
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
     <ClCompile Include="fun_for_lc.cpp" />
+    <ClCompile Include="kd_search.cpp" />
     <ClCompile Include="K_box.cpp" />
     <ClCompile Include="iwConsole.cpp" />
     <ClCompile Include="iwLog.cpp" />
     <ClCompile Include="global.cpp" />
+    <ClCompile Include="K_Pnt.cpp" />
     <ClCompile Include="MainWindowOcc.cpp" />
     <ClCompile Include="MultiUniset.cpp" />
-    <ClCompile Include="robotlogger.cpp" />
+    <ClCompile Include="KLogger.cpp" />
     <QtRcc Include="OccDebuger.qrc" />
     <QtUic Include="MainWindowOcc.ui" />
     <ClCompile Include="main.cpp" />
@@ -116,6 +119,7 @@
   <ItemGroup>
     <QtMoc Include="iwConsole.h" />
     <QtMoc Include="CustomQlistWidget.h" />
+    <ClInclude Include="BinSearchNode.h" />
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
     <ClInclude Include="fun_for_lc.h" />
@@ -126,8 +130,8 @@
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="MultiUniset.h" />
     <ClInclude Include="lc_struct.h" />
-    <ClInclude Include="RobotLogger.h" />
-    <ClInclude Include="k_search.h" />
+    <ClInclude Include="KLogger.h" />
+    <ClInclude Include="kd_search.h" />
     <ClInclude Include="unionset.h" />
     <QtMoc Include="CADView.h" />
     <ClInclude Include="K_box.h" />

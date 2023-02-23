@@ -8,7 +8,7 @@
     <ClCompile Include="iwLog.cpp">
       <Filter>UI\Consolelog</Filter>
     </ClCompile>
-    <ClCompile Include="robotlogger.cpp">
+    <ClCompile Include="KLogger.cpp">
       <Filter>UI\Consolelog</Filter>
     </ClCompile>
     <ClCompile Include="CustomQlistWidget.cpp">
@@ -34,6 +34,13 @@
     </ClCompile>
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
+    <ClCompile Include="BinSearchNode.cpp" />
+    <ClCompile Include="kd_search.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="K_Pnt.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -42,13 +49,13 @@
     <ClInclude Include="iwSingleton.h">
       <Filter>UI\Consolelog</Filter>
     </ClInclude>
-    <ClInclude Include="RobotLogger.h">
+    <ClInclude Include="KLogger.h">
       <Filter>UI\Consolelog</Filter>
     </ClInclude>
     <ClInclude Include="Ktimer.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="k_search.h">
+    <ClInclude Include="kd_search.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="K_Pnt.h">
@@ -74,6 +81,7 @@
     </ClInclude>
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
+    <ClInclude Include="BinSearchNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OccDebuger.rc" />

@@ -16,7 +16,7 @@
 #include "CADView.h"
 #include "Ktimer.h"
 #include "CustomQlistWidget.h"
-#include "RobotLogger.h"
+#include "KLogger.h"
 #include "global.h"
 #include "DataObserver.h"
 
@@ -26,6 +26,7 @@ void DataGenerator::addToObserverList(DataObserver* obs)
 {
     obs_list_.emplace_back(obs);
 }
+
 void DataGenerator::notifyAll()
 {
     for (const auto& obs : obs_list_)
@@ -33,9 +34,17 @@ void DataGenerator::notifyAll()
         obs->updateData();
     }
 }
+void DataGenerator::getPtData(std::vector<KPt>& buf)
+{
+    for (const auto& box : buf_)
+    {
+        buf.emplace_back(box.getPt());
+    }
 
-void DataGenerator::generateTestData(std::vector<KBox>& buffer,
-    int _row_size, int _col_size, double distance)
+}
+
+void DataGenerator::generateData(std::vector<KBox>& buffer,
+    int _row_size, int _col_size, double distance, double radius, bool same_radius)
 {
     if (_col_size == 0)_col_size = _row_size;
 
@@ -51,8 +60,17 @@ void DataGenerator::generateTestData(std::vector<KBox>& buffer,
             double loc_random = v(e);
             double stx = i * distance * loc_random;
             double sty = j * distance * loc_random;
-            double x_size = sizeu(e);
-            double y_size = x_size;
+            double x_size, y_size;
+            if (same_radius)
+            {
+                x_size = radius;
+            }
+            else
+            {
+                x_size = radius * sizeu(e);
+
+            }
+            y_size = x_size;
             KBox l_box(stx, sty, x_size, y_size);
             buffer.emplace_back(l_box);
         }
@@ -62,7 +80,8 @@ void DataGenerator::generateTestData(std::vector<KBox>& buffer,
     notifyAll();
 }
 
-void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis)
+void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis,
+    double radius, bool same_radius)
 {
     if (buf_.size() > 0)
     {
@@ -72,13 +91,14 @@ void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis)
     ConsoleLog("generating...");
     K_Timer timer;
 
-    generateTestData(buf_, rowcnt, colcnt, dis);
+    generateData(buf_, rowcnt, colcnt, dis, 1.0, true);
 
     if (rowcnt * colcnt < 1000)
     {
         viewData();
     }
-    ConsoleLog("generate data cost " + QString::number(timer.timeFromBegin(false)) + " ms.");
+    ConsoleLog("generate data cost " + QString::number(timer.timeFromBegin(false))
+        + " ms.");
     notifyAll();
 }
 

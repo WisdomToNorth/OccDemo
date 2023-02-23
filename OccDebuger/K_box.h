@@ -42,6 +42,7 @@ public:
 
     double X()const { return center_.x; }
     double Y()const { return center_.y; }
+    const KPt& getPt()const { return center_; }
     double size_x;
     double size_y;
 
