@@ -6,12 +6,36 @@ namespace KDebugger
 {
 class CadView;
 class DataObserver;
+
+struct HighlevelDataParameter
+{
+    double rand_loc_min = 0.6;
+    double rand_loc_max = 0.95;
+    double rand_size_min = 0.8;
+    double rand_size_max = 1.2;
+
+    double base_size = 1.0;
+};
+
+struct DataParameter
+{
+    HighlevelDataParameter defaultpar;
+    double dis;
+    int rowcnt;
+    int colcnt;
+    int precision;
+    bool w_h_same;
+    bool rand_loc;
+    bool rand_size;
+
+};
+
 class DataGenerator
 {
 public:
     DataGenerator(CadView* view) :viewer_(view) { }
 
-    void reGenerateData(int rowcnt, int colcnt, double dis, int precision, double radius, bool same_radius);
+    void reGenerateData(const DataParameter& param);
 
     void viewData();
 
@@ -23,9 +47,8 @@ public:
 
 private:
     void generateData(std::vector<KBox>& buffer,
-        int testrow, int testcol, double distance, int precision,
-        double radius, bool same_radius);
-
+        const DataParameter& param);
+    bool checkParam(const DataParameter& param) { return true; }
 private:
     CadView* viewer_;
     std::vector<KBox> buf_;

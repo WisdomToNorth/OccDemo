@@ -151,14 +151,27 @@ void MainWindowOcc::on_pb_valueSmall_pressed()
 
 void MainWindowOcc::on_pb_generate_pressed()
 {
-    int rowcnt = ui->sb_row->value();
-    int colcnt = ui->sb_col->value();
-    double dis = ui->dsb_distance->value();
-    int precision = ui->sb_precision->value();
+    DataParameter param;
+    param.colcnt = ui->sb_col->value();
+    param.rowcnt = ui->sb_row->value();
+    param.dis = ui->dsb_distance->value();
+    param.precision = ui->sb_precision->value();
+    param.w_h_same = ui->cb_wh_same->isChecked();
+    param.rand_loc = ui->cb_rand_loc->isChecked();
+    param.rand_size = ui->cb_rand_size->isChecked();
 
-    bool w_h_same = ui->cb_wh_same->isChecked();
-    data_generator_->reGenerateData(rowcnt, colcnt,
-        dis, precision, 1.0, w_h_same);
+    if (!param.rand_loc)
+    {
+        param.defaultpar.rand_loc_min = 1.0;
+        param.defaultpar.rand_loc_max = 1.0;
+    }
+    if (!param.rand_size)
+    {
+        param.defaultpar.rand_size_min = 1.0;
+        param.defaultpar.rand_size_max = 1.0;
+    }
+
+    data_generator_->reGenerateData(param);
 }
 
 

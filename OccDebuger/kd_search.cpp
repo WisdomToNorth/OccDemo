@@ -24,6 +24,8 @@ void KDTree::updateData()
 // For 1D
 void KDTree::getOneDRangeOri(double l, double r)
 {
+    std::cout << "\n\n-----------1D Search------------" << std::endl;
+
     K_Timer timer;
     size_t cnt = 0;
     for (const auto& pt : buf_)
@@ -39,6 +41,8 @@ void KDTree::getOneDRangeOri(double l, double r)
 // For 1D
 void KDTree::getOneDRange(double l, double r)
 {
+    std::cout << "\n\n-----------1D binnode search------------" << std::endl;
+
     K_Timer timer;
     if (!binsearch_1d_)
     {

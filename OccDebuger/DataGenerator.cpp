@@ -46,47 +46,53 @@ void DataGenerator::getPtData(std::vector<KPt>& buf)
 
 }
 
+//void DataGenerator::generateData(std::vector<KBox>& buffer,
+//    int _row_size, int _col_size, double distance, int precision,
+//    double radius, bool same_radius)
 void DataGenerator::generateData(std::vector<KBox>& buffer,
-    int _row_size, int _col_size, double distance, int precision,
-    double radius, bool same_radius)
+    const DataParameter& param)
 {
-    if (_col_size == 0)_col_size = _row_size;
-
+    if (!checkParam(param))return;
 
     std::default_random_engine e;
-    std::uniform_real_distribution<double> sizeu(0.8, 1.2);//尺寸随机范围
-    std::uniform_real_distribution<double> v(0.6, 0.95);//位置随机范围
     e.seed(1);
-    for (int i = 0; i < _col_size; ++i)
+    std::uniform_real_distribution<double> size_rand_gen
+    (param.defaultpar.rand_size_min, param.defaultpar.rand_size_max);//尺寸随机范围
+    std::uniform_real_distribution<double> loc_rand_gen
+    (param.defaultpar.rand_loc_min, param.defaultpar.rand_loc_max);//位置随机范围
+
+    for (int i = 0; i < param.colcnt; ++i)
     {
-        for (int j = 0; j < _row_size; ++j)
+        for (int j = 0; j < param.rowcnt; ++j)
         {
-            double loc_random = v(e);
-            double stx = roundWith(i * distance * loc_random, precision);
-            double sty = roundWith(j * distance * loc_random, precision);
+            double loc_random = loc_rand_gen(e);
+            double stx = roundWith(i * param.dis * loc_random, param.precision);
+            double sty = roundWith(j * param.dis * loc_random, param.precision);
             double x_size, y_size;
-            x_size = radius * sizeu(e);
-            if (same_radius)
+
+            x_size = param.defaultpar.base_size * size_rand_gen(e);
+            if (param.w_h_same)
             {
                 y_size = x_size;
             }
-            else
+            else//如果size不设置随机，则xy的比例也为1:1（用同一个随机数生成器）
             {
-                y_size = radius * sizeu(e);
+                y_size = param.defaultpar.base_size * size_rand_gen(e);
             }
 
             KBox l_box(stx, sty, x_size, y_size);
-            l_box.val_ = i * _row_size + j;
+            l_box.val_ = i * param.rowcnt + j;
             buffer.emplace_back(l_box);
         }
     }
-    ConsoleLog("Size: " + QString::number(_row_size * distance) + " * " +
-        QString::number(_col_size * distance));
+    ConsoleLog("Size: " + QString::number(param.rowcnt * param.dis) + " * " +
+        QString::number(param.colcnt * param.dis));
     notifyAll();
 }
-
-void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis, int precision,
-    double radius, bool same_radius)
+//
+//void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis, int precision,
+//    double radius, bool same_radius)
+void DataGenerator::reGenerateData(const DataParameter& param)
 {
     if (buf_.size() > 0)
     {
@@ -96,9 +102,9 @@ void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis, int preci
     ConsoleLog("generating...");
     K_Timer timer;
 
-    generateData(buf_, rowcnt, colcnt, dis, precision, 1.0, same_radius);
+    generateData(buf_, param);
 
-    if (rowcnt * colcnt < 1000)
+    if (param.colcnt * param.rowcnt < 1000)
     {
         viewData();
     }

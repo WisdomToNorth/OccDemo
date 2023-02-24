@@ -43,31 +43,38 @@
            </item>
            <item row="1" column="0">
             <layout class="QGridLayout" name="gridLayout_4">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>col</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="sb_col">
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="sb_precision">
                <property name="maximum">
-                <number>300</number>
-               </property>
-               <property name="value">
-                <number>7</number>
+                <number>64</number>
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item row="3" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>row</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cb_rand_size">
+               <property name="text">
+                <string>Random size</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>col</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
               <widget class="QSpinBox" name="sb_row">
                <property name="maximum">
                 <number>300</number>
@@ -77,34 +84,47 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
+             <item row="4" column="0">
               <widget class="QLabel" name="label_6">
                <property name="text">
                 <string>precision</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QSpinBox" name="sb_precision">
-               <property name="maximum">
-                <number>64</number>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="lb_low_2">
-               <property name="text">
-                <string>distance</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
+             <item row="5" column="1">
               <widget class="QDoubleSpinBox" name="dsb_distance">
                <property name="singleStep">
                 <double>0.100000000000000</double>
                </property>
                <property name="value">
                 <double>3.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="sb_col">
+               <property name="maximum">
+                <number>300</number>
+               </property>
+               <property name="value">
+                <number>7</number>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="lb_low_2">
+               <property name="text">
+                <string>distance</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="cb_rand_loc">
+               <property name="text">
+                <string>Random Location</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
                </property>
               </widget>
              </item>

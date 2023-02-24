@@ -50,21 +50,39 @@ void KBox::show()
 
     const KBox& box = *this;
     gp_Pnt loc(box.X(), box.Y(), 0);
-    gp_Elips ge(gp_Ax2(loc, dir, dirx), box.size_x * 0.5,
-        box.size_y * 0.5);
-    TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(ge);
-    BRepBuilderAPI_MakeWire WW(e2);
-    TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(WW);
-    Handle(AIS_Shape) shp = new AIS_Shape(myFaceProfile);
+    try
+    {
+        gp_Elips ge;
+        if (box.size_x < box.size_y)//major must greater than minor
+        {
+            ge = gp_Elips(gp_Ax2(loc, dir, dirx), box.size_y * 0.5,
+                box.size_x * 0.5);
+        }
+        else
+        {
+            ge = gp_Elips(gp_Ax2(loc, dir, dirx), box.size_x * 0.5,
+                box.size_y * 0.5);
+        }
 
-    G_Context->Display(shp, false);
-    gp_Pnt cur(box.X(), box.Y(), 0);
-    Handle(AIS_TextLabel) text = new AIS_TextLabel();
-    text->SetPosition(cur);
-    text->SetText(this->val_);
-    text->SetColor(Quantity_NOC_BLACK);
-    text->SetFont("consolas");
-    G_Context->Display(text, false);
+        TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(ge);
+        BRepBuilderAPI_MakeWire WW(e2);
+        TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(WW);
+        Handle(AIS_Shape) shp = new AIS_Shape(myFaceProfile);
+
+        G_Context->Display(shp, false);
+        gp_Pnt cur(box.X(), box.Y(), 0);
+        Handle(AIS_TextLabel) text = new AIS_TextLabel();
+        text->SetPosition(cur);
+        text->SetText(this->val_);
+        text->SetColor(Quantity_NOC_BLACK);
+        text->SetFont("consolas");
+        G_Context->Display(text, false);
+    }
+    catch (...)
+    {
+
+    }
+
 
 }
 
