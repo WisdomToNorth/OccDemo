@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1035</width>
-    <height>701</height>
+    <height>765</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,51 +27,10 @@
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>row</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QDoubleSpinBox" name="dsb_high">
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="sb_precision">
             <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="lb_low">
-            <property name="text">
-             <string>low</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>col</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="lb_high">
-            <property name="text">
-             <string>high</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lb_low_2">
-            <property name="text">
-             <string>distance</string>
+             <number>64</number>
             </property>
            </widget>
           </item>
@@ -85,7 +44,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="7" column="1">
            <widget class="QDoubleSpinBox" name="dsb_low">
             <property name="minimum">
              <double>-1000.000000000000000</double>
@@ -101,37 +60,116 @@
             </property>
            </widget>
           </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="lb_low">
+            <property name="text">
+             <string>low</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QDoubleSpinBox" name="dsb_high">
+            <property name="minimum">
+             <double>-1000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>5.500000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>row</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>col</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="lb_high">
+            <property name="text">
+             <string>high</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>precision</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="lb_low_2">
+            <property name="text">
+             <string>distance</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QDoubleSpinBox" name="dsb_distance">
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>3.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0" colspan="2">
+           <widget class="QPushButton" name="pb_generate">
+            <property name="text">
+             <string>Regenerate Data</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="1">
            <widget class="QSpinBox" name="sb_col">
             <property name="maximum">
              <number>300</number>
             </property>
             <property name="value">
-             <number>10</number>
+             <number>7</number>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>thread</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
+          <item row="5" column="1">
            <widget class="QSpinBox" name="sb_core">
             <property name="maximum">
              <number>64</number>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="dsb_distance">
-            <property name="singleStep">
-             <double>0.100000000000000</double>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>thread</string>
             </property>
-            <property name="value">
-             <double>1.500000000000000</double>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QPushButton" name="pb_valueMax">
+            <property name="text">
+             <string>ValueMax</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QPushButton" name="pb_valueSmall">
+            <property name="text">
+             <string>ValueSmall</string>
             </property>
            </widget>
           </item>
@@ -167,12 +205,12 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionGenerate"/>
     <addaction name="actionview"/>
     <addaction name="act_unionfind_ori"/>
     <addaction name="act_unionfind_opt1"/>
     <addaction name="act_unionfind_opt2"/>
     <addaction name="actionkd_find1D"/>
+    <addaction name="actionori_find1D"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -190,10 +228,10 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionGenerate"/>
    <addaction name="actionFitAll"/>
    <addaction name="actionview"/>
    <addaction name="actionkd_find1D"/>
+   <addaction name="actionori_find1D"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionGenerate">
@@ -229,6 +267,11 @@
   <action name="actionkd_find1D">
    <property name="text">
     <string>kd_find1D</string>
+   </property>
+  </action>
+  <action name="actionori_find1D">
+   <property name="text">
+    <string>ori_find1D</string>
    </property>
   </action>
  </widget>

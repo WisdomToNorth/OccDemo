@@ -29,7 +29,9 @@ private:
 
 private slots:
     //data
-    void on_actionGenerate_triggered();
+    void on_pb_generate_pressed();
+    void on_pb_valueMax_pressed();
+    void on_pb_valueSmall_pressed();
     void on_actionFitAll_triggered();
     void on_actionview_triggered();
 
@@ -40,6 +42,7 @@ private slots:
 
     //kdtree
     void on_actionkd_find1D_triggered();
+    void on_actionori_find1D_triggered();
 
 private:
     Ui::MainWindowOccClass* ui;

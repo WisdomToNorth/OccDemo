@@ -19,6 +19,7 @@
 #include "KLogger.h"
 #include "global.h"
 #include "DataObserver.h"
+#include "public_function.h"
 
 namespace KDebugger
 {
@@ -46,7 +47,8 @@ void DataGenerator::getPtData(std::vector<KPt>& buf)
 }
 
 void DataGenerator::generateData(std::vector<KBox>& buffer,
-    int _row_size, int _col_size, double distance, double radius, bool same_radius)
+    int _row_size, int _col_size, double distance, int precision,
+    double radius, bool same_radius)
 {
     if (_col_size == 0)_col_size = _row_size;
 
@@ -60,8 +62,8 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
         for (int j = 0; j < _row_size; ++j)
         {
             double loc_random = v(e);
-            double stx = i * distance * loc_random;
-            double sty = j * distance * loc_random;
+            double stx = roundWith(i * distance * loc_random, precision);
+            double sty = roundWith(j * distance * loc_random, precision);
             double x_size, y_size;
             if (same_radius)
             {
@@ -83,7 +85,7 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
     notifyAll();
 }
 
-void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis,
+void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis, int precision,
     double radius, bool same_radius)
 {
     if (buf_.size() > 0)
@@ -94,7 +96,7 @@ void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis,
     ConsoleLog("generating...");
     K_Timer timer;
 
-    generateData(buf_, rowcnt, colcnt, dis, 1.0, true);
+    generateData(buf_, rowcnt, colcnt, dis, precision, 1.0, true);
 
     if (rowcnt * colcnt < 1000)
     {

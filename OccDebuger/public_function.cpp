@@ -118,4 +118,15 @@ int getValue(char ch)
     default: return 0;
     }
 }
+double roundWith(double num, size_t cnt)
+{
+    int i = 1;
+    for (size_t count = 0; count < cnt; ++count)
+    {
+        i *= 10;
+    }
+
+    double res = double(int(num * i)) / i;
+    return res;
+}
 }

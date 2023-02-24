@@ -8,9 +8,6 @@
     <ClCompile Include="iwLog.cpp">
       <Filter>UI\Consolelog</Filter>
     </ClCompile>
-    <ClCompile Include="KLogger.cpp">
-      <Filter>UI\Consolelog</Filter>
-    </ClCompile>
     <ClCompile Include="CustomQlistWidget.cpp">
       <Filter>UI\Consolelog</Filter>
     </ClCompile>
@@ -26,19 +23,24 @@
     <ClCompile Include="MainWindowOcc.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="fun_for_lc.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
     <ClCompile Include="K_box.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
-    <ClCompile Include="BinSearchNode.cpp" />
     <ClCompile Include="kd_search.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
     <ClCompile Include="K_Pnt.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="public_function.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="KLogger.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="BinSearchNode.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,9 +49,6 @@
       <Filter>UI\Consolelog</Filter>
     </ClInclude>
     <ClInclude Include="iwSingleton.h">
-      <Filter>UI\Consolelog</Filter>
-    </ClInclude>
-    <ClInclude Include="KLogger.h">
       <Filter>UI\Consolelog</Filter>
     </ClInclude>
     <ClInclude Include="Ktimer.h">
@@ -73,15 +72,20 @@
     <ClInclude Include="lc_struct.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="fun_for_lc.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="K_box.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
-    <ClInclude Include="BinSearchNode.h" />
+    <ClInclude Include="public_function.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="KLogger.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="BinSearchNode.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OccDebuger.rc" />

@@ -11,7 +11,7 @@ class DataGenerator
 public:
     DataGenerator(CadView* view) :viewer_(view) { }
 
-    void reGenerateData(int rowcnt, int colcnt, double dis, double radius, bool same_radius);
+    void reGenerateData(int rowcnt, int colcnt, double dis, int precision, double radius, bool same_radius);
 
     void viewData();
 
@@ -23,7 +23,7 @@ public:
 
 private:
     void generateData(std::vector<KBox>& buffer,
-        int testrow, int testcol, double distance,
+        int testrow, int testcol, double distance, int precision,
         double radius, bool same_radius);
 
 private:

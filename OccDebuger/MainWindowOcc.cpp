@@ -48,7 +48,7 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
 
     setUpUI();
     ConsoleLog("Hello!");
-    on_actionGenerate_triggered();
+    on_pb_generate_pressed();
 }
 
 MainWindowOcc::~MainWindowOcc()
@@ -122,13 +122,33 @@ void MainWindowOcc::on_actionkd_find1D_triggered()
     kdtree_->getOneDRange(ui->dsb_low->value(), ui->dsb_high->value());
 }
 
-void MainWindowOcc::on_actionGenerate_triggered()
+
+void MainWindowOcc::on_actionori_find1D_triggered()
+{
+    if (!kdtree_)kdtree_ = new KDTree(data_generator_);
+    kdtree_->getOneDRangeOri(ui->dsb_low->value(), ui->dsb_high->value());
+}
+
+void MainWindowOcc::on_pb_valueMax_pressed()
+{
+    ui->sb_col->setValue(300);
+    ui->sb_row->setValue(300);
+}
+void MainWindowOcc::on_pb_valueSmall_pressed()
+{
+    ui->sb_col->setValue(5);
+    ui->sb_row->setValue(5);
+}
+
+void MainWindowOcc::on_pb_generate_pressed()
 {
     int rowcnt = ui->sb_row->value();
     int colcnt = ui->sb_col->value();
     double dis = ui->dsb_distance->value();
+    int precision = ui->sb_precision->value();
     data_generator_->reGenerateData(rowcnt, colcnt,
-        dis, 1.0, true);
+        dis, precision, 1.0, false);
 }
+
 
 }
