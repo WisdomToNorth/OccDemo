@@ -33,7 +33,7 @@ private:
     // 输入：树根, 两个数值, x, x', x<=x'
     // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
     const BinSearchNode* FindSplitNode(const BinSearchNode* root,
-        int leftnum, int rightnum);
+        double leftnum, double rightnum);
 
     // input: bin search tree, to-search-range [x,x']
     // output: vector<int> {numbers in to-search-range}

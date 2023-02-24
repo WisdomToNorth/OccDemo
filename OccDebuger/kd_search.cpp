@@ -1,6 +1,7 @@
 ﻿
 #include "kd_search.h"
 #include "DataGenerator.h"
+#include "Ktimer.h"
 
 namespace KDebugger
 {
@@ -13,27 +14,37 @@ KDTree::KDTree(DataGenerator* generator) :DataObserver(generator)
 void KDTree::updateData()
 {
     data_generator_->getPtData(buf_);
+    if (binsearch_1d_)
+    {
+        delete binsearch_1d_;
+        binsearch_1d_ = nullptr;
+    }
 }
 
 void KDTree::getOneDRange(double l, double r)
 {
+    K_Timer timer;
     if (!binsearch_1d_)
     {
         binsearch_1d_ = buildBinSearchTree(buf_);
         std::cout << "\n ####tree start####\n";
-        printBinSearchTree(binsearch_1d_, true);
+        printBinSearchTree(binsearch_1d_);
         std::cout << "\n ####tree end####\n";
     }
     std::vector<KPt> res;
     oneDRangeQuery(binsearch_1d_, l, r, res);
 
-    std::cout << "\nQuary res:\n";
+    std::cout << "\nGet Quary in " << timer.timeFromBegin(false)
+        << ":\n";
     printPntVec(res);
 }
 
 void KDTree::reportSubTree(BinSearchNode* root,
     std::vector<KPt>& subnodes)//1D
 {
+    std::cout << "\n%%%%report subtree: \n";
+    printBinSearchTree(root);
+    std::cout << "\n%%%%report subtree end \n";
     if (root->isLeaf())
     {
         subnodes.emplace_back(root->pnt_);
@@ -90,7 +101,7 @@ BinSearchNode* KDTree::buildBinSearchTree(std::vector<KPt>& vec)//1D
 // 输入：树根, 两个数值, x, x', x<=x'
 // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
 const BinSearchNode* KDTree::FindSplitNode(const BinSearchNode* root,
-    int leftnum, int rightnum)//1D
+    double leftnum, double rightnum)//1D
 {
     const BinSearchNode* v = root;
     while (!v->isLeaf() &&
@@ -101,7 +112,9 @@ const BinSearchNode* KDTree::FindSplitNode(const BinSearchNode* root,
         else
             v = v->right_;
     }
-    std::cout << "####spliter: " << v->pnt_.x << " " << v->pnt_.y << std::endl;
+    std::cout << "####spliter: ";
+    printBinSearchTree(v);
+    std::cout << std::endl;
     return v;
 }
 

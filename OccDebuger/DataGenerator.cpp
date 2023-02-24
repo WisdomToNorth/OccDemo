@@ -36,10 +36,12 @@ void DataGenerator::notifyAll()
 }
 void DataGenerator::getPtData(std::vector<KPt>& buf)
 {
+    std::vector<KPt> newbuf;
     for (const auto& box : buf_)
     {
-        buf.emplace_back(box.getPt());
+        newbuf.emplace_back(box.getPt());
     }
+    buf.swap(newbuf);
 
 }
 

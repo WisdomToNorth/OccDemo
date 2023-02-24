@@ -4,10 +4,10 @@
 #include <queue>
 namespace KDebugger
 {
-void printBinSearchTree(BinSearchNode* root, bool onlyX)
+void printBinSearchTree(const BinSearchNode* root, bool onlyX)
 {
     if (!root)return;
-    std::queue <BinSearchNode*> q;
+    std::queue <const BinSearchNode*> q;
     q.push(root);
     while (!q.empty())
     {
