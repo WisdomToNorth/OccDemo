@@ -77,6 +77,7 @@ private:
     std::vector<KPt> buf_;
     BinSearchNode* binsearch_1d_ = nullptr;
     BinSearchNode* binsearch_2d_ = nullptr;
+
 };
 
 }

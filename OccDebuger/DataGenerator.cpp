@@ -54,8 +54,8 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
 
 
     std::default_random_engine e;
-    std::uniform_real_distribution<double> sizeu(0.8, 1);
-    std::uniform_real_distribution<double> v(0.6, 0.95);
+    std::uniform_real_distribution<double> sizeu(0.8, 1.2);//尺寸随机范围
+    std::uniform_real_distribution<double> v(0.6, 0.95);//位置随机范围
     e.seed(1);
     for (int i = 0; i < _col_size; ++i)
     {
@@ -65,16 +65,16 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
             double stx = roundWith(i * distance * loc_random, precision);
             double sty = roundWith(j * distance * loc_random, precision);
             double x_size, y_size;
+            x_size = radius * sizeu(e);
             if (same_radius)
             {
-                x_size = radius;
+                y_size = x_size;
             }
             else
             {
-                x_size = radius * sizeu(e);
-
+                y_size = radius * sizeu(e);
             }
-            y_size = x_size;
+
             KBox l_box(stx, sty, x_size, y_size);
             l_box.val_ = i * _row_size + j;
             buffer.emplace_back(l_box);
@@ -96,7 +96,7 @@ void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis, int preci
     ConsoleLog("generating...");
     K_Timer timer;
 
-    generateData(buf_, rowcnt, colcnt, dis, precision, 1.0, true);
+    generateData(buf_, rowcnt, colcnt, dis, precision, 1.0, same_radius);
 
     if (rowcnt * colcnt < 1000)
     {

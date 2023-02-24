@@ -13,6 +13,7 @@
 #include <qdebug.h>
 #include <qspinbox.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
 
 #include "CADView.h"
 #include "Ktimer.h"
@@ -119,16 +120,24 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
 void MainWindowOcc::on_actionkd_find1D_triggered()
 {
     if (!kdtree_)kdtree_ = new KDTree(data_generator_);
-    kdtree_->getOneDRange(ui->dsb_low->value(), ui->dsb_high->value());
+    kdtree_->getOneDRange(ui->dsb_left->value(), ui->dsb_right->value());
 }
-
 
 void MainWindowOcc::on_actionori_find1D_triggered()
 {
     if (!kdtree_)kdtree_ = new KDTree(data_generator_);
-    kdtree_->getOneDRangeOri(ui->dsb_low->value(), ui->dsb_high->value());
+    kdtree_->getOneDRangeOri(ui->dsb_left->value(), ui->dsb_right->value());
 }
+void MainWindowOcc::on_actionkd_find2D_triggered()
+{
+    if (!kdtree_)kdtree_ = new KDTree(data_generator_);
 
+}
+void MainWindowOcc::on_actionori_find2D_triggered()
+{
+    if (!kdtree_)kdtree_ = new KDTree(data_generator_);
+
+}
 void MainWindowOcc::on_pb_valueMax_pressed()
 {
     ui->sb_col->setValue(300);
@@ -146,8 +155,10 @@ void MainWindowOcc::on_pb_generate_pressed()
     int colcnt = ui->sb_col->value();
     double dis = ui->dsb_distance->value();
     int precision = ui->sb_precision->value();
+
+    bool w_h_same = ui->cb_wh_same->isChecked();
     data_generator_->reGenerateData(rowcnt, colcnt,
-        dis, precision, 1.0, false);
+        dis, precision, 1.0, w_h_same);
 }
 
 
