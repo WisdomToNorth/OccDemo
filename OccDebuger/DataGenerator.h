@@ -24,6 +24,7 @@ struct DataParameter
     int rowcnt;
     int colcnt;
     int precision;
+    int seed = 1;
     bool w_h_same;
     bool rand_loc;
     bool rand_size;

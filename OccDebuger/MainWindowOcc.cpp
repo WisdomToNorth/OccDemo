@@ -154,6 +154,8 @@ void MainWindowOcc::on_pb_generate_pressed()
     DataParameter param;
     param.colcnt = ui->sb_col->value();
     param.rowcnt = ui->sb_row->value();
+    param.seed = ui->sb_seed->value();
+
     param.dis = ui->dsb_distance->value();
     param.precision = ui->sb_precision->value();
     param.w_h_same = ui->cb_wh_same->isChecked();

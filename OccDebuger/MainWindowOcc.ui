@@ -24,8 +24,33 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QWidget" name="widget_param" native="true">
-       <layout class="QGridLayout" name="gridLayout_7" rowstretch="0,0,0,0,1,0">
-        <item row="1" column="0" colspan="2">
+       <layout class="QGridLayout" name="gridLayout_7" rowstretch="0,0,0,0,1,0,0">
+        <item row="4" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pb_valueMax">
+            <property name="text">
+             <string>ValueMax</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pb_valueSmall">
+            <property name="text">
+             <string>ValueSmall</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>thread</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
          <widget class="QWidget" name="widget_2" native="true">
           <property name="styleSheet">
            <string notr="true">border:1px solid gray</string>
@@ -133,20 +158,27 @@
           </layout>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>thread</string>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="sb_core">
+          <property name="maximum">
+           <number>64</number>
           </property>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2">
+        <item row="5" column="0" colspan="2">
+         <widget class="QPushButton" name="pb_generate">
+          <property name="text">
+           <string>Regenerate Data</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
          <widget class="QWidget" name="widget" native="true">
           <property name="styleSheet">
            <string notr="true">border:1px solid gray</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0">
-           <item row="0" column="0">
+           <item row="0" column="0" alignment="Qt::AlignHCenter">
             <widget class="QLabel" name="label">
              <property name="text">
               <string>Region</string>
@@ -252,39 +284,7 @@
           </layout>
          </widget>
         </item>
-        <item row="4" column="0" colspan="2">
-         <widget class="QPushButton" name="pb_generate">
-          <property name="text">
-           <string>Regenerate Data</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="2">
-         <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pb_valueMax">
-            <property name="text">
-             <string>ValueMax</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="pb_valueSmall">
-            <property name="text">
-             <string>ValueSmall</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="sb_core">
-          <property name="maximum">
-           <number>64</number>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0" colspan="2">
+        <item row="6" column="0" colspan="2">
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -296,6 +296,23 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>seed</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="sb_seed">
+          <property name="maximum">
+           <number>64</number>
+          </property>
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

@@ -55,7 +55,7 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
     if (!checkParam(param))return;
 
     std::default_random_engine e;
-    e.seed(1);
+    e.seed(param.seed);
     std::uniform_real_distribution<double> size_rand_gen
     (param.defaultpar.rand_size_min, param.defaultpar.rand_size_max);//尺寸随机范围
     std::uniform_real_distribution<double> loc_rand_gen
