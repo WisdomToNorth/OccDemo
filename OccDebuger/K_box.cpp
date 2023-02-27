@@ -73,7 +73,10 @@ void KBox::show()
         gp_Pnt cur(box.X(), box.Y(), 0);
         Handle(AIS_TextLabel) text = new AIS_TextLabel();
         text->SetPosition(cur);
-        text->SetText(this->val_);
+        std::string text_ = '{' + QString::number(this->val_).toStdString() + '}' +
+            '\n' + QString::number(box.X()).toStdString()
+            + ',' + QString::number(box.Y()).toStdString();
+        text->SetText(text_.c_str());
         text->SetColor(Quantity_NOC_BLACK);
         text->SetFont("consolas");
         G_Context->Display(text, false);

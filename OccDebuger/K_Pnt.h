@@ -23,6 +23,9 @@ struct KRegion
     KPt right_up_;
 };
 
+bool ptInRegion(const KPt& pnt_, const KRegion& region);//[ )
+
+
 struct PntsSorted2D
 {
     std::vector<KPt> pnts_xsorted_;

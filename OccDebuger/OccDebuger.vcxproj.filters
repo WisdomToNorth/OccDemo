@@ -43,6 +43,16 @@
     <ClCompile Include="BinSearchNode.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
+    <ClCompile Include="linedrawer.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="gptools.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="statusinfowidget.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PLine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -86,6 +96,13 @@
     <ClInclude Include="BinSearchNode.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
+    <ClInclude Include="linedrawer.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="gptools.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="PLine.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OccDebuger.rc" />
@@ -101,6 +118,9 @@
       <Filter>UI</Filter>
     </QtMoc>
     <QtMoc Include="MainWindowOcc.h">
+      <Filter>UI</Filter>
+    </QtMoc>
+    <QtMoc Include="statusinfowidget.h">
       <Filter>UI</Filter>
     </QtMoc>
   </ItemGroup>
@@ -126,9 +146,18 @@
     <Filter Include="UI\Consolelog">
       <UniqueIdentifier>{09cdbec3-6863-4d65-a3af-a4873ca30766}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manner">
+      <UniqueIdentifier>{c5c47d15-f3a0-4ac8-afd8-5bc10ddff02b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Viewdata">
+      <UniqueIdentifier>{ac958943-c4e8-491e-9719-abd51bba540e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainWindowOcc.ui">
+      <Filter>UI</Filter>
+    </QtUic>
+    <QtUic Include="statusinfowidget.ui">
       <Filter>UI</Filter>
     </QtUic>
   </ItemGroup>

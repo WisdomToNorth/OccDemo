@@ -13,7 +13,7 @@ class iwLog
 public:
 
     //! 析构函数
-    virtual ~iwLog() {}
+    virtual ~iwLog() { }
 
     //! 返回唯一静态实例
     static iwLog* instance();
@@ -55,6 +55,11 @@ public:
     inline static bool print(const QString& message)
     {
         LogMessage(message, LOG_STANDARD);
+        return true;
+    }
+    inline static bool print(const std::string& message)
+    {
+        LogMessage(QString::fromStdString(message), LOG_STANDARD);
         return true;
     }
 

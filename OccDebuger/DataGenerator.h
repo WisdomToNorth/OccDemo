@@ -34,7 +34,7 @@ struct DataParameter
 class DataGenerator
 {
 public:
-    DataGenerator(CadView* view) :viewer_(view) { }
+    DataGenerator(CadView* view) :cadview_(view) { }
 
     void reGenerateData(const DataParameter& param);
 
@@ -51,7 +51,7 @@ private:
         const DataParameter& param);
     bool checkParam(const DataParameter& param) { return true; }
 private:
-    CadView* viewer_;
+    CadView* cadview_;
     std::vector<KBox> buf_;
     std::vector<DataObserver*> obs_list_;
 };

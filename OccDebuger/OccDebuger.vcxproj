@@ -97,6 +97,9 @@
     <ClCompile Include="CustomQlistWidget.cpp" />
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
+    <ClCompile Include="linedrawer.cpp" />
+    <ClCompile Include="gptools.cpp" />
+    <ClCompile Include="PLine.cpp" />
     <ClCompile Include="public_function.cpp" />
     <ClCompile Include="kd_search.cpp" />
     <ClCompile Include="K_box.cpp" />
@@ -107,10 +110,12 @@
     <ClCompile Include="MainWindowOcc.cpp" />
     <ClCompile Include="MultiUniset.cpp" />
     <ClCompile Include="KLogger.cpp" />
+    <ClCompile Include="statusinfowidget.cpp" />
     <QtRcc Include="OccDebuger.qrc" />
     <QtUic Include="MainWindowOcc.ui" />
     <ClCompile Include="main.cpp" />
     <None Include="OccDebuger.ico" />
+    <QtUic Include="statusinfowidget.ui" />
     <ResourceCompile Include="OccDebuger.rc" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +127,9 @@
     <ClInclude Include="BinSearchNode.h" />
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
+    <ClInclude Include="linedrawer.h" />
+    <ClInclude Include="gptools.h" />
+    <ClInclude Include="PLine.h" />
     <ClInclude Include="public_function.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="iwLog.h" />
@@ -132,6 +140,7 @@
     <ClInclude Include="lc_struct.h" />
     <ClInclude Include="KLogger.h" />
     <ClInclude Include="kd_search.h" />
+    <QtMoc Include="statusinfowidget.h" />
     <ClInclude Include="unionset.h" />
     <QtMoc Include="CADView.h" />
     <ClInclude Include="K_box.h" />

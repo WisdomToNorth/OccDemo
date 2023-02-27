@@ -23,6 +23,8 @@ public:
     void updateData()override;
     void getOneDRange(double l, double r);
     void getOneDRangeOri(double l, double r);
+    void getTwoDRange(const KRegion& r);
+    void getTwoDRangeOri(const KRegion& r);
 
 private:
     void reportSubTree(BinSearchNode* root, std::vector<KPt>& subnodes);

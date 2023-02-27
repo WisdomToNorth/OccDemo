@@ -85,7 +85,7 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
             buffer.emplace_back(l_box);
         }
     }
-    ConsoleLog("Size: " + QString::number(param.rowcnt * param.dis) + " * " +
+    ConsoleLog("Crose range: " + QString::number(param.rowcnt * param.dis) + " * " +
         QString::number(param.colcnt * param.dis));
     notifyAll();
 }
@@ -108,7 +108,8 @@ void DataGenerator::reGenerateData(const DataParameter& param)
     {
         viewData();
     }
-    ConsoleLog("generate data cost " + QString::number(timer.timeFromBegin(false))
+    ConsoleLog("generate " + QString::number(param.colcnt * param.rowcnt) +
+        " data cost " + QString::number(timer.timeFromBegin(false))
         + " ms.");
     notifyAll();
 }
@@ -116,14 +117,14 @@ void DataGenerator::reGenerateData(const DataParameter& param)
 
 void DataGenerator::viewData()
 {
-    viewer_->removeAll();
+    cadview_->removeAll();
     for (auto& box : buf_)
     {
         box.show();
     }
 
-    viewer_->fitAll();
+    cadview_->fitAll();
 
-    viewer_->update();
+    cadview_->update();
 }
 }

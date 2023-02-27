@@ -192,6 +192,29 @@ void KDTree::oneDRangeQuery(const BinSearchNode* root,
     }
 }
 
+void KDTree::getTwoDRangeOri(const KRegion& r)
+{
+    std::cout << "\n\n-----------2D Search------------" << std::endl;
+    std::vector<KPt> buf;
+    K_Timer timer;
+    size_t cnt = 0;
+    for (const auto& pt : buf_)
+    {
+        if (ptInRegion(pt, r))
+        {
+            buf.emplace_back(pt);
+            cnt++;
+        }
+    }
+    std::cout << "\nOrigin: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
+    std::cout << "res size:" << cnt << std::endl;
+}
+
+void KDTree::getTwoDRange(const KRegion& r)
+{
+
+}
+
 BinSearchNode* KDTree::buildKDTreeFromSortedVec(const std::vector<KPt>& pnts)
 {
     PntsSorted2D p_pnts;

@@ -7,11 +7,11 @@ namespace KDebugger
 
 struct BinSearchNode
 {
-    BinSearchNode() :pnt_(KPt()), left_(nullptr), right_(nullptr) {}
+    BinSearchNode() :pnt_(KPt()), left_(nullptr), right_(nullptr) { }
     BinSearchNode(const KPt& x, BinSearchNode* left, BinSearchNode* right)
         : pnt_(x), left_(left), right_(right)
-    {}
-    BinSearchNode(const KPt& _pnt) : pnt_(_pnt) {}
+    { }
+    BinSearchNode(const KPt& _pnt) : pnt_(_pnt) { }
 
     BinSearchNode* left_ = nullptr;
     BinSearchNode* right_ = nullptr;
@@ -34,12 +34,10 @@ struct BinSearchNode
 
     bool BinSearchNodeInRegion(const KRegion& region)
     {//todo: confirm boundry is right
-        return (pnt_.x > region.left_bottom_.x) &&
-            (pnt_.x < region.right_up_.x) &&
-            (pnt_.y > region.left_bottom_.y) &&
-            (pnt_.y < region.right_up_.y);
+        return ptInRegion(this->pnt_, region);
     }
 };
 
-void printBinSearchTree(const BinSearchNode* root, bool onlyX = false);
+void printBinSearchTree(const BinSearchNode* root,
+    bool onlyX = false);
 }

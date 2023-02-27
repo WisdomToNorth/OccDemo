@@ -47,8 +47,11 @@ private:
     };
 
 
-    typedef std::function<void(const Handle(SelectMgr_EntityOwner)&)> leftButtonClickCallBack;
+    //typedef std::function<void(const Handle(SelectMgr_EntityOwner)&)> leftButtonClickCallBack;
     typedef std::function<void(QMouseEvent* event)> rightButtonClickCallBack;
+    typedef std::function<void(const double& _1, const double& _2)> leftButtonClickCallBack;
+    typedef std::function<void(const double& _1, const double& _2, const double& _3)> moveInfoCallBack;
+
 
 public:
     enum class KUpdate
@@ -65,8 +68,9 @@ public:
     void fitAll();
     void removeAll();
     Handle(AIS_InteractiveContext) getContext() { return context_; }
-    leftButtonClickCallBack processClickCb = NULL;
+    leftButtonClickCallBack leftClickCb = NULL;
     rightButtonClickCallBack rightClickCb = NULL;
+    moveInfoCallBack moveInfoCb = NULL;
 
 public slots:
     void updateView(KUpdate);
@@ -88,6 +92,7 @@ private:
         Standard_Real lineWidth_aspect = 5.0, Quantity_Color theColor = Quantity_NOC_LIGHTBLUE2);
     void initCursors();
     void setViewCube();
+    void setOriginTrihedron();
     bool checkDetectedValid();
 
 signals:
@@ -97,7 +102,8 @@ private:
     friend class DataGenerator;
     Handle(AIS_InteractiveContext) context_;
     Handle(AIS_InteractiveObject) viewcube_ = nullptr;
-    Handle(V3d_Viewer) viewer_ = nullptr;
+    Handle(AIS_InteractiveObject) aisOriginTrihedron_ = nullptr;
+    Handle(V3d_Viewer) cadview_ = nullptr;
     Handle(Graphic3d_GraphicDriver) graphic_driver_ = nullptr;
     Handle(V3d_View) view_ = nullptr;
 

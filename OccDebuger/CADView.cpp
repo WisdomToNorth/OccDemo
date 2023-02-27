@@ -30,7 +30,13 @@
 #include <qscreen.h>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include "KLogger.h"
 
+#include <AIS_ConnectedInteractive.hxx>
+#include <AIS_Trihedron.hxx>
+#include <Geom_Axis2Placement.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
+#include <V3d_TypeOfOrientation.hxx>
 
 namespace KDebugger
 {
@@ -44,6 +50,30 @@ static QCursor* zoomCursor = NULL;
 static QCursor* rotCursor = NULL;
 }
 
+static Handle_AIS_Trihedron createOriginTrihedron()
+{
+    Handle_Geom_Axis2Placement axis = new Geom_Axis2Placement(gp::XOY());
+    Handle_AIS_Trihedron aisTrihedron = new AIS_Trihedron(axis);
+    aisTrihedron->SetDatumDisplayMode(Prs3d_DM_WireFrame);
+    aisTrihedron->SetDrawArrows(false);
+    aisTrihedron->Attributes()->DatumAspect()->LineAspect(Prs3d_DP_XAxis)->SetWidth(2.5);
+    aisTrihedron->Attributes()->DatumAspect()->LineAspect(Prs3d_DP_YAxis)->SetWidth(2.5);
+    aisTrihedron->Attributes()->DatumAspect()->LineAspect(Prs3d_DP_ZAxis)->SetWidth(2.5);
+    aisTrihedron->SetDatumPartColor(Prs3d_DP_XAxis, Quantity_NOC_RED2);
+    aisTrihedron->SetDatumPartColor(Prs3d_DP_YAxis, Quantity_NOC_GREEN2);
+    aisTrihedron->SetDatumPartColor(Prs3d_DP_ZAxis, Quantity_NOC_BLUE2);
+    aisTrihedron->SetLabel(Prs3d_DP_XAxis, "");
+    aisTrihedron->SetLabel(Prs3d_DP_YAxis, "");
+    aisTrihedron->SetLabel(Prs3d_DP_ZAxis, "");
+    //aisTrihedron->SetTextColor(Quantity_NOC_GRAY40);
+    aisTrihedron->SetSize(60);
+    aisTrihedron->SetTransformPersistence(
+        new Graphic3d_TransformPers(Graphic3d_TMF_ZoomPers, axis->Ax2().Location())
+    );
+    aisTrihedron->Attributes()->SetZLayer(Graphic3d_ZLayerId_Topmost);
+    aisTrihedron->SetInfiniteState(true);
+    return aisTrihedron;
+}
 CadView::CadView(QWidget* parent)
     : QWidget(parent)
 {
@@ -59,7 +89,7 @@ CadView::CadView(QWidget* parent)
 }
 
 CadView::~CadView()
-{}
+{ }
 
 void CadView::initCursors()
 {
@@ -105,19 +135,19 @@ void CadView::initContext()
 #endif
 
         //创建3D查看器
-        viewer_ = new V3d_Viewer(graphic_driver_);
+        cadview_ = new V3d_Viewer(graphic_driver_);
         //创建视图
-        view_ = viewer_->CreateView();
+        view_ = cadview_->CreateView();
         view_->SetWindow(wind);
         //打开窗口
         if (!wind->IsMapped())
         {
             wind->Map();
         }
-        context_ = new AIS_InteractiveContext(viewer_);  //创建交互式上下文
+        context_ = new AIS_InteractiveContext(cadview_);  //创建交互式上下文
         //配置查看器的光照
-        viewer_->SetDefaultLights();
-        viewer_->SetLightOn();
+        cadview_->SetDefaultLights();
+        cadview_->SetLightOn();
 
         //显示直角坐标系，可以配置在窗口显示位置、文字颜色、大小、样式
         view_->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_GOLD, 0.08, V3d_ZBUFFER);
@@ -144,26 +174,40 @@ void CadView::initContext()
         setMouseTracking(true);   //开启鼠标位置追踪
     }
     setViewCube();
+    setOriginTrihedron();
 
-    view_->Redraw();
+    view_->TriedronErase();
+
+
+    view_->Camera()->SetDirection(gp_Dir(0, 0, -1));
+    view_->Camera()->SetUp(gp_Dir(0, 1, 0));
+    view_->Camera()->SetCenter(gp_Pnt(0, 0, 0));
+
+    view_->ZFitAll();
     view_->MustBeResized();
 };
+
+
+void CadView::setOriginTrihedron()
+{
+    aisOriginTrihedron_ = createOriginTrihedron();
+    context_->Display(aisOriginTrihedron_, false);
+}
 
 void CadView::setViewCube()
 {
     auto ais_viewcube = new AIS_ViewCube();
     double transp_num = 0.55;//透明程度，1为完全透明
     ais_viewcube->SetBoxColor(Quantity_NOC_GRAY2);
-    //ais_viewcube->SetFixedAnimationLoop(false);
-    ais_viewcube->SetSize(62);
+    ais_viewcube->SetSize(55);
     ais_viewcube->SetFontHeight(14);
     ais_viewcube->SetBoxTransparency(transp_num);
 
     ais_viewcube->SetTransformPersistence(
         new Graphic3d_TransformPers(
-            Graphic3d_TMF_TriedronPers,
-            Aspect_TOTP_LEFT_UPPER,
-            Graphic3d_Vec2i(85, 85)));
+        Graphic3d_TMF_TriedronPers,
+        Aspect_TOTP_LEFT_UPPER,
+        Graphic3d_Vec2i(85, 85)));
 
     const Handle_Prs3d_DatumAspect datum_color = new Prs3d_DatumAspect();
     datum_color->ShadingAspect(Prs3d_DP_XAxis)->SetColor(Quantity_NOC_GREEN2);
@@ -292,11 +336,19 @@ void CadView::mousePressEvent(QMouseEvent* event)
     }
     else if (event->buttons() == Qt::RightButton)
     {
-        if (!checkDetectedValid())return;
         if (rightClickCb)rightClickCb(event);
+        if (!checkDetectedValid())return;
+
     }
     else if (event->buttons() & Qt::LeftButton)  //鼠标左键选择模型
     {
+        //view_
+        if (leftClickCb)
+        {
+            double x, y, z;
+            view_->Convert(event->pos().x(), event->pos().y(), x, y, z);
+            leftClickCb(x, y);
+        }
         if (!checkDetectedValid())return;
 
         if (qApp->keyboardModifiers() == Qt::ControlModifier)
@@ -310,54 +362,6 @@ void CadView::mousePressEvent(QMouseEvent* event)
 
         view_->Update();
     }
-};
-
-void CadView::fitAll()
-{
-    view_->FitAll();
-}
-
-void CadView::removeAll()
-{
-    this->context_->RemoveAll(false);
-    setViewCube();
-    view_->Redraw();
-}
-
-void CadView::drawTestData(const std::vector< Handle(AIS_Shape)>& all_face_)
-{
-    int cnt = all_face_.size();
-    for (auto& shape : all_face_)
-    {
-        //Handle(AIS_Shape) shape = new AIS_Shape(all_face_[i]);
-        shape->SetColor(Quantity_Color(255 / 255.0, 153 / 255.0,
-            51 / 255.0, Quantity_TOC_RGB));
-        context_->Display(shape, false);
-    }
-}
-
-void CadView::drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels)
-{
-    int textcnt = all_labels.size();
-    for (int j = 0; j < textcnt; ++j)
-    {
-        context_->Display(all_labels[j], false);
-    }
-}
-
-Handle(SelectMgr_EntityOwner) CadView::getDetectedObj()
-{
-    if (detected_obj_.empty())return nullptr;
-    else
-        return detected_obj_.front();
-}
-
-//!覆写鼠标按键释放事件
-void CadView::mouseReleaseEvent(QMouseEvent* event)
-{
-    Q_UNUSED(event);
-    context_action_mode_ = CurrentAction3dEnum::CurAction3d_Nothing;
-    this->setCursor(*defCursor);
 };
 
 //! Map Qt buttons bitmask to virtual keys.
@@ -384,7 +388,10 @@ void CadView::mouseMoveEvent(QMouseEvent* event)
 {
     // 鼠标移动到模型时，模型高亮显示
 
-    //context_->MoveTo(event->pos().x(), event->pos().y(), mView, true);
+    double x, y, z;
+
+    view_->Convert(event->pos().x(), event->pos().y(), x, y, z);
+    if (moveInfoCb) moveInfoCb(x, y, z);
 
     const Graphic3d_Vec2i new_pos(event->pos().x(), event->pos().y());
     if (!view_.IsNull() && UpdateMousePosition(new_pos, qtMouseButtons2VKeys(event->buttons()),
@@ -427,6 +434,54 @@ void CadView::mouseMoveEvent(QMouseEvent* event)
     }
     //......
 };
+void CadView::fitAll()
+{
+    view_->FitAll();
+}
+
+void CadView::removeAll()
+{
+    this->context_->RemoveAll(false);
+    setViewCube();
+    setOriginTrihedron();
+    view_->Redraw();
+}
+
+void CadView::drawTestData(const std::vector< Handle(AIS_Shape)>& all_face_)
+{
+    int cnt = all_face_.size();
+    for (auto& shape : all_face_)
+    {
+        shape->SetColor(Quantity_Color(255 / 255.0, 153 / 255.0,
+            51 / 255.0, Quantity_TOC_RGB));
+        context_->Display(shape, false);
+    }
+}
+
+void CadView::drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels)
+{
+    int textcnt = all_labels.size();
+    for (int j = 0; j < textcnt; ++j)
+    {
+        context_->Display(all_labels[j], false);
+    }
+}
+
+Handle(SelectMgr_EntityOwner) CadView::getDetectedObj()
+{
+    if (detected_obj_.empty())return nullptr;
+    else
+        return detected_obj_.front();
+}
+
+//!覆写鼠标按键释放事件
+void CadView::mouseReleaseEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+    context_action_mode_ = CurrentAction3dEnum::CurAction3d_Nothing;
+    this->setCursor(*defCursor);
+};
+
 
 //!覆写鼠标滚轮事件
 void CadView::wheelEvent(QWheelEvent* event)
