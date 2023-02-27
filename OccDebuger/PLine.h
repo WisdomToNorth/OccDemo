@@ -8,10 +8,10 @@
 namespace KDebugger
 {
 
-class PLine
+class PrePline
 {
 public:
-    PLine(const std::vector<gp_Pnt>& res) :raw_pnts_(res) { }
+    PrePline(const std::vector<gp_Pnt>& res) :raw_pnts_(res) { }
 
     void draw();
 

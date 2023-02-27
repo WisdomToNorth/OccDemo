@@ -273,7 +273,7 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
         if (!line_drawer_)return;
         std::vector<gp_Pnt> res;
         line_drawer_->commitDraw(res);
-        PLine* new_line = new PLine(res);
+        PrePline* new_line = new PrePline(res);
         pline_vec_.push_back(new_line);
         new_line->drawRawPnts();
         curmode_ = AppModeEnum::none;

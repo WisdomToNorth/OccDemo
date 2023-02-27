@@ -387,11 +387,22 @@ static Aspect_VKeyMouse qtMouseButtons2VKeys(Qt::MouseButtons theButtons)
 void CadView::mouseMoveEvent(QMouseEvent* event)
 {
     // 鼠标移动到模型时，模型高亮显示
-
     double x, y, z;
-
     view_->Convert(event->pos().x(), event->pos().y(), x, y, z);
-    if (moveInfoCb) moveInfoCb(x, y, z);
+    if (event->buttons() & Qt::LeftButton)
+    {
+        if (leftClickCb)
+        {
+            double x, y, z;
+            view_->Convert(event->pos().x(), event->pos().y(), x, y, z);
+            leftClickCb(x, y);
+        }
+    }
+    else
+    {
+        if (moveInfoCb) moveInfoCb(x, y, z);
+
+    }
 
     const Graphic3d_Vec2i new_pos(event->pos().x(), event->pos().y());
     if (!view_.IsNull() && UpdateMousePosition(new_pos, qtMouseButtons2VKeys(event->buttons()),

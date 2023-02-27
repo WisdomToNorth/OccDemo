@@ -8,12 +8,12 @@
 namespace KDebugger
 {
 
-void PLine::draw()
+void PrePline::draw()
 {
 
 }
 
-void PLine::drawRawPnts()
+void PrePline::drawRawPnts()
 {
     size_t n = raw_pnts_.size();
     for (size_t i = 0; i < n - 1; ++i)
@@ -29,7 +29,7 @@ void PLine::drawRawPnts()
     G_Context->UpdateCurrentViewer();
 }
 
-void PLine::hide()
+void PrePline::hide()
 {
     for (auto& obj : viewmodel_vec_)
     {

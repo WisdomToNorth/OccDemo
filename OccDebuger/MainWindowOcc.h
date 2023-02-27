@@ -18,7 +18,7 @@ class DataGenerator;
 class KDTree;
 class StatusInfoWidget;
 class LineDrawer;
-class PLine;
+class PrePline;
 class MainWindowOcc : public QMainWindow
 {
     Q_OBJECT
@@ -74,7 +74,7 @@ private:
 
     AppModeEnum curmode_ = AppModeEnum::none;
 
-    std::vector<PLine*> pline_vec_;
+    std::vector<PrePline*> pline_vec_;
     enum class CmdEnum
     {
         commit_draw,
