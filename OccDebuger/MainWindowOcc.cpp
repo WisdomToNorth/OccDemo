@@ -121,6 +121,7 @@ void MainWindowOcc::handleLeftPress(const double& _1, const double& _2)
 void MainWindowOcc::handleRightPress(QMouseEvent* event)
 {
     QPointer<QMenu> rightMenu = getRightMenu();
+    if (rightMenu->isEmpty())return;
     rightMenu->exec(cursor().pos());
 }
 
@@ -301,7 +302,7 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
         line_drawer_->commitDraw(res);
         PrePline* new_line = new PrePline(res);
         preline_vec_.push_back(new_line);
-        // preline_vec_.push_back(new_line);
+
         new_line->drawPnts();
         curmode_ = AppModeEnum::none;
         delete line_drawer_;

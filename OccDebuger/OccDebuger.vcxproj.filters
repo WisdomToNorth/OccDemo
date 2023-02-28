@@ -118,7 +118,6 @@
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="BoundingBox.h" />
-    <ClInclude Include="Header.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="iwConsole.h">

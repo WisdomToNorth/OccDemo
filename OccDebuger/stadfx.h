@@ -36,3 +36,8 @@
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
+#include <gp_Dir2d.hxx>
+#include <gp_Lin2d.hxx>
+#include <gp_Pnt2d.hxx>
+#include <GCE2d_MakeLine.hxx>
+#include <IntAna2d_AnaIntersection.hxx>

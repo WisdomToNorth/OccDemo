@@ -31,6 +31,8 @@ class TopoDS_Edge;
 class gp_Lin;
 class gp_Vec;
 class gp_Ax2;
+class gp_Pnt2d;
+class gp_Lin2d;
 
 namespace OccTools
 {
@@ -85,5 +87,9 @@ gp_Dir getNormalByThreePnts(const std::vector<gp_Pnt>& ori_pts);
 TopoDS_Edge drawLineByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2);
 std::vector<TopoDS_Edge> drawAngledLineByTwoPts(const gp_Pnt& p1,
     const gp_Pnt& p2);
+
+//if curve is not line, may be have several result;
+//the input is line here, so only have one result
+std::vector<gp_Pnt2d> getLineCross(const gp_Lin2d& aLine1, const gp_Lin2d& aLine2);
 }
 #endif

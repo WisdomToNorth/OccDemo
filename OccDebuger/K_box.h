@@ -34,8 +34,8 @@ public:
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
-    double X()const { return center_.x; }
-    double Y()const { return center_.y; }
+    //double X()const { return center_.x; }
+    //double Y()const { return center_.y; }
     const KPt& getPt()const { return center_; }
     KBoundingBox getBoundingbox()const;
     void setVal(const int& val) { val_ = val; }
@@ -44,11 +44,11 @@ public:
 private:
     void drawElips();
     void drawBox();
-
+    Handle(AIS_TextLabel) getText();
 private:
     KPt center_;
-    double size_x;
-    double size_y;
+    double size_x_;
+    double size_y_;
     int val_ = -1;//label
     enum class ObjType
     {

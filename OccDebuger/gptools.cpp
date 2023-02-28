@@ -17,6 +17,7 @@
 #include <QStringList>
 
 #include "stadfx.h"
+#include "KLine.h"
 
 #define EPSILON 0.00000001
 
@@ -336,6 +337,24 @@ gp_Pnt getEndPtEdge(TopoDS_Shape shp, gp_Pnt excludePt)
         return pt1_1;
 }
 
+//if curve is not line, may be have several result;
+//the input is line here, so only have one result
+std::vector<gp_Pnt2d> getLineCross(const gp_Lin2d& aLine1, const gp_Lin2d& aLine2)
+{
+    std::vector<gp_Pnt2d> res;
+    IntAna2d_AnaIntersection aIntAna;
+    aIntAna.Perform(aLine1, aLine2);
+    if (aIntAna.IsDone())
+    {
+        for (size_t i = 1; i <= aIntAna.NbPoints(); ++i)
+        {
+            const IntAna2d_IntPoint& pt = aIntAna.Point(i);
+            res.emplace_back(gp_Pnt2d(pt.Value().X(), pt.Value().Y()));
+        }
+    }
+    return res;
+}
+
 std::vector<TopoDS_Edge> drawAngledLineByTwoPts(const gp_Pnt& p1,
     const gp_Pnt& p2)
 {
@@ -344,6 +363,8 @@ std::vector<TopoDS_Edge> drawAngledLineByTwoPts(const gp_Pnt& p1,
 
     Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(p1, p2);
 
+    gp_Lin2d aLine1 = GCE2d_MakeLine(gp_Pnt2d(0.0, 0.0), gp_Pnt2d(10.0, 10.0)).Value()->Lin2d();
+    gp_Lin2d aLine2 = GCE2d_MakeLine(gp_Pnt2d(2.0, 10.0), gp_Pnt2d(12.0, 2.0)).Value()->Lin2d();
 
 
     return res;
