@@ -28,7 +28,7 @@ KBox::KBox(double x, double y, double sizex, double sizey, int type) :
 
 }
 
-bool KBox::isOut(const KBox& rhs)
+bool KBox::isOut(const KBox& rhs)const
 {
     double cx = (size_x + rhs.size_x) * 0.5;
     double cy = (size_y + rhs.size_y) * 0.5;
@@ -45,7 +45,7 @@ KBoundingBox KBox::getBoundingbox()const
     return KBoundingBox(lb, ur);
 }
 
-bool KBox::isCross(const KLine& line)
+bool KBox::isCross(const KLine& line)const
 {
     gp_Pnt lb(center_.x - size_x * 0.5, center_.y - size_y * 0.5, 0);
     gp_Pnt rb(center_.x + size_x * 0.5, center_.y - size_y * 0.5, 0);

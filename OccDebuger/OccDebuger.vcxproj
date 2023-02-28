@@ -136,6 +136,7 @@
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
+    <ClInclude Include="Header.h" />
     <ClInclude Include="KLine.h" />
     <ClInclude Include="linedrawer.h" />
     <ClInclude Include="gptools.h" />

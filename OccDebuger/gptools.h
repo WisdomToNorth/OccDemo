@@ -71,7 +71,7 @@ gp_Trsf strToTrsf(const std::string& str);
 gp_Trsf cpuRotZDirection(const gp_Ax2& ax2_0, const gp_Ax2& ax2_1);
 
 gp_Trsf cpuRot(const gp_Ax2& ax2_0, const gp_Ax2& ax2_1);
-
+gp_Pnt pointProjLine(gp_Pnt pt, gp_Lin lin);
 gp_Trsf cpuTrsf(const gp_Ax2& ax2_0, const gp_Ax2& ax2_1);
 
 gp_Vec moveOnDir(gp_Dir aDir, double aLength);
@@ -83,6 +83,7 @@ gp_Pnt getCenterOfPnts(const std::vector<gp_Pnt>& ori_pts);
 gp_Dir getNormalByThreePnts(const std::vector<gp_Pnt>& ori_pts);
 
 TopoDS_Edge drawLineByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2);
-
+std::vector<TopoDS_Edge> drawAngledLineByTwoPts(const gp_Pnt& p1,
+    const gp_Pnt& p2);
 }
 #endif

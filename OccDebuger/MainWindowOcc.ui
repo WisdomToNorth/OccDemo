@@ -361,6 +361,8 @@
     <addaction name="actionori_find2D"/>
     <addaction name="action_drawline"/>
     <addaction name="action_cpuline"/>
+    <addaction name="actionendCPU"/>
+    <addaction name="action_normline"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -380,12 +382,14 @@
    </attribute>
    <addaction name="actionFitAll"/>
    <addaction name="actionview"/>
+   <addaction name="actionendCPU"/>
    <addaction name="actionkd_find1D"/>
    <addaction name="actionori_find1D"/>
    <addaction name="actionkd_find2D"/>
    <addaction name="actionori_find2D"/>
    <addaction name="action_drawline"/>
    <addaction name="action_cpuline"/>
+   <addaction name="action_normline"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionGenerate">
@@ -446,6 +450,16 @@
   <action name="action_cpuline">
    <property name="text">
     <string>cpuline</string>
+   </property>
+  </action>
+  <action name="actionendCPU">
+   <property name="text">
+    <string>endCPU</string>
+   </property>
+  </action>
+  <action name="action_normline">
+   <property name="text">
+    <string>normline</string>
    </property>
   </action>
  </widget>

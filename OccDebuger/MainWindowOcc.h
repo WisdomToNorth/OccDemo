@@ -40,13 +40,14 @@ private:
 
 private slots:
     //data
+
     void on_pb_generate_pressed();
     void on_pb_valueMax_pressed();
     void on_pb_valueSmall_pressed();
     void on_pb_valueMax_unsafe_pressed();
     void on_actionFitAll_triggered();
     void on_actionview_triggered();
-
+    void on_actionendCPU_triggered();
     //unionfind
     void on_act_unionfind_ori_triggered();
     void on_act_unionfind_opt1_triggered();
@@ -61,6 +62,7 @@ private slots:
     //viewdate
     void on_action_drawline_triggered();
     void on_action_cpuline_triggered();
+    void on_action_normline_triggered();
 
 private:
     Ui::MainWindowOccClass* ui;

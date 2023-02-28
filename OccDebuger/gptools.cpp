@@ -16,18 +16,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <gp_Pnt.hxx>
-#include <gp_Trsf.hxx>
-#include <gp_Dir.hxx>
-#include <Geom_BSplineCurve.hxx>
-
-
-#include <Geom_TrimmedCurve.hxx>
-#include <GC_MakeSegment.hxx>
-#include <TopoDS_Edge.hxx>
-#include <BRepBuilderAPI_MakeEdge.hxx>
-#include <gp_Ax1.hxx>
-#include <gp_Ax2.hxx>
+#include "stadfx.h"
 
 #define EPSILON 0.00000001
 
@@ -180,6 +169,17 @@ gp_Trsf strToTrsf(const std::string& str)
     return trsf;
 }
 
+gp_Pnt pointProjLine(gp_Pnt pt, gp_Lin lin)
+{
+    gp_Vec V1(lin.Direction());
+    gp_Pnt OR = lin.Location();
+    gp_Vec V(OR, pt);
+    Standard_Real dist = V1.Dot(V);
+    gp_Pnt MyP = OR.Translated(dist * V1);
+    Extrema_POnCurv MyPOnCurv(dist, MyP);
+    return MyPOnCurv.Value();
+}
+
 gp_Pnt strToPnt(const QString& str)
 {
     const QStringList& strlist = str.split(',');
@@ -304,5 +304,48 @@ TopoDS_Edge drawLineByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2)
 {
     Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(p1, p2);
     return BRepBuilderAPI_MakeEdge(aSegment1);
+}
+
+//返回离excludePt最远的点
+gp_Pnt getEndPtEdge(TopoDS_Shape shp, gp_Pnt excludePt)
+{
+    gp_Pnt pt1_1, pt1_2;
+    if (shp.ShapeType() == TopAbs_EDGE)
+    {
+        Standard_Real first, last;
+        Handle(Geom_Curve) aCurve1 = BRep_Tool::Curve(TopoDS::Edge(shp), first, last);
+        pt1_1 = aCurve1->Value(first);
+        pt1_2 = aCurve1->Value(last);
+    }
+    else
+    {
+        TopTools_IndexedMapOfShape edgemap;
+        TopExp::MapShapes(shp, TopAbs_EDGE, edgemap);
+        Standard_Real first, last;
+        Handle(Geom_Curve) aCurve1 = BRep_Tool::Curve(TopoDS::Edge(edgemap(1)), first, last);
+        pt1_1 = aCurve1->Value(first);
+
+        Standard_Integer idx = edgemap.Extent();
+        aCurve1 = BRep_Tool::Curve(TopoDS::Edge(edgemap(idx)), first, last);
+        pt1_2 = aCurve1->Value(last);
+    }
+
+    if (excludePt.Distance(pt1_1) < excludePt.Distance(pt1_2))
+        return pt1_2;
+    else
+        return pt1_1;
+}
+
+std::vector<TopoDS_Edge> drawAngledLineByTwoPts(const gp_Pnt& p1,
+    const gp_Pnt& p2)
+{
+    std::vector<TopoDS_Edge>res;
+
+
+    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(p1, p2);
+
+
+
+    return res;
 }
 }

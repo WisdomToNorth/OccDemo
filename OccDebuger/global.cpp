@@ -21,6 +21,13 @@ namespace KDebugger
 {
 Handle(AIS_InteractiveContext) G_Context = nullptr;
 
+bool G_Stop_Program = false;//exit circulation
+
+bool GCheckCpuMode()
+{
+    QApplication::processEvents();
+    return G_Stop_Program;
+}
 unsigned long long G_CoreCount(unsigned long long datasize)
 {
     unsigned long long const min_per_thread = 25;

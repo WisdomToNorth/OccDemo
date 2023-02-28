@@ -23,8 +23,8 @@ class KBox
 public:
     KBox(double x, double y, double sizex, double sizey, int type);
 
-    bool isOut(const KBox& rhs);
-    bool isCross(const KLine& line);
+    bool isOut(const KBox& rhs)const;
+    bool isCross(const KLine& line)const;
     void mergeTest(const KBox&)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
