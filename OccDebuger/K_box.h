@@ -19,9 +19,7 @@ namespace KDebugger
 class KBox
 {
 public:
-    KBox(double x, double y, double sizex, double sizey) :
-        center_(KPt(x, y)), size_x(sizex), size_y(sizey)
-    { }
+    KBox(double x, double y, double sizex, double sizey, int type);
     bool isOut(const KBox& rhs)
     {
         double cx = (size_x + rhs.size_x) * 0.5;
@@ -43,14 +41,22 @@ public:
     double X()const { return center_.x; }
     double Y()const { return center_.y; }
     const KPt& getPt()const { return center_; }
-    double size_x;
-    double size_y;
-    int val_;//label
-
+    void setVal(const int& val) { val_ = val; }
     void show();
 
 private:
+    void drawElips();
+    void drawBox();
+private:
     KPt center_;
+    double size_x;
+    double size_y;
+    int val_ = -1;//label
+    enum class ObjType
+    {
+        Elips, Box
+    };
+    ObjType type_;
 };
 
 

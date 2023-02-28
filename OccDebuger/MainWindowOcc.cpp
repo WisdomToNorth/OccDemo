@@ -9,7 +9,7 @@
 #include <algorithm>
 
 #include <qguiapplication.h>
-#include <qscreen.h>
+#include <QScreen>
 #include <qdebug.h>
 #include <qspinbox.h>
 #include <qlabel.h>
@@ -17,6 +17,7 @@
 #include <QStatusBar>
 #include <QMenu>
 #include <QPointer>
+#include <QDesktopWidget>
 
 #include "CADView.h"
 #include "Ktimer.h"
@@ -271,7 +272,7 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
     case KDebugger::MainWindowOcc::CmdEnum::commit_draw:
     {
         if (!line_drawer_)return;
-        std::vector<gp_Pnt> res;
+        std::list<gp_Pnt> res;
         line_drawer_->commitDraw(res);
         PrePline* new_line = new PrePline(res);
         pline_vec_.push_back(new_line);
@@ -285,6 +286,7 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
     {
         if (!line_drawer_) return;
         line_drawer_->cancelDraw();
+        curmode_ = AppModeEnum::none;
         delete line_drawer_;
         line_drawer_ = nullptr;
         break;

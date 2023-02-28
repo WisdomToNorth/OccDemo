@@ -60,6 +60,7 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
     (param.defaultpar.rand_size_min, param.defaultpar.rand_size_max);//尺寸随机范围
     std::uniform_real_distribution<double> loc_rand_gen
     (param.defaultpar.rand_loc_min, param.defaultpar.rand_loc_max);//位置随机范围
+    std::uniform_int_distribution<int> type_rand_gen(0, 5);
 
     for (int i = 0; i < param.colcnt; ++i)
     {
@@ -80,8 +81,8 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
                 y_size = param.defaultpar.base_size * size_rand_gen(e);
             }
 
-            KBox l_box(stx, sty, x_size, y_size);
-            l_box.val_ = i * param.rowcnt + j;
+            KBox l_box(stx, sty, x_size, y_size, type_rand_gen(e));
+            l_box.setVal(i * param.rowcnt + j);
             buffer.emplace_back(l_box);
         }
     }

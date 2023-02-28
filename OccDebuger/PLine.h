@@ -4,6 +4,7 @@
 #include <AIS_ColoredShape.hxx>
 
 #include <vector>
+#include <list>
 
 namespace KDebugger
 {
@@ -11,7 +12,7 @@ namespace KDebugger
 class PrePline
 {
 public:
-    PrePline(const std::vector<gp_Pnt>& res) :raw_pnts_(res) { }
+    PrePline(const std::list<gp_Pnt>& res) :raw_pnts_(res) {}
 
     void draw();
 
@@ -19,7 +20,7 @@ public:
     void drawRawPnts();
 
 private:
-    std::vector<gp_Pnt> raw_pnts_;
+    std::list<gp_Pnt> raw_pnts_;
     std::vector<Handle(AIS_ColoredShape)> viewmodel_vec_;
 
 };

@@ -14,20 +14,16 @@ namespace KDebugger
 
 LineDrawer::LineDrawer(const gp_Pnt& pnt)
 {
-    pnt_vec_.emplace_back(pnt);
+    pnt_list_.emplace_back(pnt);
     cur_mode_ = Mode::init;
 }
 
 bool LineDrawer::appendLine(const gp_Pnt& new_pnt)
 {
-    const gp_Pnt last_pnt = pnt_vec_.back();
+    const gp_Pnt last_pnt = pnt_list_.back();
     if (last_pnt.IsEqual(new_pnt, 0.1))return false;
-    pnt_vec_.emplace_back(new_pnt);
+    pnt_list_.emplace_back(new_pnt);
 
-    ConsoleLog("Draw line from " + OccTools::ptToStr(last_pnt) +
-        " to " + OccTools::ptToStr(new_pnt));
-    //Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(last_pnt, new_pnt);
-    //TopoDS_Edge anEdge1 = BRepBuilderAPI_MakeEdge(aSegment1);
     TopoDS_Edge anEdge1 = OccTools::drawLineByTwoPts(last_pnt, new_pnt);
 
     Handle(AIS_ColoredShape) line = new AIS_ColoredShape(anEdge1);
@@ -39,7 +35,7 @@ bool LineDrawer::appendLine(const gp_Pnt& new_pnt)
 
 void LineDrawer::drawTempLine(const gp_Pnt& new_pnt)
 {
-    const gp_Pnt last_pnt = pnt_vec_.back();
+    const gp_Pnt last_pnt = pnt_list_.back();
     if (last_pnt.IsEqual(new_pnt, 0.1))return;
 
     TopoDS_Edge anEdge1 = OccTools::drawLineByTwoPts(last_pnt, new_pnt);
@@ -49,9 +45,9 @@ void LineDrawer::drawTempLine(const gp_Pnt& new_pnt)
     G_Context->Display(temp_line_, 1, -1, true);
 }
 
-void LineDrawer::commitDraw(std::vector<gp_Pnt>& pnts)
+void LineDrawer::commitDraw(std::list<gp_Pnt>& pnts)
 {
-    pnts.swap(pnt_vec_);
+    pnts.swap(pnt_list_);
     removeTempViewModel();
 }
 

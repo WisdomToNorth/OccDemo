@@ -2,47 +2,44 @@
 
 #include <chrono>
 #include <vector>
-#include <BRepAlgoAPI_Algo.hxx>
 #include <iostream>
 #include <ctime>
 #include <random>
+#include <algorithm>
 
-
-#include <GC_MakeArcOfCircle.hxx>
-#include <GC_MakeSegment.hxx>
-#include <BRepBuilderAPI_MakeEdge.hxx>
-#include <TopoDS_Edge.hxx>
-#include <BRepBuilderAPI_MakeWire.hxx>
-#include <TopoDS_Face.hxx>
-#include <BRepBuilderAPI_Transform.hxx>
-#include <gp_Ax2.hxx>
-#include <BRepFilletAPI_MakeFillet.hxx>
-#include <BRepBuilderAPI_MakeFace.hxx>
-#include <BRepPrimAPI_MakeCylinder.hxx>
-#include <TopoDS.hxx>
-#include <BRepPrimAPI_MakePrism.hxx>
-#include <TopExp_Explorer.hxx>
-#include <BRepAlgoAPI_Fuse.hxx>
-#include <Geom_Plane.hxx>
-#include <BRepPrimAPI_MakeBox.hxx>
-#include <BRepPrimAPI_MakeSphere.hxx>
-#include <Geom_CylindricalSurface.hxx>
-#include <BRepOffsetAPI_MakeThickSolid.hxx>
-#include <Geom2d_Ellipse.hxx>
-#include <Geom2d_TrimmedCurve.hxx>
-#include <GCE2d_MakeSegment.hxx>
-#include <BRepLib.hxx>
-#include <TopoDS_Face.hxx>
-#include <AIS_TextLabel.hxx>
-#include <AIS_Shape.hxx>
 #include <QString>
 
+#include "stadfx.h"
 #include "global.h"
 
 namespace KDebugger
 {
+KBox::KBox(double x, double y, double sizex, double sizey, int type) :
+    center_(KPt(x, y)), size_x(sizex), size_y(sizey)
+{
+    if (type / 2)
+    {
+        type_ = ObjType::Box;
+    }
+    else type_ = ObjType::Elips;
 
+}
 void KBox::show()
+{
+    switch (type_)
+    {
+    case KDebugger::KBox::ObjType::Elips:
+        drawElips();
+        break;
+    case KDebugger::KBox::ObjType::Box:
+        drawBox();
+        break;
+    default:
+        break;
+    }
+
+}
+void KBox::drawElips()
 {
     if (G_Context.IsNull()) return;
     gp_Dir dir = gp_Dir(0, 0, 1);
@@ -85,8 +82,41 @@ void KBox::show()
     {
 
     }
-
-
 }
 
+void KBox::drawBox()
+{
+    if (G_Context.IsNull()) return;
+    gp_Pnt lb = gp_Pnt(center_.x - size_x * 0.5, center_.y - size_y * 0.5, 0);
+    gp_Pnt rb = gp_Pnt(center_.x + size_x * 0.5, center_.y - size_y * 0.5, 0);
+    gp_Pnt lu = gp_Pnt(center_.x - size_x * 0.5, center_.y + size_y * 0.5, 0);
+    gp_Pnt ur = gp_Pnt(center_.x + size_x * 0.5, center_.y + size_y * 0.5, 0);
+
+    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(lb, rb);
+    Handle(Geom_TrimmedCurve) aSegment2 = GC_MakeSegment(rb, ur);
+    Handle(Geom_TrimmedCurve) aSegment3 = GC_MakeSegment(ur, lu);
+    Handle(Geom_TrimmedCurve) aSegment4 = GC_MakeSegment(lu, lb);
+    TopoDS_Edge anEdge1 = BRepBuilderAPI_MakeEdge(aSegment1);
+    TopoDS_Edge anEdge2 = BRepBuilderAPI_MakeEdge(aSegment2);
+    TopoDS_Edge anEdge3 = BRepBuilderAPI_MakeEdge(aSegment3);
+    TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
+    TopoDS_Wire aWire = BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
+
+    TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(aWire);
+    Handle(AIS_Shape) shp = new AIS_Shape(myFaceProfile);
+
+    G_Context->Display(shp, false);
+
+    const KBox& box = *this;
+    gp_Pnt cur(box.X(), box.Y(), 0);
+    Handle(AIS_TextLabel) text = new AIS_TextLabel();
+    text->SetPosition(cur);
+    std::string text_ = '{' + QString::number(this->val_).toStdString() + '}' +
+        '\n' + QString::number(box.X()).toStdString()
+        + ',' + QString::number(box.Y()).toStdString();
+    text->SetText(text_.c_str());
+    text->SetColor(Quantity_NOC_BLACK);
+    text->SetFont("consolas");
+    G_Context->Display(text, false);
+}
 }

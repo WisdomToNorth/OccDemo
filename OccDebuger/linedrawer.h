@@ -4,6 +4,7 @@
 #include <vector>
 #include <gp_Pnt.hxx>
 #include <AIS_ColoredShape.hxx>
+#include <list>
 
 namespace KDebugger
 {
@@ -28,9 +29,9 @@ private:
 
 public:
     LineDrawer(const gp_Pnt& pnt);
-    ~LineDrawer() { }
+    ~LineDrawer() {}
 
-    void commitDraw(std::vector<gp_Pnt>& pnts);
+    void commitDraw(std::list<gp_Pnt>& pnts);
 
     void cancelDraw();
     void removeTempViewModel();
@@ -40,7 +41,7 @@ public:
 private:
 
     Mode cur_mode_;
-    std::vector<gp_Pnt> pnt_vec_;
+    std::list<gp_Pnt> pnt_list_;
     std::vector<Handle(AIS_ColoredShape)> viewmodel_vec_;
     Handle(AIS_ColoredShape) temp_line_;
 };

@@ -52,7 +52,9 @@
     <ClCompile Include="statusinfowidget.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="PLine.cpp" />
+    <ClCompile Include="PLine.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -102,10 +104,10 @@
     <ClInclude Include="gptools.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="PLine.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OccDebuger.rc" />
+    <ClInclude Include="PLine.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="stadfx.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="iwConsole.h">
@@ -123,12 +125,6 @@
     <QtMoc Include="statusinfowidget.h">
       <Filter>UI</Filter>
     </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="OccDebuger.qrc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="OccDebuger.ico" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DataStructure">
@@ -149,8 +145,8 @@
     <Filter Include="Manner">
       <UniqueIdentifier>{c5c47d15-f3a0-4ac8-afd8-5bc10ddff02b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Viewdata">
-      <UniqueIdentifier>{ac958943-c4e8-491e-9719-abd51bba540e}</UniqueIdentifier>
+    <Filter Include="resource">
+      <UniqueIdentifier>{6d2e76e6-edd3-453e-a04c-d6d88515dc72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -160,5 +156,20 @@
     <QtUic Include="statusinfowidget.ui">
       <Filter>UI</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OccDebuger.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OccDebuger.ico">
+      <Filter>resource</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="OccDebuger.qrc">
+      <Filter>resource</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

@@ -141,6 +141,7 @@
     <ClInclude Include="KLogger.h" />
     <ClInclude Include="kd_search.h" />
     <QtMoc Include="statusinfowidget.h" />
+    <ClInclude Include="stadfx.h" />
     <ClInclude Include="unionset.h" />
     <QtMoc Include="CADView.h" />
     <ClInclude Include="K_box.h" />
