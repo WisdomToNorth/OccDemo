@@ -1,4 +1,4 @@
-#include "PLine.h"
+#include "PreLine.h"
 
 #include "gptools.h"
 
@@ -7,6 +7,11 @@
 
 namespace KDebugger
 {
+PrePline::PrePline(const std::list<gp_Pnt>& res) :
+    raw_pnts_(res), aabbox_(KBoundingBox(res.front()))
+{
+
+}
 
 void PrePline::draw()
 {
@@ -42,5 +47,27 @@ void PrePline::hide()
         G_Context->Remove(obj, false);
     }
     G_Context->UpdateCurrentViewer();
+}
+
+void PrePline::updateAABB()
+{
+    for (const auto& pt : raw_pnts_)
+    {
+        aabbox_.update(KPt(pt.X(), pt.Y()));
+    }
+}
+
+void PrePline::reGenerate(const std::vector<KBox>& context_info)
+{
+    updateAABB();
+    std::vector<KBox> adjacent_objs_;
+    for (const auto& obj : context_info)
+    {
+        if (!obj.getBoundingbox().isOut(aabbox_))
+        {
+            adjacent_objs_.emplace_back(obj);
+        }
+    }
+    std::cout << "\nCount of adjacent obj: " << adjacent_objs_.size() << std::endl;
 }
 }

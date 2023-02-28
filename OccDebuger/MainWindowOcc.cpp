@@ -31,7 +31,7 @@
 #include "ui_MainWindowOcc.h"
 #include "statusinfowidget.h"
 #include "linedrawer.h"
-#include "PLine.h"
+#include "PreLine.h"
 
 namespace KDebugger
 {
@@ -78,6 +78,16 @@ MainWindowOcc::~MainWindowOcc()
 void MainWindowOcc::on_action_drawline_triggered()
 {
     curmode_ = AppModeEnum::draw_line;
+}
+
+void MainWindowOcc::on_action_cpuline_triggered()
+{
+    const std::vector<KBox>& context_info = data_generator_->getData();
+    for (auto& obj : preline_vec_)
+    {
+        obj->reGenerate(context_info);
+    }
+
 }
 
 void MainWindowOcc::handleLeftPress(const double& _1, const double& _2)
@@ -275,7 +285,8 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
         std::list<gp_Pnt> res;
         line_drawer_->commitDraw(res);
         PrePline* new_line = new PrePline(res);
-        pline_vec_.push_back(new_line);
+        preline_vec_.push_back(new_line);
+        // preline_vec_.push_back(new_line);
         new_line->drawRawPnts();
         curmode_ = AppModeEnum::none;
         delete line_drawer_;

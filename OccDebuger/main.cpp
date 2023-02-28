@@ -9,15 +9,18 @@
 #include <map>
 #include <algorithm>
 
-#include "lc_struct.h"
+#include "test_datastructure.h"
 
-using namespace std;
-
-int main(int argc, char* argv [])
+int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     KDebugger::MainWindowOcc w;
     w.show();
 
     return a.exec();
+
+    //using namespace KDebugger;
+    //KTest te;
+    //te.testLineCross();
+    //return 0;
 }

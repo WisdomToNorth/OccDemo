@@ -16,19 +16,15 @@ class AIS_Shape;
 
 namespace KDebugger
 {
+class KLine;
+class KBoundingBox;
 class KBox
 {
 public:
     KBox(double x, double y, double sizex, double sizey, int type);
-    bool isOut(const KBox& rhs)
-    {
-        double cx = (size_x + rhs.size_x) * 0.5;
-        double cy = (size_y + rhs.size_y) * 0.5;
 
-        if (abs(rhs.center_.x - center_.x) > cx || abs(rhs.center_.y - center_.y) > cy)
-            return true;
-        else return false;
-    }
+    bool isOut(const KBox& rhs);
+    bool isCross(const KLine& line);
     void mergeTest(const KBox&)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -41,12 +37,14 @@ public:
     double X()const { return center_.x; }
     double Y()const { return center_.y; }
     const KPt& getPt()const { return center_; }
+    KBoundingBox getBoundingbox()const;
     void setVal(const int& val) { val_ = val; }
     void show();
 
 private:
     void drawElips();
     void drawBox();
+
 private:
     KPt center_;
     double size_x;

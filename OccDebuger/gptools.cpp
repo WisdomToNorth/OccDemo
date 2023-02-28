@@ -29,6 +29,8 @@
 #include <gp_Ax1.hxx>
 #include <gp_Ax2.hxx>
 
+#define EPSILON 0.00000001
+
 namespace OccTools
 {
 

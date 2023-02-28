@@ -12,7 +12,6 @@
 #pragma warning(disable : 26451)
 #pragma warning(disable : 4267) 
 
-#define EPSILON 0.00000001
 
 #include <iomanip> 
 

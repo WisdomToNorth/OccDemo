@@ -65,6 +65,11 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -93,13 +98,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BinSearchNode.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="CADView.cpp" />
     <ClCompile Include="CustomQlistWidget.cpp" />
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
+    <ClCompile Include="KLine.cpp" />
     <ClCompile Include="linedrawer.cpp" />
     <ClCompile Include="gptools.cpp" />
-    <ClCompile Include="PLine.cpp" />
+    <ClCompile Include="PreLine.cpp" />
     <ClCompile Include="public_function.cpp" />
     <ClCompile Include="kd_search.cpp" />
     <ClCompile Include="K_box.cpp" />
@@ -111,6 +118,7 @@
     <ClCompile Include="MultiUniset.cpp" />
     <ClCompile Include="KLogger.cpp" />
     <ClCompile Include="statusinfowidget.cpp" />
+    <ClCompile Include="test_datastructure.cpp" />
     <QtRcc Include="OccDebuger.qrc" />
     <QtUic Include="MainWindowOcc.ui" />
     <ClCompile Include="main.cpp" />
@@ -125,11 +133,13 @@
     <QtMoc Include="iwConsole.h" />
     <QtMoc Include="CustomQlistWidget.h" />
     <ClInclude Include="BinSearchNode.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
+    <ClInclude Include="KLine.h" />
     <ClInclude Include="linedrawer.h" />
     <ClInclude Include="gptools.h" />
-    <ClInclude Include="PLine.h" />
+    <ClInclude Include="PreLine.h" />
     <ClInclude Include="public_function.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="iwLog.h" />
@@ -142,6 +152,7 @@
     <ClInclude Include="kd_search.h" />
     <QtMoc Include="statusinfowidget.h" />
     <ClInclude Include="stadfx.h" />
+    <ClInclude Include="test_datastructure.h" />
     <ClInclude Include="unionset.h" />
     <QtMoc Include="CADView.h" />
     <ClInclude Include="K_box.h" />

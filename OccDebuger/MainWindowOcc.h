@@ -60,6 +60,7 @@ private slots:
 
     //viewdate
     void on_action_drawline_triggered();
+    void on_action_cpuline_triggered();
 
 private:
     Ui::MainWindowOccClass* ui;
@@ -74,7 +75,7 @@ private:
 
     AppModeEnum curmode_ = AppModeEnum::none;
 
-    std::vector<PrePline*> pline_vec_;
+    std::vector<PrePline*> preline_vec_;
     enum class CmdEnum
     {
         commit_draw,

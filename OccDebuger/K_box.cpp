@@ -8,9 +8,12 @@
 #include <algorithm>
 
 #include <QString>
+#include <GCPnts_UniformAbscissa.hxx>
 
 #include "stadfx.h"
 #include "global.h"
+#include "KLine.h"
+#include "BoundingBox.h"
 
 namespace KDebugger
 {
@@ -24,6 +27,35 @@ KBox::KBox(double x, double y, double sizex, double sizey, int type) :
     else type_ = ObjType::Elips;
 
 }
+
+bool KBox::isOut(const KBox& rhs)
+{
+    double cx = (size_x + rhs.size_x) * 0.5;
+    double cy = (size_y + rhs.size_y) * 0.5;
+
+    if (abs(rhs.center_.x - center_.x) > cx || abs(rhs.center_.y - center_.y) > cy)
+        return true;
+    else return false;
+}
+
+KBoundingBox KBox::getBoundingbox()const
+{
+    KPt lb(center_.x - size_x * 0.5, center_.y - size_y * 0.5);
+    KPt ur(center_.x + size_x * 0.5, center_.y + size_y * 0.5);
+    return KBoundingBox(lb, ur);
+}
+
+bool KBox::isCross(const KLine& line)
+{
+    gp_Pnt lb(center_.x - size_x * 0.5, center_.y - size_y * 0.5, 0);
+    gp_Pnt rb(center_.x + size_x * 0.5, center_.y - size_y * 0.5, 0);
+    gp_Pnt lu(center_.x - size_x * 0.5, center_.y + size_y * 0.5, 0);
+    gp_Pnt ur(center_.x + size_x * 0.5, center_.y + size_y * 0.5, 0);
+    KLine l1(lb, rb), l2(lb, lu), l3(rb, ur), l4(lu, ur);
+    return l1.isCross(line) || l2.isCross(line) ||
+        l3.isCross(line) || l4.isCross(line);
+}
+
 void KBox::show()
 {
     switch (type_)
@@ -100,6 +132,7 @@ void KBox::drawBox()
     TopoDS_Edge anEdge2 = BRepBuilderAPI_MakeEdge(aSegment2);
     TopoDS_Edge anEdge3 = BRepBuilderAPI_MakeEdge(aSegment3);
     TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
+
     TopoDS_Wire aWire = BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
 
     TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(aWire);
@@ -119,4 +152,5 @@ void KBox::drawBox()
     text->SetFont("consolas");
     G_Context->Display(text, false);
 }
+
 }

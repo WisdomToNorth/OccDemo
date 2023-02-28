@@ -52,9 +52,14 @@
     <ClCompile Include="statusinfowidget.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="PLine.cpp">
+    <ClCompile Include="PreLine.cpp">
       <Filter>Manner</Filter>
     </ClCompile>
+    <ClCompile Include="KLine.cpp" />
+    <ClCompile Include="test_datastructure.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -104,10 +109,15 @@
     <ClInclude Include="gptools.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="PLine.h">
+    <ClInclude Include="PreLine.h">
       <Filter>Manner</Filter>
     </ClInclude>
     <ClInclude Include="stadfx.h" />
+    <ClInclude Include="KLine.h" />
+    <ClInclude Include="test_datastructure.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="iwConsole.h">
