@@ -303,7 +303,7 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
         PrePline* new_line = new PrePline(res);
         preline_vec_.push_back(new_line);
 
-        new_line->drawPnts();
+        new_line->drawRawPnts();
         curmode_ = AppModeEnum::none;
         delete line_drawer_;
         line_drawer_ = nullptr;

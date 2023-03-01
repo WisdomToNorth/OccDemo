@@ -85,8 +85,11 @@ gp_Pnt getCenterOfPnts(const std::vector<gp_Pnt>& ori_pts);
 gp_Dir getNormalByThreePnts(const std::vector<gp_Pnt>& ori_pts);
 
 TopoDS_Edge drawLineByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2);
-std::vector<TopoDS_Edge> drawAngledLineByTwoPts(const gp_Pnt& p1,
-    const gp_Pnt& p2);
+
+//range of angle: (0~90)
+//return: pnts: pA,pB,pC,pD
+std::vector<gp_Pnt> drawAngledLineByTwoPts(gp_Pnt pA,
+    gp_Pnt pB, const double& angle = 45.0);
 
 //if curve is not line, may be have several result;
 //the input is line here, so only have one result

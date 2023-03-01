@@ -24,7 +24,8 @@ public:
     KBox(double x, double y, double sizex, double sizey, int type);
 
     bool isOut(const KBox& rhs)const;
-    bool isCross(const KLine& line)const;
+    bool isCrossWith(const KLine& line)const;
+    bool isCrossWithVal(KLine line);
     void mergeTest(const KBox&)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -34,8 +35,6 @@ public:
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
-    //double X()const { return center_.x; }
-    //double Y()const { return center_.y; }
     const KPt& getPt()const { return center_; }
     KBoundingBox getBoundingbox()const;
     void setVal(const int& val) { val_ = val; }

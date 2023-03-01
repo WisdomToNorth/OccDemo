@@ -55,11 +55,19 @@
     <ClCompile Include="PreLine.cpp">
       <Filter>Manner</Filter>
     </ClCompile>
-    <ClCompile Include="KLine.cpp" />
     <ClCompile Include="test_datastructure.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
     <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="mathUtils.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="KLine.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="KAngleMultiLine.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -113,11 +121,19 @@
       <Filter>Manner</Filter>
     </ClInclude>
     <ClInclude Include="stadfx.h" />
-    <ClInclude Include="KLine.h" />
     <ClInclude Include="test_datastructure.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="mathUtils.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="KLine.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="KAngleMultiLine.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="iwConsole.h">

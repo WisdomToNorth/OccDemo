@@ -46,7 +46,17 @@ KBoundingBox KBox::getBoundingbox()const
     return KBoundingBox(lb, ur);
 }
 
-bool KBox::isCross(const KLine& line)const
+bool KBox::isCrossWithVal(KLine line)
+{
+    gp_Pnt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
+    gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
+    gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
+    gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
+    KLine l1(lb, rb), l2(lb, lu), l3(rb, ur), l4(lu, ur);
+    return l1.isCross(line) || l2.isCross(line) ||
+        l3.isCross(line) || l4.isCross(line);
+}
+bool KBox::isCrossWith(const KLine& line)const
 {
     gp_Pnt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
     gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
@@ -62,7 +72,8 @@ void KBox::show()
     switch (type_)
     {
     case KDebugger::KBox::ObjType::Elips:
-        drawElips();
+        // drawElips();
+        drawBox();
         break;
     case KDebugger::KBox::ObjType::Box:
         drawBox();

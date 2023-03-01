@@ -18,6 +18,7 @@
 
 #include "stadfx.h"
 #include "KLine.h"
+#include "mathUtils.h"
 
 #define EPSILON 0.00000001
 
@@ -355,17 +356,45 @@ std::vector<gp_Pnt2d> getLineCross(const gp_Lin2d& aLine1, const gp_Lin2d& aLine
     return res;
 }
 
-std::vector<TopoDS_Edge> drawAngledLineByTwoPts(const gp_Pnt& p1,
-    const gp_Pnt& p2)
+std::vector<gp_Pnt> drawAngledLineByTwoPts(gp_Pnt pA,
+    gp_Pnt pB, const double& angle)//todo: handle divide 0
 {
-    std::vector<TopoDS_Edge>res;
+    double arc = angle * M_PI / 180.0;
+    double tan_a = std::tan(arc);
+    std::vector<gp_Pnt>res;// { pA, pB };
+    if (pA.X() > pB.X())//confirm A is left to B
+    {
+        gp_Pnt temp = pA;
+        pA = pB;
+        pB = temp;
+    }
+    double dx = std::abs(pB.X() - pA.X());
+    double dy = std::abs(pB.Y() - pA.Y());
 
-
-    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(p1, p2);
-
-    gp_Lin2d aLine1 = GCE2d_MakeLine(gp_Pnt2d(0.0, 0.0), gp_Pnt2d(10.0, 10.0)).Value()->Lin2d();
-    gp_Lin2d aLine2 = GCE2d_MakeLine(gp_Pnt2d(2.0, 10.0), gp_Pnt2d(12.0, 2.0)).Value()->Lin2d();
-
+    if (fequal(dx, 0.0, EPSILON) || fequal(dy, 0.0, EPSILON) || dy / dx == tan_a)
+    {
+        return res;
+    }
+    else if (dy / dx < tan_a)
+    {
+        res.push_back(gp_Pnt(pB.X() - dy / tan_a, pA.Y(), 0));
+        res.push_back(gp_Pnt(pA.X() + dy / tan_a, pB.Y(), 0));
+    }
+    else//dy/dx>tan_a
+    {
+        if (pB.Y() > pA.Y())
+        {
+            res.push_back(gp_Pnt(pB.X(), pA.Y() + dx / tan_a, 0));
+            res.push_back(gp_Pnt(pA.X(), pB.Y() - dx / tan_a, 0));
+        }
+        else
+        {
+            res.push_back(gp_Pnt(pB.X(), pA.Y() - dx / tan_a, 0));
+            res.push_back(gp_Pnt(pA.X(), pB.Y() + dx / tan_a, 0));
+        }
+    }
+    std::cout << "\nptC:" << ptToStr(res.front()) << std::endl;
+    std::cout << "ptD:" << ptToStr(res.back()) << std::endl;
 
     return res;
 }

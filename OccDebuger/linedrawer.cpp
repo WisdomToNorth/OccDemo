@@ -20,6 +20,7 @@ LineDrawer::LineDrawer(const gp_Pnt& pnt)
 
 bool LineDrawer::appendLine(const gp_Pnt& new_pnt)
 {
+    //todo: not all new pnts append here
     const gp_Pnt last_pnt = pnt_list_.back();
     if (last_pnt.IsEqual(new_pnt, 0.1))return false;
     pnt_list_.emplace_back(new_pnt);
