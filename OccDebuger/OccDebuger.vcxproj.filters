@@ -68,6 +68,9 @@
     <ClCompile Include="KAngleMultiLine.cpp">
       <Filter>Manner</Filter>
     </ClCompile>
+    <ClCompile Include="shapetools.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="KAngleMultiLine.h">
       <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="shapetools.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

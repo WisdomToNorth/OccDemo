@@ -6,6 +6,11 @@
 #include "global.h"
 #include "KLine.h"
 #include "KAngleMultiLine.h"
+#include "shapetools.h"
+#include "stadfx.h"
+
+#include "K_box.h"
+#include <GC_MakeArcOfCircle.hxx>
 
 namespace KDebugger
 {
@@ -17,7 +22,6 @@ PrePline::PrePline(const std::list<gp_Pnt>& res) :
 
 void PrePline::drawRawPnts(Quantity_Color color)
 {
-
     auto cur = raw_pnts_.begin();
     auto cur_next = raw_pnts_.begin();
     std::advance(cur_next, 1);
@@ -37,67 +41,43 @@ void PrePline::drawRawPnts(Quantity_Color color)
     G_Context->UpdateCurrentViewer();
 }
 
-void PrePline::drawPnts(Quantity_Color color)
+void PrePline::postProcessLine()
 {
+    //auto cur = multiline_list_.begin();
+    //auto cur_next = multiline_list_.begin();
+    //std::advance(cur_next, 1);
+    //while (cur_next != multiline_list_.end())
+    //{
+    //    if (!cur_next->checkBetterRes(*cur))
+    //    {
+    //        std::cout << "need a better res!\n";
+    //    }
+    //    ++cur;
+    //    ++cur_next;
+    //}
+}
 
-    auto cur = raw_pnts_.begin();
-    auto cur_next = raw_pnts_.begin();
-    std::advance(cur_next, 1);
-
-    while (cur_next != raw_pnts_.end())
+void PrePline::drawMultiLine(Quantity_Color)
+{
+    auto cur = multiline_list_.begin();
+    while (cur != multiline_list_.end())
     {
-        if (cur->IsEqual(*cur_next, 0.01))
+        if (cur->resSize())
         {
-            cur++;
-            cur_next++;
-            continue;
+            auto color = OccTools::getRandomColor();
+            const std::vector<TopoDS_Edge>& edges = cur->getEdge();
 
-        }
-
-        KAngleMultiLine to_check(*cur, *cur_next);
-        to_check.cpuAvailable(45);
-
-        for (const KBox& obj : adjacent_objs_)
-        {
-            to_check.checkColli(obj);
-        }
-        if (to_check.resSize())
-        {
-            gp_Pnt mid = to_check.getRes();
-            if (!cur->IsEqual(mid, 0.01))
+            for (const auto& edge : edges)
             {
-                TopoDS_Edge e1 = OccTools::drawLineByTwoPts(*cur, mid);
-                Handle(AIS_ColoredShape) line = new AIS_ColoredShape(e1);
+                Handle(AIS_ColoredShape) line = new AIS_ColoredShape(edge);
                 line->SetWidth(3.0);
                 line->SetColor(color);
                 G_Context->Display(line, false);
                 viewmodel_vec_.push_back(line);
             }
-            if (!cur_next->IsEqual(mid, 0.01))
-            {
-                TopoDS_Edge e2 = OccTools::drawLineByTwoPts(mid, *cur_next);
-
-                Handle(AIS_ColoredShape) line2 = new AIS_ColoredShape(e2);
-                line2->SetWidth(3.0);
-                line2->SetColor(color);
-                G_Context->Display(line2, false);
-                viewmodel_vec_.push_back(line2);
-            }
+            cur++;
         }
-        else
-        {
-
-            TopoDS_Edge e1 = OccTools::drawLineByTwoPts(*cur, *cur_next);
-            Handle(AIS_ColoredShape) line = new AIS_ColoredShape(e1);
-            line->SetWidth(3.0);
-            line->SetColor(color);
-            G_Context->Display(line, false);
-            viewmodel_vec_.push_back(line);
-        }
-        cur++;
-        cur_next++;
     }
-
     G_Context->UpdateCurrentViewer();
 }
 
@@ -116,6 +96,13 @@ void PrePline::updateColor(Quantity_Color color)
     {
         obj->SetColor(color);
     }
+}
+
+void PrePline::updatePreviousColor(Quantity_Color color)
+{
+    updateColor();
+    std::vector<Handle(AIS_ColoredShape)> viewmodel_vec;
+    viewmodel_vec_.swap(viewmodel_vec_);
 }
 
 void PrePline::updateAABB()
@@ -140,46 +127,8 @@ void PrePline::printAllPts()
 
 void PrePline::normlizeSegment()
 {
-    printAllPts();
-    auto cur = raw_pnts_.begin();
-    auto cur_next = raw_pnts_.begin();
-    std::advance(cur_next, 1);
-
-    while (cur_next != raw_pnts_.end())
-    {
-        const std::vector<gp_Pnt>& pnts = OccTools::drawAngledLineByTwoPts(*cur, *cur_next);
-        if (pnts.empty())//vertical or horizon
-        {
-            /*TopoDS_Edge edge = OccTools::drawLineByTwoPts(pnts[0], pnts[1]);
-            Handle(AIS_ColoredShape) line = new AIS_ColoredShape(edge);
-            line->SetWidth(3.0);
-            G_Context->Display(line, false);
-            viewmodel_vec_.push_back(line);*/
-            cur++;
-            cur_next++;
-        }
-        else//size == 4
-        {
-
-            std::cout << "\nbefore insert: " << OccTools::ptToStr(*cur) << std::endl;
-            std::cout << "next before insert: " << OccTools::ptToStr(*cur_next) << std::endl;
-            std::cout << "insert: " << OccTools::ptToStr(pnts[0]) << std::endl;
-            cur++;
-            raw_pnts_.insert(cur, pnts[0]);
-            std::cout << "after insert: " << OccTools::ptToStr(*cur) << std::endl;
-            std::cout << "next after insert: " << OccTools::ptToStr(*cur_next) << std::endl;
-            //cur++;
-            cur_next++;
-            printAllPts();
-        }
-    }
-    std::cout << "\nAfter insert: ";
-
-    this->updateColor();
-    std::vector<Handle(AIS_ColoredShape)> viewmodel_vec;
-    viewmodel_vec_.swap(viewmodel_vec_);
-    this->drawPnts();
-    G_Context->UpdateCurrentViewer();
+    opt_open_ = opt_open_ == true ? false : true;
+    std::cout << "optimize is " << opt_open_ << std::endl;
 }
 
 void PrePline::caculateEnviroment(const std::vector<KBox>& context_info)
@@ -200,56 +149,76 @@ void PrePline::reGenerate(const std::vector<KBox>& context_info)
 {
     caculateEnviroment(context_info);
 
-    std::list<gp_Pnt>pline_pnt;
+    std::list<KAngleMultiLine>temp_newpnt;
+    multiline_list_.swap(temp_newpnt);
 
     auto cur_vertax = raw_pnts_.begin();
-    pline_pnt.emplace_back(*cur_vertax);
+    // multiline_list_.emplace_back(*cur_vertax);
 
     auto cur_next = raw_pnts_.begin();
     cur_next++;
 
+    KAngleMultiLine last_check(*cur_vertax, *cur_next);
     while (cur_next != raw_pnts_.end())
     {
+        //for debug, break endless loop
+        if (GCheckCpuMode())return;
 
-        if (GCheckCpuMode())return;//for debug
+        //KBox box1 = KBox(double(cur_vertax->X()), double(cur_vertax->Y()),
+        //    0.1, 0.1, 1);
+        //KBox box2 = KBox(double(cur_next->X()), double(cur_next->Y()),
+        //    0.1, 0.1, 1);
+        //box1.tempshow();
+        //box2.tempshow();
 
         bool colli = false;
-        KAngleMultiLine to_check(*cur_vertax, *cur_next);
-        to_check.cpuAvailable(45);
+        KAngleMultiLine cur_check(*cur_vertax, *cur_next);
+        cur_check.cpuAvailable(45);
 
         for (const KBox& obj : adjacent_objs_)
         {
-            if (to_check.checkColli(obj))
+            if ((!obj.outBoxWithSpacing(KPt(cur_vertax->X(), cur_vertax->Y()))) ||
+                (!obj.outBoxWithSpacing(KPt(cur_next->X(), cur_next->Y()))))
+            {
+                std::cout << "pnt in box! unhandled!\n";
+                return;//TODO: draw in box is unhandled currently
+            }
+
+
+            if (cur_check.checkColli(obj))
+                //碰撞，或者与上一条line呈小夹角，则记录当前的上一个点。
             {
                 colli = true;
-                std::cout << "\ncrash vertax: "
-                    << OccTools::ptToStr(*cur_next)
-                    << std::endl;
                 break;
             }
         }
         if (!colli)//
         {
             cur_next++;
-            std::cout << "\n##";
+            last_check = cur_check;
         }
-        else
+        else//collision
         {
             auto temp = cur_next;
             temp--;
+
             cur_vertax = temp;
-            pline_pnt.emplace_back(*cur_vertax);
-            std::cout << "\nvertax: " << OccTools::ptToStr(*cur_vertax)
-                << std::endl;
+
+            multiline_list_.push_back(last_check);
+            //last_check = cur_check;
+            have_tried_ = false;
+
         }
     }
-    pline_pnt.emplace_back(raw_pnts_.back());
+    multiline_list_.emplace_back(last_check);
 
-    raw_pnts_.swap(pline_pnt);
+    //if (opt_open_)
+    //{
+    //    std::cout << "optimize is on\n";
+    //    postProcessLine();
+    //}
 
-    this->updateColor();
-    std::vector<Handle(AIS_ColoredShape)> viewmodel_vec;
-    viewmodel_vec_.swap(viewmodel_vec_);
-    this->drawPnts();
+    this->updatePreviousColor();//colored previous to gray
+    this->drawMultiLine();
 }
 }

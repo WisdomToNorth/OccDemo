@@ -2,6 +2,7 @@
 
 #include "K_Pnt.h"
 #include "K_box.h"
+#include "KLine.h"
 
 class gp_Pnt;
 namespace KDebugger
@@ -16,6 +17,7 @@ public:
     KBoundingBox(const KBox& box);
     bool isOut(const KBoundingBox& rhs)const;
     void update(const KPt& lb);
+    bool isCrossKLine(const KLine& line)const;
 
 private:
     KPt lb_;

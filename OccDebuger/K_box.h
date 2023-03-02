@@ -11,21 +11,24 @@
 #include <TopoDS_Face.hxx>
 
 #include "K_Pnt.h"
-
+#include "KLine.h"
 class AIS_Shape;
 
 namespace KDebugger
 {
-class KLine;
+
 class KBoundingBox;
 class KBox
 {
 public:
-    KBox(double x, double y, double sizex, double sizey, int type);
 
+    KBox(double x, double y, double sizex, double sizey, int type);
+    ~KBox();
     bool isOut(const KBox& rhs)const;
-    bool isCrossWith(const KLine& line)const;
-    bool isCrossWithVal(KLine line);
+    bool outBox(const KPt& pt)const;
+    bool outBoxWithSpacing(const KPt& pt)const;
+    bool isCrossWithKLine(const KLine& line)const;
+    bool isCrossWithKLineWithSpace(const KLine& line)const;
     void mergeTest(const KBox&)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -37,23 +40,29 @@ public:
 
     const KPt& getPt()const { return center_; }
     KBoundingBox getBoundingbox()const;
+    KBoundingBox getSpaceBoundingbox()const;
     void setVal(const int& val) { val_ = val; }
     void show();
-
+    void tempshow();
+    void temphide();
 private:
     void drawElips();
     void drawBox();
+    void drawSpacingBox();
     Handle(AIS_TextLabel) getText();
+
 private:
     KPt center_;
     double size_x_;
     double size_y_;
+    double space_ = 0.15;
     int val_ = -1;//label
     enum class ObjType
     {
         Elips, Box
     };
     ObjType type_;
+    Handle(AIS_Shape) temp_obj_ = nullptr;
 };
 
 

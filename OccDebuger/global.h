@@ -5,11 +5,16 @@
 #include <vector>
 #include <QString>
 #include <QApplication>
+#include <random>
+
 namespace KDebugger
 {
 extern Handle(AIS_InteractiveContext) G_Context;
 
+extern std::default_random_engine G_Random_Engine;
+
 extern bool G_Stop_Program;//exit circulation
+
 bool GCheckCpuMode();
 unsigned long long G_CoreCount(unsigned long long datasize);
 

@@ -119,6 +119,7 @@
     <ClCompile Include="MainWindowOcc.cpp" />
     <ClCompile Include="MultiUniset.cpp" />
     <ClCompile Include="KLogger.cpp" />
+    <ClCompile Include="shapetools.cpp" />
     <ClCompile Include="statusinfowidget.cpp" />
     <ClCompile Include="test_datastructure.cpp" />
     <QtRcc Include="OccDebuger.qrc" />
@@ -155,6 +156,7 @@
     <ClInclude Include="KLogger.h" />
     <ClInclude Include="kd_search.h" />
     <QtMoc Include="statusinfowidget.h" />
+    <ClInclude Include="shapetools.h" />
     <ClInclude Include="stadfx.h" />
     <ClInclude Include="test_datastructure.h" />
     <ClInclude Include="unionset.h" />

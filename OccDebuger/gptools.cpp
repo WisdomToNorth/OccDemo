@@ -356,46 +356,4 @@ std::vector<gp_Pnt2d> getLineCross(const gp_Lin2d& aLine1, const gp_Lin2d& aLine
     return res;
 }
 
-std::vector<gp_Pnt> drawAngledLineByTwoPts(gp_Pnt pA,
-    gp_Pnt pB, const double& angle)//todo: handle divide 0
-{
-    double arc = angle * M_PI / 180.0;
-    double tan_a = std::tan(arc);
-    std::vector<gp_Pnt>res;// { pA, pB };
-    if (pA.X() > pB.X())//confirm A is left to B
-    {
-        gp_Pnt temp = pA;
-        pA = pB;
-        pB = temp;
-    }
-    double dx = std::abs(pB.X() - pA.X());
-    double dy = std::abs(pB.Y() - pA.Y());
-
-    if (fequal(dx, 0.0, EPSILON) || fequal(dy, 0.0, EPSILON) || dy / dx == tan_a)
-    {
-        return res;
-    }
-    else if (dy / dx < tan_a)
-    {
-        res.push_back(gp_Pnt(pB.X() - dy / tan_a, pA.Y(), 0));
-        res.push_back(gp_Pnt(pA.X() + dy / tan_a, pB.Y(), 0));
-    }
-    else//dy/dx>tan_a
-    {
-        if (pB.Y() > pA.Y())
-        {
-            res.push_back(gp_Pnt(pB.X(), pA.Y() + dx / tan_a, 0));
-            res.push_back(gp_Pnt(pA.X(), pB.Y() - dx / tan_a, 0));
-        }
-        else
-        {
-            res.push_back(gp_Pnt(pB.X(), pA.Y() - dx / tan_a, 0));
-            res.push_back(gp_Pnt(pA.X(), pB.Y() + dx / tan_a, 0));
-        }
-    }
-    std::cout << "\nptC:" << ptToStr(res.front()) << std::endl;
-    std::cout << "ptD:" << ptToStr(res.back()) << std::endl;
-
-    return res;
-}
 }

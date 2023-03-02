@@ -247,6 +247,8 @@ void MainWindowOcc::on_pb_generate_pressed()
     param.rowcnt = ui->sb_row->value();
     param.seed = ui->sb_seed->value();
 
+    G_Random_Engine.seed(param.seed);
+
     param.dis = ui->dsb_distance->value();
     param.precision = ui->sb_precision->value();
     param.w_h_same = ui->cb_wh_same->isChecked();

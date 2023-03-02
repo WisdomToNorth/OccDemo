@@ -1,21 +1,5 @@
 ﻿#include "CadView.h"
 
-#include <AIS_InteractiveContext.hxx>
-#include <V3d_View.hxx>
-#include <V3d_Viewer.hxx>
-#include <AIS_ViewCube.hxx>
-#include <AIS_InteractiveContext.hxx>
-#include <OpenGl_GraphicDriver.hxx>
-#include <V3d_View.hxx>
-#include <Graphic3d_GraphicDriver.hxx>
-#include <V3d_Viewer.hxx>
-#include <AIS_TextLabel.hxx>
-#include <Prs3d_DatumAspect.hxx>
-#include <Prs3d_PlaneAspect.hxx>
-#include <AIS_Shape.hxx>
-#include <AIS_InteractiveObject.hxx>
-#include <Prs3d_TypeOfHighlight.hxx>
-
 #include <qclipboard.h>
 #include <QTimer>
 #include <QMenuBar>
@@ -30,13 +14,10 @@
 #include <qscreen.h>
 #include <QMouseEvent>
 #include <QWheelEvent>
-#include "KLogger.h"
 
-#include <AIS_ConnectedInteractive.hxx>
-#include <AIS_Trihedron.hxx>
-#include <Geom_Axis2Placement.hxx>
-#include <Graphic3d_GraphicDriver.hxx>
-#include <V3d_TypeOfOrientation.hxx>
+#include "KLogger.h"
+#include "stadfx.h"
+#include "shapetools.h"
 
 namespace KDebugger
 {
@@ -50,30 +31,6 @@ static QCursor* zoomCursor = NULL;
 static QCursor* rotCursor = NULL;
 }
 
-static Handle_AIS_Trihedron createOriginTrihedron()
-{
-    Handle_Geom_Axis2Placement axis = new Geom_Axis2Placement(gp::XOY());
-    Handle_AIS_Trihedron aisTrihedron = new AIS_Trihedron(axis);
-    aisTrihedron->SetDatumDisplayMode(Prs3d_DM_WireFrame);
-    aisTrihedron->SetDrawArrows(false);
-    aisTrihedron->Attributes()->DatumAspect()->LineAspect(Prs3d_DP_XAxis)->SetWidth(2.5);
-    aisTrihedron->Attributes()->DatumAspect()->LineAspect(Prs3d_DP_YAxis)->SetWidth(2.5);
-    aisTrihedron->Attributes()->DatumAspect()->LineAspect(Prs3d_DP_ZAxis)->SetWidth(2.5);
-    aisTrihedron->SetDatumPartColor(Prs3d_DP_XAxis, Quantity_NOC_RED2);
-    aisTrihedron->SetDatumPartColor(Prs3d_DP_YAxis, Quantity_NOC_GREEN2);
-    aisTrihedron->SetDatumPartColor(Prs3d_DP_ZAxis, Quantity_NOC_BLUE2);
-    aisTrihedron->SetLabel(Prs3d_DP_XAxis, "");
-    aisTrihedron->SetLabel(Prs3d_DP_YAxis, "");
-    aisTrihedron->SetLabel(Prs3d_DP_ZAxis, "");
-    //aisTrihedron->SetTextColor(Quantity_NOC_GRAY40);
-    aisTrihedron->SetSize(60);
-    aisTrihedron->SetTransformPersistence(
-        new Graphic3d_TransformPers(Graphic3d_TMF_ZoomPers, axis->Ax2().Location())
-    );
-    aisTrihedron->Attributes()->SetZLayer(Graphic3d_ZLayerId_Topmost);
-    aisTrihedron->SetInfiniteState(true);
-    return aisTrihedron;
-}
 CadView::CadView(QWidget* parent)
     : QWidget(parent)
 {
@@ -86,10 +43,18 @@ CadView::CadView(QWidget* parent)
 
     initContext();
     initCursors();
+
+    //text_ = new AIS_TextLabel();
+    //text_->SetPosition(gp_Pnt(5, 5, 0));
+    //text_->SetColor(Quantity_NOC_BLACK);
+    //text_->SetFont("consolas");
+
+    //context_->Display(text_, true);
 }
 
 CadView::~CadView()
-{ }
+{
+}
 
 void CadView::initCursors()
 {
@@ -135,19 +100,19 @@ void CadView::initContext()
 #endif
 
         //创建3D查看器
-        cadview_ = new V3d_Viewer(graphic_driver_);
+        viewer_ = new V3d_Viewer(graphic_driver_);
         //创建视图
-        view_ = cadview_->CreateView();
+        view_ = viewer_->CreateView();
         view_->SetWindow(wind);
         //打开窗口
         if (!wind->IsMapped())
         {
             wind->Map();
         }
-        context_ = new AIS_InteractiveContext(cadview_);  //创建交互式上下文
+        context_ = new AIS_InteractiveContext(viewer_);  //创建交互式上下文
         //配置查看器的光照
-        cadview_->SetDefaultLights();
-        cadview_->SetLightOn();
+        viewer_->SetDefaultLights();
+        viewer_->SetLightOn();
 
         //显示直角坐标系，可以配置在窗口显示位置、文字颜色、大小、样式
         view_->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_GOLD, 0.08, V3d_ZBUFFER);
@@ -190,7 +155,7 @@ void CadView::initContext()
 
 void CadView::setOriginTrihedron()
 {
-    aisOriginTrihedron_ = createOriginTrihedron();
+    aisOriginTrihedron_ = OccTools::createOriginTrihedron();
     context_->Display(aisOriginTrihedron_, false);
 }
 
@@ -205,9 +170,9 @@ void CadView::setViewCube()
 
     ais_viewcube->SetTransformPersistence(
         new Graphic3d_TransformPers(
-        Graphic3d_TMF_TriedronPers,
-        Aspect_TOTP_LEFT_UPPER,
-        Graphic3d_Vec2i(85, 85)));
+            Graphic3d_TMF_TriedronPers,
+            Aspect_TOTP_LEFT_UPPER,
+            Graphic3d_Vec2i(85, 85)));
 
     const Handle_Prs3d_DatumAspect datum_color = new Prs3d_DatumAspect();
     datum_color->ShadingAspect(Prs3d_DP_XAxis)->SetColor(Quantity_NOC_GREEN2);
@@ -402,6 +367,12 @@ void CadView::mouseMoveEvent(QMouseEvent* event)
     {
         if (moveInfoCb) moveInfoCb(x, y, z);
 
+        //todo: add text float on viewer like viewcube
+        //std::string new_text = "x:" + std::to_string(x) + "  y:" +
+        //    std::to_string(y);
+        //text_->SetText(new_text.c_str());
+        //context_->Remove(text_, false);
+        //context_->Display(text_, true);
     }
 
     const Graphic3d_Vec2i new_pos(event->pos().x(), event->pos().y());

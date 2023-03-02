@@ -13,7 +13,7 @@
 
 #include "stadfx.h"
 #include "global.h"
-#include "KLine.h"
+
 #include "BoundingBox.h"
 
 namespace KDebugger
@@ -39,34 +39,55 @@ bool KBox::isOut(const KBox& rhs)const
     else return false;
 }
 
+bool KBox::outBox(const KPt& pt)const
+{
+    double cx = (size_x_) * 0.5;
+    double cy = (size_y_) * 0.5;
+
+    if (abs(pt.x - center_.x) > cx || abs(pt.y - center_.y) > cy)
+        return true;
+    else return false;
+}
+bool KBox::outBoxWithSpacing(const KPt& pt)const
+{
+    double cx = (size_x_) * 0.5 + space_;
+    double cy = (size_y_) * 0.5 + space_;
+
+    if (abs(pt.x - center_.x) > cx || abs(pt.y - center_.y) > cy)
+        return true;
+    else return false;
+}
+
 KBoundingBox KBox::getBoundingbox()const
 {
     KPt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5);
-    KPt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5);
-    return KBoundingBox(lb, ur);
+    KPt ru(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5);
+    return KBoundingBox(lb, ru);
 }
 
-bool KBox::isCrossWithVal(KLine line)
+KBoundingBox KBox::getSpaceBoundingbox()const
 {
-    gp_Pnt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
-    gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
-    gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
-    gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
-    KLine l1(lb, rb), l2(lb, lu), l3(rb, ur), l4(lu, ur);
-    return l1.isCross(line) || l2.isCross(line) ||
-        l3.isCross(line) || l4.isCross(line);
-}
-bool KBox::isCrossWith(const KLine& line)const
-{
-    gp_Pnt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
-    gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
-    gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
-    gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
-    KLine l1(lb, rb), l2(lb, lu), l3(rb, ur), l4(lu, ur);
-    return l1.isCross(line) || l2.isCross(line) ||
-        l3.isCross(line) || l4.isCross(line);
+    KPt lb(center_.x - size_x_ * 0.5 - space_,
+        center_.y - size_y_ * 0.5 - space_);
+
+    KPt ru(center_.x + size_x_ * 0.5 + space_,
+        center_.y + size_y_ * 0.5 + space_);
+    return KBoundingBox(lb, ru);
 }
 
+bool KBox::isCrossWithKLine(const KLine& line)const
+{
+    return getBoundingbox().isCrossKLine(line);
+}
+
+bool KBox::isCrossWithKLineWithSpace(const KLine& line)const
+{
+    return getSpaceBoundingbox().isCrossKLine(line);
+}
+KBox::~KBox()
+{
+    this->temphide();
+}
 void KBox::show()
 {
     switch (type_)
@@ -74,9 +95,11 @@ void KBox::show()
     case KDebugger::KBox::ObjType::Elips:
         // drawElips();
         drawBox();
+        drawSpacingBox();
         break;
     case KDebugger::KBox::ObjType::Box:
         drawBox();
+        drawSpacingBox();
         break;
     default:
         break;
@@ -99,6 +122,7 @@ Handle(AIS_TextLabel) KBox::getText()
     return text;
 
 }
+
 void KBox::drawElips()
 {
     if (G_Context.IsNull()) return;
@@ -166,4 +190,65 @@ void KBox::drawBox()
     G_Context->Display(text, false);
 }
 
+void KBox::drawSpacingBox()
+{
+    if (G_Context.IsNull()) return;
+    gp_Pnt lb(center_.x - size_x_ * 0.5 - space_,
+        center_.y - size_y_ * 0.5 - space_, 0);
+    gp_Pnt rb(center_.x + size_x_ * 0.5 + space_,
+        center_.y - size_y_ * 0.5 - space_, 0);
+    gp_Pnt lu(center_.x - size_x_ * 0.5 - space_,
+        center_.y + size_y_ * 0.5 + space_, 0);
+    gp_Pnt ur(center_.x + size_x_ * 0.5 + space_,
+        center_.y + size_y_ * 0.5 + space_, 0);
+
+    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(lb, rb);
+    Handle(Geom_TrimmedCurve) aSegment2 = GC_MakeSegment(rb, ur);
+    Handle(Geom_TrimmedCurve) aSegment3 = GC_MakeSegment(ur, lu);
+    Handle(Geom_TrimmedCurve) aSegment4 = GC_MakeSegment(lu, lb);
+    TopoDS_Edge anEdge1 = BRepBuilderAPI_MakeEdge(aSegment1);
+    TopoDS_Edge anEdge2 = BRepBuilderAPI_MakeEdge(aSegment2);
+    TopoDS_Edge anEdge3 = BRepBuilderAPI_MakeEdge(aSegment3);
+    TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
+
+    TopoDS_Wire aWire = BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
+
+    Handle(AIS_Shape) shp = new AIS_Shape(aWire);
+    shp->SetColor(Quantity_NOC_GRAY11);
+    G_Context->Display(shp, false);
+
+    Handle(AIS_TextLabel) text = getText();
+
+    G_Context->Display(text, false);
+}
+void KBox::tempshow()
+{
+    if (G_Context.IsNull()) return;
+    gp_Pnt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
+    gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
+    gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
+    gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
+
+    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(lb, rb);
+    Handle(Geom_TrimmedCurve) aSegment2 = GC_MakeSegment(rb, ur);
+    Handle(Geom_TrimmedCurve) aSegment3 = GC_MakeSegment(ur, lu);
+    Handle(Geom_TrimmedCurve) aSegment4 = GC_MakeSegment(lu, lb);
+    TopoDS_Edge anEdge1 = BRepBuilderAPI_MakeEdge(aSegment1);
+    TopoDS_Edge anEdge2 = BRepBuilderAPI_MakeEdge(aSegment2);
+    TopoDS_Edge anEdge3 = BRepBuilderAPI_MakeEdge(aSegment3);
+    TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
+
+    TopoDS_Wire aWire = BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
+
+    TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(aWire);
+    temp_obj_ = new AIS_Shape(myFaceProfile);
+
+    G_Context->Display(temp_obj_, true);
+}
+
+void KBox::temphide()
+{
+    if (temp_obj_.IsNull())return;
+    G_Context->Remove(temp_obj_, true);
+}
 }

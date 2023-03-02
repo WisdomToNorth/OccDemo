@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <map>
 #include <algorithm>
-
+#include <list>
 #include "test_datastructure.h"
 
 int main(int argc, char* argv[])
@@ -19,8 +19,4 @@ int main(int argc, char* argv[])
 
     return a.exec();
 
-    //using namespace KDebugger;
-    //KTest te;
-    //te.testLineCross();
-    //return 0;
 }

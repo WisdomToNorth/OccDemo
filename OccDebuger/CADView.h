@@ -28,6 +28,7 @@ class V3d_View;
 class V3d_Viewer;
 class AIS_InteractiveObject;
 class Graphic3d_GraphicDriver;
+class AIS_TextLabel;
 enum Prs3d_TypeOfHighlight;
 
 namespace KDebugger
@@ -103,9 +104,10 @@ private:
     Handle(AIS_InteractiveContext) context_;
     Handle(AIS_InteractiveObject) viewcube_ = nullptr;
     Handle(AIS_InteractiveObject) aisOriginTrihedron_ = nullptr;
-    Handle(V3d_Viewer) cadview_ = nullptr;
+    Handle(V3d_Viewer) viewer_ = nullptr;
     Handle(Graphic3d_GraphicDriver) graphic_driver_ = nullptr;
     Handle(V3d_View) view_ = nullptr;
+    Handle(AIS_TextLabel) text_ = nullptr;
 
     CurrentAction3dEnum context_action_mode_;//!三维场景转换模式
     std::vector<Handle(SelectMgr_EntityOwner)>detected_obj_;//存储点击过的对象，可能是点线面
