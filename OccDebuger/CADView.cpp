@@ -109,7 +109,7 @@ void CadView::initContext()
         {
             wind->Map();
         }
-        context_ = new AIS_InteractiveContext(viewer_);  //创建交互式上下文
+        context_ = new K_Context(viewer_);  //创建交互式上下文
         //配置查看器的光照
         viewer_->SetDefaultLights();
         viewer_->SetLightOn();
@@ -303,7 +303,6 @@ void CadView::mousePressEvent(QMouseEvent* event)
     {
         if (rightClickCb)rightClickCb(event);
         if (!checkDetectedValid())return;
-
     }
     else if (event->buttons() & Qt::LeftButton)  //鼠标左键选择模型
     {
@@ -313,6 +312,7 @@ void CadView::mousePressEvent(QMouseEvent* event)
             double x, y, z;
             view_->Convert(event->pos().x(), event->pos().y(), x, y, z);
             leftClickCb(x, y);
+
         }
         if (!checkDetectedValid())return;
 
@@ -351,6 +351,18 @@ static Aspect_VKeyMouse qtMouseButtons2VKeys(Qt::MouseButtons theButtons)
 //!覆写鼠标移动事件
 void CadView::mouseMoveEvent(QMouseEvent* event)
 {
+    //鼠标按下时，依然会做highlight检测
+    context_->MoveTo(event->pos().x(), event->pos().y(), view_, true);
+
+    //鼠标按下时，不做highlight检测
+    //const Graphic3d_Vec2i new_pos(event->pos().x(), event->pos().y());
+    //if (!view_.IsNull() && UpdateMousePosition(new_pos,
+    //    qtMouseButtons2VKeys(event->buttons()),
+    //    Aspect_VKeyFlags_NONE, false))
+    //{
+    //    update();
+    //}
+
     // 鼠标移动到模型时，模型高亮显示
     double x, y, z;
     view_->Convert(event->pos().x(), event->pos().y(), x, y, z);
@@ -375,31 +387,17 @@ void CadView::mouseMoveEvent(QMouseEvent* event)
         //context_->Display(text_, true);
     }
 
-    const Graphic3d_Vec2i new_pos(event->pos().x(), event->pos().y());
-    if (!view_.IsNull() && UpdateMousePosition(new_pos, qtMouseButtons2VKeys(event->buttons()),
-        Aspect_VKeyFlags_NONE, false))
-    {
-        update();
-    }
-
     switch (context_action_mode_)
     {
     case CadView::CurrentAction3dEnum::CurAction3d_Nothing:
     {
-
-        if (event->buttons() == Qt::LeftButton)//位姿调整状态
-        {
-
-        }
-        else
-        {
-            this->setCursor(*defCursor);
-        }
+        this->setCursor(*defCursor);
         break;
     }
     case CadView::CurrentAction3dEnum::CurAction3d_DynamicPanning:
     {
-        view_->Pan(event->pos().x() - mouse_x_record_, mouse_y_record_ - event->pos().y());
+        view_->Pan(event->pos().x() - mouse_x_record_,
+            mouse_y_record_ - event->pos().y());
         mouse_x_record_ = event->pos().x();
         mouse_y_record_ = event->pos().y();
         break;
@@ -414,8 +412,8 @@ void CadView::mouseMoveEvent(QMouseEvent* event)
     default:
         break;
     }
-    //......
 };
+
 void CadView::fitAll()
 {
     view_->FitAll();

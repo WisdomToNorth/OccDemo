@@ -17,6 +17,8 @@
 
 #include <AIS_ViewController.hxx>
 
+#include "KContext.h"
+
 class QMenu;
 class QRubberBand;
 class AIS_Shape;
@@ -29,6 +31,7 @@ class V3d_Viewer;
 class AIS_InteractiveObject;
 class Graphic3d_GraphicDriver;
 class AIS_TextLabel;
+class K_Context;
 enum Prs3d_TypeOfHighlight;
 
 namespace KDebugger
@@ -101,7 +104,7 @@ signals:
 
 private:
     friend class DataGenerator;
-    Handle(AIS_InteractiveContext) context_;
+    Handle(K_Context) context_;
     Handle(AIS_InteractiveObject) viewcube_ = nullptr;
     Handle(AIS_InteractiveObject) aisOriginTrihedron_ = nullptr;
     Handle(V3d_Viewer) viewer_ = nullptr;

@@ -43,15 +43,14 @@ public:
     KBoundingBox getSpaceBoundingbox()const;
     void setVal(const int& val) { val_ = val; }
     void show();
-    void tempshow();
-    void temphide();
+
 private:
     void drawElips();
     void drawBox();
     void drawSpacingBox();
     Handle(AIS_TextLabel) getText();
 
-private:
+protected:
     KPt center_;
     double size_x_;
     double size_y_;
@@ -62,7 +61,7 @@ private:
         Elips, Box
     };
     ObjType type_;
-    Handle(AIS_Shape) temp_obj_ = nullptr;
+
 };
 
 

@@ -71,6 +71,8 @@
     <ClCompile Include="shapetools.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="KViewBox.cpp" />
+    <ClCompile Include="KContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -140,6 +142,8 @@
     <ClInclude Include="shapetools.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="KViewBox.h" />
+    <ClInclude Include="KContext.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="iwConsole.h">

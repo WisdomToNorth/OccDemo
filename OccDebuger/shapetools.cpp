@@ -1,8 +1,16 @@
-#include "shapetools.h"
+﻿#include "shapetools.h"
 
 
 #include <AIS_Trihedron.hxx>
 #include <Geom_Axis2Placement.hxx>
+#include <TopoDS_Wire.hxx>
+#include <GC_MakeSegment.hxx>
+#include <Geom_TrimmedCurve.hxx>
+#include <TopoDS_Edge.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRep_Tool.hxx>
+
 
 #include "global.h"
 
@@ -43,5 +51,36 @@ Quantity_Color getRandomColor()
     else if (cur == 4)return Quantity_NOC_ORANGE;
     else return Quantity_NOC_BLUE3;
 
+}
+
+TopoDS_Wire getWireFromFourPts(const gp_Pnt& lb, const gp_Pnt& rb,
+    const gp_Pnt& ru, const gp_Pnt& lu)
+{
+    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(lb, rb);
+    Handle(Geom_TrimmedCurve) aSegment2 = GC_MakeSegment(rb, ru);
+    Handle(Geom_TrimmedCurve) aSegment3 = GC_MakeSegment(ru, lu);
+    Handle(Geom_TrimmedCurve) aSegment4 = GC_MakeSegment(lu, lb);
+    TopoDS_Edge anEdge1 = BRepBuilderAPI_MakeEdge(aSegment1);
+    TopoDS_Edge anEdge2 = BRepBuilderAPI_MakeEdge(aSegment2);
+    TopoDS_Edge anEdge3 = BRepBuilderAPI_MakeEdge(aSegment3);
+    TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
+
+    return BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
+
+}
+std::vector<gp_Pnt> getEdgeEndPts(TopoDS_Edge shp)
+{
+    std::vector<gp_Pnt> res;
+    Standard_Real first, last;
+
+    Handle(Geom_Curve) curve = BRep_Tool::Curve(shp, first, last);
+    if (curve)
+    {
+        gp_Pnt pt1 = curve->Value(first);
+        gp_Pnt pt2 = curve->Value(last);
+        res.push_back(pt1);
+        res.push_back(pt2);
+    }
+    return res;
 }
 }

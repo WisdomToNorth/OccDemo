@@ -13,7 +13,7 @@
 
 #include "stadfx.h"
 #include "global.h"
-
+#include "shapetools.h"
 #include "BoundingBox.h"
 
 namespace KDebugger
@@ -86,7 +86,7 @@ bool KBox::isCrossWithKLineWithSpace(const KLine& line)const
 }
 KBox::~KBox()
 {
-    this->temphide();
+
 }
 void KBox::show()
 {
@@ -169,16 +169,8 @@ void KBox::drawBox()
     gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
     gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
 
-    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(lb, rb);
-    Handle(Geom_TrimmedCurve) aSegment2 = GC_MakeSegment(rb, ur);
-    Handle(Geom_TrimmedCurve) aSegment3 = GC_MakeSegment(ur, lu);
-    Handle(Geom_TrimmedCurve) aSegment4 = GC_MakeSegment(lu, lb);
-    TopoDS_Edge anEdge1 = BRepBuilderAPI_MakeEdge(aSegment1);
-    TopoDS_Edge anEdge2 = BRepBuilderAPI_MakeEdge(aSegment2);
-    TopoDS_Edge anEdge3 = BRepBuilderAPI_MakeEdge(aSegment3);
-    TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
 
-    TopoDS_Wire aWire = BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
+    TopoDS_Wire aWire = OccTools::getWireFromFourPts(lb, rb, ur, lu);
 
     TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(aWire);
     Handle(AIS_Shape) shp = new AIS_Shape(myFaceProfile);
@@ -202,18 +194,7 @@ void KBox::drawSpacingBox()
     gp_Pnt ur(center_.x + size_x_ * 0.5 + space_,
         center_.y + size_y_ * 0.5 + space_, 0);
 
-    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(lb, rb);
-    Handle(Geom_TrimmedCurve) aSegment2 = GC_MakeSegment(rb, ur);
-    Handle(Geom_TrimmedCurve) aSegment3 = GC_MakeSegment(ur, lu);
-    Handle(Geom_TrimmedCurve) aSegment4 = GC_MakeSegment(lu, lb);
-    TopoDS_Edge anEdge1 = BRepBuilderAPI_MakeEdge(aSegment1);
-    TopoDS_Edge anEdge2 = BRepBuilderAPI_MakeEdge(aSegment2);
-    TopoDS_Edge anEdge3 = BRepBuilderAPI_MakeEdge(aSegment3);
-    TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
-
-    TopoDS_Wire aWire = BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
-
-    Handle(AIS_Shape) shp = new AIS_Shape(aWire);
+    Handle(AIS_Shape) shp = new AIS_Shape(OccTools::getWireFromFourPts(lb, rb, ur, lu));
     shp->SetColor(Quantity_NOC_GRAY11);
     G_Context->Display(shp, false);
 
@@ -221,34 +202,5 @@ void KBox::drawSpacingBox()
 
     G_Context->Display(text, false);
 }
-void KBox::tempshow()
-{
-    if (G_Context.IsNull()) return;
-    gp_Pnt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
-    gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
-    gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
-    gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
 
-    Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(lb, rb);
-    Handle(Geom_TrimmedCurve) aSegment2 = GC_MakeSegment(rb, ur);
-    Handle(Geom_TrimmedCurve) aSegment3 = GC_MakeSegment(ur, lu);
-    Handle(Geom_TrimmedCurve) aSegment4 = GC_MakeSegment(lu, lb);
-    TopoDS_Edge anEdge1 = BRepBuilderAPI_MakeEdge(aSegment1);
-    TopoDS_Edge anEdge2 = BRepBuilderAPI_MakeEdge(aSegment2);
-    TopoDS_Edge anEdge3 = BRepBuilderAPI_MakeEdge(aSegment3);
-    TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
-
-    TopoDS_Wire aWire = BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
-
-    TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(aWire);
-    temp_obj_ = new AIS_Shape(myFaceProfile);
-
-    G_Context->Display(temp_obj_, true);
-}
-
-void KBox::temphide()
-{
-    if (temp_obj_.IsNull())return;
-    G_Context->Remove(temp_obj_, true);
-}
 }

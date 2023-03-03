@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <unordered_map>
 #include <vector>
@@ -32,14 +32,14 @@ public:
     ~LineDrawer() {}
 
     void commitDraw(std::list<gp_Pnt>& pnts);
-
+    void checkDetectedObj(const gp_Pnt& new_pnt);
     void cancelDraw();
     void removeTempViewModel();
     bool appendLine(const gp_Pnt& pnt);
     void drawTempLine(const gp_Pnt& new_pnt);
+    void handleExistPnt(const gp_Pnt& pt);
 
 private:
-
     Mode cur_mode_;
     std::list<gp_Pnt> pnt_list_;
     std::vector<Handle(AIS_ColoredShape)> viewmodel_vec_;

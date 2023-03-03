@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "KLine.h"
 #include "K_Pnt.h"

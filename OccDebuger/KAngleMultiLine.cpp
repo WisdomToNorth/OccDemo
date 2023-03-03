@@ -1,4 +1,4 @@
-#include "KAngleMultiLine.h"
+﻿#include "KAngleMultiLine.h"
 
 #include "gptools.h"
 #include "KLine.h"
@@ -94,19 +94,17 @@ std::vector<TopoDS_Edge> KAngleMultiLine::getEdge()
 
 bool KAngleMultiLine::checkColli(const KBox& box)
 {
-    KBox l_box = box;
-
     if (res_.empty())
     {
-        return l_box.isCrossWithKLineWithSpace(KLine(p1_, p2_));
+        return box.isCrossWithKLineWithSpace(KLine(p1_, p2_));
     }
     auto it = res_.begin();
     while (it != res_.end())
     {
         KLine l1_1(p1_, *it);
         KLine l1_2(p2_, *it);
-        if (l_box.isCrossWithKLineWithSpace(l1_1) ||
-            l_box.isCrossWithKLineWithSpace(l1_2))
+        if (box.isCrossWithKLineWithSpace(l1_1) ||
+            box.isCrossWithKLineWithSpace(l1_2))
         {
             res_.erase(it);
         }
