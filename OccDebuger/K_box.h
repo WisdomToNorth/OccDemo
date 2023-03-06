@@ -12,6 +12,7 @@
 
 #include "K_Pnt.h"
 #include "KLine.h"
+
 class AIS_Shape;
 
 namespace KDebugger

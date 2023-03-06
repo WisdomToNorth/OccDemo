@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <gp_Pnt.hxx>
 #include <AIS_ColoredShape.hxx>

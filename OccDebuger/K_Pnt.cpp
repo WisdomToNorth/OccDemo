@@ -30,11 +30,4 @@ void printPntVec(const std::vector<KPt>& pnts)
 
 }
 
-bool ptInRegion(const KPt& pnt_, const KRegion& region)//[ )
-{
-    return (pnt_.x >= region.left_bottom_.x) &&
-        (pnt_.x < region.right_up_.x) &&
-        (pnt_.y >= region.left_bottom_.y) &&
-        (pnt_.y < region.right_up_.y);
-}
 }

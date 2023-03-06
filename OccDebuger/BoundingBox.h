@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "K_Pnt.h"
 #include "K_box.h"
@@ -8,7 +8,7 @@ class gp_Pnt;
 namespace KDebugger
 {
 class KBox;
-class KBoundingBox
+struct KBoundingBox
 {
 public:
     KBoundingBox(const KPt& lb, const KPt& ru) :lb_(lb), ru_(ru) {}
@@ -18,12 +18,11 @@ public:
     bool isOut(const KBoundingBox& rhs)const;
     void update(const KPt& lb);
     bool isCrossKLine(const KLine& line)const;
+    bool ptInRegion(const KPt& pnt_)const;//[ )
 
-private:
+public:
     KPt lb_;
     KPt ru_;
-
-
 };
 
 }

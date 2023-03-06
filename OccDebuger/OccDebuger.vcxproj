@@ -63,6 +63,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <CompileAs>Default</CompileAs>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -106,6 +107,7 @@
     <ClCompile Include="KAngleMultiLine.cpp" />
     <ClCompile Include="KContext.cpp" />
     <ClCompile Include="KLine.cpp" />
+    <ClCompile Include="KRegion.cpp" />
     <ClCompile Include="KViewBox.cpp" />
     <ClCompile Include="linedrawer.cpp" />
     <ClCompile Include="gptools.cpp" />
@@ -144,6 +146,7 @@
     <ClInclude Include="KAngleMultiLine.h" />
     <ClInclude Include="KContext.h" />
     <ClInclude Include="KLine.h" />
+    <ClInclude Include="KRegion.h" />
     <ClInclude Include="KViewBox.h" />
     <ClInclude Include="linedrawer.h" />
     <ClInclude Include="gptools.h" />

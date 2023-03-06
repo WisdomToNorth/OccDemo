@@ -213,7 +213,7 @@ void MainWindowOcc::on_actionori_find1D_triggered()
 void MainWindowOcc::on_actionkd_find2D_triggered()
 {
     if (!kdtree_)kdtree_ = new KDTree(data_generator_);
-    kdtree_->getTwoDRange(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
+    kdtree_->getTwoDRangeKDTree(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
         KPt(ui->dsb_right->value(), ui->dsb_up->value())));
 }
 

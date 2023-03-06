@@ -58,7 +58,6 @@
     <ClCompile Include="test_datastructure.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
-    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="mathUtils.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
@@ -73,6 +72,12 @@
     </ClCompile>
     <ClCompile Include="KViewBox.cpp" />
     <ClCompile Include="KContext.cpp" />
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="KRegion.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -89,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="K_Pnt.h">
       <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="unionset.h">
-      <Filter>UnionSet</Filter>
     </ClInclude>
     <ClInclude Include="MultiUniset.h">
       <Filter>UnionSet</Filter>
@@ -129,7 +131,6 @@
     <ClInclude Include="test_datastructure.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="mathUtils.h">
       <Filter>Tools</Filter>
     </ClInclude>
@@ -144,6 +145,15 @@
     </ClInclude>
     <ClInclude Include="KViewBox.h" />
     <ClInclude Include="KContext.h" />
+    <ClInclude Include="unionset.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="KRegion.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="iwConsole.h">

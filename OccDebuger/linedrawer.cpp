@@ -58,7 +58,9 @@ void LineDrawer::checkDetectedObj(const gp_Pnt& new_pnt)
         if (!ais_shape.IsNull())
         {
             Handle(AIS_Shape) ais_model = Handle(AIS_Shape)::DownCast(ais_shape);
-            if (ais_model.get() == viewmodel_vec_.back().get())return;
+            if (viewmodel_vec_.empty() || //当起始点直接就在图形内部时会出现此情况
+                ais_model.get() == viewmodel_vec_.back().get())//画得很慢，上一笔画完的点被检测到
+                return;
         }
         const auto& detect_owner = G_Context->DetectedOwner();
         Handle(StdSelect_BRepOwner) aBRepOwner = Handle(StdSelect_BRepOwner)::DownCast(detect_owner);

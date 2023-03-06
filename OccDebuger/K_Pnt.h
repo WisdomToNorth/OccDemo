@@ -9,21 +9,12 @@ struct KPt
 {
     double x;
     double y;
-    KPt(double _x, double _y) :x(_x), y(_y) { };
-    KPt() :x(0), y(0) { };
+    KPt(double _x, double _y) :x(_x), y(_y) {};
+    KPt() :x(0), y(0) {};
     void print()const;
     void printX()const;
 };
 void printPntVec(const std::vector<KPt>& pnts);
-
-struct KRegion
-{
-    KRegion(const KPt& lb, const KPt& ru) :left_bottom_(lb), right_up_(ru) { }
-    KPt left_bottom_;
-    KPt right_up_;
-};
-
-bool ptInRegion(const KPt& pnt_, const KRegion& region);//[ )
 
 
 struct PntsSorted2D
@@ -31,13 +22,13 @@ struct PntsSorted2D
     std::vector<KPt> pnts_xsorted_;
     std::vector<KPt> pnts_ysorted_;
 
-    size_t size()
+    size_t size()const
     {
         assert(pnts_xsorted_.size() == pnts_ysorted_.size());
         return pnts_xsorted_.size();
     }
 
-    KPt getOnlyPnt()
+    KPt getOnlyPnt()const
     {
         assert(size() == 1);
         return pnts_xsorted_.front();

@@ -1,8 +1,9 @@
-#include "PreLine.h"
+ï»¿#include "PreLine.h"
 
 #include "gptools.h"
 
 #include <TopoDS_Edge.hxx>
+
 #include "global.h"
 #include "KLine.h"
 #include "KAngleMultiLine.h"
@@ -43,18 +44,7 @@ void PrePline::drawRawPnts(Quantity_Color color)
 
 void PrePline::postProcessLine()
 {
-    //auto cur = multiline_list_.begin();
-    //auto cur_next = multiline_list_.begin();
-    //std::advance(cur_next, 1);
-    //while (cur_next != multiline_list_.end())
-    //{
-    //    if (!cur_next->checkBetterRes(*cur))
-    //    {
-    //        std::cout << "need a better res!\n";
-    //    }
-    //    ++cur;
-    //    ++cur_next;
-    //}
+
 }
 
 void PrePline::drawMultiLine(Quantity_Color)
@@ -164,13 +154,6 @@ void PrePline::reGenerate(const std::vector<KBox>& context_info)
         //for debug, break endless loop
         if (GCheckCpuMode())return;
 
-        //KBox box1 = KBox(double(cur_vertax->X()), double(cur_vertax->Y()),
-        //    0.1, 0.1, 1);
-        //KBox box2 = KBox(double(cur_next->X()), double(cur_next->Y()),
-        //    0.1, 0.1, 1);
-        //box1.tempshow();
-        //box2.tempshow();
-
         bool colli = false;
         KAngleMultiLine cur_check(*cur_vertax, *cur_next);
         cur_check.cpuAvailable(45);
@@ -186,7 +169,7 @@ void PrePline::reGenerate(const std::vector<KBox>& context_info)
 
 
             if (cur_check.checkColli(obj))
-                //Åö×²£¬»òÕßÓëÉÏÒ»Ìõline³ÊĞ¡¼Ğ½Ç£¬Ôò¼ÇÂ¼µ±Ç°µÄÉÏÒ»¸öµã¡£
+                //ç¢°æ’ï¼Œæˆ–è€…ä¸ä¸Šä¸€æ¡lineå‘ˆå°å¤¹è§’ï¼Œåˆ™è®°å½•å½“å‰çš„ä¸Šä¸€ä¸ªç‚¹ã€‚
             {
                 colli = true;
                 break;
@@ -201,11 +184,10 @@ void PrePline::reGenerate(const std::vector<KBox>& context_info)
         {
             auto temp = cur_next;
             temp--;
-
             cur_vertax = temp;
 
             multiline_list_.push_back(last_check);
-            //last_check = cur_check;
+
             have_tried_ = false;
 
         }

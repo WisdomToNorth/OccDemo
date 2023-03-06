@@ -1,4 +1,4 @@
-#include "BoundingBox.h"
+﻿#include "BoundingBox.h"
 
 #include <gp_Pnt.hxx>
 
@@ -32,6 +32,14 @@ bool KBoundingBox::isCrossKLine(const KLine& line)const
     KLine l1(lb, rb), l2(lb, lu), l3(rb, ru), l4(lu, ru);
     return l1.isCross(line) || l2.isCross(line) ||
         l3.isCross(line) || l4.isCross(line);
+}
+
+bool KBoundingBox::ptInRegion(const KPt& pnt_)const//[ )
+{
+    return (pnt_.x >= lb_.x) &&
+        (pnt_.x < ru_.x) &&
+        (pnt_.y >= lb_.y) &&
+        (pnt_.y < ru_.y);
 }
 
 void KBoundingBox::update(const KPt& pt)
