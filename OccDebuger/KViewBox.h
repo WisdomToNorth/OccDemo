@@ -1,6 +1,6 @@
 #pragma once
 
-#include "K_box.h"
+#include "KBox.h"
 
 namespace KDebugger
 {

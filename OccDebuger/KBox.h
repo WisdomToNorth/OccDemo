@@ -10,7 +10,7 @@
 #include <AIS_TextLabel.hxx>
 #include <TopoDS_Face.hxx>
 
-#include "K_Pnt.h"
+#include "KPnt.h"
 #include "KLine.h"
 
 class AIS_Shape;

@@ -5,11 +5,12 @@
 
 namespace KDebugger
 {
-class K_Timer
+class KTimer
 {
 public:
-    K_Timer() :t1(std::chrono::steady_clock::now()), t2(t1)
-    {}
+    KTimer() :t1(std::chrono::steady_clock::now()), t2(t1)
+    {
+    }
     double timeFromBegin(bool cout_ = true)
     {
         t2 = std::chrono::steady_clock::now();

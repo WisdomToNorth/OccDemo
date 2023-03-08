@@ -14,7 +14,7 @@
 #include <qdebug.h>
 
 #include "CADView.h"
-#include "Ktimer.h"
+#include "KTimer.h"
 #include "CustomQlistWidget.h"
 #include "KLogger.h"
 #include "global.h"
@@ -100,7 +100,7 @@ void DataGenerator::reGenerateData(const DataParameter& param)
         buf_.swap(newbuf);
     }
     ConsoleLog("generating...");
-    K_Timer timer;
+    KTimer timer;
 
     generateData(buf_, param);
 

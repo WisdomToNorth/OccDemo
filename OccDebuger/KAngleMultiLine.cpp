@@ -132,8 +132,8 @@ std::list<gp_Pnt> KAngleMultiLine::drawAngledLineByTwoPts(gp_Pnt pA,
     double dx = std::abs(pB.X() - pA.X());
     double dy = std::abs(pB.Y() - pA.Y());
 
-    if (OccTools::fequal(dx, 0.0, 0.0001) ||
-        OccTools::fequal(dy, 0.0, 0.0001) || dy / dx == tan_a)
+    if (OccTools::fEqual(dx, 0.0, 0.0001) ||
+        OccTools::fEqual(dy, 0.0, 0.0001) || dy / dx == tan_a)
     {
         return res;
     }

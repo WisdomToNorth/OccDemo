@@ -4,7 +4,7 @@
 
 class RobotMainWindow;
 
-iwCustomQListWidget* ConsoleInit(QWidget* parentWidget,
+iwCustomQListWidget* InitConsole(QWidget* parentWidget,
     QMainWindow* parentWindow, bool redirectToStdOut)
 {
     iwCustomQListWidget* console_widget = new iwCustomQListWidget(parentWidget);

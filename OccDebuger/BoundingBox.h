@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "K_Pnt.h"
-#include "K_box.h"
+#include "KPnt.h"
+#include "KBox.h"
 #include "KLine.h"
 
 class gp_Pnt;

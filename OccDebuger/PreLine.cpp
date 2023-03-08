@@ -10,7 +10,7 @@
 #include "shapetools.h"
 #include "stadfx.h"
 
-#include "K_box.h"
+#include "KBox.h"
 #include <GC_MakeArcOfCircle.hxx>
 
 namespace KDebugger

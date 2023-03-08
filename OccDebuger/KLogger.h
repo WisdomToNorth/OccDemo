@@ -10,7 +10,7 @@
 
 class QMainWindow;
 class iwCustomQListWidget;
-iwCustomQListWidget* ConsoleInit(QWidget* parentWidget = nullptr,
+iwCustomQListWidget* InitConsole(QWidget* parentWidget = nullptr,
     QMainWindow* parentWindow = nullptr,
     bool redirectToStdOut = false);
 

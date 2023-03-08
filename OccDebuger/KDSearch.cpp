@@ -1,109 +1,11 @@
-﻿
-#include "kd_search.h"
-#include "DataGenerator.h"
-#include "Ktimer.h"
+﻿#include "KDSearch.h"
 
 namespace KDebugger
 {
+KDSearch::KDSearch() {}
 
 
-KDTree::KDTree(DataGenerator* generator) :DataObserver(generator)
-{
-    updateData();
-}
-
-void KDTree::updateData()
-{
-    data_generator_->getPtData(buf_);
-    if (binsearch_1d_)
-    {
-        delete binsearch_1d_;
-        binsearch_1d_ = nullptr;
-    }
-    if (kd_2d_)
-    {
-        delete kd_2d_;
-        kd_2d_ = nullptr;
-    }
-}
-
-// For 1D
-void KDTree::getOneDRangeOri(double l, double r)
-{
-    std::cout << "\n\n-----------1D Search------------" << std::endl;
-
-    K_Timer timer;
-    size_t cnt = 0;
-    for (const auto& pt : buf_)
-    {
-        if (pt.x >= l && pt.x < r)
-            cnt++;
-    }
-
-    std::cout << "\nOrigin: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << cnt << std::endl;
-}
-
-// For 1D
-void KDTree::getOneDRange(double l, double r)
-{
-    std::cout << "\n\n-----------1D binnode search------------" << std::endl;
-
-    K_Timer timer;
-    if (!binsearch_1d_)
-    {
-        binsearch_1d_ = buildBinSearchTree(buf_);
-        //std::cout << "\n ####tree start####\n";
-        //printBinSearchTree(binsearch_1d_, true);
-        //std::cout << "\n ####tree end####\n";
-        std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms\n";
-    }
-    std::vector<KPt> res;
-    oneDRangeQuery(binsearch_1d_, l, r, res);
-
-    std::cout << "\nGet Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << res.size() << std::endl;
-    //printPntVec(res);
-}
-
-void KDTree::getTwoDRangeOri(const KRegion& r)
-{
-    std::cout << "\n\n-----------2D Search------------" << std::endl;
-    std::vector<KPt> buf;
-    K_Timer timer;
-    size_t cnt = 0;
-    for (const auto& pt : buf_)
-    {
-        if (r.ptInRegion(pt))
-        {
-            buf.emplace_back(pt);
-            cnt++;
-        }
-    }
-    std::cout << "\nOrigin: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << cnt << std::endl;
-    //for (auto& pt : buf)pt.print();
-}
-
-void KDTree::getTwoDRangeKDTree(const KRegion& r)
-{
-    std::cout << "\n\n-----------2D Search KD------------" << std::endl;
-
-    K_Timer timer;
-    size_t cnt = 0;
-    if (!kd_2d_)
-    {
-        kd_2d_ = buildKDTree(buf_);
-        printBinSearchTree(kd_2d_);
-        std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms\n";
-    }
-    std::vector<KPt> buf = searchKDTreeFromRoot(kd_2d_, r);
-    std::cout << "\nkd_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << buf.size() << std::endl;
-    //for (auto& pt : buf)pt.print();
-}
-
-void KDTree::getSortedPnts(const std::vector<KPt>& pnts,
+void KDSearch::getSortedPnts(const std::vector<KPt>& pnts,
     PntsSorted2D& sorted_pnts)
 {
     sorted_pnts.pnts_xsorted_ = pnts;
@@ -118,11 +20,11 @@ void KDTree::getSortedPnts(const std::vector<KPt>& pnts,
     std::sort(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end(),
         [](KPt v1, KPt v2) -> bool
         {
-            return v1.y < v2.y;
+            return v1.y > v2.y;
         });
 }
 
-BinSearchNode* KDTree::buildKDTree(const std::vector<KPt>& pnts)
+BinSearchNode* KDSearch::buildKDTree(const std::vector<KPt>& pnts)
 {
     PntsSorted2D sorted_pnts;
     getSortedPnts(pnts, sorted_pnts);
@@ -130,7 +32,7 @@ BinSearchNode* KDTree::buildKDTree(const std::vector<KPt>& pnts)
     return buildKDTreeFromSortedPnts(sorted_pnts, 0);
 }
 
-KPt KDTree::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
+KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
     PntsSorted2D& p2s, bool direction)
 {
     int n = pnts.size();
@@ -150,13 +52,13 @@ KPt KDTree::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
         std::sort(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end(),
             [](KPt v1, KPt v2) -> bool
             {
-                return v1.y < v2.y;
+                return v1.y > v2.y;
             });
         p2s.pnts_ysorted_ = p2s.pnts_xsorted_;
         std::sort(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end(),
             [](KPt v1, KPt v2) -> bool
             {
-                return v1.y < v2.y;
+                return v1.y > v2.y;
             });
         midpt = *(pnts.pnts_xsorted_.begin() + mid);
         /* double mid_x = (pnts.pnts_xsorted_.begin() + mid)->x;
@@ -216,7 +118,7 @@ KPt KDTree::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
     return midpt;
 }
 
-BinSearchNode* KDTree::buildKDTreeFromSortedPnts(PntsSorted2D pnts,
+BinSearchNode* KDSearch::buildKDTreeFromSortedPnts(PntsSorted2D pnts,
     int cur_depth)
 {
     size_t n = pnts.size();
@@ -224,7 +126,7 @@ BinSearchNode* KDTree::buildKDTreeFromSortedPnts(PntsSorted2D pnts,
     if (n == 0)
         return nullptr;
     else if (n == 1)
-        return new BinSearchNode(pnts.getOnlyPnt());
+        return new BinSearchNode(pnts.getOnlyPnt(), false);
     else
     {
         PntsSorted2D p1s;
@@ -250,7 +152,7 @@ BinSearchNode* KDTree::buildKDTreeFromSortedPnts(PntsSorted2D pnts,
 //search KD tree
 //input: root of kd-tree, to-search region
 //output: vector of point in region
-std::vector<KPt> KDTree::searchKDTreeFromRoot(BinSearchNode* root,
+std::vector<KPt> KDSearch::searchKDTreeFromRoot(BinSearchNode* root,
     const KRegion& region)
 {
     std::vector<KPt> res;
@@ -260,7 +162,7 @@ std::vector<KPt> KDTree::searchKDTreeFromRoot(BinSearchNode* root,
     return res;
 }
 
-KRegion KDTree::getNewRegion(const KRegion& cur_region, const BinSearchNode* node, bool f_or_s)
+KRegion KDSearch::getNewRegion(const KRegion& cur_region, const BinSearchNode* node, bool f_or_s)
 {
     if (f_or_s)//true, first
     {
@@ -279,7 +181,7 @@ KRegion KDTree::getNewRegion(const KRegion& cur_region, const BinSearchNode* nod
     }
 }
 
-void KDTree::searchKDTree(std::vector<KPt>& res, BinSearchNode* root,
+void KDSearch::searchKDTree(std::vector<KPt>& res, BinSearchNode* root,
     const KRegion& cur_region, const KRegion& region)
 {
     if (root->isLeaf())
@@ -292,7 +194,8 @@ void KDTree::searchKDTree(std::vector<KPt>& res, BinSearchNode* root,
         auto check_res_l = regionCheck(left_region, region);
         if (check_res_l == ERegionCrossState::in)
         {
-            reportSubTree(root->left_, res);
+           // reportSubTree(root->left_, res);
+            root->left_->reportSubTree(res);
         }
         else if (check_res_l == ERegionCrossState::part)
         {
@@ -303,7 +206,8 @@ void KDTree::searchKDTree(std::vector<KPt>& res, BinSearchNode* root,
         auto check_res_r = regionCheck(right_region, region);
         if (check_res_r == ERegionCrossState::in)
         {
-            reportSubTree(root->right_, res);
+            //reportSubTree(root->right_, res);
+            root->right_->reportSubTree(res);
         }
         else if (check_res_r == ERegionCrossState::part)
         {

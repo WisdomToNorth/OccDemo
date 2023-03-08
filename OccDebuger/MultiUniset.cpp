@@ -9,7 +9,7 @@
 #include <algorithm>
 
 #include "CADView.h"
-#include "Ktimer.h"
+#include "KTimer.h"
 #include "CustomQlistWidget.h"
 #include "KLogger.h"
 #include "global.h"
@@ -39,7 +39,7 @@ void MultiUniset::badWay()
         n << "\ncaculating..." << std::endl;
 
     int cnt = 0;
-    K_Timer timer;
+    KTimer timer;
     for (int i = 0; i < n; ++i)
     {
         for (int j = i + 1; j < n; ++j)
@@ -61,7 +61,7 @@ void MultiUniset::oneCoreUnionSet()
     std::cout << "\n\n-----------unionset single thread------------" << std::endl;
     unsigned long long data_count = buf_.size();
     std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
-    K_Timer timer;
+    KTimer timer;
     UnionFind unionfinder(data_count);
     unsigned long long caculate_cnt = (data_count) * (data_count - 1) / 2;
     std::cout << "caculate_cnt: " << caculate_cnt << std::endl;
@@ -89,7 +89,7 @@ void MultiUniset::multiCoreUnionSet(int user_set_num)
     unsigned long long block_size = caculate_cnt / num_of_thread;
 
 
-    K_Timer timer;
+    KTimer timer;
     //这里多线程的划分也可以优化，按平面区域分块划分，使各子并查集的重合性尽可能小
     //此处，假设x、y都为偶数，这样恰好可以被四等分。分四线程计算
     std::vector<std::thread> threads(num_of_thread - 1);

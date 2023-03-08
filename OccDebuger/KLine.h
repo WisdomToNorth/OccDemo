@@ -1,6 +1,6 @@
 #pragma once
 
-#include "K_Pnt.h"
+#include "KPnt.h"
 
 class gp_Pnt;
 namespace KDebugger

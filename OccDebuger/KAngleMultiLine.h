@@ -1,12 +1,12 @@
 ﻿#pragma once
 
 #include "KLine.h"
-#include "K_Pnt.h"
+#include "KPnt.h"
 #include <vector>
 #include <list>
 #include <deque>
 #include <gp_Pnt.hxx>
-#include "K_box.h"
+#include "KBox.h"
 #include <TopoDS_Edge.hxx>
 
 namespace KDebugger

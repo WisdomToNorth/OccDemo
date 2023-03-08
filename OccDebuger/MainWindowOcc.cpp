@@ -20,14 +20,14 @@
 #include <QDesktopWidget>
 
 #include "CADView.h"
-#include "Ktimer.h"
+#include "KTimer.h"
 #include "CustomQlistWidget.h"
 #include "KLogger.h"
 #include "global.h"
 #include "MultiUniset.h"
 #include "DataGenerator.h"
-#include "kd_search.h"
-#include "K_Pnt.h"
+#include "2d_search.h"
+#include "KPnt.h"
 #include "ui_MainWindowOcc.h"
 #include "statusinfowidget.h"
 #include "linedrawer.h"
@@ -88,7 +88,7 @@ void MainWindowOcc::on_action_cpuline_triggered()
     const std::vector<KBox>& context_info = data_generator_->getData();
     for (auto& obj : preline_vec_)
     {
-        K_Timer timer;
+        KTimer timer;
         obj->reGenerate(context_info);
         timer.timeFromBegin();
     }
@@ -99,7 +99,7 @@ void MainWindowOcc::on_action_normline_triggered()
 {
     for (auto& obj : preline_vec_)
     {
-        K_Timer timer;
+        KTimer timer;
         obj->normlizeSegment();
         timer.timeFromBegin();
     }
@@ -151,7 +151,7 @@ void MainWindowOcc::setUpUI()
     auto scheight = height * 4 / 5;
     this->setGeometry(width * 1 / 10, height / 10, scwidth, scheight);
 
-    iwCustomQListWidget* console_widget = ConsoleInit(this, this, false);
+    iwCustomQListWidget* console_widget = InitConsole(this, this, false);
     ui->gridLayout_Console->addWidget(console_widget);
 
     QList<int> console_size;

@@ -4,6 +4,6 @@
 
 namespace OccTools
 {
-bool fequal(double avalue1, double avalue2, double atolerance = 1.0e-7);
+bool fEqual(double avalue1, double avalue2, double atolerance = 1.0e-7);
 }
 #endif

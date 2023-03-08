@@ -99,6 +99,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BinSearchNode.cpp" />
+    <ClCompile Include="BiSearch.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="CADView.cpp" />
     <ClCompile Include="CustomQlistWidget.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="DataObserver.cpp" />
     <ClCompile Include="KAngleMultiLine.cpp" />
     <ClCompile Include="KContext.cpp" />
+    <ClCompile Include="KDSearch.cpp" />
     <ClCompile Include="KLine.cpp" />
     <ClCompile Include="KRegion.cpp" />
     <ClCompile Include="KViewBox.cpp" />
@@ -114,15 +116,16 @@
     <ClCompile Include="mathUtils.cpp" />
     <ClCompile Include="PreLine.cpp" />
     <ClCompile Include="public_function.cpp" />
-    <ClCompile Include="kd_search.cpp" />
-    <ClCompile Include="K_box.cpp" />
+    <ClCompile Include="2d_search.cpp" />
+    <ClCompile Include="KBox.cpp" />
     <ClCompile Include="iwConsole.cpp" />
     <ClCompile Include="iwLog.cpp" />
     <ClCompile Include="global.cpp" />
-    <ClCompile Include="K_Pnt.cpp" />
+    <ClCompile Include="KPnt.cpp" />
     <ClCompile Include="MainWindowOcc.cpp" />
     <ClCompile Include="MultiUniset.cpp" />
     <ClCompile Include="KLogger.cpp" />
+    <ClCompile Include="RangeTree.cpp" />
     <ClCompile Include="shapetools.cpp" />
     <ClCompile Include="statusinfowidget.cpp" />
     <ClCompile Include="test_datastructure.cpp" />
@@ -140,11 +143,13 @@
     <QtMoc Include="iwConsole.h" />
     <QtMoc Include="CustomQlistWidget.h" />
     <ClInclude Include="BinSearchNode.h" />
+    <ClInclude Include="BiSearch.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
     <ClInclude Include="KAngleMultiLine.h" />
     <ClInclude Include="KContext.h" />
+    <ClInclude Include="KDSearch.h" />
     <ClInclude Include="KLine.h" />
     <ClInclude Include="KRegion.h" />
     <ClInclude Include="KViewBox.h" />
@@ -156,19 +161,20 @@
     <ClInclude Include="global.h" />
     <ClInclude Include="iwLog.h" />
     <ClInclude Include="iwSingleton.h" />
-    <ClInclude Include="K_Pnt.h" />
+    <ClInclude Include="KPnt.h" />
     <ClInclude Include="Ktimer.h" />
     <ClInclude Include="MultiUniset.h" />
     <ClInclude Include="lc_struct.h" />
     <ClInclude Include="KLogger.h" />
-    <ClInclude Include="kd_search.h" />
+    <ClInclude Include="2d_search.h" />
     <QtMoc Include="statusinfowidget.h" />
+    <ClInclude Include="RangeTree.h" />
     <ClInclude Include="shapetools.h" />
     <ClInclude Include="stadfx.h" />
     <ClInclude Include="test_datastructure.h" />
     <ClInclude Include="unionset.h" />
     <QtMoc Include="CADView.h" />
-    <ClInclude Include="K_box.h" />
+    <ClInclude Include="KBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

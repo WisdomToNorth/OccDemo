@@ -7,7 +7,7 @@
 #include <list>
 
 #include "BoundingBox.h"
-#include "K_box.h"
+#include "KBox.h"
 #include "KAngleMultiLine.h"
 
 namespace KDebugger

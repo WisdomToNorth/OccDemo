@@ -23,15 +23,12 @@
     <ClCompile Include="MainWindowOcc.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="K_box.cpp">
+    <ClCompile Include="KBox.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
-    <ClCompile Include="kd_search.cpp">
-      <Filter>DataStructure</Filter>
-    </ClCompile>
-    <ClCompile Include="K_Pnt.cpp">
+    <ClCompile Include="KPnt.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
     <ClCompile Include="public_function.cpp">
@@ -70,13 +67,25 @@
     <ClCompile Include="shapetools.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="KViewBox.cpp" />
     <ClCompile Include="KContext.cpp" />
     <ClCompile Include="BoundingBox.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
     <ClCompile Include="KRegion.cpp">
       <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="2d_search.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="KDSearch.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="KViewBox.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="BiSearch.cpp" />
+    <ClCompile Include="RangeTree.cpp">
+      <Filter>DataStructure</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,13 +95,7 @@
     <ClInclude Include="iwSingleton.h">
       <Filter>UI\Consolelog</Filter>
     </ClInclude>
-    <ClInclude Include="Ktimer.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="kd_search.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="K_Pnt.h">
+    <ClInclude Include="KPnt.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="MultiUniset.h">
@@ -104,7 +107,7 @@
     <ClInclude Include="lc_struct.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="K_box.h">
+    <ClInclude Include="KBox.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="DataGenerator.h" />
@@ -143,7 +146,6 @@
     <ClInclude Include="shapetools.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="KViewBox.h" />
     <ClInclude Include="KContext.h" />
     <ClInclude Include="unionset.h">
       <Filter>Manner</Filter>
@@ -153,6 +155,22 @@
     </ClInclude>
     <ClInclude Include="KRegion.h">
       <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="2d_search.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="Ktimer.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="KDSearch.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="KViewBox.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="BiSearch.h" />
+    <ClInclude Include="RangeTree.h">
+      <Filter>DataStructure</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
