@@ -4,7 +4,6 @@ namespace KDebugger
 {
 BiSearch::BiSearch() {}
 
-
 // For 1D
 template<typename Iterator>
 BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
@@ -40,12 +39,11 @@ BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
     std::sort(vec.begin(), vec.end(),
         [](KPt& pt1, KPt& pt2)
         {
-            return pt1.x < pt2.x;
+            return pt1.y < pt2.y;
         });
     //std::cout << "\nAfter sort:" << std::endl;
     //printPntVec(vec);
 
-    int n = vec.size();
     BinSearchNode* root = new BinSearchNode();
     return buildFromSortedVec(root, vec, vec.begin(), vec.size());
 }
@@ -57,9 +55,9 @@ const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
     double leftnum, double rightnum)//1D
 {
     const BinSearchNode* v = root;
-    while (!v->isLeaf() && (rightnum <= v->pnt_.x || leftnum > v->pnt_.x))
+    while (!v->isLeaf() && (rightnum <= v->pnt_.y || leftnum > v->pnt_.y))
     {
-        if (rightnum < v->pnt_.x)
+        if (rightnum <= v->pnt_.y)
             v = v->left_;
         else
             v = v->right_;
@@ -79,7 +77,7 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
     const BinSearchNode* v_split = FindSplitNode(root, l, r);
     if (v_split->isLeaf())
     {
-        if (v_split->belongToRangeInX(l, r))
+        if (v_split->belongToRangeInY(l, r))
             res.emplace_back(v_split->pnt_);
     }
     else
@@ -88,10 +86,9 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
         const BinSearchNode* l_split = v_split->left_;
         while (!l_split->isLeaf())
         {
-            if (l_split->pnt_.x >= l)
+            if (l_split->pnt_.y >= l)
             { // report right tree
                 l_split->right_->reportSubTree(res);
-                //  reportSubTree(, res);
                 l_split = l_split->left_;
             }
             else
@@ -99,17 +96,16 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
                 l_split = l_split->right_;
             }
         }
-        if (l_split->belongToRangeInX(l, r))
+        if (l_split->belongToRangeInY(l, r))
             res.emplace_back(l_split->pnt_);
 
         // find way to right;
         const BinSearchNode* r_split = v_split->right_;
         while (!r_split->isLeaf())
         {
-            if (r_split->pnt_.x < r)
+            if (r_split->pnt_.y < r)
             { // report right tree
                 r_split->left_->reportSubTree(res);
-                // reportSubTree(r_split->left_, res);
                 r_split = r_split->right_;
             }
             else
@@ -117,10 +113,8 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
                 r_split = r_split->left_;
             }
         }
-        if (r_split->belongToRangeInX(l, r))
+        if (r_split->belongToRangeInY(l, r))
             res.emplace_back(r_split->pnt_);
-
     }
 }
-
 }

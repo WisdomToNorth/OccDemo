@@ -35,6 +35,7 @@ void DataGenerator::notifyAll()
         obs->updateData();
     }
 }
+
 void DataGenerator::getPtData(std::vector<KPt>& buf)
 {
     std::vector<KPt> newbuf;
@@ -45,7 +46,19 @@ void DataGenerator::getPtData(std::vector<KPt>& buf)
     buf.swap(newbuf);
 
 }
+std::vector<double> DataGenerator::getFourNumber(double _min, double _max)
+{
+    std::vector<double> res;
+    std::uniform_real_distribution<double> size_rand_gen
+    (_min, _max);//尺寸随机范围
 
+    res.push_back(size_rand_gen(G_Random_Engine));
+    res.push_back(size_rand_gen(G_Random_Engine));
+    res.push_back(size_rand_gen(G_Random_Engine));
+    res.push_back(size_rand_gen(G_Random_Engine));
+    std::sort(res.begin(), res.end());
+    return res;
+}
 //void DataGenerator::generateData(std::vector<KBox>& buffer,
 //    int _row_size, int _col_size, double distance, int precision,
 //    double radius, bool same_radius)

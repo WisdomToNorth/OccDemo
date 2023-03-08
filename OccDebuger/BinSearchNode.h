@@ -14,11 +14,14 @@ struct BinSearchNode
     {
     }
     BinSearchNode(const KPt& _pnt, bool direction) : pnt_(_pnt), direction_(direction) {}
+    BinSearchNode(const KPt& _pnt) : pnt_(_pnt) {}
 
     BinSearchNode* left_ = nullptr;
     BinSearchNode* right_ = nullptr;
+    BinSearchNode* aux_ = nullptr;
+
     KPt pnt_;
-    bool direction_; // 0 for hor; 1 for vert
+    bool direction_ = false; // 0 for hor; 1 for vert
 
 public:
     bool isLeaf()const
@@ -29,12 +32,12 @@ public:
             return true;
     }
 
-    bool belongToRangeInX(int l, int r)const//in range [ )
+    bool belongToRangeInY(int b, int u)const//in range [ )
     {
-        return pnt_.x >= l && pnt_.x < r;
+        return pnt_.y >= b && pnt_.y < u;
     }
 
-    bool BinSearchNodeInRegion(const KRegion& region)//in range [ )
+    bool belongToRegion(const KRegion& region)const//in range [ )
     {
         return region.ptInRegion(this->pnt_);
     }
@@ -48,6 +51,7 @@ private:
         bool onlyX = false);
 
     void reportSubTree(BinSearchNode* root, std::vector<KPt>& subnodes);
+
 
 };
 

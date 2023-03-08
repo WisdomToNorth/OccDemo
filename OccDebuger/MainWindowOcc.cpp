@@ -201,26 +201,42 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
 
 void MainWindowOcc::on_actionkd_find1D_triggered()
 {
-    if (!kdtree_)kdtree_ = new KDTree(data_generator_);
-    kdtree_->getOneDRange(ui->dsb_left->value(), ui->dsb_right->value());
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
+    kdtree_->getOneDRange(ui->dsb_down->value(), ui->dsb_up->value());
 }
 
 void MainWindowOcc::on_actionori_find1D_triggered()
 {
-    if (!kdtree_)kdtree_ = new KDTree(data_generator_);
-    kdtree_->getOneDRangeOri(ui->dsb_left->value(), ui->dsb_right->value());
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
+    kdtree_->getOneDRangeOri(ui->dsb_down->value(), ui->dsb_up->value());
 }
+
+void MainWindowOcc::on_actionfind2D_triggered()
+{
+    std::cout << "\n############ 2D Search Test ###########\n";
+    on_actionori_find2D_triggered();
+    on_actionkd_find2D_triggered();
+    on_actionran_find2D_triggered();
+}
+
 void MainWindowOcc::on_actionkd_find2D_triggered()
 {
-    if (!kdtree_)kdtree_ = new KDTree(data_generator_);
-    kdtree_->getTwoDRangeKDTree(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
+    kdtree_->getTwoDRangeTwoDSearch(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
         KPt(ui->dsb_right->value(), ui->dsb_up->value())));
 }
 
 void MainWindowOcc::on_actionori_find2D_triggered()
 {
-    if (!kdtree_)kdtree_ = new KDTree(data_generator_);
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
     kdtree_->getTwoDRangeOri(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
+        KPt(ui->dsb_right->value(), ui->dsb_up->value())));
+}
+
+void MainWindowOcc::on_actionran_find2D_triggered()
+{
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
+    kdtree_->getTwoDRangeRangeTree(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
         KPt(ui->dsb_right->value(), ui->dsb_up->value())));
 }
 
@@ -238,6 +254,17 @@ void MainWindowOcc::on_pb_valueSmall_pressed()
 {
     ui->sb_col->setValue(5);
     ui->sb_row->setValue(5);
+}
+
+void MainWindowOcc::on_pb_RandRange_pressed()
+{
+    double mi = ui->dsb_r_min->value();
+    double ma = ui->dsb_r_max->value();
+    const std::vector<double>& nums = data_generator_->getFourNumber(mi, ma);
+    ui->dsb_left->setValue(nums[0]);
+    ui->dsb_down->setValue(nums[1]);
+    ui->dsb_up->setValue(nums[2]);
+    ui->dsb_right->setValue(nums[3]);
 }
 
 void MainWindowOcc::on_pb_generate_pressed()

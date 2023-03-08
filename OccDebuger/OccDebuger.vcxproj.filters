@@ -83,8 +83,10 @@
     <ClCompile Include="KViewBox.cpp">
       <Filter>Manner</Filter>
     </ClCompile>
-    <ClCompile Include="BiSearch.cpp" />
     <ClCompile Include="RangeTree.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="BiSearch.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
   </ItemGroup>
@@ -168,8 +170,10 @@
     <ClInclude Include="KViewBox.h">
       <Filter>Manner</Filter>
     </ClInclude>
-    <ClInclude Include="BiSearch.h" />
     <ClInclude Include="RangeTree.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="BiSearch.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
   </ItemGroup>

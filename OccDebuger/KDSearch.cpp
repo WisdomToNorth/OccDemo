@@ -24,12 +24,12 @@ void KDSearch::getSortedPnts(const std::vector<KPt>& pnts,
         });
 }
 
-BinSearchNode* KDSearch::buildKDTree(const std::vector<KPt>& pnts)
+BinSearchNode* KDSearch::buildTwoDSearch(const std::vector<KPt>& pnts)
 {
     PntsSorted2D sorted_pnts;
     getSortedPnts(pnts, sorted_pnts);
 
-    return buildKDTreeFromSortedPnts(sorted_pnts, 0);
+    return buildTwoDSearchFromSortedPnts(sorted_pnts, 0);
 }
 
 KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
@@ -118,7 +118,7 @@ KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
     return midpt;
 }
 
-BinSearchNode* KDSearch::buildKDTreeFromSortedPnts(PntsSorted2D pnts,
+BinSearchNode* KDSearch::buildTwoDSearchFromSortedPnts(PntsSorted2D pnts,
     int cur_depth)
 {
     size_t n = pnts.size();
@@ -143,8 +143,8 @@ BinSearchNode* KDSearch::buildKDTreeFromSortedPnts(PntsSorted2D pnts,
             node->direction_ = 0;
         }
 
-        node->left_ = buildKDTreeFromSortedPnts(p1s, cur_depth + 1);
-        node->right_ = buildKDTreeFromSortedPnts(p2s, cur_depth + 1);
+        node->left_ = buildTwoDSearchFromSortedPnts(p1s, cur_depth + 1);
+        node->right_ = buildTwoDSearchFromSortedPnts(p2s, cur_depth + 1);
         return node;
     }
 }
@@ -152,13 +152,13 @@ BinSearchNode* KDSearch::buildKDTreeFromSortedPnts(PntsSorted2D pnts,
 //search KD tree
 //input: root of kd-tree, to-search region
 //output: vector of point in region
-std::vector<KPt> KDSearch::searchKDTreeFromRoot(BinSearchNode* root,
+std::vector<KPt> KDSearch::searchTwoDSearchFromRoot(BinSearchNode* root,
     const KRegion& region)
 {
     std::vector<KPt> res;
 
     KRegion init_region(KPt(INT8_MIN, INT8_MIN), KPt(INT8_MAX, INT8_MAX));
-    searchKDTree(res, root, init_region, region);
+    searchTwoDSearch(res, root, init_region, region);
     return res;
 }
 
@@ -181,12 +181,12 @@ KRegion KDSearch::getNewRegion(const KRegion& cur_region, const BinSearchNode* n
     }
 }
 
-void KDSearch::searchKDTree(std::vector<KPt>& res, BinSearchNode* root,
+void KDSearch::searchTwoDSearch(std::vector<KPt>& res, BinSearchNode* root,
     const KRegion& cur_region, const KRegion& region)
 {
     if (root->isLeaf())
     {
-        if (root->BinSearchNodeInRegion(region))res.emplace_back(root->pnt_);
+        if (root->belongToRegion(region))res.emplace_back(root->pnt_);
     }
     else
     {
@@ -194,12 +194,12 @@ void KDSearch::searchKDTree(std::vector<KPt>& res, BinSearchNode* root,
         auto check_res_l = regionCheck(left_region, region);
         if (check_res_l == ERegionCrossState::in)
         {
-           // reportSubTree(root->left_, res);
+            // reportSubTree(root->left_, res);
             root->left_->reportSubTree(res);
         }
         else if (check_res_l == ERegionCrossState::part)
         {
-            searchKDTree(res, root->left_, left_region, region);
+            searchTwoDSearch(res, root->left_, left_region, region);
         }
 
         KRegion right_region = getNewRegion(cur_region, root, false);
@@ -211,7 +211,7 @@ void KDSearch::searchKDTree(std::vector<KPt>& res, BinSearchNode* root,
         }
         else if (check_res_r == ERegionCrossState::part)
         {
-            searchKDTree(res, root->right_, right_region, region);
+            searchTwoDSearch(res, root->right_, right_region, region);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace KDebugger
 class CadView;
 class MultiUniset;
 class DataGenerator;
-class KDTree;
+class TwoDSearch;
 class StatusInfoWidget;
 class LineDrawer;
 class PrePline;
@@ -45,6 +45,8 @@ private slots:
     void on_pb_valueMax_pressed();
     void on_pb_valueSmall_pressed();
     void on_pb_valueMax_unsafe_pressed();
+    void on_pb_RandRange_pressed();
+
     void on_actionFitAll_triggered();
     void on_actionview_triggered();
     void on_actionendCPU_triggered();
@@ -58,6 +60,9 @@ private slots:
     void on_actionori_find1D_triggered();
     void on_actionkd_find2D_triggered();
     void on_actionori_find2D_triggered();
+    void on_actionran_find2D_triggered();
+    void on_actionfind2D_triggered();
+
 
     //viewdate
     void on_action_drawline_triggered();
@@ -71,7 +76,7 @@ private:
 
     DataGenerator* data_generator_;
     MultiUniset* unionset_;
-    KDTree* kdtree_;
+    TwoDSearch* kdtree_;
     StatusInfoWidget* info_widget_;
     LineDrawer* line_drawer_ = nullptr;
 
