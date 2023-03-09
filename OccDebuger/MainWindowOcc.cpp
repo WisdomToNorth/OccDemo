@@ -213,7 +213,7 @@ void MainWindowOcc::on_actionori_find1D_triggered()
 
 void MainWindowOcc::on_actionfind2D_triggered()
 {
-    std::cout << "\n############ 2D Search Test ###########\n";
+    std::cout << "\n################### 2D Search Test ###################\n";
     on_actionori_find2D_triggered();
     on_actionkd_find2D_triggered();
     on_actionran_find2D_triggered();

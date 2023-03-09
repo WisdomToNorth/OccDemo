@@ -89,6 +89,9 @@
     <ClCompile Include="BiSearch.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
+    <ClCompile Include="multisort.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -175,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="BiSearch.h">
       <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="multisort.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

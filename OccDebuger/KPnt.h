@@ -13,7 +13,11 @@ struct KPt
     KPt() :x(0), y(0) {};
     void print()const;
     void printX()const;
+
+    bool operator <(const KPt&);
+    bool operator >(const KPt&);
 };
+
 void printPntVec(const std::vector<KPt>& pnts);
 
 

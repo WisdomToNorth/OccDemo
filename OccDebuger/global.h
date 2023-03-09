@@ -16,7 +16,9 @@ extern std::default_random_engine G_Random_Engine;
 extern bool G_Stop_Program;//exit circulation
 
 bool GCheckCpuMode();
-unsigned long long G_CoreCount(unsigned long long datasize);
+
+unsigned long long G_CoreCount(unsigned long long datasize,
+    unsigned long long min_per_thread = 5000);
 
 enum class Appearance
 {
