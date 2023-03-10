@@ -5,9 +5,9 @@
 namespace KDebugger
 {
 
-void BinSearchNode::printBinSearchTree(bool onlyX)
+void BinSearchNode::printBinSearchTree(bool onlyY)
 {
-    printBinSearchTree(this, onlyX);
+    printBinSearchTree(this, onlyY);
 }
 
 void BinSearchNode::reportSubTree(std::vector<KPt>& subnodes)
@@ -31,7 +31,7 @@ void BinSearchNode::reportSubTree(BinSearchNode* root,
         reportSubTree(root->right_, subnodes);
 }
 
-void BinSearchNode::printBinSearchTree(const BinSearchNode* root, bool onlyX)
+void BinSearchNode::printBinSearchTree(const BinSearchNode* root, bool onlyY)
 {
     if (!root)return;
     std::queue <const BinSearchNode*> q;
@@ -44,7 +44,7 @@ void BinSearchNode::printBinSearchTree(const BinSearchNode* root, bool onlyX)
             auto node = q.front();
             q.pop();
 
-            if (onlyX)node->pnt_.printX();
+            if (onlyY)node->pnt_.printY();
             else node->pnt_.print();
             std::cout << '\t';
             if (node->left_)q.push(node->left_);

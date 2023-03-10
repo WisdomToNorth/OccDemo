@@ -72,12 +72,16 @@ int TwoDSearch::getOneDRange(double l, double r, bool _debug)
     }
     std::vector<KPt>temp;
     res_.swap(temp);
-    helper.oneDRangeQuery(binsearch_1d_, l, r, res_);
     if (_debug)
     {
         std::cout << "\n ####tree start####\n";
-        binsearch_1d_->printBinSearchTree();
+        binsearch_1d_->printBinSearchTree(true);
         std::cout << "\n ####tree end####\n";
+
+    }
+    helper.oneDRangeQuery(binsearch_1d_, l, r, res_);
+    if (_debug)
+    {
         reportRes();
     }
     return res_.size();
@@ -85,7 +89,7 @@ int TwoDSearch::getOneDRange(double l, double r, bool _debug)
 
 int TwoDSearch::getTwoDRangeOri(const KRegion& r)
 {
-    std::cout << "\n-----2D Search Origin-----";
+    // std::cout << "\n-----2D Search Origin-----";
 
     std::vector<KPt>temp;
     res_.swap(temp);
@@ -99,15 +103,15 @@ int TwoDSearch::getTwoDRangeOri(const KRegion& r)
             cnt++;
         }
     }
-    std::cout << "\nOrigin: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << cnt << std::endl;
+    //std::cout << "\nOrigin: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
+    //std::cout << "res size:" << cnt << std::endl;
 
     return res_.size();
 }
 
 int TwoDSearch::getTwoDRangeTwoDSearch(const KRegion& r)
 {
-    std::cout << "\n-----2D Search KD------";
+    // std::cout << "\n-----2D Search KD------";
 
     KTimer timer;
     size_t cnt = 0;
@@ -119,7 +123,7 @@ int TwoDSearch::getTwoDRangeTwoDSearch(const KRegion& r)
         std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms\n";
     }
     std::vector<KPt> buf = helper.searchTwoDSearchFromRoot(kd_2d_, r);
-    std::cout << "\nkd_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
+    //std::cout << "\nkd_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
     //std::cout << "res size:" << buf.size() << std::endl;
     //for (auto& pt : buf)pt.print();
 
@@ -129,7 +133,7 @@ int TwoDSearch::getTwoDRangeTwoDSearch(const KRegion& r)
 
 int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r)
 {
-    std::cout << "\n-----2D Search Range2D------";
+    //std::cout << "\n-----2D Search Range2D------";
 
     KTimer timer;
     size_t cnt = 0;
@@ -143,8 +147,8 @@ int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r)
     std::vector<KPt> temp;
     res_.swap(temp);
     helper.searchRangeTreeFromRoot(range_2d_, r, res_);
-    std::cout << "\nrange_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << res_.size() << std::endl;
+    //std::cout << "\nrange_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
+    //std::cout << "res size:" << res_.size() << std::endl;
     //printPntVec(buf);
     return res_.size();
 }

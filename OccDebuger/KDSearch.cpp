@@ -1,5 +1,7 @@
 ﻿#include "KDSearch.h"
 
+#include "multisort.h"
+
 namespace KDebugger
 {
 KDSearch::KDSearch() {}
@@ -10,18 +12,20 @@ void KDSearch::getSortedPnts(const std::vector<KPt>& pnts,
 {
     sorted_pnts.pnts_xsorted_ = pnts;
     sorted_pnts.pnts_ysorted_ = pnts;
-    //sortx
-    std::sort(sorted_pnts.pnts_xsorted_.begin(), sorted_pnts.pnts_xsorted_.end(),
-        [](KPt v1, KPt v2) -> bool
-        {
-            return v1.x < v2.x;
-        });
-    // sorty
-    std::sort(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end(),
-        [](KPt v1, KPt v2) -> bool
-        {
-            return v1.y > v2.y;
-        });
+    ////sortx
+    //std::sort(sorted_pnts.pnts_xsorted_.begin(), sorted_pnts.pnts_xsorted_.end(),
+    //    [](KPt v1, KPt v2) -> bool
+    //    {
+    //        return v1.x < v2.x;
+    //    });
+    //// sorty
+    //std::sort(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end(),
+    //    [](KPt v1, KPt v2) -> bool
+    //    {
+    //        return v1.y > v2.y;
+    //    });
+    Sort_XS(sorted_pnts.pnts_xsorted_.begin(), sorted_pnts.pnts_xsorted_.end());
+    Sort_YL(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end());
 }
 
 BinSearchNode* KDSearch::buildTwoDSearch(const std::vector<KPt>& pnts)
@@ -61,18 +65,7 @@ KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
                 return v1.y > v2.y;
             });
         midpt = *(pnts.pnts_xsorted_.begin() + mid);
-        /* double mid_x = (pnts.pnts_xsorted_.begin() + mid)->x;
-         for (const KPt& pnt : pnts.pnts_ysorted_)
-         {
-             if (pnt.x < mid_x)
-             {
-                 p1s.pnts_ysorted_.emplace_back(pnt);
-             }
-             else
-             {
-                 p2s.pnts_ysorted_.emplace_back(pnt);
-             }
-         }*/
+
         p1s.size();
         p2s.size();
     }
@@ -99,19 +92,7 @@ KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
                 return v1.x < v2.x;
             });
         midpt = *(pnts.pnts_ysorted_.begin() + mid - 1);
-        //double mid_y = (pnts.pnts_ysorted_.begin() + mid-1)->y;
-        ////需要用前一组的最后一个元素，判定时，取小于等于，值
-        //for (const KPt& pnt : pnts.pnts_xsorted_)
-        //{
-        //    if (pnt.y < mid_y)
-        //    {
-        //        p1s.pnts_xsorted_.emplace_back(pnt);
-        //    }
-        //    else
-        //    {
-        //        p2s.pnts_xsorted_.emplace_back(pnt);
-        //    }
-        //}
+
         p1s.size();
         p2s.size();
     }

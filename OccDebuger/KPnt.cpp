@@ -9,6 +9,10 @@ void KPt::print()const
 {
     std::cout << "{" << x << ", " << y << "}";
 }
+void KPt::printY()const
+{
+    std::cout << "{" << y << "}";
+}
 void KPt::printX()const
 {
     std::cout << "{" << x << "}";

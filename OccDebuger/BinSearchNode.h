@@ -32,7 +32,12 @@ public:
             return true;
     }
 
-    bool belongToRangeInY(int b, int u)const//in range [ )
+    bool belongToRangeInX(double l, double r)const//in range [ )
+    {
+        return pnt_.x >= l && pnt_.x < r;
+    }
+
+    bool belongToRangeInY(double b, double u)const//in range [ )
     {
         return pnt_.y >= b && pnt_.y < u;
     }

@@ -76,6 +76,7 @@ private:
     int kd_find2D(bool _debug = false);
     int ori_find2D(bool _debug = false);
     int ran_find2D(bool _debug = false);
+
 private:
     Ui::MainWindowOccClass* ui;
 

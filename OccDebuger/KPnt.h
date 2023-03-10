@@ -12,6 +12,7 @@ struct KPt
     KPt(double _x, double _y) :x(_x), y(_y) {};
     KPt() :x(0), y(0) {};
     void print()const;
+    void printY()const;
     void printX()const;
 };
 void printPntVec(const std::vector<KPt>& pnts);
