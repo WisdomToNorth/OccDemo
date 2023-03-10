@@ -201,43 +201,85 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
 
 void MainWindowOcc::on_actionkd_find1D_triggered()
 {
-    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    kdtree_->getOneDRange(ui->dsb_down->value(), ui->dsb_up->value());
+    kd_find1D();
 }
 
 void MainWindowOcc::on_actionori_find1D_triggered()
 {
-    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    kdtree_->getOneDRangeOri(ui->dsb_down->value(), ui->dsb_up->value());
+    ori_find1D();
 }
 
-void MainWindowOcc::on_actionfind2D_triggered()
+void MainWindowOcc::on_pb_Test1DFind_pressed()
 {
-    std::cout << "\n################### 2D Search Test ###################\n";
+    std::cout << "\n############ 1D Search Test Start ###########\n";
+
+    on_pb_generate_pressed();
+    for (int i = 0; i < 100; i++)
+    {
+        on_pb_RandRange_pressed();
+        if (ori_find1D() != kd_find1D())
+        {
+            std::cout << "test failed:" << std::endl;
+            std::cout << '[' << ui->dsb_down->value() << ", "
+                << ui->dsb_up->value() << "): ";
+            std::cout << "ori :" << ori_find1D() << std::endl;
+            std::cout << "binfind :" << kd_find1D() << std::endl;
+            std::cout << "ori :";
+            ori_find1D(true);
+            std::cout << "binfind :";
+            kd_find1D(true);
+        }
+    }
+    std::cout << "\n############ 1D Search Test Done ###########\n";
+}
+void MainWindowOcc::on_pb_Test2DFind_pressed()
+{
+    std::cout << "\n############ 2D Search Test ###########\n";
     on_actionori_find2D_triggered();
     on_actionkd_find2D_triggered();
     on_actionran_find2D_triggered();
 }
-
-void MainWindowOcc::on_actionkd_find2D_triggered()
+int MainWindowOcc::kd_find1D(bool _debug)
 {
     if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    kdtree_->getTwoDRangeTwoDSearch(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
+    return kdtree_->getOneDRange(ui->dsb_down->value(), ui->dsb_up->value(), _debug);
+}
+int MainWindowOcc::ori_find1D(bool _debug)
+{
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
+    return kdtree_->getOneDRangeOri(ui->dsb_down->value(), ui->dsb_up->value(), _debug);
+}
+int MainWindowOcc::kd_find2D(bool _debug)
+{
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
+    return kdtree_->getTwoDRangeTwoDSearch(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
         KPt(ui->dsb_right->value(), ui->dsb_up->value())));
+}
+int MainWindowOcc::ori_find2D(bool _debug)
+{
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
+    return kdtree_->getTwoDRangeOri(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
+        KPt(ui->dsb_right->value(), ui->dsb_up->value())));
+}
+int MainWindowOcc::ran_find2D(bool _debug)
+{
+    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
+    return kdtree_->getTwoDRangeRangeTree(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
+        KPt(ui->dsb_right->value(), ui->dsb_up->value())));
+}
+void MainWindowOcc::on_actionkd_find2D_triggered()
+{
+    kd_find2D();
 }
 
 void MainWindowOcc::on_actionori_find2D_triggered()
 {
-    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    kdtree_->getTwoDRangeOri(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
-        KPt(ui->dsb_right->value(), ui->dsb_up->value())));
+    ori_find2D();
 }
 
 void MainWindowOcc::on_actionran_find2D_triggered()
 {
-    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    kdtree_->getTwoDRangeRangeTree(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
-        KPt(ui->dsb_right->value(), ui->dsb_up->value())));
+    ran_find2D();
 }
 
 void MainWindowOcc::on_pb_valueMax_pressed()

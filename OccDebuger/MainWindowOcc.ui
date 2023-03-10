@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>848</width>
+    <width>441</width>
     <height>774</height>
    </rect>
   </property>
@@ -375,6 +375,20 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="pb_Test1DFind">
+            <property name="text">
+             <string>Test1DFind</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pb_Test2DFind">
+            <property name="text">
+             <string>Test2DFind</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -399,7 +413,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>848</width>
+     <width>441</width>
      <height>21</height>
     </rect>
    </property>
@@ -441,9 +455,6 @@
    <addaction name="actionFitAll"/>
    <addaction name="actionview"/>
    <addaction name="actionendCPU"/>
-   <addaction name="separator"/>
-   <addaction name="actionkd_find1D"/>
-   <addaction name="actionori_find1D"/>
    <addaction name="separator"/>
    <addaction name="actionfind2D"/>
    <addaction name="separator"/>

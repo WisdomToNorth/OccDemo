@@ -56,19 +56,26 @@ private slots:
     void on_act_unionfind_opt2_triggered();
 
     //kdtree
+    void on_pb_Test1DFind_pressed();
+    void on_pb_Test2DFind_pressed();
+
     void on_actionkd_find1D_triggered();
     void on_actionori_find1D_triggered();
     void on_actionkd_find2D_triggered();
     void on_actionori_find2D_triggered();
     void on_actionran_find2D_triggered();
-    void on_actionfind2D_triggered();
-
 
     //viewdate
     void on_action_drawline_triggered();
     void on_action_cpuline_triggered();
     void on_action_normline_triggered();
 
+private:
+    int kd_find1D(bool _debug=false);
+    int ori_find1D(bool _debug = false);
+    int kd_find2D(bool _debug = false);
+    int ori_find2D(bool _debug = false);
+    int ran_find2D(bool _debug = false);
 private:
     Ui::MainWindowOccClass* ui;
 

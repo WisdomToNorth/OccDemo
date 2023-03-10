@@ -1,7 +1,5 @@
 ﻿#include "BiSearch.h"
 
-#include "multisort.h"
-
 namespace KDebugger
 {
 BiSearch::BiSearch() {}
@@ -38,8 +36,13 @@ BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
 // For 1D
 BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
 {
-
-    Sort_YS(vec.begin(), vec.end());
+    std::sort(vec.begin(), vec.end(),
+        [](KPt& pt1, KPt& pt2)
+        {
+            return pt1.y < pt2.y;
+        });
+    //std::cout << "\nAfter sort:" << std::endl;
+    //printPntVec(vec);
 
     BinSearchNode* root = new BinSearchNode();
     return buildFromSortedVec(root, vec, vec.begin(), vec.size());

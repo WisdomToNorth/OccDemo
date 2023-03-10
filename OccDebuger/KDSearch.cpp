@@ -1,12 +1,5 @@
 ﻿#include "KDSearch.h"
 
-#include "multisort.h"
-
-#include <vector>
-#include <iterator>
-#include <forward_list>
-#include <algorithm>
-
 namespace KDebugger
 {
 KDSearch::KDSearch() {}
@@ -17,9 +10,18 @@ void KDSearch::getSortedPnts(const std::vector<KPt>& pnts,
 {
     sorted_pnts.pnts_xsorted_ = pnts;
     sorted_pnts.pnts_ysorted_ = pnts;
-
-    Sort_XS(sorted_pnts.pnts_xsorted_.begin(), sorted_pnts.pnts_xsorted_.end());
-    Sort_YL(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end());
+    //sortx
+    std::sort(sorted_pnts.pnts_xsorted_.begin(), sorted_pnts.pnts_xsorted_.end(),
+        [](KPt v1, KPt v2) -> bool
+        {
+            return v1.x < v2.x;
+        });
+    // sorty
+    std::sort(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end(),
+        [](KPt v1, KPt v2) -> bool
+        {
+            return v1.y > v2.y;
+        });
 }
 
 BinSearchNode* KDSearch::buildTwoDSearch(const std::vector<KPt>& pnts)
@@ -30,7 +32,7 @@ BinSearchNode* KDSearch::buildTwoDSearch(const std::vector<KPt>& pnts)
     return buildTwoDSearchFromSortedPnts(sorted_pnts, 0);
 }
 
-KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
+KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
     PntsSorted2D& p2s, bool direction)
 {
     int n = pnts.size();
@@ -45,37 +47,34 @@ KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
         p2s.pnts_xsorted_.assign(pnts.pnts_xsorted_.begin() + mid,
             pnts.pnts_xsorted_.end()); // mid to last
 
-        midpt = *(pnts.pnts_xsorted_.begin() + mid);
-
         //todo: need not sort here
-        /*p1s.pnts_ysorted_ = p1s.pnts_xsorted_;
-        Sort_YL(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end());
-        p2s.pnts_ysorted_ = p2s.pnts_xsorted_;
-        Sort_YL(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end());*/
-
-        double mid_x = (pnts.pnts_xsorted_.begin() + mid)->x;
-        auto it = std::stable_partition(pnts.pnts_ysorted_.begin(),
-            pnts.pnts_ysorted_.end(), [=](const KPt& pt)
+        p1s.pnts_ysorted_ = p1s.pnts_xsorted_;
+        std::sort(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end(),
+            [](KPt v1, KPt v2) -> bool
             {
-                return pt.x < mid_x;
+                return v1.y > v2.y;
             });
-        int gap = int(p1s.pnts_xsorted_.size()) - int(std::distance(pnts.pnts_ysorted_.begin(), it));
-        std::advance(it, gap);
-        p1s.pnts_ysorted_.assign(pnts.pnts_ysorted_.begin(), it);
-        p2s.pnts_ysorted_.assign(it, pnts.pnts_ysorted_.end());
-        /*for (const KPt& pnt : pnts.pnts_ysorted_)
-        {
-            if (pnt.x <= mid_x && p1s.pnts_ysorted_.size() < p1s.pnts_xsorted_.size())
+        p2s.pnts_ysorted_ = p2s.pnts_xsorted_;
+        std::sort(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end(),
+            [](KPt v1, KPt v2) -> bool
             {
-                p1s.pnts_ysorted_.emplace_back(pnt);
-            }
-            else
-            {
-                p2s.pnts_ysorted_.emplace_back(pnt);
-            }
-        }*/
-        //p1s.size();
-        //p2s.size();
+                return v1.y > v2.y;
+            });
+        midpt = *(pnts.pnts_xsorted_.begin() + mid);
+        /* double mid_x = (pnts.pnts_xsorted_.begin() + mid)->x;
+         for (const KPt& pnt : pnts.pnts_ysorted_)
+         {
+             if (pnt.x < mid_x)
+             {
+                 p1s.pnts_ysorted_.emplace_back(pnt);
+             }
+             else
+             {
+                 p2s.pnts_ysorted_.emplace_back(pnt);
+             }
+         }*/
+        p1s.size();
+        p2s.size();
     }
     else//horizon by mid y
     {
@@ -85,33 +84,26 @@ KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
         //put into p2s
         p2s.pnts_ysorted_.assign(pnts.pnts_ysorted_.begin() + mid,
             pnts.pnts_ysorted_.end()); // mid to last
-        midpt = *(pnts.pnts_ysorted_.begin() + mid - 1);
 
         //todo: need not sort here
-        /*p1s.pnts_xsorted_ = p1s.pnts_ysorted_;
-        Sort_XS(p1s.pnts_xsorted_.begin(), p1s.pnts_xsorted_.end());
-        p2s.pnts_xsorted_ = p2s.pnts_ysorted_;
-        Sort_XS(p2s.pnts_xsorted_.begin(), p2s.pnts_xsorted_.end());*/
-
-        //double mid_x = (pnts.pnts_xsorted_.begin() + mid)->x;
-
-        double mid_y = (pnts.pnts_ysorted_.begin() + mid)->y;
-        auto it = std::stable_partition(pnts.pnts_xsorted_.begin(),
-            pnts.pnts_xsorted_.end(), [=](const KPt& pt)
+        p1s.pnts_xsorted_ = p1s.pnts_ysorted_;
+        std::sort(p1s.pnts_xsorted_.begin(), p1s.pnts_xsorted_.end(),
+            [](KPt v1, KPt v2) -> bool
             {
-                return pt.y > mid_y;
+                return v1.x < v2.x;
             });
-        int gap = int(p1s.pnts_ysorted_.size()) -
-            int(std::distance(pnts.pnts_xsorted_.begin(), it));
-        std::advance(it, gap);
-        p1s.pnts_xsorted_.assign(pnts.pnts_xsorted_.begin(), it);
-        p2s.pnts_xsorted_.assign(it, pnts.pnts_xsorted_.end());
-
-        //double mid_y = (pnts.pnts_ysorted_.begin() + mid - 1)->y;
+        p2s.pnts_xsorted_ = p2s.pnts_ysorted_;
+        std::sort(p2s.pnts_xsorted_.begin(), p2s.pnts_xsorted_.end(),
+            [](KPt v1, KPt v2) -> bool
+            {
+                return v1.x < v2.x;
+            });
+        midpt = *(pnts.pnts_ysorted_.begin() + mid - 1);
+        //double mid_y = (pnts.pnts_ysorted_.begin() + mid-1)->y;
         ////需要用前一组的最后一个元素，判定时，取小于等于，值
         //for (const KPt& pnt : pnts.pnts_xsorted_)
         //{
-        //    if (pnt.y <= mid_y && p1s.pnts_xsorted_.size() < p1s.pnts_ysorted_.size())
+        //    if (pnt.y < mid_y)
         //    {
         //        p1s.pnts_xsorted_.emplace_back(pnt);
         //    }
@@ -120,13 +112,13 @@ KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
         //        p2s.pnts_xsorted_.emplace_back(pnt);
         //    }
         //}
-        //p1s.size();
-        //p2s.size();
+        p1s.size();
+        p2s.size();
     }
     return midpt;
 }
 
-BinSearchNode* KDSearch::buildTwoDSearchFromSortedPnts(PntsSorted2D& pnts,
+BinSearchNode* KDSearch::buildTwoDSearchFromSortedPnts(PntsSorted2D pnts,
     int cur_depth)
 {
     size_t n = pnts.size();

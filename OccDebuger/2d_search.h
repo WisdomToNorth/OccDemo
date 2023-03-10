@@ -16,15 +16,15 @@ class TwoDSearch :public DataObserver
 public:
     TwoDSearch(DataGenerator* generator);
     void updateData()override;
-    void getOneDRange(double l, double r);
-    void getOneDRangeOri(double l, double r);
-    void getTwoDRangeTwoDSearch(const KRegion& r);
-    void getTwoDRangeOri(const KRegion& r);
-    void getTwoDRangeRangeTree(const KRegion& r);
-
+    int getOneDRange(double l, double r, bool _debug = false);
+    int getOneDRangeOri(double l, double r, bool _debug = false);
+    int getTwoDRangeTwoDSearch(const KRegion& r);
+    int getTwoDRangeOri(const KRegion& r);
+    int getTwoDRangeRangeTree(const KRegion& r);
+    void reportRes();
 private:
     std::vector<KPt> buf_;
-
+    std::vector<KPt> res_;
     BinSearchNode* binsearch_1d_ = nullptr;
     BinSearchNode* kd_2d_ = nullptr;
     BinSearchNode* range_2d_ = nullptr;

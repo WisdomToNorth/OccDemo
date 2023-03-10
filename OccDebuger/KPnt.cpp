@@ -5,17 +5,6 @@
 
 namespace KDebugger
 {
-
-bool KPt::operator <(const KPt& rhs)
-{
-    return this->x < rhs.x;
-}
-
-bool KPt::operator >(const KPt& rhs)
-{
-    return this->x < rhs.x;
-}
-
 void KPt::print()const
 {
     std::cout << "{" << x << ", " << y << "}";

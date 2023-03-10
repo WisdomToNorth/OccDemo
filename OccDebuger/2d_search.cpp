@@ -34,33 +34,31 @@ void TwoDSearch::updateData()
 }
 
 // For 1D
-void TwoDSearch::getOneDRangeOri(double l, double r)
+int TwoDSearch::getOneDRangeOri(double l, double r, bool _debug)
 {
-    std::cout << "\n-----------1D Search------------" << std::endl;
-
-    KTimer timer;
     size_t cnt = 0;
     std::vector<KPt> res;
+    res_.swap(res);
     for (const auto& pt : buf_)
     {
         if (pt.y >= l && pt.y < r)
         {
             cnt++;
-            res.emplace_back(pt);
+            res_.emplace_back(pt);
         }
 
     }
-
-    std::cout << "\nOrigin: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << cnt << std::endl;
-    //printPntVec(res);
-
+    if (_debug)reportRes();
+    return res_.size();
 }
-
-// For 1D
-void TwoDSearch::getOneDRange(double l, double r)
+void TwoDSearch::reportRes()
 {
-    std::cout << "\n-----------1D binnode search------------" << std::endl;
+    printPntVec(res_);
+}
+// For 1D
+int TwoDSearch::getOneDRange(double l, double r, bool _debug)
+{
+    //std::cout << "\n-----1D binnode search------" << std::endl;
 
     KTimer timer;
     BiSearch helper;
@@ -72,35 +70,44 @@ void TwoDSearch::getOneDRange(double l, double r)
         //std::cout << "\n ####tree end####\n";
         std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms\n";
     }
-    std::vector<KPt> res;
-    helper.oneDRangeQuery(binsearch_1d_, l, r, res);
-
-    std::cout << "\nGet Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << res.size() << std::endl;
-    //printPntVec(res);
+    std::vector<KPt>temp;
+    res_.swap(temp);
+    helper.oneDRangeQuery(binsearch_1d_, l, r, res_);
+    if (_debug)
+    {
+        std::cout << "\n ####tree start####\n";
+        binsearch_1d_->printBinSearchTree();
+        std::cout << "\n ####tree end####\n";
+        reportRes();
+    }
+    return res_.size();
 }
 
-void TwoDSearch::getTwoDRangeOri(const KRegion& r)
+int TwoDSearch::getTwoDRangeOri(const KRegion& r)
 {
-    std::cout << "\n-----------2D Search Origin------------";
-    std::vector<KPt> buf;
+    std::cout << "\n-----2D Search Origin-----";
+
+    std::vector<KPt>temp;
+    res_.swap(temp);
     KTimer timer;
     size_t cnt = 0;
     for (const auto& pt : buf_)
     {
         if (r.ptInRegion(pt))
         {
-            buf.emplace_back(pt);
+            res_.emplace_back(pt);
             cnt++;
         }
     }
     std::cout << "\nOrigin: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
     std::cout << "res size:" << cnt << std::endl;
+
+    return res_.size();
 }
 
-void TwoDSearch::getTwoDRangeTwoDSearch(const KRegion& r)
+int TwoDSearch::getTwoDRangeTwoDSearch(const KRegion& r)
 {
-    std::cout << "\n-----------2D Search KD------------";
+    std::cout << "\n-----2D Search KD------";
 
     KTimer timer;
     size_t cnt = 0;
@@ -113,13 +120,16 @@ void TwoDSearch::getTwoDRangeTwoDSearch(const KRegion& r)
     }
     std::vector<KPt> buf = helper.searchTwoDSearchFromRoot(kd_2d_, r);
     std::cout << "\nkd_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << buf.size() << std::endl;
+    //std::cout << "res size:" << buf.size() << std::endl;
     //for (auto& pt : buf)pt.print();
+
+    res_.swap(buf);
+    return res_.size();
 }
 
-void TwoDSearch::getTwoDRangeRangeTree(const KRegion& r)
+int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r)
 {
-    std::cout << "\n-----------2D Search Range2D------------";
+    std::cout << "\n-----2D Search Range2D------";
 
     KTimer timer;
     size_t cnt = 0;
@@ -130,10 +140,12 @@ void TwoDSearch::getTwoDRangeRangeTree(const KRegion& r)
         //range_2d_->printBinSearchTree();
         std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms\n";
     }
-    std::vector<KPt> buf;
-    helper.searchRangeTreeFromRoot(range_2d_, r, buf);
+    std::vector<KPt> temp;
+    res_.swap(temp);
+    helper.searchRangeTreeFromRoot(range_2d_, r, res_);
     std::cout << "\nrange_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << buf.size() << std::endl;
+    std::cout << "res size:" << res_.size() << std::endl;
     //printPntVec(buf);
+    return res_.size();
 }
 }
