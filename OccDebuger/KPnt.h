@@ -11,6 +11,7 @@ struct KPt
     double y;
     KPt(double _x, double _y) :x(_x), y(_y) {};
     KPt() :x(0), y(0) {};
+    bool isEqual(const KPt& rhs);
     void print()const;
     void printY()const;
     void printX()const;
@@ -34,6 +35,7 @@ struct PntsSorted2D
         assert(size() == 1);
         return pnts_xsorted_.front();
     }
+    bool confirmValid();
 };
 
 }

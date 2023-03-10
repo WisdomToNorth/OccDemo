@@ -7,6 +7,8 @@
 #include "global.h"
 #include "KPnt.h"
 
+//#define MULTISORT
+
 namespace KDebugger
 {
 
@@ -80,6 +82,7 @@ void merge_yl(Iterator start, int length, int size)
 template<typename Iterator>
 void Sort_XS(Iterator start, Iterator end)
 {
+#ifdef MULTISORT
     const size_t length = std::distance(start, end);
 
     auto max_thread = G_CoreCount(length);
@@ -98,11 +101,17 @@ void Sort_XS(Iterator start, Iterator end)
     for (auto& i : threads)
         i.join();
     merge_xs(start, size, max_thread);
+#else
+    F_XS(start, end);
+#endif // MULTISORT
+
+
 }
 
 template<typename Iterator>
 void Sort_XL(Iterator start, Iterator end)
 {
+#ifdef MULTISORT
     const size_t length = std::distance(start, end);
 
     auto max_thread = G_CoreCount(length);
@@ -121,10 +130,16 @@ void Sort_XL(Iterator start, Iterator end)
     for (auto& i : threads)
         i.join();
     merge_xl(start, size, max_thread);
+
+#else
+
+    F_XL(start, end);
+#endif // MULTISORT
 }
 template<typename Iterator>
 void Sort_YS(Iterator start, Iterator end)
 {
+#ifdef MULTISORT
     const size_t length = std::distance(start, end);
 
     auto max_thread = G_CoreCount(length);
@@ -143,11 +158,15 @@ void Sort_YS(Iterator start, Iterator end)
     for (auto& i : threads)
         i.join();
     merge_ys(start, size, max_thread);
+#else
+    F_YS(start, end);
+#endif // MULTISORT
 }
 
 template<typename Iterator>
 void Sort_YL(Iterator start, Iterator end)
 {
+#ifdef MULTISORT
     const size_t length = std::distance(start, end);
 
     auto max_thread = G_CoreCount(length);
@@ -166,5 +185,8 @@ void Sort_YL(Iterator start, Iterator end)
     for (auto& i : threads)
         i.join();
     merge_yl(start, size, max_thread);
+#else
+    F_YL(start, end);
+#endif // MULTISORT
 }
 }

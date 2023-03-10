@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
+    <width>896</width>
     <height>774</height>
    </rect>
   </property>
@@ -413,7 +413,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>441</width>
+     <width>896</width>
      <height>21</height>
     </rect>
    </property>
@@ -456,7 +456,6 @@
    <addaction name="actionview"/>
    <addaction name="actionendCPU"/>
    <addaction name="separator"/>
-   <addaction name="actionfind2D"/>
    <addaction name="separator"/>
    <addaction name="action_drawline"/>
    <addaction name="action_cpuline"/>

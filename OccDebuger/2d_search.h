@@ -18,9 +18,9 @@ public:
     void updateData()override;
     int getOneDRange(double l, double r, bool _debug = false);
     int getOneDRangeOri(double l, double r, bool _debug = false);
-    int getTwoDRangeTwoDSearch(const KRegion& r);
-    int getTwoDRangeOri(const KRegion& r);
-    int getTwoDRangeRangeTree(const KRegion& r);
+    int getTwoDRangeKDSearch(const KRegion& r, bool _debug = false);
+    int getTwoDRangeOri(const KRegion& r, bool _debug = false);
+    int getTwoDRangeRangeTree(const KRegion& r, bool _debug = false);
     void reportRes();
 private:
     std::vector<KPt> buf_;

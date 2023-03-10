@@ -87,7 +87,7 @@ int TwoDSearch::getOneDRange(double l, double r, bool _debug)
     return res_.size();
 }
 
-int TwoDSearch::getTwoDRangeOri(const KRegion& r)
+int TwoDSearch::getTwoDRangeOri(const KRegion& r, bool _debug)
 {
     // std::cout << "\n-----2D Search Origin-----";
 
@@ -105,11 +105,15 @@ int TwoDSearch::getTwoDRangeOri(const KRegion& r)
     }
     //std::cout << "\nOrigin: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
     //std::cout << "res size:" << cnt << std::endl;
-
+    if (_debug)
+    {
+        std::cout << "\nres of origin method: ";
+        reportRes();
+    }
     return res_.size();
 }
 
-int TwoDSearch::getTwoDRangeTwoDSearch(const KRegion& r)
+int TwoDSearch::getTwoDRangeKDSearch(const KRegion& r, bool _debug)
 {
     // std::cout << "\n-----2D Search KD------";
 
@@ -119,19 +123,31 @@ int TwoDSearch::getTwoDRangeTwoDSearch(const KRegion& r)
     if (!kd_2d_)
     {
         kd_2d_ = helper.buildTwoDSearch(buf_);
-        //printBinSearchTree(kd_2d_);
-        std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms\n";
+
+        std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms" << std::endl;
+    }
+
+    if (_debug)
+    {
+        std::cout << "\n ####tree start####" << std::endl;
+        kd_2d_->printBinSearchTree();
+        std::cout << "\n ####tree end####" << std::endl;
     }
     std::vector<KPt> buf = helper.searchTwoDSearchFromRoot(kd_2d_, r);
     //std::cout << "\nkd_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
     //std::cout << "res size:" << buf.size() << std::endl;
-    //for (auto& pt : buf)pt.print();
-
     res_.swap(buf);
+
+    if (_debug)
+    {
+        std::cout << "\nres of kd tree method:";
+        reportRes();
+    }
+
     return res_.size();
 }
 
-int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r)
+int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r, bool _debug)
 {
     //std::cout << "\n-----2D Search Range2D------";
 
@@ -142,14 +158,26 @@ int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r)
     {
         range_2d_ = helper.buildRangeTree(buf_);
         //range_2d_->printBinSearchTree();
-        std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms\n";
+        std::cout << "\nBuild tree in " << timer.timeFromBegin(false)
+            << " ms" << std::endl;
+    }
+    if (_debug)
+    {
+        std::cout << "\n ####tree start####" << std::endl;
+        range_2d_->printBinSearchTree();
+        std::cout << "\n ####tree end####" << std::endl;
     }
     std::vector<KPt> temp;
     res_.swap(temp);
     helper.searchRangeTreeFromRoot(range_2d_, r, res_);
     //std::cout << "\nrange_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
     //std::cout << "res size:" << res_.size() << std::endl;
-    //printPntVec(buf);
+
+    if (_debug)
+    {
+        std::cout << "\nres of range tree method: ";
+        reportRes();
+    }
     return res_.size();
 }
 }
