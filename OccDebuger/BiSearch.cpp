@@ -40,11 +40,6 @@ BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
 // For 1D
 BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
 {
-    /*  std::sort(vec.begin(), vec.end(),
-          [](KPt& pt1, KPt& pt2)
-          {
-              return pt1.y < pt2.y;
-          });*/
     Sort_YS(vec.begin(), vec.end());
     //std::cout << "\nAfter sort:" << std::endl;
     //printPntVec(vec);

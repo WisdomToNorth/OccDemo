@@ -12,18 +12,7 @@ void KDSearch::getSortedPnts(const std::vector<KPt>& pnts,
 {
     sorted_pnts.pnts_xsorted_ = pnts;
     sorted_pnts.pnts_ysorted_ = pnts;
-    ////sortx
-    //std::sort(sorted_pnts.pnts_xsorted_.begin(), sorted_pnts.pnts_xsorted_.end(),
-    //    [](KPt v1, KPt v2) -> bool
-    //    {
-    //        return v1.x < v2.x;
-    //    });
-    //// sorty
-    //std::sort(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end(),
-    //    [](KPt v1, KPt v2) -> bool
-    //    {
-    //        return v1.y > v2.y;
-    //    });
+
     Sort_XS(sorted_pnts.pnts_xsorted_.begin(), sorted_pnts.pnts_xsorted_.end());
     Sort_YL(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end());
 }
@@ -53,17 +42,10 @@ KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
 
         //todo: need not sort here
         p1s.pnts_ysorted_ = p1s.pnts_xsorted_;
-        std::sort(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end(),
-            [](KPt v1, KPt v2) -> bool
-            {
-                return v1.y > v2.y;
-            });
+        Sort_YL(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end());
+
         p2s.pnts_ysorted_ = p2s.pnts_xsorted_;
-        std::sort(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end(),
-            [](KPt v1, KPt v2) -> bool
-            {
-                return v1.y > v2.y;
-            });
+        Sort_YL(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end());
         midpt = *(pnts.pnts_xsorted_.begin() + mid);
 
         p1s.size();
@@ -80,17 +62,11 @@ KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
 
         //todo: need not sort here
         p1s.pnts_xsorted_ = p1s.pnts_ysorted_;
-        std::sort(p1s.pnts_xsorted_.begin(), p1s.pnts_xsorted_.end(),
-            [](KPt v1, KPt v2) -> bool
-            {
-                return v1.x < v2.x;
-            });
+
+        Sort_XS(p1s.pnts_xsorted_.begin(), p1s.pnts_xsorted_.end());
         p2s.pnts_xsorted_ = p2s.pnts_ysorted_;
-        std::sort(p2s.pnts_xsorted_.begin(), p2s.pnts_xsorted_.end(),
-            [](KPt v1, KPt v2) -> bool
-            {
-                return v1.x < v2.x;
-            });
+
+        Sort_XS(p2s.pnts_xsorted_.begin(), p2s.pnts_xsorted_.end());
         midpt = *(pnts.pnts_ysorted_.begin() + mid - 1);
 
         p1s.size();
@@ -99,7 +75,7 @@ KPt KDSearch::splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s,
     return midpt;
 }
 
-BinSearchNode* KDSearch::buildTwoDSearchFromSortedPnts(PntsSorted2D pnts,
+BinSearchNode* KDSearch::buildTwoDSearchFromSortedPnts(PntsSorted2D& pnts,
     int cur_depth)
 {
     size_t n = pnts.size();

@@ -23,7 +23,7 @@ private:
 
     KPt splitPnts(const PntsSorted2D& pnts, PntsSorted2D& p1s, PntsSorted2D& p2s, bool direction);
 
-    BinSearchNode* buildTwoDSearchFromSortedPnts(PntsSorted2D pnts, int cur_depth);
+    BinSearchNode* buildTwoDSearchFromSortedPnts(PntsSorted2D& pnts, int cur_depth);
 
     //true for first, false for second
     KRegion getNewRegion(const KRegion& cur_region, const BinSearchNode* node,

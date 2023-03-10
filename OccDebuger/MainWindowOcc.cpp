@@ -201,75 +201,12 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
 
 void MainWindowOcc::on_actionkd_find1D_triggered()
 {
-    kd_find1D();
+    kd_find1D(true);
 }
 
 void MainWindowOcc::on_actionori_find1D_triggered()
 {
-    ori_find1D();
-}
-
-void MainWindowOcc::on_pb_Test1DFind_pressed()
-{
-    std::cout << "\n\n\n############ 1D Search Test Start ###########\n";
-    for (int i = 0; i < 100; i++)
-    {
-        on_pb_RandRange_pressed();
-        if (ori_find1D() != kd_find1D())
-        {
-            std::cout << "test failed:" << i << std::endl;
-            std::cout << '[' << ui->dsb_down->value() << ", "
-                << ui->dsb_up->value() << "): ";
-            std::cout << "ori :" << ori_find1D() << std::endl;
-            std::cout << "binfind :" << kd_find1D() << std::endl;
-            std::cout << "ori :";
-            ori_find1D(true);
-            std::cout << "binfind :";
-            kd_find1D(true);
-        }
-    }
-    std::cout << "\n############ 1D Search Test Done ###########\n";
-}
-void MainWindowOcc::on_pb_Test2DFind_pressed()
-{
-    std::cout << "\n\n\n############ 2D Search Test Start #############\n";
-
-    for (int i = 0; i < 100; i++)
-    {
-        on_pb_RandRange_pressed();
-        if (ori_find2D() != kd_find2D())
-        {
-            std::cout << "test failed:" << i << std::endl;
-            std::cout << "left to right: [" << ui->dsb_left->value() << ", "
-                << ui->dsb_right->value() << ")\n";
-            std::cout << "down to up: [" << ui->dsb_down->value() << ", "
-                << ui->dsb_up->value() << ")\n";
-
-            std::cout << "ori :" << ori_find2D() << std::endl;
-            std::cout << "kd tree :" << kd_find2D() << std::endl;
-            std::cout << "ori :";
-            ori_find1D(true);
-            std::cout << "kd tree :";
-            kd_find1D(true);
-        }
-        if (ori_find2D() != ran_find2D())
-        {
-            std::cout << "test failed:" << i << std::endl;
-            std::cout << "left to right: [" << ui->dsb_left->value() << ", "
-                << ui->dsb_right->value() << ")\n";
-            std::cout << "down to up: [" << ui->dsb_down->value() << ", "
-                << ui->dsb_up->value() << ")\n";
-
-            std::cout << "ori :" << ori_find2D() << std::endl;
-            std::cout << "range tree :" << ran_find2D() << std::endl;
-            std::cout << "ori :";
-            ori_find2D(true);
-            std::cout << "range tree :";
-            ran_find2D(true);
-        }
-    }
-
-    std::cout << "\n############ 2D Search Test Done #############\n";
+    ori_find1D(true);
 }
 
 int MainWindowOcc::kd_find1D(bool _debug)
@@ -302,17 +239,17 @@ int MainWindowOcc::ran_find2D(bool _debug)
 }
 void MainWindowOcc::on_actionkd_find2D_triggered()
 {
-    kd_find2D();
+    kd_find2D(true);
 }
 
 void MainWindowOcc::on_actionori_find2D_triggered()
 {
-    ori_find2D();
+    ori_find2D(true);
 }
 
 void MainWindowOcc::on_actionran_find2D_triggered()
 {
-    ran_find2D();
+    ran_find2D(true);
 }
 
 void MainWindowOcc::on_pb_valueMax_pressed()
@@ -425,6 +362,69 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
     default:
         break;
     }
-
 };
+
+void MainWindowOcc::on_pb_Test1DFind_pressed()
+{
+    std::cout << "\n\n\n############ 1D Search Test Start ###########\n";
+    for (int i = 0; i < 100; i++)
+    {
+        on_pb_RandRange_pressed();
+        if (ori_find1D() != kd_find1D())
+        {
+            std::cout << "test failed:" << i << std::endl;
+            std::cout << '[' << ui->dsb_down->value() << ", "
+                << ui->dsb_up->value() << "): ";
+            std::cout << "ori :" << ori_find1D() << std::endl;
+            std::cout << "binfind :" << kd_find1D() << std::endl;
+            std::cout << "ori :";
+            ori_find1D(true);
+            std::cout << "binfind :";
+            kd_find1D(true);
+        }
+    }
+    std::cout << "\n############ 1D Search Test Done ###########\n";
+}
+void MainWindowOcc::on_pb_Test2DFind_pressed()
+{
+    std::cout << "\n\n\n############ 2D Search Test Start #############\n";
+
+    for (int i = 0; i < 100; i++)
+    {
+        on_pb_RandRange_pressed();
+        if (ori_find2D() != kd_find2D())
+        {
+            std::cout << "test failed:" << i << std::endl;
+            std::cout << "left to right: [" << ui->dsb_left->value() << ", "
+                << ui->dsb_right->value() << ")\n";
+            std::cout << "down to up: [" << ui->dsb_down->value() << ", "
+                << ui->dsb_up->value() << ")\n";
+
+            std::cout << "ori :" << ori_find2D() << std::endl;
+            std::cout << "kd tree :" << kd_find2D() << std::endl;
+            std::cout << "ori :";
+            ori_find1D(true);
+            std::cout << "kd tree :";
+            kd_find1D(true);
+        }
+        if (ori_find2D() != ran_find2D())
+        {
+            std::cout << "test failed:" << i << std::endl;
+            std::cout << "left to right: [" << ui->dsb_left->value() << ", "
+                << ui->dsb_right->value() << ")\n";
+            std::cout << "down to up: [" << ui->dsb_down->value() << ", "
+                << ui->dsb_up->value() << ")\n";
+
+            std::cout << "ori :" << ori_find2D() << std::endl;
+            std::cout << "range tree :" << ran_find2D() << std::endl;
+            std::cout << "ori :";
+            ori_find2D(true);
+            std::cout << "range tree :";
+            ran_find2D(true);
+        }
+    }
+
+    std::cout << "\n############ 2D Search Test Done #############\n";
+}
+
 }

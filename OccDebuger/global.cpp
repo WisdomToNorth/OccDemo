@@ -31,9 +31,10 @@ bool GCheckCpuMode()
     return G_Stop_Program;
 }
 
-unsigned long long G_CoreCount(unsigned long long datasize)
+unsigned long long G_CoreCount(unsigned long long datasize,
+    unsigned long long min_per_thread)
 {
-    unsigned long long const min_per_thread = 25;
+
     unsigned long long const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
     unsigned long long const hardware_thread = std::thread::hardware_concurrency();
     unsigned long long const temp = hardware_thread != 0 ? hardware_thread : 2;
