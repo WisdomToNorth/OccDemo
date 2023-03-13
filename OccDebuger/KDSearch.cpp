@@ -12,13 +12,9 @@ namespace KDebugger
 {
 KDSearch::KDSearch() {}
 
-
-
 BinSearchNode* KDSearch::buildTwoDSearch(const std::vector<KPt>& pnts)
 {
-    PntsSorted2D sorted_pnts;
-    getSortedPnts(pnts, sorted_pnts);
-
+    PntsSorted2D sorted_pnts(pnts);
     return buildTwoDSearchFromSortedPnts(sorted_pnts, 0);
 }
 
@@ -39,39 +35,39 @@ KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
         midpt = *(pnts.pnts_xsorted_.begin() + mid);
 
         ////直接拷贝并且重排，不好的方法
-        //p1s.pnts_ysorted_ = p1s.pnts_xsorted_;
-        //Sort_YL(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end());
+        p1s.pnts_ysorted_ = p1s.pnts_xsorted_;
+        Sort_YS(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end());
 
-        //p2s.pnts_ysorted_ = p2s.pnts_xsorted_;
-        //Sort_YL(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end());
+        p2s.pnts_ysorted_ = p2s.pnts_xsorted_;
+        Sort_YS(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end());
 
         //数出来的肯定是更多的。
-        double mid_x = (pnts.pnts_xsorted_.begin() + mid)->x;
-        auto it = std::stable_partition(pnts.pnts_ysorted_.begin(),
-            pnts.pnts_ysorted_.end(), [&](KPt& pt)
-            {
-                return pt.x <= mid_x;
-            });
-        //需要在此集合中先选严格小于mid_x的值，再选等于mid_x时从大到小排y值
-        auto it_aux = std::stable_partition(pnts.pnts_ysorted_.begin(),
-            it, [&](KPt& pt)
-            {
-                return pt.x < mid_x;
-            });
+        //double mid_x = (pnts.pnts_xsorted_.begin() + mid)->x;
+        //auto it = std::stable_partition(pnts.pnts_ysorted_.begin(),
+        //    pnts.pnts_ysorted_.end(), [&](KPt& pt)
+        //    {
+        //        return pt.x <= mid_x;
+        //    });
+        ////需要在此集合中先选严格小于mid_x的值，再选等于mid_x时从大到小排y值
+        //auto it_aux = std::stable_partition(pnts.pnts_ysorted_.begin(),
+        //    it, [&](KPt& pt)
+        //    {
+        //        return pt.x < mid_x;
+        //    });
 
 
-        int gap = int(p1s.pnts_xsorted_.size()) -
-            int(std::distance(pnts.pnts_ysorted_.begin(), it_aux));
-        std::advance(it_aux, gap);
-        p1s.pnts_ysorted_.assign(pnts.pnts_ysorted_.begin(), it_aux);
-        p2s.pnts_ysorted_.assign(it_aux, pnts.pnts_ysorted_.end());
-        //如果等于mid的值的y小，则不应该在此处，此时整体y大致有序，
-        //因此，使用冒泡排序，可以在较短时间还原y顺序
+        //int gap = int(p1s.pnts_xsorted_.size()) -
+        //    int(std::distance(pnts.pnts_ysorted_.begin(), it_aux));
+        //std::advance(it_aux, gap);
+        //p1s.pnts_ysorted_.assign(pnts.pnts_ysorted_.begin(), it_aux);
+        //p2s.pnts_ysorted_.assign(it_aux, pnts.pnts_ysorted_.end());
+        ////如果等于mid的值的y小，则不应该在此处，此时整体y大致有序，
+        ////因此，使用冒泡排序，可以在较短时间还原y顺序
 
-        //此方案理论上可以大幅度减少无用排序。下面的数组在排序前基本是已经有序的
-        //但是使用冒泡排序提前终止的话，速度还是比std::sort慢得多
-        Sort_YL(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end());
-        Sort_YL(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end());
+        ////此方案理论上可以大幅度减少无用排序。下面的数组在排序前基本是已经有序的
+        ////但是使用冒泡排序提前终止的话，速度还是比std::sort慢得多
+        //Sort_YL(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end());
+        //Sort_YL(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end());
 
     }
     else//horizon by mid y
@@ -85,34 +81,34 @@ KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
         midpt = *(pnts.pnts_ysorted_.begin() + mid - 1);
 
         ////直接拷贝并且重排，不好的方法
-        //p1s.pnts_xsorted_ = p1s.pnts_ysorted_;
-        //Sort_XS(p1s.pnts_xsorted_.begin(), p1s.pnts_xsorted_.end());
-        //p2s.pnts_xsorted_ = p2s.pnts_ysorted_;
-        //Sort_XS(p2s.pnts_xsorted_.begin(), p2s.pnts_xsorted_.end());
-
-        double mid_y = (pnts.pnts_ysorted_.begin() + mid)->y;
-        auto it = std::stable_partition(pnts.pnts_xsorted_.begin(),
-            pnts.pnts_xsorted_.end(), [&](KPt& pt)
-            {
-                return pt.y >= mid_y;
-            });
-        //需要在此集合中先选严格小于mid_y的值，再选等于mid_y时从大到小排y值
-        auto it_aux = std::stable_partition(pnts.pnts_xsorted_.begin(), it,
-            [&](KPt& pt)
-            {
-                return pt.y > mid_y;
-            });
-
-        int gap = int(p1s.pnts_ysorted_.size()) -
-            int(std::distance(pnts.pnts_xsorted_.begin(), it_aux));
-        std::advance(it_aux, gap);
-        p1s.pnts_xsorted_.assign(pnts.pnts_xsorted_.begin(), it_aux);
-        p2s.pnts_xsorted_.assign(it_aux, pnts.pnts_xsorted_.end());
-        //如果等于mid的值的y小，则不应该在此处，此时整体y大致有序，
-
-
+        p1s.pnts_xsorted_ = p1s.pnts_ysorted_;
         Sort_XS(p1s.pnts_xsorted_.begin(), p1s.pnts_xsorted_.end());
+        p2s.pnts_xsorted_ = p2s.pnts_ysorted_;
         Sort_XS(p2s.pnts_xsorted_.begin(), p2s.pnts_xsorted_.end());
+
+        //double mid_y = (pnts.pnts_ysorted_.begin() + mid)->y;
+        //auto it = std::stable_partition(pnts.pnts_xsorted_.begin(),
+        //    pnts.pnts_xsorted_.end(), [&](KPt& pt)
+        //    {
+        //        return pt.y >= mid_y;
+        //    });
+        ////需要在此集合中先选严格小于mid_y的值，再选等于mid_y时从大到小排y值
+        //auto it_aux = std::stable_partition(pnts.pnts_xsorted_.begin(), it,
+        //    [&](KPt& pt)
+        //    {
+        //        return pt.y > mid_y;
+        //    });
+
+        //int gap = int(p1s.pnts_ysorted_.size()) -
+        //    int(std::distance(pnts.pnts_xsorted_.begin(), it_aux));
+        //std::advance(it_aux, gap);
+        //p1s.pnts_xsorted_.assign(pnts.pnts_xsorted_.begin(), it_aux);
+        //p2s.pnts_xsorted_.assign(it_aux, pnts.pnts_xsorted_.end());
+        ////如果等于mid的值的y小，则不应该在此处，此时整体y大致有序，
+
+
+        //Sort_XS(p1s.pnts_xsorted_.begin(), p1s.pnts_xsorted_.end());
+        //Sort_XS(p2s.pnts_xsorted_.begin(), p2s.pnts_xsorted_.end());
 
     }
     return midpt;
@@ -186,16 +182,15 @@ KRegion KDSearch::getNewRegion(const KRegion& cur_region, const BinSearchNode* n
     {
         if (node->direction_)//left
             return KRegion(cur_region.lb_, KPt(node->pnt_.x, cur_region.ru_.y));
-        else//up
-            return KRegion(KPt(cur_region.lb_.x, node->pnt_.y), cur_region.ru_);
-
+        else//bottom
+            return KRegion(cur_region.lb_, KPt(cur_region.ru_.x, node->pnt_.y));
     }
     else
     {
         if (node->direction_)//right
             return KRegion(KPt(node->pnt_.x, cur_region.lb_.y), cur_region.ru_);
-        else //down
-            return KRegion(cur_region.lb_, KPt(cur_region.ru_.x, node->pnt_.y));
+        else //up
+            return KRegion(KPt(cur_region.lb_.x, node->pnt_.y), cur_region.ru_);
     }
 }
 
@@ -212,7 +207,6 @@ void KDSearch::searchTwoDSearch(std::vector<KPt>& res, BinSearchNode* root,
         auto check_res_l = regionCheck(left_region, region);
         if (check_res_l == ERegionCrossState::in)
         {
-            // reportSubTree(root->left_, res);
             root->left_->reportSubTree(res);
         }
         else if (check_res_l == ERegionCrossState::part)
@@ -224,7 +218,6 @@ void KDSearch::searchTwoDSearch(std::vector<KPt>& res, BinSearchNode* root,
         auto check_res_r = regionCheck(right_region, region);
         if (check_res_r == ERegionCrossState::in)
         {
-            //reportSubTree(root->right_, res);
             root->right_->reportSubTree(res);
         }
         else if (check_res_r == ERegionCrossState::part)

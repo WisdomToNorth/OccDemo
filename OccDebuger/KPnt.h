@@ -18,11 +18,25 @@ struct KPt
 };
 void printPntVec(const std::vector<KPt>& pnts);
 
-
 struct PntsSorted2D
 {
+    PntsSorted2D(const std::vector<KPt>& pnts);
+    PntsSorted2D() {};
+
+
+    PntsSorted2D getSubPntsInRangeX(double x_s, double x_m);
+    std::vector<PntsSorted2D> getSubPntsByX(double _x);
+    std::vector<PntsSorted2D> getSubPntsByY(double _y);
+    KPt getSubPntsByMidX(std::vector<PntsSorted2D>& res);
+    KPt getSubPntsByMidY(std::vector<PntsSorted2D>& res);
+
+    template<typename Iterator>
+    PntsSorted2D getSubPntsInRangeXIt(Iterator it_s, Iterator it_m);
+    template<typename Iterator>
+    PntsSorted2D getSubPntsInRangeYIt(Iterator it_s, Iterator it_m);
     std::vector<KPt> pnts_xsorted_;
     std::vector<KPt> pnts_ysorted_;
+
 
     size_t size()const
     {
@@ -36,8 +50,8 @@ struct PntsSorted2D
         return pnts_xsorted_.front();
     }
     bool confirmValid();
+    void print();
 };
 
-void getSortedPnts(const std::vector<KPt>& pnts,
-    PntsSorted2D& sorted_pnts);
+
 }

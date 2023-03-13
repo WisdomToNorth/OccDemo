@@ -25,6 +25,9 @@ private:
     BinSearchNode* buildFromSortedVec(BinSearchNode* parent,
         const std::vector<KPt>& vec, Iterator it, int cnt);
 
+    BinSearchNode* buildFromSortedVec(BinSearchNode* parent,
+        PntsSorted2D& vec, int cnt);
+
     // For 1D
     // 输入：树根, 两个数值, x, x', x<=x'
     // 输出：从树根出发分别通往x和x'的两条路径的分叉点v

@@ -37,15 +37,40 @@ BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
     return parent;
 }
 
+BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
+    PntsSorted2D& vec, int cnt)
+{
+    assert(cnt > 0);
+    //if (cnt == 1)
+    //{
+    //    parent->pnt_ = *it;
+    //    return parent;
+    //}
+
+    std::vector<PntsSorted2D> aux;
+    KPt midpt = vec.getSubPntsByMidY(aux);
+    PntsSorted2D r1 = aux.front();
+    PntsSorted2D r2 = aux.back();
+
+
+
+    //parent->pnt_ = *mid_it;
+    //parent->left_ = buildFromSortedVec(new BinSearchNode(),
+    //    vec, it, leftcnt);
+    //parent->right_ = buildFromSortedVec(new BinSearchNode(),
+    //    vec, mid_it + 1, rightcnt);
+    return parent;
+}
+
 // For 1D
 BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
 {
-    Sort_YS(vec.begin(), vec.end());
+    //Sort_YS(vec.begin(), vec.end());
     //std::cout << "\nAfter sort:" << std::endl;
     //printPntVec(vec);
-
+    PntsSorted2D pt2d(vec);
     BinSearchNode* root = new BinSearchNode();
-    return buildFromSortedVec(root, vec, vec.begin(), vec.size());
+    return buildFromSortedVec(root, pt2d, vec.size());
 }
 
 BinSearchNode* BiSearch::buildBinSearchTreeFromSortedVec(const std::vector<KPt>& vec)
@@ -60,6 +85,7 @@ BinSearchNode* BiSearch::buildBinSearchTreeFromSortedVec(const std::vector<KPt>&
 const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
     const double& leftnum, const double& rightnum)//1D
 {
+    if (!root)return nullptr;
     const BinSearchNode* v = root;
     while (!v->isLeaf() && (rightnum <= v->pnt_.y || leftnum > v->pnt_.y))
     {
@@ -80,7 +106,9 @@ const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
 void BiSearch::oneDRangeQuery(const BinSearchNode* root,
     double l, double r, std::vector<KPt>& res)
 {
+
     const BinSearchNode* v_split = FindSplitNode(root, l, r);
+    if (!v_split)return;
     if (v_split->isLeaf())
     {
         if (v_split->belongToRangeInY(l, r))

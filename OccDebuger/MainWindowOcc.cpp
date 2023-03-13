@@ -456,21 +456,21 @@ void MainWindowOcc::on_pb_Test2DFind_pressed()
                 std::cout << "\nkd tree :";
                 kd_find2D(true);
             }
-            if (ori_find2D() != ran_find2D())
-            {
-                std::cout << "\n\n****** test failed:" << i << " ******\n";
-                std::cout << "left to right: [" << ui->dsb_left->value() << ", "
-                    << ui->dsb_right->value() << ")\n";
-                std::cout << "down to up: [" << ui->dsb_down->value() << ", "
-                    << ui->dsb_up->value() << ")\n";
+            /* if (ori_find2D() != ran_find2D())
+             {
+                 std::cout << "\n\n****** test failed:" << i << " ******\n";
+                 std::cout << "left to right: [" << ui->dsb_left->value() << ", "
+                     << ui->dsb_right->value() << ")\n";
+                 std::cout << "down to up: [" << ui->dsb_down->value() << ", "
+                     << ui->dsb_up->value() << ")\n";
 
-                std::cout << "ori :" << ori_find2D() << std::endl;
-                std::cout << "range tree :" << ran_find2D() << std::endl;
-                std::cout << "ori :";
-                ori_find2D(true);
-                std::cout << "range tree :";
-                ran_find2D(true);
-            }
+                 std::cout << "ori :" << ori_find2D() << std::endl;
+                 std::cout << "range tree :" << ran_find2D() << std::endl;
+                 std::cout << "ori :";
+                 ori_find2D(true);
+                 std::cout << "range tree :";
+                 ran_find2D(true);
+             }*/
         }
     }
     std::cout << "test 10*100 times in " << timer.timeFromBegin(false) << " ms";

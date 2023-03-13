@@ -6,16 +6,15 @@ namespace KDebugger
 {
 BinSearchNode* KRangeTree::buildRangeTree(std::vector<KPt>& pnts)
 {
+    PntsSorted2D sorted_pnts(pnts);
 
-    Sort_XS(pnts.begin(), pnts.end());
-    size_t n = pnts.size();
     BinSearchNode* root = new BinSearchNode();
-    return buildRangeTreeFromSortedVec(root, pnts, pnts.begin(), pnts.size());
+    return buildRangeTreeFromSortedVec(root, sorted_pnts, pnts.begin(), pnts.size());
 }
 
 template<typename Iterator>
 BinSearchNode* KRangeTree::buildRangeTreeFromSortedVec(BinSearchNode* parent,
-    const std::vector<KPt>& vec, Iterator it, size_t cnt)//1D
+    PntsSorted2D& sorted_pnts, Iterator it, size_t cnt)//1D
 {
     std::vector<KPt> pnts_y(it, it + cnt);
     BiSearch helper;
@@ -43,10 +42,10 @@ BinSearchNode* KRangeTree::buildRangeTreeFromSortedVec(BinSearchNode* parent,
 
     parent->pnt_ = *mid_it;
     parent->aux_ = aux_tree_;
-    parent->left_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
-        vec, it, leftcnt);
-    parent->right_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
-        vec, mid_it + 1, rightcnt);
+    //parent->left_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
+    //    vec, it, leftcnt);
+    //parent->right_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
+    //    vec, mid_it + 1, rightcnt);
     return parent;
 }
 

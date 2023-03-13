@@ -14,11 +14,11 @@ namespace KDebugger
 
 static bool cmp_x_s(const KPt& a, const KPt& b)
 {
-    return (a.x < b.x) || (a.x == b.x && a.y > b.y);
+    return (a.x < b.x) || (a.x == b.x && a.y < b.y);
 }
 static bool cmp_x_l(const KPt& a, const KPt& b)
 {
-    return (a.x > b.x) || (a.x == b.x && a.y < b.y);
+    return (a.x > b.x) || (a.x == b.x && a.y > b.y);
 }
 static bool cmp_y_s(const KPt& a, const KPt& b)
 {
@@ -26,7 +26,7 @@ static bool cmp_y_s(const KPt& a, const KPt& b)
 }
 static bool cmp_y_l(const KPt& a, const KPt& b)
 {
-    return (a.y > b.y) || (a.y == b.y && a.x < b.x);
+    return (a.y > b.y) || (a.y == b.y && a.x > b.x);
 }
 
 template<typename Iterator>

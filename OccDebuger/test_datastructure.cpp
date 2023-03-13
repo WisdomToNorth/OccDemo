@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "test_datastructure.h"
 #include "KLine.h"
 
@@ -7,6 +7,7 @@
 #include <map>
 #include <iostream>
 
+#include "KPnt.h"
 namespace KDebugger
 {
 
@@ -33,4 +34,23 @@ bool KTest::testLineCross()//todo: use qt or google test
     return false;
 }
 
+bool KTest::testKPnt2D()
+{
+    std::vector<KPt> pnts{ KPt{ 0, 2 }, KPt{ 1, 3 }, KPt{ 2, 0 }, KPt{ 5, 0 },
+        KPt{ 2, 2 }, KPt{ 3, 1 }, KPt{ 0, 4 }, KPt{ 0, 6 }, KPt{ 0, 8 },
+        KPt{ 2, 7 }, KPt{ 3, 7 }, KPt{ 4, 4 }, KPt{ 2, 10 }, KPt{ 4, 7 } };
+    PntsSorted2D tes(pnts);
+    std::vector<PntsSorted2D> res1 = tes.getSubPntsByX(2);
+    PntsSorted2D r11 = res1.front();
+    PntsSorted2D r12 = res1.back();
+    r11.print();
+    r12.print();
+    std::cout << "\n\n###########\n";
+    std::vector<PntsSorted2D> res2 = tes.getSubPntsByY(5);
+    PntsSorted2D r21 = res2.front();
+    PntsSorted2D r22 = res2.back();
+    r21.print();
+    r22.print();
+    return true;
+}
 }

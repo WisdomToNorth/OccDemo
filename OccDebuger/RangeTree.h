@@ -32,6 +32,6 @@ private:
     // For 1D
     template<typename Iterator>
     BinSearchNode* buildRangeTreeFromSortedVec(BinSearchNode* parent,
-        const std::vector<KPt>& vec, Iterator it, size_t cnt);
+        PntsSorted2D&, Iterator it, size_t cnt);
 };
 }
