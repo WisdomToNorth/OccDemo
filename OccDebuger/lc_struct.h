@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+
 namespace KDebugger
 {
 struct TreeNode
@@ -11,7 +12,8 @@ struct TreeNode
     TreeNode(int x) : val(x), left_(nullptr), right_(nullptr) {}
     TreeNode(int x, TreeNode* left_, TreeNode* right_) :
         val(x), left_(left_), right_(right_)
-    {}
+    {
+    }
 };
 
 struct Node
@@ -28,7 +30,8 @@ public:
 
     Node(int _val, Node* _left, Node* _right, Node* _next)
         : val(_val), left_(_left), right_(_right), next(_next)
-    {}
+    {
+    }
 };
 
 

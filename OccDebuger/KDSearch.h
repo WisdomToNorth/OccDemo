@@ -18,10 +18,8 @@ public:
     std::vector<KPt> searchTwoDSearchFromRoot(BinSearchNode* root, const KRegion& region);
 
 private:
-    void getSortedPnts(const std::vector<KPt>& pnts,
-        PntsSorted2D& p_pnts);
 
-    KPt splitPnts(PntsSorted2D pnts, PntsSorted2D& p1s, PntsSorted2D& p2s, bool direction);
+    KPt splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s, PntsSorted2D& p2s, bool direction);
 
     BinSearchNode* buildTwoDSearchFromSortedPnts(PntsSorted2D& pnts, int cur_depth);
 

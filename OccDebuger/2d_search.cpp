@@ -124,7 +124,7 @@ int TwoDSearch::getTwoDRangeKDSearch(const KRegion& r, bool _debug)
     {
         kd_2d_ = helper.buildTwoDSearch(buf_);
 
-        std::cout << "\nBuild tree in " << timer.timeFromBegin(false) << " ms" << std::endl;
+        std::cout << "\nBuild kd tree in " << timer.timeFromBegin(false) << " ms" << std::endl;
     }
 
     if (_debug)
@@ -158,7 +158,7 @@ int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r, bool _debug)
     {
         range_2d_ = helper.buildRangeTree(buf_);
         //range_2d_->printBinSearchTree();
-        std::cout << "\nBuild tree in " << timer.timeFromBegin(false)
+        std::cout << "\nBuild range tree in " << timer.timeFromBegin(false)
             << " ms" << std::endl;
     }
     if (_debug)

@@ -36,7 +36,7 @@ class DataGenerator
 public:
     DataGenerator(CadView* view) :cadview_(view) {}
 
-    void reGenerateData(const DataParameter& param);
+    void reGenerateData(const DataParameter& param, bool _view);
 
     void viewData();
 
@@ -45,6 +45,7 @@ public:
 
     void addToObserverList(DataObserver* obs);
     void notifyAll();
+    std::vector<int> getIntNumbers(int min, int max, int count);
     std::vector<double> getFourNumber(double min, double max);
 
 private:

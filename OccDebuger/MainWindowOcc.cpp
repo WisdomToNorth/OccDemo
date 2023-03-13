@@ -66,6 +66,7 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
     setUpUI();
     ConsoleLog("Hello!");
     on_pb_generate_pressed();
+    on_actionview_triggered();
 }
 
 MainWindowOcc::~MainWindowOcc()
@@ -264,10 +265,15 @@ void MainWindowOcc::on_pb_valueMax_unsafe_pressed()
     ui->sb_col->setValue(1000);
     ui->sb_row->setValue(1000);
 }
-void MainWindowOcc::on_pb_valueSmall_pressed()
+
+void MainWindowOcc::on_pb_Randvalue_pressed()
 {
-    ui->sb_col->setValue(5);
-    ui->sb_row->setValue(5);
+    int mi = 0;
+    int ma = ui->sb_maxvalue->value();
+    const std::vector<int>& nums = data_generator_->getIntNumbers(mi, ma, 4);
+    ui->sb_col->setValue(nums[0]);
+    ui->sb_row->setValue(nums[3]);
+    ui->sb_precision->setValue(nums[1] % 3);
 }
 
 void MainWindowOcc::on_pb_RandRange_pressed()
@@ -307,7 +313,8 @@ void MainWindowOcc::on_pb_generate_pressed()
         param.defaultpar.rand_size_max = 1.0;
     }
 
-    data_generator_->reGenerateData(param);
+    data_generator_->reGenerateData(param, false);
+
 }
 
 QMenu* MainWindowOcc::getRightMenu()
@@ -369,48 +376,42 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
 void MainWindowOcc::on_pb_Test1DFind_pressed()
 {
     std::cout << "\n\n\n############ 1D Search Test Start ###########" << std::endl;
-    for (int i = 0; i < 100; i++)
+    KTimer timer;
+    for (int j = 0; j < 10; ++j)
     {
-        on_pb_RandRange_pressed();
-        if (ori_find1D() != kd_find1D())
+        on_pb_Randvalue_pressed();
+        on_pb_generate_pressed();
+        for (int i = 0; i < 100; i++)
         {
-            std::cout << "\n\n****** test failed:" << i << " ******" << std::endl;
-            std::cout << '[' << ui->dsb_down->value() << ", "
-                << ui->dsb_up->value() << "): ";
-            std::cout << "ori :" << ori_find1D() << std::endl;
-            std::cout << "binfind :" << kd_find1D() << std::endl;
-            std::cout << "ori :";
-            ori_find1D(true);
-            std::cout << "binfind :";
-            kd_find1D(true);
+            on_pb_RandRange_pressed();
+            if (ori_find1D() != kd_find1D())
+            {
+                std::cout << "\n\n****** test failed:" << i << " ******" << std::endl;
+                std::cout << '[' << ui->dsb_down->value() << ", "
+                    << ui->dsb_up->value() << "): ";
+                std::cout << "ori :" << ori_find1D() << std::endl;
+                std::cout << "binfind :" << kd_find1D() << std::endl;
+                std::cout << "ori :";
+                ori_find1D(true);
+                std::cout << "binfind :";
+                kd_find1D(true);
+            }
         }
     }
+    std::cout << "test 10*100 times in " << timer.timeFromBegin(false) << " ms";
     std::cout << "\n############ 1D Search Test Done ###########\n";
-}
 
-void MainWindowOcc::on_pb_Test2DFind_pressed()
+}
+void MainWindowOcc::on_pb_Simple2DFind_pressed()
 {
     std::cout << "\n\n\n############ 2D Search Test Start #############" << std::endl;
+    KTimer timer;
 
     for (int i = 0; i < 100; i++)
     {
         on_pb_RandRange_pressed();
-        if (ori_find2D() != kd_find2D())
-        {
-            std::cout << "\n\n****** test failed:" << i << " ******" << std::endl;
-            std::cout << "left to right: [" << ui->dsb_left->value() << ", "
-                << ui->dsb_right->value() << ")" << std::endl;
-            std::cout << "down to up: [" << ui->dsb_down->value() << ", "
-                << ui->dsb_up->value() << ")" << std::endl;
 
-            std::cout << "number of ori :" << ori_find2D() << std::endl;
-            std::cout << "number of kd tree :" << kd_find2D() << std::endl;
-            std::cout << "ori :";
-            ori_find2D(true);
-            std::cout << "\nkd tree :";
-            kd_find2D(true);
-        }
-        /*if (ori_find2D() != ran_find2D())
+        if (ori_find2D() != ran_find2D())
         {
             std::cout << "\n\n****** test failed:" << i << " ******\n";
             std::cout << "left to right: [" << ui->dsb_left->value() << ", "
@@ -424,8 +425,55 @@ void MainWindowOcc::on_pb_Test2DFind_pressed()
             ori_find2D(true);
             std::cout << "range tree :";
             ran_find2D(true);
-        }*/
+        }
     }
+
+    std::cout << "\n############ 2D Search Test Done #############" << std::endl;
+}
+void MainWindowOcc::on_pb_Test2DFind_pressed()
+{
+    std::cout << "\n\n\n############ 2D Search Test Start #############" << std::endl;
+    KTimer timer;
+    for (int j = 0; j < 10; ++j)
+    {
+        on_pb_Randvalue_pressed();
+        on_pb_generate_pressed();
+        for (int i = 0; i < 100; i++)
+        {
+            on_pb_RandRange_pressed();
+            if (ori_find2D() != kd_find2D())
+            {
+                std::cout << "\n\n****** test failed:" << i << " ******" << std::endl;
+                std::cout << "left to right: [" << ui->dsb_left->value() << ", "
+                    << ui->dsb_right->value() << ")" << std::endl;
+                std::cout << "down to up: [" << ui->dsb_down->value() << ", "
+                    << ui->dsb_up->value() << ")" << std::endl;
+
+                std::cout << "number of ori :" << ori_find2D() << std::endl;
+                std::cout << "number of kd tree :" << kd_find2D() << std::endl;
+                std::cout << "ori :";
+                ori_find2D(true);
+                std::cout << "\nkd tree :";
+                kd_find2D(true);
+            }
+            if (ori_find2D() != ran_find2D())
+            {
+                std::cout << "\n\n****** test failed:" << i << " ******\n";
+                std::cout << "left to right: [" << ui->dsb_left->value() << ", "
+                    << ui->dsb_right->value() << ")\n";
+                std::cout << "down to up: [" << ui->dsb_down->value() << ", "
+                    << ui->dsb_up->value() << ")\n";
+
+                std::cout << "ori :" << ori_find2D() << std::endl;
+                std::cout << "range tree :" << ran_find2D() << std::endl;
+                std::cout << "ori :";
+                ori_find2D(true);
+                std::cout << "range tree :";
+                ran_find2D(true);
+            }
+        }
+    }
+    std::cout << "test 10*100 times in " << timer.timeFromBegin(false) << " ms";
 
     std::cout << "\n############ 2D Search Test Done #############" << std::endl;
 }

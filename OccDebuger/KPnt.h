@@ -38,4 +38,6 @@ struct PntsSorted2D
     bool confirmValid();
 };
 
+void getSortedPnts(const std::vector<KPt>& pnts,
+    PntsSorted2D& sorted_pnts);
 }

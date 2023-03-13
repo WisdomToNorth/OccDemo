@@ -13,6 +13,43 @@ BinSearchNode* KRangeTree::buildRangeTree(std::vector<KPt>& pnts)
     return buildRangeTreeFromSortedVec(root, pnts, pnts.begin(), pnts.size());
 }
 
+template<typename Iterator>
+BinSearchNode* KRangeTree::buildRangeTreeFromSortedVec(BinSearchNode* parent,
+    const std::vector<KPt>& vec, Iterator it, size_t cnt)//1D
+{
+    std::vector<KPt> pnts_y(it, it + cnt);
+    BiSearch helper;
+    BinSearchNode* aux_tree_ = helper.buildBinSearchTreeFromSortedVec(pnts_y);
+    //BinSearchNode* aux_tree_ = helper.buildBinSearchTree(pnts_y);
+
+    assert(cnt > 0);
+    if (cnt == 1)
+    {
+        parent->pnt_ = *it;
+        //appoint aux_node
+        parent->aux_ = aux_tree_;
+        return parent;
+    }
+    //else
+
+    //计数的时候添加哨兵会更容易
+    // -,1,2,3
+    // -,1,2,3,4
+    int cnt_P1 = cnt + 1;
+    int leftcnt = cnt_P1 / 2;
+    int rightcnt = cnt - leftcnt;
+    auto mid_it = it;
+    std::advance(mid_it, leftcnt - 1);
+
+    parent->pnt_ = *mid_it;
+    parent->aux_ = aux_tree_;
+    parent->left_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
+        vec, it, leftcnt);
+    parent->right_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
+        vec, mid_it + 1, rightcnt);
+    return parent;
+}
+
 // For 1D
 // 输入：树根, 两个数值, x, x', x<=x'
 // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
@@ -89,39 +126,4 @@ void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
     }
 }
 
-template<typename Iterator>
-BinSearchNode* KRangeTree::buildRangeTreeFromSortedVec(BinSearchNode* parent,
-    const std::vector<KPt>& vec, Iterator it, size_t cnt)//1D
-{
-    std::vector<KPt> pnts_y(it, it + cnt);
-    BiSearch helper;
-    BinSearchNode* aux_tree_ = helper.buildBinSearchTree(pnts_y);
-
-    assert(cnt > 0);
-    if (cnt == 1)
-    {
-        parent->pnt_ = *it;
-        //appoint aux_node
-        parent->aux_ = aux_tree_;
-        return parent;
-    }
-    //else
-
-    //计数的时候添加哨兵会更容易
-    // -,1,2,3
-    // -,1,2,3,4
-    int cnt_P1 = cnt + 1;
-    int leftcnt = cnt_P1 / 2;
-    int rightcnt = cnt - leftcnt;
-    auto mid_it = it;
-    std::advance(mid_it, leftcnt - 1);
-
-    parent->pnt_ = *mid_it;
-    parent->aux_ = aux_tree_;
-    parent->left_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
-        vec, it, leftcnt);
-    parent->right_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
-        vec, mid_it + 1, rightcnt);
-    return parent;
-}
 }

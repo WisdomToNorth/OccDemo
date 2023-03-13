@@ -48,11 +48,17 @@ BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
     return buildFromSortedVec(root, vec, vec.begin(), vec.size());
 }
 
+BinSearchNode* BiSearch::buildBinSearchTreeFromSortedVec(const std::vector<KPt>& vec)
+{
+    BinSearchNode* root = new BinSearchNode();
+    return buildFromSortedVec(root, vec, vec.begin(), vec.size());
+}
+
 // For 1D
 // 输入：树根, 两个数值, x, x', x<=x'
 // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
 const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
-    double leftnum, double rightnum)//1D
+    const double& leftnum, const double& rightnum)//1D
 {
     const BinSearchNode* v = root;
     while (!v->isLeaf() && (rightnum <= v->pnt_.y || leftnum > v->pnt_.y))

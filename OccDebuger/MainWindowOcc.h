@@ -43,9 +43,9 @@ private slots:
 
     void on_pb_generate_pressed();
     void on_pb_valueMax_pressed();
-    void on_pb_valueSmall_pressed();
     void on_pb_valueMax_unsafe_pressed();
     void on_pb_RandRange_pressed();
+    void on_pb_Randvalue_pressed();
 
     void on_actionFitAll_triggered();
     void on_actionview_triggered();
@@ -58,6 +58,7 @@ private slots:
     //kdtree
     void on_pb_Test1DFind_pressed();
     void on_pb_Test2DFind_pressed();
+    void on_pb_Simple2DFind_pressed();
 
     void on_actionkd_find1D_triggered();
     void on_actionori_find1D_triggered();
@@ -71,7 +72,7 @@ private slots:
     void on_action_normline_triggered();
 
 private:
-    int kd_find1D(bool _debug=false);
+    int kd_find1D(bool _debug = false);
     int ori_find1D(bool _debug = false);
     int kd_find2D(bool _debug = false);
     int ori_find2D(bool _debug = false);

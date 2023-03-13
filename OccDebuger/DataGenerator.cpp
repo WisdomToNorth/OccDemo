@@ -46,6 +46,22 @@ void DataGenerator::getPtData(std::vector<KPt>& buf)
     buf.swap(newbuf);
 
 }
+
+std::vector<int> DataGenerator::getIntNumbers(int _min, int _max, int count)
+{
+    std::vector<int> res;
+    std::uniform_int_distribution<int> size_rand_gen
+    (_min, _max);//尺寸随机范围
+
+    while (count--)
+    {
+        res.push_back(size_rand_gen(G_Random_Engine));
+    }
+
+    std::sort(res.begin(), res.end());
+    return res;
+}
+
 std::vector<double> DataGenerator::getFourNumber(double _min, double _max)
 {
     std::vector<double> res;
@@ -105,7 +121,7 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
 //
 //void DataGenerator::reGenerateData(int rowcnt, int colcnt, double dis, int precision,
 //    double radius, bool same_radius)
-void DataGenerator::reGenerateData(const DataParameter& param)
+void DataGenerator::reGenerateData(const DataParameter& param, bool _view)
 {
     if (buf_.size() > 0)
     {
@@ -117,7 +133,7 @@ void DataGenerator::reGenerateData(const DataParameter& param)
 
     generateData(buf_, param);
 
-    if (param.colcnt * param.rowcnt < 1000)
+    if (_view)
     {
         viewData();
     }

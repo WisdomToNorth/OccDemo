@@ -50,4 +50,14 @@ bool PntsSorted2D::confirmValid()
     }
     return true;
 }
+
+void getSortedPnts(const std::vector<KPt>& pnts,
+    PntsSorted2D& sorted_pnts)
+{
+    sorted_pnts.pnts_xsorted_ = pnts;
+    sorted_pnts.pnts_ysorted_ = pnts;
+
+    Sort_XS(sorted_pnts.pnts_xsorted_.begin(), sorted_pnts.pnts_xsorted_.end());
+    Sort_YL(sorted_pnts.pnts_ysorted_.begin(), sorted_pnts.pnts_ysorted_.end());
+}
 }
