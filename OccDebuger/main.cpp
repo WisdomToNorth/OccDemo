@@ -1,7 +1,7 @@
-﻿#include "MainWindowOcc.h"
+﻿#include <iostream>
 #include <QtWidgets/QApplication>
-#include <iostream>
 
+#include "MainWindowOcc.h"
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);

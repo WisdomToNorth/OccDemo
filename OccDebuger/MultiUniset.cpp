@@ -9,7 +9,7 @@
 #include <algorithm>
 
 #include "CADView.h"
-#include "KTimer.h"
+#include "Ktimer.h"
 #include "CustomQlistWidget.h"
 #include "KLogger.h"
 #include "global.h"
