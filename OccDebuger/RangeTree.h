@@ -29,9 +29,7 @@ public:
         const KRegion& region, std::vector<KPt>& res);
 
 private:
-    // For 1D
-    template<typename Iterator>
-    BinSearchNode* buildRangeTreeFromSortedVec(BinSearchNode* parent,
-        PntsSorted2D&, Iterator it, size_t cnt);
+    BinSearchNode* buildRangeTreeFromSortedVec(PntsSorted2D& vec);//2D
+
 };
 }

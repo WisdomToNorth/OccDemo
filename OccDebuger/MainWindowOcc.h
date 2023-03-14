@@ -58,6 +58,7 @@ private slots:
     //kdtree
     void on_pb_Test1DFind_pressed();
     void on_pb_Test2DFind_pressed();
+    void on_pb_Simple1DFind_pressed();
     void on_pb_Simple2DFind_pressed();
 
     void on_actionkd_find1D_triggered();

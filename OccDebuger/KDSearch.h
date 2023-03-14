@@ -19,6 +19,7 @@ public:
 
 private:
 
+    KPt splitPnts_OLD(PntsSorted2D& pnts, PntsSorted2D& p1s, PntsSorted2D& p2s, bool direction);
     KPt splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s, PntsSorted2D& p2s, bool direction);
 
     BinSearchNode* buildTwoDSearchFromSortedPnts(PntsSorted2D& pnts, int cur_depth);

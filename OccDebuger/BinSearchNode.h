@@ -15,12 +15,14 @@ struct BinSearchNode
     }
     BinSearchNode(const KPt& _pnt, bool direction) : pnt_(_pnt), direction_(direction) {}
     BinSearchNode(const KPt& _pnt) : pnt_(_pnt) {}
+    BinSearchNode(const PntsSorted2D& _pnt) : pnt_(KPt(-1, -1)), pnts_(_pnt) {}
 
     BinSearchNode* left_ = nullptr;
     BinSearchNode* right_ = nullptr;
     BinSearchNode* aux_ = nullptr;
 
     KPt pnt_;
+    PntsSorted2D pnts_;
     bool direction_ = false; // 0 for hor; 1 for vert
 
 public:
@@ -47,15 +49,15 @@ public:
         return region.ptInRegion(this->pnt_);
     }
 
-    void printBinSearchTree(bool onlyX = false);
+    void printBinSearchTree(bool onlyX = false)const;
 
-    void reportSubTree(std::vector<KPt>& subnodes);
+    void reportSubTree(std::vector<KPt>& subnodes)const;
 
 private:
     void printBinSearchTree(const BinSearchNode* root,
-        bool onlyX = false);
+        bool onlyX = false)const;
 
-    void reportSubTree(BinSearchNode* root, std::vector<KPt>& subnodes);
+    void reportSubTree(const BinSearchNode* root, std::vector<KPt>& subnodes)const;
 
 
 };

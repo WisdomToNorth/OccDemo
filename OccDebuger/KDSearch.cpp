@@ -18,7 +18,7 @@ BinSearchNode* KDSearch::buildTwoDSearch(const std::vector<KPt>& pnts)
     return buildTwoDSearchFromSortedPnts(sorted_pnts, 0);
 }
 
-KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
+KPt KDSearch::splitPnts_OLD(PntsSorted2D& pnts, PntsSorted2D& p1s,
     PntsSorted2D& p2s, bool direction)
 {
     int n = pnts.size();
@@ -114,11 +114,55 @@ KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
     return midpt;
 }
 
+KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
+    PntsSorted2D& p2s, bool direction)
+{
+    int n = pnts.size();
+    int mid = n / 2;
+    KPt midpt;
+    if (direction)//vertical by mid x
+    {
+        //put into p1s
+        p1s.pnts_xsorted_.assign(pnts.pnts_xsorted_.begin(),
+            pnts.pnts_xsorted_.begin() + mid); // 0 to mid
+        //put into p2s
+        p2s.pnts_xsorted_.assign(pnts.pnts_xsorted_.begin() + mid,
+            pnts.pnts_xsorted_.end()); // mid to last
+        midpt = *(pnts.pnts_xsorted_.begin() + mid);
+
+        ////直接拷贝并且重排，不好的方法
+        p1s.pnts_ysorted_ = p1s.pnts_xsorted_;
+        Sort_YS(p1s.pnts_ysorted_.begin(), p1s.pnts_ysorted_.end());
+
+        p2s.pnts_ysorted_ = p2s.pnts_xsorted_;
+        Sort_YS(p2s.pnts_ysorted_.begin(), p2s.pnts_ysorted_.end());
+
+
+    }
+    else//horizon by mid y
+    {
+        //put into p1s
+        p1s.pnts_ysorted_.assign(pnts.pnts_ysorted_.begin(),
+            pnts.pnts_ysorted_.begin() + mid); // 0 to mid
+        //put into p2s
+        p2s.pnts_ysorted_.assign(pnts.pnts_ysorted_.begin() + mid,
+            pnts.pnts_ysorted_.end()); // mid to last
+        midpt = *(pnts.pnts_ysorted_.begin() + mid - 1);
+
+        ////直接拷贝并且重排，不好的方法
+        p1s.pnts_xsorted_ = p1s.pnts_ysorted_;
+        Sort_XS(p1s.pnts_xsorted_.begin(), p1s.pnts_xsorted_.end());
+        p2s.pnts_xsorted_ = p2s.pnts_ysorted_;
+        Sort_XS(p2s.pnts_xsorted_.begin(), p2s.pnts_xsorted_.end());
+
+
+    }
+    return midpt;
+}
 BinSearchNode* KDSearch::buildTwoDSearchFromSortedPnts(PntsSorted2D& pnts,
     int cur_depth)
 {
     size_t n = pnts.size();
-    //std::cout << "split n: " << n << std::endl;
     if (n == 0)
         return nullptr;
     else if (n == 1)
@@ -130,31 +174,14 @@ BinSearchNode* KDSearch::buildTwoDSearchFromSortedPnts(PntsSorted2D& pnts,
         BinSearchNode* node = new BinSearchNode();
         if (cur_depth % 2) //vert
         {
-            //std::cout << "\n\nvert:";
-            //std::cout << "\norix:"; printPntVec(pnts.pnts_xsorted_);
-            //std::cout << "\noriy:"; printPntVec(pnts.pnts_ysorted_);
             node->pnt_ = splitPnts(pnts, p1s, p2s, 1);
-
-            //std::cout << "\np1x:"; printPntVec(p1s.pnts_xsorted_);
-            //std::cout << "\np1y:"; printPntVec(p1s.pnts_ysorted_);
-            //std::cout << "\np2x:"; printPntVec(p2s.pnts_xsorted_);
-            //std::cout << "\np2y:"; printPntVec(p2s.pnts_ysorted_);
-
             node->direction_ = 1;
         }
         else//horizon
         {
-            //std::cout << "\n\nhori:";
-            //std::cout << "\n\nhori:";  std::cout << "\norix:"; printPntVec(pnts.pnts_xsorted_);
-            //std::cout << "\noriy:"; printPntVec(pnts.pnts_ysorted_);
             node->pnt_ = splitPnts(pnts, p1s, p2s, 0);
 
-            //std::cout << "\np1x:"; printPntVec(p1s.pnts_xsorted_);
-            //std::cout << "\np1y:"; printPntVec(p1s.pnts_ysorted_);
-            //std::cout << "\np2x:"; printPntVec(p2s.pnts_xsorted_);
-            //std::cout << "\np2y:"; printPntVec(p2s.pnts_ysorted_);
             node->direction_ = 0;
-
         }
 
         node->left_ = buildTwoDSearchFromSortedPnts(p1s, cur_depth + 1);
@@ -176,8 +203,10 @@ std::vector<KPt> KDSearch::searchTwoDSearchFromRoot(BinSearchNode* root,
     return res;
 }
 
-KRegion KDSearch::getNewRegion(const KRegion& cur_region, const BinSearchNode* node, bool f_or_s)
+KRegion KDSearch::getNewRegion(const KRegion& cur_region,
+    const BinSearchNode* node, bool f_or_s)
 {
+
     if (f_or_s)//true, first
     {
         if (node->direction_)//left

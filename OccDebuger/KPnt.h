@@ -12,10 +12,17 @@ struct KPt
     KPt(double _x, double _y) :x(_x), y(_y) {};
     KPt() :x(0), y(0) {};
     bool isEqual(const KPt& rhs);
+    bool operator<(const KPt& rhs)
+    {
+        return this->y < rhs.y;
+    }
+
+    bool operator==(const KPt& rhs);
     void print()const;
     void printY()const;
     void printX()const;
 };
+
 void printPntVec(const std::vector<KPt>& pnts);
 
 struct PntsSorted2D
@@ -23,21 +30,17 @@ struct PntsSorted2D
     PntsSorted2D(const std::vector<KPt>& pnts);
     PntsSorted2D() {};
 
+    KPt getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2);
+    KPt getSubPntsByMidY(PntsSorted2D& p1, PntsSorted2D& p2);
 
-    PntsSorted2D getSubPntsInRangeX(double x_s, double x_m);
-    std::vector<PntsSorted2D> getSubPntsByX(double _x);
-    std::vector<PntsSorted2D> getSubPntsByY(double _y);
-    KPt getSubPntsByMidX(std::vector<PntsSorted2D>& res);
-    KPt getSubPntsByMidY(std::vector<PntsSorted2D>& res);
-
-    template<typename Iterator>
-    PntsSorted2D getSubPntsInRangeXIt(Iterator it_s, Iterator it_m);
-    template<typename Iterator>
-    PntsSorted2D getSubPntsInRangeYIt(Iterator it_s, Iterator it_m);
     std::vector<KPt> pnts_xsorted_;
     std::vector<KPt> pnts_ysorted_;
 
-
+    bool empty()const
+    {
+        assert(pnts_xsorted_.empty() == pnts_ysorted_.empty());
+        return pnts_xsorted_.empty();
+    }
     size_t size()const
     {
         assert(pnts_xsorted_.size() == pnts_ysorted_.size());

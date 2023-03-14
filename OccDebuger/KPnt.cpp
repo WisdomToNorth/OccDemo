@@ -6,6 +6,10 @@
 
 namespace KDebugger
 {
+bool KPt::operator==(const KPt& rhs)
+{
+    return OccTools::fEqual(rhs.y, y);
+}
 
 void KPt::print()const
 {
@@ -62,125 +66,66 @@ PntsSorted2D::PntsSorted2D(const std::vector<KPt>& pnts)
     Sort_XS(pnts_xsorted_.begin(), pnts_xsorted_.end());
     Sort_YS(pnts_ysorted_.begin(), pnts_ysorted_.end());
 }
-
-PntsSorted2D PntsSorted2D::getSubPntsInRangeX(double x_s, double x_m)
+bool mycompx(const KPt& pt1, const KPt& pt2)
 {
-
-    size_t cnt = this->size();
-    auto it = std::find_if(pnts_xsorted_.begin(), pnts_xsorted_.end(), [&](KPt& pt)
-        {
-            return OccTools::fEqual(pt.x, x_s);
-        });
-    auto it_er = std::find_if(pnts_xsorted_.rbegin(), pnts_xsorted_.rend(), [&](KPt& pt)
-        {
-            return OccTools::fEqual(pt.x, x_m);
-        });
-
-    auto it_e = pnts_xsorted_.begin();
-    std::advance(it_e, cnt - std::distance(pnts_xsorted_.rbegin(), it_er));
-
-    return getSubPntsInRangeXIt(it, it_e);
+    return pt1.x < pt2.x;
 }
-
-std::vector<PntsSorted2D> PntsSorted2D::getSubPntsByX(double _x)
+KPt PntsSorted2D::getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2)
 {
-    std::vector<PntsSorted2D> res;
-    size_t cnt = this->size();
-    auto it = std::find_if(pnts_xsorted_.begin(), pnts_xsorted_.end(), [&](KPt& pt)
-        {
-            return OccTools::fEqual(pt.x, _x) || pt.x > _x;;
-        });
+    size_t mid = this->pnts_xsorted_.size() / 2;
+    auto it = this->pnts_xsorted_.begin();
+    std::advance(it, mid);
+    double pivot = it->x;
 
-    PntsSorted2D res1;
-    PntsSorted2D res2;
-    res1.pnts_xsorted_.assign(pnts_xsorted_.begin(), it);
-    res2.pnts_xsorted_.assign(it, pnts_xsorted_.end());
+    auto second_it = std::lower_bound(pnts_xsorted_.begin(),
+        pnts_xsorted_.end(), *it, mycompx);
 
+    p1.pnts_xsorted_.assign(pnts_xsorted_.begin(), second_it);
+    p2.pnts_xsorted_.assign(second_it, pnts_xsorted_.end());
+
+    int cnt = this->size();
     for (size_t i = 0; i < cnt; ++i)
     {
-        if (pnts_ysorted_[i].x < _x)
-            res1.pnts_ysorted_.emplace_back(pnts_ysorted_[i]);
-        else res2.pnts_ysorted_.emplace_back(pnts_ysorted_[i]);
+        if (pnts_ysorted_[i].x < pivot)
+            p1.pnts_ysorted_.emplace_back(pnts_ysorted_[i]);
+        else
+            p2.pnts_ysorted_.emplace_back(pnts_ysorted_[i]);
     }
 
-    assert(res1.confirmValid() && res2.confirmValid());
-    res.emplace_back(res1);
-    res.emplace_back(res2);
+    assert(p1.confirmValid() && p2.confirmValid());
 
-    return res;
+    return *it;
 }
-std::vector<PntsSorted2D> PntsSorted2D::getSubPntsByY(double _y)
+bool mycompy(const KPt& pt1, const KPt& pt2)
 {
-    std::vector<PntsSorted2D> res;
-    size_t cnt = this->size();
-    auto it = std::find_if(pnts_ysorted_.begin(), pnts_ysorted_.end(), [&](KPt& pt)
-        {
-            return OccTools::fEqual(pt.y, _y) || pt.y > _y;
-        });
+    return pt1.y < pt2.y;
+}
 
-    PntsSorted2D res1;
-    PntsSorted2D res2;
-    res1.pnts_ysorted_.assign(pnts_ysorted_.begin(), it);
-    res2.pnts_ysorted_.assign(it, pnts_ysorted_.end());
+KPt PntsSorted2D::getSubPntsByMidY(PntsSorted2D& p1, PntsSorted2D& p2)
+{
+    size_t mid = this->pnts_ysorted_.size() / 2;
+    auto it = this->pnts_ysorted_.begin();
+    std::advance(it, mid);
+    double pivot = it->y;
 
+    auto second_it = std::lower_bound(pnts_ysorted_.begin(),
+        pnts_ysorted_.end(), *it, mycompy);
+
+    p1.pnts_ysorted_.assign(pnts_ysorted_.begin(), second_it);
+    p2.pnts_ysorted_.assign(second_it, pnts_ysorted_.end());
+
+    int cnt = this->size();
     for (size_t i = 0; i < cnt; ++i)
     {
-        if (pnts_xsorted_[i].y < _y)
-            res1.pnts_xsorted_.emplace_back(pnts_xsorted_[i]);
-        else res2.pnts_xsorted_.emplace_back(pnts_xsorted_[i]);
+        if (pnts_xsorted_[i].y < pivot)
+            p1.pnts_xsorted_.emplace_back(pnts_xsorted_[i]);
+        else
+            p2.pnts_xsorted_.emplace_back(pnts_xsorted_[i]);
     }
 
-    assert(res1.confirmValid() && res2.confirmValid());
+    assert(p1.confirmValid() && p2.confirmValid());
 
-    res.emplace_back(res1);
-    res.emplace_back(res2);
-
-    return res;
-}
-
-KPt PntsSorted2D::getSubPntsByMidX(std::vector<PntsSorted2D>& res)
-{
-    KPt pt;
-    return pt;
-}
-
-KPt PntsSorted2D::getSubPntsByMidY(std::vector<PntsSorted2D>& res)
-{
-    KPt pt;
-    return pt;
-}
-template<typename Iterator>
-PntsSorted2D PntsSorted2D::getSubPntsInRangeXIt(Iterator it_s, Iterator it_m)
-{
-    PntsSorted2D res;
-    res.pnts_xsorted_.assign(it_s, it_m);
-    double x_s = it_s->x;
-    double x_m = it_s->x;
-    size_t n = this->pnts_xsorted_.size();
-    for (size_t i = 0; i < n; ++i)
-    {
-        if (pnts_ysorted_[i].x >= x_s
-            && pnts_ysorted_[i].x < x_m)
-            res.pnts_ysorted_.emplace_back(pnts_ysorted_[i]);
-    }
-    return res;
-}
-
-template<typename Iterator>
-PntsSorted2D PntsSorted2D::getSubPntsInRangeYIt(Iterator it_s, Iterator it_m)
-{
-    PntsSorted2D res;
-    res.pnts_xsorted_.assign(it_s, it_m);
-    double y_s = it_s->y;
-    double y_m = it_s->y;
-    size_t n = this->pnts_xsorted_.size();
-    for (size_t i = 0; i < n; ++i)
-    {
-        if (pnts_xsorted_[i].y >= y_s
-            && pnts_xsorted_[i].y < y_m)
-            res.pnts_xsorted_.emplace_back(pnts_xsorted_[i]);
-    }
-    return res;
+    return *it;
 }
 
 void PntsSorted2D::print()

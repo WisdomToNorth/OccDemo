@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>892</width>
-    <height>765</height>
+    <width>896</width>
+    <height>774</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
            <string notr="true">border:1px solid gray</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
-           <item row="0" column="0">
+           <item row="1" column="0">
             <widget class="QCheckBox" name="cb_wh_same">
              <property name="text">
               <string>W-H Same</string>
@@ -41,7 +41,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <layout class="QGridLayout" name="gridLayout_4">
              <item row="3" column="0">
               <widget class="QLabel" name="label_4">
@@ -73,7 +73,7 @@
                 <number>1000</number>
                </property>
                <property name="value">
-                <number>5</number>
+                <number>2</number>
                </property>
               </widget>
              </item>
@@ -100,7 +100,7 @@
                 <number>1000</number>
                </property>
                <property name="value">
-                <number>3</number>
+                <number>4</number>
                </property>
               </widget>
              </item>
@@ -132,6 +132,16 @@
               </widget>
              </item>
             </layout>
+           </item>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="cb_debug">
+             <property name="text">
+              <string>DebugOutput</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -396,6 +406,13 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="pb_Simple1DFind">
+            <property name="text">
+             <string>Simple1DFind</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item row="2" column="0">
@@ -411,7 +428,7 @@
            <number>2000</number>
           </property>
           <property name="value">
-           <number>500</number>
+           <number>50</number>
           </property>
          </widget>
         </item>
@@ -437,8 +454,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>892</width>
-     <height>26</height>
+     <width>896</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
