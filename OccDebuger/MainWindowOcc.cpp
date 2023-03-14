@@ -93,7 +93,6 @@ void MainWindowOcc::on_action_cpuline_triggered()
         obj->reGenerate(context_info);
         timer.timeFromBegin();
     }
-
 }
 
 void MainWindowOcc::on_action_normline_triggered()
@@ -316,6 +315,10 @@ void MainWindowOcc::on_pb_generate_pressed()
     }
 
     data_generator_->reGenerateData(param, false);
+}
+
+void MainWindowOcc::on_pb_appenddata_pressed()
+{
 
 }
 

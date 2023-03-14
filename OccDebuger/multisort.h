@@ -105,8 +105,6 @@ void Sort_XS(Iterator start, Iterator end)
     F_XS(start, end);
     std::cout << "sort" << std::endl;
 #endif // MULTISORT
-
-
 }
 
 template<typename Iterator>

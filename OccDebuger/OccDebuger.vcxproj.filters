@@ -26,8 +26,6 @@
     <ClCompile Include="KBox.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
-    <ClCompile Include="DataGenerator.cpp" />
-    <ClCompile Include="DataObserver.cpp" />
     <ClCompile Include="KPnt.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
@@ -67,7 +65,6 @@
     <ClCompile Include="shapetools.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="KContext.cpp" />
     <ClCompile Include="BoundingBox.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
@@ -88,6 +85,18 @@
     </ClCompile>
     <ClCompile Include="BiSearch.cpp">
       <Filter>DataStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="multisort.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="DataGenerator.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="DataObserver.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="KContext.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,8 +121,6 @@
     <ClInclude Include="KBox.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="DataGenerator.h" />
-    <ClInclude Include="DataObserver.h" />
     <ClInclude Include="public_function.h">
       <Filter>Tools</Filter>
     </ClInclude>
@@ -132,7 +139,6 @@
     <ClInclude Include="PreLine.h">
       <Filter>Manner</Filter>
     </ClInclude>
-    <ClInclude Include="stadfx.h" />
     <ClInclude Include="test_datastructure.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
@@ -148,7 +154,6 @@
     <ClInclude Include="shapetools.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="KContext.h" />
     <ClInclude Include="unionset.h">
       <Filter>Manner</Filter>
     </ClInclude>
@@ -175,6 +180,21 @@
     </ClInclude>
     <ClInclude Include="BiSearch.h">
       <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="multisort.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="DataObserver.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="DataGenerator.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="KContext.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="stadfx.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

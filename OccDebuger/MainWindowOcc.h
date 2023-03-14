@@ -46,6 +46,7 @@ private slots:
     void on_pb_valueMax_unsafe_pressed();
     void on_pb_RandRange_pressed();
     void on_pb_Randvalue_pressed();
+    void on_pb_appenddata_pressed();
 
     void on_actionFitAll_triggered();
     void on_actionview_triggered();

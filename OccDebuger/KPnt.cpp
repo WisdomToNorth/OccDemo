@@ -6,10 +6,6 @@
 
 namespace KDebugger
 {
-bool KPt::operator==(const KPt& rhs)
-{
-    return OccTools::fEqual(rhs.y, y);
-}
 
 void KPt::print()const
 {
@@ -24,6 +20,10 @@ void KPt::printX()const
     std::cout << "{" << x << "}";
 }
 bool KPt::isEqual(const KPt& rhs)
+{
+    return OccTools::fEqual(x, rhs.x) && OccTools::fEqual(y, rhs.y);
+}
+bool KPt::operator==(const KPt& rhs)
 {
     return OccTools::fEqual(x, rhs.x) && OccTools::fEqual(y, rhs.y);
 }
@@ -66,13 +66,22 @@ PntsSorted2D::PntsSorted2D(const std::vector<KPt>& pnts)
     Sort_XS(pnts_xsorted_.begin(), pnts_xsorted_.end());
     Sort_YS(pnts_ysorted_.begin(), pnts_ysorted_.end());
 }
+
 bool mycompx(const KPt& pt1, const KPt& pt2)
 {
     return pt1.x < pt2.x;
 }
+
 KPt PntsSorted2D::getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2)
 {
-    size_t mid = this->pnts_xsorted_.size() / 2;
+    size_t cursize = this->pnts_xsorted_.size();
+    if (cursize == 1)
+    {
+        p2 = *this;
+        return this->getOnlyPnt();
+    }
+
+    size_t mid = cursize / 2;
     auto it = this->pnts_xsorted_.begin();
     std::advance(it, mid);
     double pivot = it->x;
@@ -83,19 +92,20 @@ KPt PntsSorted2D::getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2)
     p1.pnts_xsorted_.assign(pnts_xsorted_.begin(), second_it);
     p2.pnts_xsorted_.assign(second_it, pnts_xsorted_.end());
 
-    int cnt = this->size();
-    for (size_t i = 0; i < cnt; ++i)
-    {
-        if (pnts_ysorted_[i].x < pivot)
-            p1.pnts_ysorted_.emplace_back(pnts_ysorted_[i]);
-        else
-            p2.pnts_ysorted_.emplace_back(pnts_ysorted_[i]);
-    }
+    auto it_y = std::stable_partition(pnts_ysorted_.begin(), pnts_ysorted_.end(),
+        [&](const KPt& pt)
+        {
+            return pt.x < pivot;
+        });
+
+    p1.pnts_ysorted_.assign(pnts_ysorted_.begin(), it_y);
+    p2.pnts_ysorted_.assign(it_y, pnts_ysorted_.end());
 
     assert(p1.confirmValid() && p2.confirmValid());
 
     return *it;
 }
+
 bool mycompy(const KPt& pt1, const KPt& pt2)
 {
     return pt1.y < pt2.y;
@@ -103,6 +113,13 @@ bool mycompy(const KPt& pt1, const KPt& pt2)
 
 KPt PntsSorted2D::getSubPntsByMidY(PntsSorted2D& p1, PntsSorted2D& p2)
 {
+    size_t cursize = this->pnts_xsorted_.size();
+    if (cursize == 1)
+    {
+        p2 = *this;
+        return this->getOnlyPnt();
+    }
+
     size_t mid = this->pnts_ysorted_.size() / 2;
     auto it = this->pnts_ysorted_.begin();
     std::advance(it, mid);
@@ -114,15 +131,14 @@ KPt PntsSorted2D::getSubPntsByMidY(PntsSorted2D& p1, PntsSorted2D& p2)
     p1.pnts_ysorted_.assign(pnts_ysorted_.begin(), second_it);
     p2.pnts_ysorted_.assign(second_it, pnts_ysorted_.end());
 
-    int cnt = this->size();
-    for (size_t i = 0; i < cnt; ++i)
-    {
-        if (pnts_xsorted_[i].y < pivot)
-            p1.pnts_xsorted_.emplace_back(pnts_xsorted_[i]);
-        else
-            p2.pnts_xsorted_.emplace_back(pnts_xsorted_[i]);
-    }
+    auto it_y = std::stable_partition(pnts_xsorted_.begin(), pnts_xsorted_.end(),
+        [&](const KPt& pt)
+        {
+            return pt.y < pivot;
+        });
 
+    p1.pnts_xsorted_.assign(pnts_xsorted_.begin(), it_y);
+    p2.pnts_xsorted_.assign(it_y, pnts_xsorted_.end());
     assert(p1.confirmValid() && p2.confirmValid());
 
     return *it;

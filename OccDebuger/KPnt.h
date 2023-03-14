@@ -12,11 +12,6 @@ struct KPt
     KPt(double _x, double _y) :x(_x), y(_y) {};
     KPt() :x(0), y(0) {};
     bool isEqual(const KPt& rhs);
-    bool operator<(const KPt& rhs)
-    {
-        return this->y < rhs.y;
-    }
-
     bool operator==(const KPt& rhs);
     void print()const;
     void printY()const;
