@@ -19,7 +19,7 @@
 #include <QPointer>
 #include <QDesktopWidget>
 
-#include "CADView.h"
+#include "CadView.h"
 #include "KTimer.h"
 #include "CustomQlistWidget.h"
 #include "KLogger.h"
@@ -57,13 +57,15 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
         this, std::placeholders::_1);
 
 
-    info_widget_ = new StatusInfoWidget(this);
-    ui->statusBar->addPermanentWidget(info_widget_);
+    info_widget_ = new StatusInfoWidget(cadview_);
+    // info_widget_->
+     //ui->statusBar->addPermanentWidget(info_widget_);
 
-    data_generator_ = new DataGenerator(cadview_);
-    ui->gridLayout_view->addWidget(cadview_);
+
 
     setUpUI();
+    data_generator_ = new DataGenerator(cadview_);
+    ui->gridLayout_view->addWidget(cadview_);
     ConsoleLog("Hello!");
     on_pb_generate_pressed();
     on_actionview_triggered();
@@ -159,7 +161,7 @@ void MainWindowOcc::setUpUI()
     console_size << 3500 << 1000;
     ui->splitter->setSizes(console_size);
     QList<int> console_size_vert;
-    console_size_vert << 600 << 3000;
+    console_size_vert << 1000 << 3000;
     ui->splitter_2->setSizes(console_size_vert);
 }
 

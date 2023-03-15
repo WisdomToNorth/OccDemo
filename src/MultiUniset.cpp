@@ -8,7 +8,7 @@
 #include <thread>
 #include <algorithm>
 
-#include "CADView.h"
+#include "CadView.h"
 #include "KTimer.h"
 #include "CustomQlistWidget.h"
 #include "KLogger.h"

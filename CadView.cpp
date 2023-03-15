@@ -1,4 +1,4 @@
-﻿#include "CADView.h"
+﻿#include "CadView.h"
 
 #include <AIS_InteractiveContext.hxx>
 #include <V3d_View.hxx>
@@ -181,7 +181,7 @@ void CadView::setViewCube()
     ais_viewcube->SetTransformPersistence(
         new Graphic3d_TransformPers(
             Graphic3d_TMF_TriedronPers,
-            Aspect_TOTP_LEFT_UPPER,
+            Aspect_TOTP_RIGHT_UPPER,
             Graphic3d_Vec2i(85, 85)));
 
     const Handle(Prs3d_DatumAspect) datum_color = new Prs3d_DatumAspect();

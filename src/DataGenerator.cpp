@@ -13,7 +13,7 @@
 #include <qscreen.h>
 #include <qdebug.h>
 
-#include "CADView.h"
+#include "CadView.h"
 #include "KTimer.h"
 #include "CustomQlistWidget.h"
 #include "KLogger.h"

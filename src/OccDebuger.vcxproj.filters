@@ -14,7 +14,7 @@
     <ClCompile Include="MultiUniset.cpp">
       <Filter>UnionSet</Filter>
     </ClCompile>
-    <ClCompile Include="CADView.cpp">
+    <ClCompile Include="CadView.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="global.cpp">
@@ -85,9 +85,6 @@
     </ClCompile>
     <ClCompile Include="BiSearch.cpp">
       <Filter>DataStructure</Filter>
-    </ClCompile>
-    <ClCompile Include="multisort.cpp">
-      <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="DataGenerator.cpp">
       <Filter>Manner</Filter>
@@ -204,7 +201,7 @@
     <QtMoc Include="CustomQlistWidget.h">
       <Filter>UI\Consolelog</Filter>
     </QtMoc>
-    <QtMoc Include="CADView.h">
+    <QtMoc Include="CadView.h">
       <Filter>UI</Filter>
     </QtMoc>
     <QtMoc Include="MainWindowOcc.h">

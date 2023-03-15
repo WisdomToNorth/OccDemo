@@ -101,7 +101,7 @@
     <ClCompile Include="BinSearchNode.cpp" />
     <ClCompile Include="BiSearch.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
-    <ClCompile Include="CADView.cpp" />
+    <ClCompile Include="CadView.cpp" />
     <ClCompile Include="CustomQlistWidget.cpp" />
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
@@ -114,7 +114,6 @@
     <ClCompile Include="linedrawer.cpp" />
     <ClCompile Include="gptools.cpp" />
     <ClCompile Include="mathUtils.cpp" />
-    <ClCompile Include="multisort.cpp" />
     <ClCompile Include="PreLine.cpp" />
     <ClCompile Include="public_function.cpp" />
     <ClCompile Include="2d_search.cpp" />
@@ -175,7 +174,7 @@
     <ClInclude Include="stadfx.h" />
     <ClInclude Include="test_datastructure.h" />
     <ClInclude Include="unionset.h" />
-    <QtMoc Include="CADView.h" />
+    <QtMoc Include="CadView.h" />
     <ClInclude Include="KBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
