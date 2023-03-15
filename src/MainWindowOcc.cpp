@@ -58,10 +58,8 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
         this, std::placeholders::_1);
 
 
-    info_widget_ = new StatusInfoWidget(cadview_);
-    // info_widget_->
-     //ui->statusBar->addPermanentWidget(info_widget_);
-
+    info_widget_ = new StatusInfoWidget(this);
+    ui->gl_info->addWidget(info_widget_);
 
 
     setUpUI();
@@ -156,7 +154,7 @@ void MainWindowOcc::setUpUI()
     this->setGeometry(width * 1 / 8, height / 8, scwidth, scheight);
 
     iwCustomQListWidget* console_widget = InitConsole(this, this, false);
-    ui->gridLayout_Console->addWidget(console_widget);
+    ui->gl_console->addWidget(console_widget);
 
     QList<int> console_size;
     console_size << 3500 << 1000;
