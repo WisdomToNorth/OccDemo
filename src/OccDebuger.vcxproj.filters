@@ -11,9 +11,6 @@
     <ClCompile Include="CustomQlistWidget.cpp">
       <Filter>UI\Consolelog</Filter>
     </ClCompile>
-    <ClCompile Include="MultiUniset.cpp">
-      <Filter>UnionSet</Filter>
-    </ClCompile>
     <ClCompile Include="CadView.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -95,6 +92,12 @@
     <ClCompile Include="KContext.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="MultiUniset.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="KBoxObj.cpp">
+      <Filter>DataStructure</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -105,9 +108,6 @@
     </ClInclude>
     <ClInclude Include="KPnt.h">
       <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="MultiUniset.h">
-      <Filter>UnionSet</Filter>
     </ClInclude>
     <ClInclude Include="global.h">
       <Filter>UI</Filter>
@@ -151,9 +151,6 @@
     <ClInclude Include="shapetools.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="unionset.h">
-      <Filter>Manner</Filter>
-    </ClInclude>
     <ClInclude Include="BoundingBox.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
@@ -163,7 +160,7 @@
     <ClInclude Include="2d_search.h">
       <Filter>Manner</Filter>
     </ClInclude>
-    <ClInclude Include="Ktimer.h">
+    <ClInclude Include="KTimer.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="KDSearch.h">
@@ -193,6 +190,15 @@
     <ClInclude Include="stadfx.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="MultiUniset.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="unionset.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="KBoxObj.h">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="iwConsole.h">
@@ -217,9 +223,6 @@
     </Filter>
     <Filter Include="Tools">
       <UniqueIdentifier>{321affaa-2ba9-4ec9-baa9-68d568a4807d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UnionSet">
-      <UniqueIdentifier>{c858a4c6-e1d3-4fef-a4ee-b7aee9406a6c}</UniqueIdentifier>
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{1ba945c5-be17-47a0-8678-ba95ece7cd94}</UniqueIdentifier>

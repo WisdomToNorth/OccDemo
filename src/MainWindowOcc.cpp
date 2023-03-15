@@ -8,12 +8,12 @@
 #include <thread>
 #include <algorithm>
 
-#include <qguiapplication.h>
+#include <QGuiapplication>
 #include <QScreen>
-#include <qdebug.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
+#include <QDebug>
+#include <QSpinbox>
+#include <QLabel>
+#include <QCheckbox>
 #include <QStatusBar>
 #include <QMenu>
 #include <QPointer>
@@ -28,10 +28,11 @@
 #include "DataGenerator.h"
 #include "2d_search.h"
 #include "KPnt.h"
-#include "ui_MainWindowOcc.h"
 #include "statusinfowidget.h"
 #include "linedrawer.h"
 #include "PreLine.h"
+
+#include "ui_MainWindowOcc.h"
 
 namespace KDebugger
 {
@@ -200,6 +201,17 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
         def = ui->sb_core->value();
     }
     unionset_->multiCoreUnionSet(def);
+}
+void MainWindowOcc::on_actionuf_opt3_triggered()
+{
+    if (!unionset_)
+        unionset_ = new MultiUniset(data_generator_);
+    int def = 0;
+    if (ui->sb_core->value() > 0)
+    {
+        def = ui->sb_core->value();
+    }
+    unionset_->optUnionSet(def);
 }
 
 void MainWindowOcc::on_actionkd_find1D_triggered()

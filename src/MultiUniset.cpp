@@ -14,6 +14,8 @@
 #include "KLogger.h"
 #include "global.h"
 #include "DataGenerator.h"
+#include "BinSearchNode.h"
+#include "RangeTree.h"
 
 namespace KDebugger
 {
@@ -28,6 +30,7 @@ MultiUniset::MultiUniset(DataGenerator* view) :
 void MultiUniset::updateData()
 {
     buf_ = data_generator_->getData();
+    data_generator_->getBoxObjData(bufobj_);
     ConsoleLog("Data update in Multi Unionset!");
 }
 
@@ -56,7 +59,20 @@ void MultiUniset::badWay()
     std::cout << "merge cnt : " << cnt << std::endl;
 }
 
-void MultiUniset::oneCoreUnionSet()
+void MultiUniset::optUnionSet(int user_set_num)
+{
+    Q_UNUSED(user_set_num);
+    KRangeTree helper;
+    std::vector<KPt> buf;
+    for (auto& obj : bufobj_)
+    {
+        const std::vector<KPt>& temp = obj.getBoxPt();
+        buf.insert(buf.end(), temp.begin(), temp.end());
+    }
+    BinSearchNode* range_2d = helper.buildRangeTree(buf);
+}
+
+void MultiUniset::oneCoreUnionSet(bool _merge)
 {
     std::cout << "\n\n-----------unionset single thread------------" << std::endl;
     unsigned long long data_count = buf_.size();
@@ -69,13 +85,15 @@ void MultiUniset::oneCoreUnionSet()
     unionfinder.update();
 
     timer.timeFromBegin("union single thread build");
-    int cnt = handleUnionFinder(unionfinder, false);
-
-    timer.timeFromBegin("union single all");
-    std::cout << "merge count: " << cnt << std::endl;
+    if (_merge)
+    {
+        int cnt = handleUnionFinder(unionfinder, false);
+        timer.timeFromBegin("union single all");
+        std::cout << "merge count: " << cnt << std::endl;
+    }
 }
 
-void MultiUniset::multiCoreUnionSet(int user_set_num)
+void MultiUniset::multiCoreUnionSet(int user_set_num, bool _merge)
 {
 
     std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
@@ -116,10 +134,12 @@ void MultiUniset::multiCoreUnionSet(int user_set_num)
 
     timer.timeFromBegin("union mutil thread build");
 
-    int cnt = handleUnionFinder(unionfinders[0], true);
-
-    timer.timeFromBegin("union multi all");
-    std::cout << "merge count: " << cnt << std::endl;
+    if (_merge)
+    {
+        int cnt = handleUnionFinder(unionfinders[0], true);
+        timer.timeFromBegin("union multi all");
+        std::cout << "merge count: " << cnt << std::endl;
+    }
 }
 
 
@@ -157,7 +177,7 @@ std::pair<int, int> MultiUniset::getLoc(unsigned long long num)
     int b = static_cast<int>(n);
 
     //std::cout << "loc: " << a << " * " << b << " &" << std::endl;
-    return {a,b};//m,n从0开始数
+    return { a,b };//m,n从0开始数
 }
 
 /*
@@ -270,7 +290,7 @@ int MultiUniset::handleUnionFinder(const UnionFind& finder, bool use_multi)
         {
             auto l_end = l_start + block_size;
 
-            threads[thread_index] = std::thread([=, &cnt,this]//涉及迭代器，貌似需要使用赋值
+            threads[thread_index] = std::thread([=, &cnt, this]//涉及迭代器，貌似需要使用赋值
                 {
                     cnt += handleUnionSetResult(l_start, l_end, thread_index);
                 });
@@ -284,6 +304,4 @@ int MultiUniset::handleUnionFinder(const UnionFind& finder, bool use_multi)
         return cnt;
     }
 }
-
-
 }

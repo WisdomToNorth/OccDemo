@@ -106,6 +106,7 @@
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
     <ClCompile Include="KAngleMultiLine.cpp" />
+    <ClCompile Include="KBoxObj.cpp" />
     <ClCompile Include="KContext.cpp" />
     <ClCompile Include="KDSearch.cpp" />
     <ClCompile Include="KLine.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
     <ClInclude Include="KAngleMultiLine.h" />
+    <ClInclude Include="KBoxObj.h" />
     <ClInclude Include="KContext.h" />
     <ClInclude Include="KDSearch.h" />
     <ClInclude Include="KLine.h" />
@@ -163,7 +165,7 @@
     <ClInclude Include="iwLog.h" />
     <ClInclude Include="iwSingleton.h" />
     <ClInclude Include="KPnt.h" />
-    <ClInclude Include="Ktimer.h" />
+    <ClInclude Include="KTimer.h" />
     <ClInclude Include="MultiUniset.h" />
     <ClInclude Include="lc_struct.h" />
     <ClInclude Include="KLogger.h" />

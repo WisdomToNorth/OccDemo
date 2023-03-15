@@ -7,15 +7,25 @@ namespace KDebugger
 {
 struct KPt
 {
-    double x;
-    double y;
-    KPt(double _x, double _y) :x(_x), y(_y) {};
-    KPt() :x(0), y(0) {};
+    KPt(double _x, double _y, KPt* parent = nullptr) :
+        x(_x), y(_y), parent_(parent)
+    {
+    };
+    KPt(const KPt& rhs, KPt* parent = nullptr) :
+        x(rhs.x), y(rhs.y), parent_(parent)
+    {
+    };
+    KPt() :x(0), y(0), parent_(nullptr) {};
     bool isEqual(const KPt& rhs);
     bool operator==(const KPt& rhs);
     void print()const;
     void printY()const;
     void printX()const;
+
+    double x;
+    double y;
+    KPt* parent_;
+    bool merged_ = false;
 };
 
 void printPntVec(const std::vector<KPt>& pnts);

@@ -44,7 +44,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>972</width>
+             <width>971</width>
              <height>759</height>
             </rect>
            </property>
@@ -492,6 +492,7 @@
     <addaction name="act_unionfind_ori"/>
     <addaction name="act_unionfind_opt1"/>
     <addaction name="act_unionfind_opt2"/>
+    <addaction name="actionuf_opt3"/>
     <addaction name="actionkd_find1D"/>
     <addaction name="actionori_find1D"/>
     <addaction name="actionkd_find2D"/>
@@ -527,6 +528,9 @@
    <addaction name="action_drawline"/>
    <addaction name="action_cpuline"/>
    <addaction name="action_normline"/>
+   <addaction name="act_unionfind_opt1"/>
+   <addaction name="act_unionfind_opt2"/>
+   <addaction name="actionuf_opt3"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionGenerate">
@@ -536,7 +540,7 @@
   </action>
   <action name="act_unionfind_ori">
    <property name="text">
-    <string>unionfind_ori</string>
+    <string>uf_ori</string>
    </property>
   </action>
   <action name="actionFitAll">
@@ -546,12 +550,12 @@
   </action>
   <action name="act_unionfind_opt1">
    <property name="text">
-    <string>unionfind_opt1</string>
+    <string>uf_opt1</string>
    </property>
   </action>
   <action name="act_unionfind_opt2">
    <property name="text">
-    <string>unionfind_opt2</string>
+    <string>uf_opt2</string>
    </property>
   </action>
   <action name="actionview">
@@ -607,6 +611,11 @@
   <action name="actionfind2D">
    <property name="text">
     <string>find2D</string>
+   </property>
+  </action>
+  <action name="actionuf_opt3">
+   <property name="text">
+    <string>uf_opt3</string>
    </property>
   </action>
  </widget>

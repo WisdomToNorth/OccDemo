@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "KBox.h"
+#include "KBoxObj.h"
 
 namespace KDebugger
 {
@@ -41,6 +42,7 @@ public:
     void viewData();
 
     const std::vector<KBox>& getData() { return buf_; }
+    void getBoxObjData(std::vector<KBoxObj>&);
     void getPtData(std::vector<KPt>&);
 
     void addToObserverList(DataObserver* obs);
@@ -55,6 +57,7 @@ private:
 
 private:
     CadView* cadview_;
+
     std::vector<KBox> buf_;
     std::vector<DataObserver*> obs_list_;
 };
