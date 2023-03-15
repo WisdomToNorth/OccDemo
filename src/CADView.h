@@ -1,10 +1,21 @@
-﻿#pragma once
+﻿/****************************************************************************
+** Copyright 2022 by KangYucheng.
+** All Rights Reserved.
+**
+** This file is part of RobotConfig software. No part of this file may be
+** reproduced in any form or means, without the prior written consent of KangYucheng.
+****************************************************************************/
+
+#pragma once
 #ifndef _CADVIEW_H_
 #define _CADVIEW_H_
 
 #include <functional>
 
 #include <QWidget>
+#include <QMouseEvent>
+#include <QWheelEvent>
+
 
 #ifdef _WIN32
 #include <WNT_Window.hxx>
@@ -15,7 +26,13 @@
 #include <QGLWidget>
 #endif
 
+#include <AIS_InteractiveObject.hxx>
 #include <AIS_ViewController.hxx>
+#include <Prs3d_TypeOfHighlight.hxx>
+#include <V3d_Viewer.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
+#include <V3d_View.hxx>
+#include <AIS_TextLabel.hxx>
 
 #include "KContext.h"
 
@@ -25,12 +42,10 @@ class AIS_Shape;
 class AIS_InteractiveContext;
 class QMouseEvent;
 class QWheelEvent;
-class AIS_TextLabel;
 class V3d_View;
 class V3d_Viewer;
 class AIS_InteractiveObject;
 class Graphic3d_GraphicDriver;
-class AIS_TextLabel;
 class K_Context;
 enum Prs3d_TypeOfHighlight;
 

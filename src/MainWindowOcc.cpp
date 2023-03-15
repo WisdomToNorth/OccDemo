@@ -489,6 +489,7 @@ void MainWindowOcc::on_pb_Test2DFind_pressed()
                 ori_find2D(true);
                 std::cout << "\nrange tree :";
                 ran_find2D(true);
+                return;
             }
             /* if (ori_find2D() != ran_find2D())
              {

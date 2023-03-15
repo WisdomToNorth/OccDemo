@@ -164,7 +164,7 @@ int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r, bool _debug)
         range_2d_ = helper.buildRangeTree(buf_);
         std::cout << "\nDataSize: " << buf_.size();
         std::cout << "\nBuild range tree in " << timer.timeFromBegin(false)
-            << " ms" << std::endl;
+            << " ms";
     }
     if (_debug)
     {
@@ -175,8 +175,8 @@ int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r, bool _debug)
     std::vector<KPt> temp;
     res_.swap(temp);
     helper.searchRangeTreeFromRoot(range_2d_, r, res_);
-    std::cout << "\nrange_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << res_.size() << std::endl;
+    std::cout << "\nrange_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms";
+    std::cout << "\nres size:" << res_.size() << std::endl;
 
     if (_debug)
     {

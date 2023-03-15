@@ -9,7 +9,7 @@
 #include <algorithm>
 
 #include "CADView.h"
-#include "Ktimer.h"
+#include "KTimer.h"
 #include "CustomQlistWidget.h"
 #include "KLogger.h"
 #include "global.h"
@@ -270,7 +270,7 @@ int MultiUniset::handleUnionFinder(const UnionFind& finder, bool use_multi)
         {
             auto l_end = l_start + block_size;
 
-            threads[thread_index] = std::thread([=, &cnt]//涉及迭代器，貌似需要使用赋值
+            threads[thread_index] = std::thread([=, &cnt,this]//涉及迭代器，貌似需要使用赋值
                 {
                     cnt += handleUnionSetResult(l_start, l_end, thread_index);
                 });

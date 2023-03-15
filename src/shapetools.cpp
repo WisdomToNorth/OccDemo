@@ -16,10 +16,10 @@
 
 namespace OccTools
 {
-Handle_AIS_Trihedron createOriginTrihedron()
+Handle(AIS_Trihedron) createOriginTrihedron()
 {
-    Handle_Geom_Axis2Placement axis = new Geom_Axis2Placement(gp::XOY());
-    Handle_AIS_Trihedron aisTrihedron = new AIS_Trihedron(axis);
+    Handle(Geom_Axis2Placement) axis = new Geom_Axis2Placement(gp::XOY());
+    Handle(AIS_Trihedron) aisTrihedron = new AIS_Trihedron(axis);
     aisTrihedron->SetDatumDisplayMode(Prs3d_DM_WireFrame);
     aisTrihedron->SetDrawArrows(false);
     aisTrihedron->Attributes()->DatumAspect()->LineAspect(Prs3d_DP_XAxis)->SetWidth(2.5);

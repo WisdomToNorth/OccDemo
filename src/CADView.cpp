@@ -1,4 +1,15 @@
-﻿#include "CadView.h"
+﻿#include "CADView.h"
+
+#include <AIS_InteractiveContext.hxx>
+#include <V3d_View.hxx>
+#include <V3d_Viewer.hxx>
+#include <AIS_ViewCube.hxx>
+#include <AIS_InteractiveContext.hxx>
+#include <OpenGl_GraphicDriver.hxx>
+#include <V3d_View.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
+#include <AIS_TextLabel.hxx>
+#include <Aspect_Handle.hxx>
 
 #include <qclipboard.h>
 #include <QTimer>
@@ -12,8 +23,7 @@
 #include <qcursor.h>
 #include <qdebug.h>
 #include <qscreen.h>
-#include <QMouseEvent>
-#include <QWheelEvent>
+
 
 #include "KLogger.h"
 #include "stadfx.h"
@@ -174,7 +184,7 @@ void CadView::setViewCube()
             Aspect_TOTP_LEFT_UPPER,
             Graphic3d_Vec2i(85, 85)));
 
-    const Handle_Prs3d_DatumAspect datum_color = new Prs3d_DatumAspect();
+    const Handle(Prs3d_DatumAspect) datum_color = new Prs3d_DatumAspect();
     datum_color->ShadingAspect(Prs3d_DP_XAxis)->SetColor(Quantity_NOC_GREEN2);
     datum_color->ShadingAspect(Prs3d_DP_YAxis)->SetColor(Quantity_NOC_RED2);
     datum_color->ShadingAspect(Prs3d_DP_ZAxis)->SetColor(Quantity_NOC_BLUE2);

@@ -1,7 +1,7 @@
 ﻿#include "iwConsole.h"
 
 //Local
-#include "MainwindowOcc.h"
+#include "MainWindowOcc.h"
 
 //LAB_Camera
 #include "iwSingleton.h"

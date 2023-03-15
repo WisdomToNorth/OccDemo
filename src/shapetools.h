@@ -4,15 +4,14 @@
 
 #include <Quantity_Color.hxx>
 #include <gp_Pnt.hxx>
-//#include <TopoDS_Wire.hxx>
+#include <AIS_Trihedron.hxx>
 
-class Handle_AIS_Trihedron;
 class TopoDS_Wire;
 class TopoDS_Edge;
 
 namespace OccTools
 {
-Handle_AIS_Trihedron createOriginTrihedron();
+Handle(AIS_Trihedron) createOriginTrihedron();
 
 Quantity_Color getRandomColor();
 
