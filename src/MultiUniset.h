@@ -1,17 +1,20 @@
 ﻿#pragma once
 
 #include <vector>
+#include <set>
 
 #include "KBox.h"
+#include "KPnt.h"
 #include "KBoxObj.h"
 #include "unionset.h"
 #include "DataObserver.h"
 
 namespace KDebugger
 {
-
+struct BinSearchNode;
 class MultiUniset :public DataObserver
 {
+
 public:
     MultiUniset(DataGenerator* view);
 
@@ -29,6 +32,9 @@ public:
     int handleUnionSetResult(Iterator first, Iterator last, const int index);
 
     static std::pair<int, int> getLoc(unsigned long long num);
+
+private:
+    void recurveCheck(BinSearchNode* root, const std::vector<KPt>& cur_tocheck, std::set<KPt*>& cur_res);
 
 private:
     std::vector<KBox> buf_;

@@ -1,4 +1,4 @@
-#include "KLine.h"
+ï»¿#include "KLine.h"
 
 #include <algorithm>
 #include <gp_Pnt.hxx>
@@ -6,16 +6,15 @@
 
 namespace KDebugger
 {
-KLine::KLine(const gp_Pnt& p1, const gp_Pnt& p2)
+KLine::KLine(const gp_Pnt& p1, const gp_Pnt& p2) :
+    p1_(KPt(p1.X(), p1.Y())), p2_(KPt(p2.X(), p2.Y()))
 {
-    p1_ = KPt(p1.X(), p1.Y());
-    p2_ = KPt(p2.X(), p2.Y());
 }
 
 bool KLine::isCross(const KLine& rhs)const
 {
     const KLine& lhs = *this;
-    //Èç¹ûËÄÌõÅĞ¶ÏÓĞÒ»¸öÎªÕæ£¬Ôò´ú±íÁ½Ïß¶Î±Ø²»¿É½»£¬·ñÔòÓ¦¸Ã½øĞĞµÚ¶ş²½ÅĞ¶Ï¡£
+    //å¦‚æœå››æ¡åˆ¤æ–­æœ‰ä¸€ä¸ªä¸ºçœŸï¼Œåˆ™ä»£è¡¨ä¸¤çº¿æ®µå¿…ä¸å¯äº¤ï¼Œå¦åˆ™åº”è¯¥è¿›è¡Œç¬¬äºŒæ­¥åˆ¤æ–­ã€‚
 
     if (std::max(lhs.p1_.x, lhs.p2_.x) < std::min(rhs.p1_.x, rhs.p2_.x) ||
         std::max(lhs.p1_.y, lhs.p2_.y) < std::min(rhs.p1_.y, rhs.p2_.y) ||

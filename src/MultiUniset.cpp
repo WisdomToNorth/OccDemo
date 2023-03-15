@@ -60,38 +60,65 @@ void MultiUniset::badWay()
     std::cout << "merge cnt : " << cnt << std::endl;
 }
 
+void MultiUniset::recurveCheck(BinSearchNode* root, const std::vector<KPt>& _tocheck, std::set<KPt*>& _res)
+{
+    KRangeTree helper;
+    std::vector<KPt> cur_tocheck;
+    for (auto& pt : _tocheck)
+    {
+        if (pt.parent_ && (!pt.parent_->merged_) && !_res.count(pt.parent_))
+        {
+            _res.emplace(pt.parent_);
+            pt.parent_->merged_ = true;
+            std::vector<KPt> temp_tocheck;
+            helper.searchRangeTreeFromRoot(root, pt.parent_->obj_ptr_->getRegion(), temp_tocheck);
+            cur_tocheck.insert(cur_tocheck.end(), temp_tocheck.begin(), temp_tocheck.end());
+        }
+    }
+    if (!cur_tocheck.empty())
+        recurveCheck(root, cur_tocheck, _res);
+}
+
 void MultiUniset::optUnionSet(int user_set_num)
 {
     Q_UNUSED(user_set_num);
+    KTimer timer;
     KRangeTree helper;
     std::vector<KPt> buf;
-    for (auto& obj : bufobj_)
+    for (const auto& obj : bufobj_)
     {
         const std::vector<KPt>& temp = obj.getBoxPt();
-        buf.insert(buf.end(), temp.begin(), temp.end());
+        for (const auto& pt : temp)
+        {
+            if (!pt.parent_)
+                std::cout << "error\n";
+            else
+            {
+                buf.emplace_back(pt);
+                if (!buf.back().parent_)std::cout << "error2\n";
+            }
+        }
     }
-    std::cout<<"size of 4pt: "<<buf.size();
+    for (const auto& pt : buf)
+    {
+        if (!pt.parent_)std::cout << "error3\n";
+    }
+    std::cout << "size of 4 pt: " << buf.size() << std::endl;
 
     BinSearchNode* range_2d = helper.buildRangeTree(buf);
     std::vector<std::set<KPt*>>res;
-    for(auto& obj:bufobj_)
+    for (auto& obj : bufobj_)
     {
-        if(obj.loc_.merged_)continue;
+        if (obj.loc_.merged_)continue;
         std::set<KPt*> cur_res;
         std::vector<KPt> cur_tocheck;
-        helper.searchRangeTreeFromRoot(range_2d,obj.getRegion(),cur_tocheck);
-        for(auto&pt:cur_tocheck)
-        {
-//             if(!cur_res.count(pt.parent_))
-//             {
-// cur_res.emplace(pt.parent_);
-// std::vector<KPt> cur_tocheck;
-// helper.searchRangeTreeFromRoot(range_2d,pt.parent_->getRegion(),cur_tocheck);
-//             }
-
-        }
+        helper.searchRangeTreeFromRoot(range_2d, obj.getRegion(), cur_tocheck);
+        recurveCheck(range_2d, cur_tocheck, cur_res);
+        if (cur_res.size() > 1)
+            res.emplace_back(cur_res);
     }
-
+    timer.timeFromBegin();
+    std::cout << "mergecount: " << res.size() << std::endl;
 
 }
 
