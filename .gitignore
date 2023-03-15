@@ -13,6 +13,8 @@
 *.recipe
 *.idx
 *.suo
+*.lock
+*.vsidx
 
 # Compiled Object files
 *.slo
@@ -27,7 +29,6 @@
 *.svn-base
 .svn/*
 
-.vscode/*
 */x64/
 */x64/*
 x64/*

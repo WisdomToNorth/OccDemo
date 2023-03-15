@@ -120,6 +120,7 @@ KPt KDSearch::splitPnts(PntsSorted2D& pnts, PntsSorted2D& p1s,
     int n = pnts.size();
     int mid = n / 2;
     KPt midpt;
+
     if (direction)//vertical by mid x
     {
         //put into p1s
