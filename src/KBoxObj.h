@@ -3,6 +3,7 @@
 #include "KPnt.h"
 #include "KBox.h"
 #include "BoundingBox.h"
+#include "KRegion.h"
 #include <vector>
 
 namespace KDebugger
@@ -23,6 +24,10 @@ struct KBoxObj
     {
         return corners_;
     };
+    KRegion getRegion()
+    {
+        return KRegion(corners_[0],corners_[3]);
+    }
 
     KPt loc_;
     std::vector<KPt> corners_;

@@ -5,6 +5,7 @@
 #include <vector>
 #include <ctime>
 
+#include <set>
 #include <thread>
 #include <algorithm>
 
@@ -69,7 +70,29 @@ void MultiUniset::optUnionSet(int user_set_num)
         const std::vector<KPt>& temp = obj.getBoxPt();
         buf.insert(buf.end(), temp.begin(), temp.end());
     }
+    std::cout<<"size of 4pt: "<<buf.size();
+
     BinSearchNode* range_2d = helper.buildRangeTree(buf);
+    std::vector<std::set<KPt*>>res;
+    for(auto& obj:bufobj_)
+    {
+        if(obj.loc_.merged_)continue;
+        std::set<KPt*> cur_res;
+        std::vector<KPt> cur_tocheck;
+        helper.searchRangeTreeFromRoot(range_2d,obj.getRegion(),cur_tocheck);
+        for(auto&pt:cur_tocheck)
+        {
+//             if(!cur_res.count(pt.parent_))
+//             {
+// cur_res.emplace(pt.parent_);
+// std::vector<KPt> cur_tocheck;
+// helper.searchRangeTreeFromRoot(range_2d,pt.parent_->getRegion(),cur_tocheck);
+//             }
+
+        }
+    }
+
+
 }
 
 void MultiUniset::oneCoreUnionSet(bool _merge)

@@ -8,12 +8,12 @@
 #include <thread>
 #include <algorithm>
 
-#include <QGuiapplication>
+#include <QGuiApplication>
 #include <QScreen>
 #include <QDebug>
-#include <QSpinbox>
+#include <QSpinBox>
 #include <QLabel>
-#include <QCheckbox>
+#include <QCheckBox>
 #include <QStatusBar>
 #include <QMenu>
 #include <QPointer>
