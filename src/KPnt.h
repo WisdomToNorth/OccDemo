@@ -8,15 +8,15 @@ namespace KDebugger
 struct KBoxObj;
 struct KPt
 {
-    KPt(double _x, double _y, KPt* parent = nullptr) :
-        x(_x), y(_y), parent_(parent)
+    KPt(double _x, double _y) :
+        x(_x), y(_y)
     {
     };
-    KPt(const KPt& rhs, KPt* parent) :
-        x(rhs.x), y(rhs.y), parent_(parent)
-    {
-    };
-    KPt() :x(0), y(0), parent_(nullptr) {};
+    //KPt(const KPt& rhs) :
+    //    x(rhs.x), y(rhs.y)
+    //{
+    //};
+    KPt() :x(0), y(0) {};
     bool isEqual(const KPt& rhs);
     bool operator==(const KPt& rhs);
     void print()const;
@@ -25,7 +25,7 @@ struct KPt
 
     double x;
     double y;
-    KPt* parent_ = nullptr;
+
     KBoxObj* obj_ptr_ = nullptr;
     bool merged_ = false;
 };

@@ -11,13 +11,12 @@ BinSearchNode* KRangeTree::buildRangeTreeFromSortedVec(PntsSorted2D& vec)//2D
     BiSearch helper;
     BinSearchNode* aux_tree_ = helper.buildFromSortedVec(vec);
 
-    //std::vector<PntsSorted2D> aux;
-    PntsSorted2D r1;// = aux.front();
-    PntsSorted2D r2;// = aux.back();
+    PntsSorted2D r1;
+    PntsSorted2D r2;
+    //Caution: vec这里其实发生了变化，但是各种编译器在release版本下，
+    //vec是保持原值的，使其得以正常运行。这里要研究一下怎么解决这个问题。
     KPt midpt = vec.getSubPntsByMidX(r1, r2);;
 
-    //PntsSorted2D& r1 = aux.front();
-    //PntsSorted2D& r2 = aux.back();
     BinSearchNode* node;
 
     if (r1.empty() || r2.empty())
@@ -67,22 +66,22 @@ const BinSearchNode* KRangeTree::FindSplitNodeInX(const BinSearchNode* root,
 //search Range tree
 //input: root of Range tree, to-search region
 //output: vector of point in region
-void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
+void KRangeTree::searchRangeTreeFromRoot(const BinSearchNode* root,
     const KRegion& region, std::vector<KPt>& res)
 {
     if (!root)return;
-    double l = region.lb_.x;
-    double r = region.ru_.x;
-    double u = region.ru_.y;
-    double b = region.lb_.y;
-    BiSearch helper;
+    const double& l = region.lb_.x;
+    const double& r = region.ru_.x;
+    const double& u = region.ru_.y;
+    const double& b = region.lb_.y;
+    //BiSearch helper;
 
     const BinSearchNode* v_split = FindSplitNodeInX(root, l, r);
     if (!v_split)return;
 
     if (v_split->isLeaf())
     {
-        for (auto& p : v_split->pnts_.pnts_xsorted_)
+        for (const auto& p : v_split->pnts_.pnts_xsorted_)
         {
             if (region.ptInRegion(p))
             {
@@ -99,7 +98,7 @@ void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
         {
             if (l_split->pnt_.x >= l)
             { // report right tree
-                helper.oneDRangeQuery(l_split->right_->aux_, b, u, res);
+                BiSearch::oneDRangeQuery(l_split->right_->aux_, b, u, res);
                 l_split = l_split->left_;
             }
             else
@@ -109,7 +108,7 @@ void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
         }
         if (l_split)
         {
-            for (auto& p : l_split->pnts_.pnts_xsorted_)
+            for (const auto& p : l_split->pnts_.pnts_xsorted_)
             {
                 if (region.ptInRegion(p))
                 {
@@ -124,7 +123,7 @@ void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
         {
             if (r_split->pnt_.x < r)
             { // report right tree
-                helper.oneDRangeQuery(r_split->left_->aux_, b, u, res);
+                BiSearch::oneDRangeQuery(r_split->left_->aux_, b, u, res);
                 r_split = r_split->right_;
             }
             else
@@ -134,7 +133,7 @@ void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
         }
         if (r_split)
         {
-            for (auto& p : r_split->pnts_.pnts_xsorted_)
+            for (const auto& p : r_split->pnts_.pnts_xsorted_)
             {
                 if (region.ptInRegion(p))
                 {

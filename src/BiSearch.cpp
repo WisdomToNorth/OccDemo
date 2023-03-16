@@ -39,8 +39,8 @@ BinSearchNode* BiSearch::buildFromSortedVec(PntsSorted2D& vec)
 {
     if (vec.empty())return nullptr;
 
-    PntsSorted2D r1;// = aux.front();
-    PntsSorted2D r2;// = aux.back();
+    PntsSorted2D r1;
+    PntsSorted2D r2;
     KPt midpt = vec.getSubPntsByMidY(r1, r2);
 
     BinSearchNode* node;
@@ -98,9 +98,9 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
     if (!v_split)return;
     if (v_split->isLeaf())
     {
-        for (auto& p : v_split->pnts_.pnts_xsorted_)
+        for (const auto& p : v_split->pnts_.pnts_xsorted_)
         {
-            if (p.y >= l && p.y < r)res.push_back(p);
+            if (p.y >= l && p.y < r)res.emplace_back(p);
         }
     }
     else
@@ -121,7 +121,7 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
         }
         if (l_split)//leaf，
         {
-            for (auto& p : l_split->pnts_.pnts_xsorted_)
+            for (const auto& p : l_split->pnts_.pnts_xsorted_)
             {
                 if (p.y >= l && p.y < r)res.push_back(p);
             }
@@ -143,7 +143,7 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
         }
         if (r_split)
         {
-            for (auto& p : r_split->pnts_.pnts_xsorted_)
+            for (const auto& p : r_split->pnts_.pnts_xsorted_)
             {
                 if (p.y >= l && p.y < r)res.push_back(p);
             }
