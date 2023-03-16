@@ -63,7 +63,7 @@ private slots:
     void on_pb_Simple1DFind_pressed();
     void on_pb_Simple2DFind_pressed();
 
-    void on_actionkd_find1D_triggered();
+    void on_actionbi_find1D_triggered();
     void on_actionori_find1D_triggered();
     void on_actionkd_find2D_triggered();
     void on_actionori_find2D_triggered();

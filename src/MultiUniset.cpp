@@ -31,7 +31,7 @@ MultiUniset::MultiUniset(DataGenerator* view) :
 void MultiUniset::updateData()
 {
     buf_ = data_generator_->getData();
-    data_generator_->getBoxObjData(bufobj_);
+
     ConsoleLog("Data update in Multi Unionset!");
 }
 

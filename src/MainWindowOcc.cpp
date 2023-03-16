@@ -212,14 +212,14 @@ void MainWindowOcc::on_actionuf_opt3_triggered()
     unionset_->optUnionSet(def);
 }
 
-void MainWindowOcc::on_actionkd_find1D_triggered()
+void MainWindowOcc::on_actionbi_find1D_triggered()
 {
-    kd_find1D(true);
+    kd_find1D(ui->cb_debug->isChecked());
 }
 
 void MainWindowOcc::on_actionori_find1D_triggered()
 {
-    ori_find1D(true);
+    ori_find1D(ui->cb_debug->isChecked());
 }
 
 int MainWindowOcc::kd_find1D(bool _debug)
@@ -243,6 +243,7 @@ int MainWindowOcc::ori_find2D(bool _debug)
     return kdtree_->getTwoDRangeOri(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
         KPt(ui->dsb_right->value(), ui->dsb_up->value())), _debug);
 }
+
 int MainWindowOcc::ran_find2D(bool _debug)
 {
     if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
@@ -444,6 +445,7 @@ void MainWindowOcc::on_pb_Simple1DFind_pressed()
     std::cout << "test 100 times in " << timer.timeFromBegin(false) << " ms";
     std::cout << "\n############ 1D Search Test Done ###########\n";
 }
+
 void MainWindowOcc::on_pb_Simple2DFind_pressed()
 {
     std::cout << "\n\n\n############ 2D Search Test Start #############" << std::endl;
@@ -452,11 +454,7 @@ void MainWindowOcc::on_pb_Simple2DFind_pressed()
     for (int i = 0; i < 100; i++)
     {
         on_pb_RandRange_pressed();
-        if (ori_find2D() == ran_find2D())
-        {
-            std::cout << "\nfind " << ran_find2D() << "items\n";
-        }
-        else
+        if (ori_find2D() != ran_find2D())
         {
             succ = false;
             std::cout << "\n\n****** test failed:" << i << " ******\n";
@@ -505,21 +503,7 @@ void MainWindowOcc::on_pb_Test2DFind_pressed()
                 ran_find2D(true);
                 return;
             }
-            /* if (ori_find2D() != ran_find2D())
-             {
-                 std::cout << "\n\n****** test failed:" << i << " ******\n";
-                 std::cout << "left to right: [" << ui->dsb_left->value() << ", "
-                     << ui->dsb_right->value() << ")\n";
-                 std::cout << "down to up: [" << ui->dsb_down->value() << ", "
-                     << ui->dsb_up->value() << ")\n";
 
-                 std::cout << "ori :" << ori_find2D() << std::endl;
-                 std::cout << "range tree :" << ran_find2D() << std::endl;
-                 std::cout << "ori :";
-                 ori_find2D(true);
-                 std::cout << "range tree :";
-                 ran_find2D(true);
-             }*/
         }
     }
     std::cout << "test 10*100 times in " << timer.timeFromBegin(false) << " ms";

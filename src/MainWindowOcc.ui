@@ -504,7 +504,7 @@
     <addaction name="act_unionfind_opt1"/>
     <addaction name="act_unionfind_opt2"/>
     <addaction name="actionuf_opt3"/>
-    <addaction name="actionkd_find1D"/>
+    <addaction name="actionbi_find1D"/>
     <addaction name="actionori_find1D"/>
     <addaction name="actionkd_find2D"/>
     <addaction name="actionran_find2D"/>
@@ -574,9 +574,9 @@
     <string>view</string>
    </property>
   </action>
-  <action name="actionkd_find1D">
+  <action name="actionbi_find1D">
    <property name="text">
-    <string>kd_find1D</string>
+    <string>bi_find1D</string>
    </property>
   </action>
   <action name="actionori_find1D">

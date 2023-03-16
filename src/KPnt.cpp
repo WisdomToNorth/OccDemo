@@ -45,12 +45,12 @@ void printPntVec(const std::vector<KPt>& pnts)
 }
 bool PntsSorted2D::confirmValid()
 {
+
     if (pnts_xsorted_.empty() && pnts_ysorted_.empty())return true;
 
     std::vector<KPt> p1 = pnts_xsorted_;
     std::vector<KPt> p2 = pnts_ysorted_;
-    Sort_XL(p1.begin(), p1.end());
-    Sort_XL(p2.begin(), p2.end());
+
     for (int i = 0; i < p1.size(); ++i)
     {
         if (!p1[i].isEqual(p2[i]))return false;
@@ -74,6 +74,7 @@ bool mycompx(const KPt& pt1, const KPt& pt2)
 
 KPt PntsSorted2D::getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2)
 {
+
     size_t cursize = this->pnts_xsorted_.size();
     if (cursize == 1)
     {
@@ -89,11 +90,12 @@ KPt PntsSorted2D::getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2)
     auto second_it = std::lower_bound(pnts_xsorted_.begin(),
         pnts_xsorted_.end(), *it, mycompx);
 
+
     p1.pnts_xsorted_.assign(pnts_xsorted_.begin(), second_it);
     p2.pnts_xsorted_.assign(second_it, pnts_xsorted_.end());
 
     auto it_y = std::stable_partition(pnts_ysorted_.begin(), pnts_ysorted_.end(),
-        [&](const KPt& pt)
+        [&pivot](const KPt& pt)
         {
             return pt.x < pivot;
         });

@@ -36,16 +36,6 @@ void DataGenerator::notifyAll()
     }
 }
 
-void DataGenerator::getBoxObjData(std::vector<KBoxObj*>& buf)
-{
-    std::vector<KBoxObj*> newbuf;
-    for (const auto& box : buf_)
-    {
-        newbuf.emplace_back(new KBoxObj(box));
-    }
-    buf.swap(newbuf);
-}
-
 void DataGenerator::getPtData(std::vector<KPt>& buf)
 {
     std::vector<KPt> newbuf;

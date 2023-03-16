@@ -8,6 +8,7 @@
 #include "KPnt.h"
 
 //#define MULTISORT
+#define DEBUG_OUTPUT
 
 namespace KDebugger
 {
@@ -103,7 +104,10 @@ void Sort_XS(Iterator start, Iterator end)
     merge_xs(start, size, max_thread);
 #else
     F_XS(start, end);
-    std::cout << "sort" << std::endl;
+
+#ifdef DEBUG_OUTPUT
+    std::cout << "sortXS" << std::endl;
+#endif // DEBUG_OUTPUT
 #endif // MULTISORT
 }
 
@@ -133,7 +137,9 @@ void Sort_XL(Iterator start, Iterator end)
 #else
 
     F_XL(start, end);
-    std::cout << "sort" << std::endl;
+#ifdef DEBUG_OUTPUT
+    std::cout << "sortXL" << std::endl;
+#endif // DEBUG_OUTPUT
 #endif // MULTISORT
 }
 template<typename Iterator>
@@ -160,7 +166,12 @@ void Sort_YS(Iterator start, Iterator end)
     merge_ys(start, size, max_thread);
 #else
     F_YS(start, end);
-    std::cout << "sort" << std::endl;
+
+#ifdef DEBUG_OUTPUT
+    std::cout << "sortYS" << std::endl;
+#endif // DEBUG_OUTPUT
+
+
 #endif // MULTISORT
 }
 
@@ -188,7 +199,9 @@ void Sort_YL(Iterator start, Iterator end)
     merge_yl(start, size, max_thread);
 #else
     F_YL(start, end);
-    std::cout << "sort" << std::endl;
+#ifdef DEBUG_OUTPUT
+    std::cout << "sortYL" << std::endl;
+#endif // DEBUG_OUTPUT
 #endif // MULTISORT
 }
 }

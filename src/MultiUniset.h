@@ -5,7 +5,6 @@
 
 #include "KBox.h"
 #include "KPnt.h"
-#include "KBoxObj.h"
 #include "unionset.h"
 #include "DataObserver.h"
 
@@ -35,7 +34,7 @@ public:
 
 private:
     std::vector<KBox> buf_;
-    std::vector<KBoxObj*> bufobj_;
+
 
 };
 }

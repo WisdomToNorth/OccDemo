@@ -64,10 +64,10 @@ int TwoDSearch::getOneDRange(double l, double r, bool _debug)
     //std::cout << "\n-----1D binnode search------" << std::endl;
 
     KTimer timer;
-    BiSearch helper;
+    //BiSearch helper;
     if (!binsearch_1d_)
     {
-        binsearch_1d_ = helper.buildBinSearchTree(buf_);
+        binsearch_1d_ = BiSearch::buildBinSearchTree(buf_);
         std::cout << "\nDataSize: " << buf_.size();
         std::cout << "\nBuild bintree in " << timer.timeFromBegin(false) << " ms\n";
     }
@@ -80,7 +80,7 @@ int TwoDSearch::getOneDRange(double l, double r, bool _debug)
         std::cout << "\n ####tree end####\n";
 
     }
-    helper.oneDRangeQuery(binsearch_1d_, l, r, res_);
+    BiSearch::oneDRangeQuery(binsearch_1d_, l, r, res_);
     if (_debug)
     {
         reportRes();
@@ -90,8 +90,6 @@ int TwoDSearch::getOneDRange(double l, double r, bool _debug)
 
 int TwoDSearch::getTwoDRangeOri(const KRegion& r, bool _debug)
 {
-    // std::cout << "\n-----2D Search Origin-----";
-
     std::vector<KPt>temp;
     res_.swap(temp);
     KTimer timer;
@@ -120,10 +118,10 @@ int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r, bool _debug)
 
     KTimer timer;
     size_t cnt = 0;
-    KRangeTree helper;
+    // KRangeTree helper;
     if (!range_2d_)
     {
-        range_2d_ = helper.buildRangeTree(buf_);
+        range_2d_ = KRangeTree::buildRangeTree(buf_);
         std::cout << "\nDataSize: " << buf_.size();
         std::cout << "\nBuild range tree in " << timer.timeFromBegin(false)
             << " ms";
@@ -136,7 +134,7 @@ int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r, bool _debug)
     }
     std::vector<KPt> temp;
     res_.swap(temp);
-    helper.searchRangeTreeFromRoot(range_2d_, r, res_);
+    KRangeTree::searchRangeTreeFromRoot(range_2d_, r, res_);
     std::cout << "\nrange_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms";
     std::cout << "\nres size:" << res_.size() << std::endl;
 
