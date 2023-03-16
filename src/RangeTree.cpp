@@ -39,6 +39,7 @@ BinSearchNode* KRangeTree::buildRangeTree(std::vector<KPt>& pnts)
 {
     if (pnts.empty())return nullptr;
     PntsSorted2D sorted_pnts(pnts);
+
     return buildRangeTreeFromSortedVec(sorted_pnts);
 }
 

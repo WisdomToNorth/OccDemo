@@ -108,7 +108,6 @@
     <ClCompile Include="KAngleMultiLine.cpp" />
     <ClCompile Include="KBoxObj.cpp" />
     <ClCompile Include="KContext.cpp" />
-    <ClCompile Include="KDSearch.cpp" />
     <ClCompile Include="KLine.cpp" />
     <ClCompile Include="KRegion.cpp" />
     <ClCompile Include="KViewBox.cpp" />
@@ -151,7 +150,6 @@
     <ClInclude Include="KAngleMultiLine.h" />
     <ClInclude Include="KBoxObj.h" />
     <ClInclude Include="KContext.h" />
-    <ClInclude Include="KDSearch.h" />
     <ClInclude Include="KLine.h" />
     <ClInclude Include="KRegion.h" />
     <ClInclude Include="KViewBox.h" />

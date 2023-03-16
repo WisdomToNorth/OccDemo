@@ -3,7 +3,7 @@
 #include "DataGenerator.h"
 #include "KTimer.h"
 #include "BiSearch.h"
-#include "KDSearch.h"
+
 #include "RangeTree.h"
 #include "multisort.h"
 
@@ -22,11 +22,7 @@ void TwoDSearch::updateData()
         delete binsearch_1d_;
         binsearch_1d_ = nullptr;
     }
-    if (kd_2d_)
-    {
-        delete kd_2d_;
-        kd_2d_ = nullptr;
-    }
+
     if (range_2d_)
     {
         delete range_2d_;
@@ -115,40 +111,6 @@ int TwoDSearch::getTwoDRangeOri(const KRegion& r, bool _debug)
         std::cout << "\nres of origin method:\n";
         reportRes();
     }
-    return res_.size();
-}
-
-int TwoDSearch::getTwoDRangeKDSearch(const KRegion& r, bool _debug)
-{
-    // std::cout << "\n-----2D Search KD------";
-
-    KTimer timer;
-    size_t cnt = 0;
-    KDSearch helper;
-    if (!kd_2d_)
-    {
-        kd_2d_ = helper.buildTwoDSearch(buf_);
-        std::cout << "\nDataSize: " << buf_.size();
-        std::cout << "\nBuild kd tree in " << timer.timeFromBegin(false) << " ms" << std::endl;
-    }
-
-    if (_debug)
-    {
-        std::cout << "\n ####tree start####" << std::endl;
-        kd_2d_->printBinSearchTree();
-        std::cout << "\n ####tree end####" << std::endl;
-    }
-    std::vector<KPt> buf = helper.searchTwoDSearchFromRoot(kd_2d_, r);
-    std::cout << "\nkd_2d: Get Quary in " << timer.timeFromLastSee(false) << " ms\n";
-    std::cout << "res size:" << buf.size() << std::endl;
-    res_.swap(buf);
-
-    if (_debug)
-    {
-        std::cout << "\nres of kd tree method:";
-        reportRes();
-    }
-
     return res_.size();
 }
 

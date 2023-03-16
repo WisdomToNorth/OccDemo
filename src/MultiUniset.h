@@ -34,9 +34,6 @@ public:
     static std::pair<int, int> getLoc(unsigned long long num);
 
 private:
-    void recurveCheck(BinSearchNode* root, const std::vector<KPt>& cur_tocheck, std::set<KPt*>& cur_res);
-
-private:
     std::vector<KBox> buf_;
     std::vector<KBoxObj*> bufobj_;
 

@@ -235,9 +235,7 @@ int MainWindowOcc::ori_find1D(bool _debug)
 }
 int MainWindowOcc::kd_find2D(bool _debug)
 {
-    if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    return kdtree_->getTwoDRangeKDSearch(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
-        KPt(ui->dsb_right->value(), ui->dsb_up->value())), _debug);
+    return 0;
 }
 int MainWindowOcc::ori_find2D(bool _debug)
 {

@@ -7,7 +7,7 @@
 #include "global.h"
 #include "KPnt.h"
 
-#define MULTISORT
+//#define MULTISORT
 
 namespace KDebugger
 {

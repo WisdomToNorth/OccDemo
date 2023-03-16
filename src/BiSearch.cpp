@@ -43,7 +43,6 @@ BinSearchNode* BiSearch::buildFromSortedVec(PntsSorted2D& vec)
     PntsSorted2D r2;// = aux.back();
     KPt midpt = vec.getSubPntsByMidY(r1, r2);
 
-
     BinSearchNode* node;
     if (r1.empty() || r2.empty())
     {

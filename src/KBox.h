@@ -55,7 +55,7 @@ protected:
     KPt center_;
     double size_x_;
     double size_y_;
-    double space_ = 0.15;
+    double space_ = 0.0;// 15;
     int val_ = -1;//label
     enum class ObjType
     {
