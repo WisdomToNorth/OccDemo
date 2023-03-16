@@ -38,7 +38,7 @@ private:
 
 private:
     std::vector<KBox> buf_;
-    std::vector<KBoxObj> bufobj_;
+    std::vector<KBoxObj*> bufobj_;
 
 };
 }

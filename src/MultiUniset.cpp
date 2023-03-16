@@ -66,7 +66,8 @@ void MultiUniset::recurveCheck(BinSearchNode* root, const std::vector<KPt>& _toc
     std::vector<KPt> cur_tocheck;
     for (auto& pt : _tocheck)
     {
-        if (pt.parent_ && (!pt.parent_->merged_) && !_res.count(pt.parent_))
+        if (pt.parent_->merged_)continue;
+        if (!_res.count(pt.parent_))
         {
             _res.emplace(pt.parent_);
             pt.parent_->merged_ = true;
@@ -87,32 +88,33 @@ void MultiUniset::optUnionSet(int user_set_num)
     std::vector<KPt> buf;
     for (const auto& obj : bufobj_)
     {
-        const std::vector<KPt>& temp = obj.getBoxPt();
+        const std::vector<KPt>& temp = obj->getBoxPt();
         for (const auto& pt : temp)
         {
-            if (!pt.parent_)
-                std::cout << "error\n";
-            else
-            {
-                buf.emplace_back(pt);
-                if (!buf.back().parent_)std::cout << "error2\n";
-            }
+            buf.emplace_back(pt);
         }
     }
     for (const auto& pt : buf)
     {
-        if (!pt.parent_)std::cout << "error3\n";
+        if (pt.parent_->obj_ptr_->corners_.empty())
+        {
+            std::cout << "error3\n";
+            return;
+        }
     }
+
     std::cout << "size of 4 pt: " << buf.size() << std::endl;
 
     BinSearchNode* range_2d = helper.buildRangeTree(buf);
     std::vector<std::set<KPt*>>res;
     for (auto& obj : bufobj_)
     {
-        if (obj.loc_.merged_)continue;
+        if (obj->loc_.merged_)continue;
         std::set<KPt*> cur_res;
         std::vector<KPt> cur_tocheck;
-        helper.searchRangeTreeFromRoot(range_2d, obj.getRegion(), cur_tocheck);
+
+        helper.searchRangeTreeFromRoot(range_2d, obj->getRegion(), cur_tocheck);
+
         recurveCheck(range_2d, cur_tocheck, cur_res);
         if (cur_res.size() > 1)
             res.emplace_back(cur_res);

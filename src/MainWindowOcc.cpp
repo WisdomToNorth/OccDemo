@@ -327,6 +327,10 @@ void MainWindowOcc::on_pb_generate_pressed()
     }
 
     data_generator_->reGenerateData(param, false);
+
+    if (ui->sb_col->value() < 10 &&
+        ui->sb_row->value() < 10)
+        this->on_actionview_triggered();
 }
 
 void MainWindowOcc::on_pb_appenddata_pressed()

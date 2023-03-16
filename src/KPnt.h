@@ -12,17 +12,10 @@ struct KPt
         x(_x), y(_y), parent_(parent)
     {
     };
-    KPt(const KPt& rhs, KPt* parent = nullptr) :
+    KPt(const KPt& rhs, KPt* parent) :
         x(rhs.x), y(rhs.y), parent_(parent)
     {
     };
-    KPt(KPt& rhs)
-    {
-        x = rhs.x;
-        y = rhs.y;
-        parent_ = rhs.parent_;
-        //rhs.parent_ = nullptr;
-    }
     KPt() :x(0), y(0), parent_(nullptr) {};
     bool isEqual(const KPt& rhs);
     bool operator==(const KPt& rhs);
