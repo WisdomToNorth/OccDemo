@@ -7,6 +7,8 @@
 #include "DataObserver.h"
 #include "KRegion.h"
 
+#include "RTree.h"
+
 namespace KDebugger
 {
 
@@ -19,6 +21,7 @@ public:
     int getOneDRange(double l, double r, bool _debug = false);
     int getOneDRangeOri(double l, double r, bool _debug = false);
     int getTwoDRangeOri(const KRegion& r, bool _debug = false);
+    int getTwoDRange(const KRegion& r);
     int getTwoDRangeRangeTree(const KRegion& r, bool _debug = false);
     void reportRes();
 private:

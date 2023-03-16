@@ -168,6 +168,7 @@
     <ClInclude Include="2d_search.h" />
     <QtMoc Include="statusinfowidget.h" />
     <ClInclude Include="RangeTree.h" />
+    <ClInclude Include="RTree.h" />
     <ClInclude Include="shapetools.h" />
     <ClInclude Include="stadfx.h" />
     <ClInclude Include="test_datastructure.h" />

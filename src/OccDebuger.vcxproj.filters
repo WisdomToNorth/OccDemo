@@ -71,9 +71,6 @@
     <ClCompile Include="2d_search.cpp">
       <Filter>Manner</Filter>
     </ClCompile>
-    <ClCompile Include="KDSearch.cpp">
-      <Filter>DataStructure</Filter>
-    </ClCompile>
     <ClCompile Include="KViewBox.cpp">
       <Filter>Manner</Filter>
     </ClCompile>
@@ -94,9 +91,6 @@
     </ClCompile>
     <ClCompile Include="MultiUniset.cpp">
       <Filter>Manner</Filter>
-    </ClCompile>
-    <ClCompile Include="KBoxObj.cpp">
-      <Filter>DataStructure</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,9 +157,6 @@
     <ClInclude Include="KTimer.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="KDSearch.h">
-      <Filter>DataStructure</Filter>
-    </ClInclude>
     <ClInclude Include="KViewBox.h">
       <Filter>Manner</Filter>
     </ClInclude>
@@ -196,7 +187,7 @@
     <ClInclude Include="unionset.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="KBoxObj.h">
+    <ClInclude Include="RTree.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
   </ItemGroup>

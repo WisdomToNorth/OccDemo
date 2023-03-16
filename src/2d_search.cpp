@@ -113,6 +113,11 @@ int TwoDSearch::getTwoDRangeOri(const KRegion& r, bool _debug)
     return res_.size();
 }
 
+int TwoDSearch::getTwoDRange(const KRegion& r)
+{
+    //RangeTree::RangeTree<double, double> tree;
+}
+
 int TwoDSearch::getTwoDRangeRangeTree(const KRegion& r, bool _debug)
 {
     //std::cout << "\n-----2D Search Range2D------";
