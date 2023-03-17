@@ -5,18 +5,14 @@
 
 namespace KDebugger
 {
-struct KBoxObj;
+class KBox;
 struct KPt
 {
-    KPt(double _x, double _y) :
-        x(_x), y(_y)
+    KPt(double _x, double _y, const KBox* parent = nullptr) :
+        x(_x), y(_y), parent_(parent)
     {
     };
-    //KPt(const KPt& rhs) :
-    //    x(rhs.x), y(rhs.y)
-    //{
-    //};
-    KPt() :x(0), y(0) {};
+    KPt() :x(0), y(0), parent_(nullptr) {};
     bool isEqual(const KPt& rhs);
     bool operator==(const KPt& rhs);
     void print()const;
@@ -26,7 +22,7 @@ struct KPt
     double x;
     double y;
 
-    KBoxObj* obj_ptr_ = nullptr;
+    const KBox* parent_;
     bool merged_ = false;
 };
 
@@ -37,6 +33,8 @@ struct PntsSorted2D
     PntsSorted2D(const std::vector<KPt>& pnts);
     PntsSorted2D() {};
 
+    KPt getSubPntsByMidX_uneven(PntsSorted2D& p1, PntsSorted2D& p2);
+    KPt getSubPntsByMidY_uneven(PntsSorted2D& p1, PntsSorted2D& p2);
     KPt getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2);
     KPt getSubPntsByMidY(PntsSorted2D& p1, PntsSorted2D& p2);
 

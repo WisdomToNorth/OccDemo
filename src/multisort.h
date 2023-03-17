@@ -8,7 +8,7 @@
 #include "KPnt.h"
 
 //#define MULTISORT
-#define DEBUG_OUTPUT
+//#define DEBUG_OUTPUT
 
 namespace KDebugger
 {

@@ -18,6 +18,9 @@
 #include "BinSearchNode.h"
 #include "RangeTree.h"
 
+#include "2d_search.h"
+#include "KRegion.h"
+
 namespace KDebugger
 {
 
@@ -65,7 +68,7 @@ void MultiUniset::optUnionSet(int user_set_num)
 
 }
 
-void MultiUniset::oneCoreUnionSet(bool _merge)
+void MultiUniset::oneCoreUnionSetOld(bool _merge)
 {
     std::cout << "\n\n-----------unionset single thread------------" << std::endl;
     unsigned long long data_count = buf_.size();
@@ -81,6 +84,55 @@ void MultiUniset::oneCoreUnionSet(bool _merge)
     if (_merge)
     {
         int cnt = handleUnionFinder(unionfinder, false);
+        timer.timeFromBegin("union single all");
+        std::cout << "merge count: " << cnt << std::endl;
+    }
+}
+
+void MultiUniset::oneCoreUnionSet(bool _merge)
+{
+    std::cout << "\n\n-----------unionset single thread------------" << std::endl;
+    unsigned long long data_count = buf_.size();
+    std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
+    KTimer timer;
+    UnionFind finder(data_count);
+
+
+    std::vector<KPt> allcorner;
+
+    for (auto& box : buf_)
+    {
+        allcorner.push_back(box.leftBottom());
+        allcorner.push_back(box.rightUp());
+    }
+
+    for (int i = 0; i < data_count; ++i)//
+    {
+        std::vector<KPt> to_check;
+        auto it = allcorner.begin();
+        std::advance(it, 2 * i);
+        std::vector<KPt> rescorners(it, allcorner.end());
+
+        TwoDSearch::getTwoDExpendRange(rescorners,
+            buf_[i].getBoundingbox(), to_check);
+
+
+        for (auto& b : to_check)
+        {
+            if (!buf_[i].isOut(*b.parent_))
+            {
+                finder.merge(i, b.parent_->val_);
+            }
+        };
+    }
+    /////////////
+
+    finder.update();
+
+    timer.timeFromBegin("union single thread build");
+    if (_merge)
+    {
+        int cnt = handleUnionFinder(finder, false);
         timer.timeFromBegin("union single all");
         std::cout << "merge count: " << cnt << std::endl;
     }

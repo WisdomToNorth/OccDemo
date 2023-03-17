@@ -5,6 +5,9 @@
 #include <utility>
 #include <map>
 #include <iostream>
+#include <random>
+#include "global.h"
+
 
 #include "KPnt.h"
 namespace KDebugger
@@ -33,14 +36,34 @@ bool KTest::testLineCross()//todo: use qt or google test
     return false;
 }
 
-bool KTest::testKPnt2D()
+bool KTest::testKPnt2D(int seed)
 {
-    std::vector<KPt> pnts{ KPt{ 0, 2 }, KPt{ 1, 3 }, KPt{ 2, 0 }, KPt{ 5, 0 },
-        KPt{ 2, 2 }, KPt{ 3, 1 }, KPt{ 0, 4 }, KPt{ 0, 6 }, KPt{ 0, 8 },
-        KPt{ 2, 7 }, KPt{ 3, 7 }, KPt{ 4, 4 }, KPt{ 2, 10 }, KPt{ 4, 7 } };
+    G_Random_Engine.seed(seed);
+    std::vector<KPt> pnts;
+    //std::uniform_real_distribution<double> size_rand_gen(0, 10);//尺寸随机范围
+    std::uniform_int_distribution<int>size_rand_gen(0, 10);//尺寸随机范围
+
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < i; ++j)
+        {
+            pnts.push_back(KPt(size_rand_gen(G_Random_Engine),
+                size_rand_gen(G_Random_Engine)));
+        }
+    }
     PntsSorted2D tes(pnts);
+    tes.print();
+    PntsSorted2D p1, p2;
 
+    tes.getSubPntsByMidY(p1, p2);
+    std::cout << "\np1:" << p1.confirmValid();
+    p1.print();
 
-    return true;
+    std::cout << "\np2:" << p2.confirmValid();
+    p2.print();
+    bool res = p1.confirmValid() && p2.confirmValid();
+    std::cout << "res:" << res << std::endl;
+    return res;
 }
 }

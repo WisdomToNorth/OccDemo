@@ -10,11 +10,16 @@ int main(int argc, char* argv[])
 
     return a.exec();
 }
-
+//
 //#include "test_datastructure.h"
+//using namespace KDebugger;
 //int main(int argc, char* argv[])
 //{
-//    KDebugger::KTest te;
-//    te.testKPnt2D();
+//    KTest te;
+//    for (int i = 0; i < 1; ++i)
+//    {
+//        te.testKPnt2D(i);
+//    }
+//
 //    return 0;
 //}

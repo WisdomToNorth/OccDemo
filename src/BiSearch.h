@@ -12,7 +12,7 @@ public:
 
     // For 1D point
     static BinSearchNode* buildBinSearchTree(std::vector<KPt>& vec);
-    static BinSearchNode* buildFromSortedVec(PntsSorted2D& vec);
+    static BinSearchNode* buildFromSortedVec(BinSearchNode* parent, PntsSorted2D& vec);
     // For 1D point
     // input: bin search tree, to-search-range [x,x']
     // output: vector<int> {numbers in to-search-range}

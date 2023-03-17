@@ -388,55 +388,54 @@ public:
         {
             throw std::range_error("Cannot construct a SortedPointMatrix with 0 points.");
         }
-        else
+
+        dim = points[0]->dim();
+        for (int i = 1; i < points.size(); i++)
         {
-            dim = points[0]->dim();
-            for (int i = 1; i < points.size(); i++)
+            if (points[i]->dim() != dim)
             {
-                if (points[i]->dim() != dim)
-                {
-                    throw std::logic_error("Input points to SortedPointMatrix must all"
-                        " have the same dimension.");
-                }
-            }
-
-            int sortDimension = (points.size() > MAX_POINTS_BEFORE_SWITCH) ? dim - 1 : 0;
-            PointOrdering<T, S> pointOrdering(sortDimension);
-            std::sort(points.begin(), points.end(),
-                [pointOrdering](Point<T, S>* p1, Point<T, S>* p2)
-                {
-                    return pointOrdering.less(*p1, *p2);
-                });
-
-            pointsSortedByCurrentDim.push_back(points[0]);
-            int k = 0;
-            for (int i = 1; i < points.size(); i++)
-            {
-                if (pointOrdering.equals(*(pointsSortedByCurrentDim[k]), *points[i]))
-                {
-                    if (pointsSortedByCurrentDim[k]->value() != points[i]->value())
-                    {
-                        throw std::logic_error("Input points have same position but different values");
-                    }
-                    pointsSortedByCurrentDim[k]->increaseCountBy(points[i]->count());
-                }
-                else
-                {
-                    pointsSortedByCurrentDim.push_back(points[i]);
-                    k++;
-                }
-            }
-
-            if (pointsSortedByCurrentDim.size() > MAX_POINTS_BEFORE_SWITCH)
-            {
-                for (int i = dim - 2; i >= currentDim; i--)
-                {
-                    std::vector<int> order = sortOrder(pointsSortedByCurrentDim, i);
-                    redirectionTable.push_front(order);
-                    rearrangeGivenOrder(pointsSortedByCurrentDim, order);
-                }
+                throw std::logic_error("Input points to SortedPointMatrix must all"
+                    " have the same dimension.");
             }
         }
+
+        int sortDimension = (points.size() > MAX_POINTS_BEFORE_SWITCH) ? dim - 1 : 0;
+        PointOrdering<T, S> pointOrdering(sortDimension);
+        std::sort(points.begin(), points.end(),
+            [pointOrdering](Point<T, S>* p1, Point<T, S>* p2)
+            {
+                return pointOrdering.less(*p1, *p2);
+            });
+
+        pointsSortedByCurrentDim.push_back(points[0]);
+        int k = 0;
+        for (int i = 1; i < points.size(); i++)
+        {
+            if (pointOrdering.equals(*(pointsSortedByCurrentDim[k]), *points[i]))
+            {
+                if (pointsSortedByCurrentDim[k]->value() != points[i]->value())
+                {
+                    throw std::logic_error("Input points have same position but different values");
+                }
+                pointsSortedByCurrentDim[k]->increaseCountBy(points[i]->count());
+            }
+            else
+            {
+                pointsSortedByCurrentDim.push_back(points[i]);
+                k++;
+            }
+        }
+
+        if (pointsSortedByCurrentDim.size() > MAX_POINTS_BEFORE_SWITCH)
+        {
+            for (int i = dim - 2; i >= currentDim; i--)
+            {
+                std::vector<int> order = sortOrder(pointsSortedByCurrentDim, i);
+                redirectionTable.push_front(order);
+                rearrangeGivenOrder(pointsSortedByCurrentDim, order);
+            }
+        }
+
     }
 
     void moveToNextDimension()

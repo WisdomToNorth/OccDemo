@@ -57,7 +57,14 @@ bool KBox::outBoxWithSpacing(const KPt& pt)const
         return true;
     else return false;
 }
-
+KPt KBox::leftBottom()const
+{
+    return KPt(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, this);
+}
+KPt KBox::rightUp()const
+{
+    return KPt(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, this);
+}
 KBoundingBox KBox::getBoundingbox()const
 {
     KPt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5);

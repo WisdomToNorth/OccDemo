@@ -35,34 +35,39 @@ BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
     return parent;
 }
 
-BinSearchNode* BiSearch::buildFromSortedVec(PntsSorted2D& vec)
+BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent, PntsSorted2D& vec)
 {
-    if (vec.empty())return nullptr;
+    if (vec.size() == 1)
+    {
+        parent->pnt_ = vec.getOnlyPnt();
+        return parent;
+    }
 
     PntsSorted2D r1;
     PntsSorted2D r2;
     KPt midpt = vec.getSubPntsByMidY(r1, r2);
 
-    BinSearchNode* node;
-    if (r1.empty() || r2.empty())
-    {
-        node = new BinSearchNode(vec);
-    }
-    else
-    {
-        node = new BinSearchNode(midpt);
+    //BinSearchNode* node;
+    //if (r1.empty() || r2.empty())
+    //{
+    //    node = new BinSearchNode(midpt);
+    //}
+    //else
+    //{
+    parent->pnt_ = midpt;
+    parent->left_ = buildFromSortedVec(new BinSearchNode(), r1);
+    parent->right_ = buildFromSortedVec(new BinSearchNode(), r2);
 
-        node->left_ = buildFromSortedVec(r1);
-        node->right_ = buildFromSortedVec(r2);
-    }
-    return node;
+    return parent;
 }
 
 // For 1D
 BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
 {
+    if (vec.empty())return nullptr;
     PntsSorted2D pt2d(vec);
-    return buildFromSortedVec(pt2d);
+    BinSearchNode* root = new BinSearchNode();
+    return buildFromSortedVec(root, pt2d);
 }
 
 // For 1D
@@ -71,7 +76,7 @@ BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
 const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
     const double& leftnum, const double& rightnum)//1D
 {
-    if (!root)return nullptr;
+    //if (!root)return nullptr;
     const BinSearchNode* v = root;
     while (!v->isLeaf() && (rightnum <= v->pnt_.y || leftnum > v->pnt_.y))
     {
@@ -80,11 +85,11 @@ const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
         else
             v = v->right_;
     }
-    //std::cout << "\n####spliter of [" << leftnum << ", "
-    //    << rightnum << "):\n";
-    /*v->printBinSearchTree();
-    std::cout << std::endl;
-    */
+    //std::cout << "\n## spliter of [" << leftnum << ", "
+    //    << rightnum << ") :\n";
+    //v->printBinSearchTree();
+    //std::cout << std::endl;
+
     return v;
 }
 
@@ -95,19 +100,16 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
     double l, double r, std::vector<KPt>& res)
 {
     const BinSearchNode* v_split = FindSplitNode(root, l, r);
-    if (!v_split)return;
     if (v_split->isLeaf())
     {
-        for (const auto& p : v_split->pnts_.pnts_xsorted_)
-        {
-            if (p.y >= l && p.y < r)res.emplace_back(p);
-        }
+        if (v_split->belongToRangeInY(l, r))
+            res.emplace_back(v_split->pnt_);
     }
     else
     {
         // find way to left
         const BinSearchNode* l_split = v_split->left_;
-        while (l_split && !l_split->isLeaf())
+        while (!l_split->isLeaf())
         {
             if (l_split->pnt_.y >= l)
             { // report right tree
@@ -119,17 +121,12 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
                 l_split = l_split->right_;
             }
         }
-        if (l_split)//leaf，
-        {
-            for (const auto& p : l_split->pnts_.pnts_xsorted_)
-            {
-                if (p.y >= l && p.y < r)res.push_back(p);
-            }
-        }
+        if (l_split->belongToRangeInY(l, r))
+            res.emplace_back(l_split->pnt_);
 
         // find way to right;
         const BinSearchNode* r_split = v_split->right_;
-        while (r_split && !r_split->isLeaf())
+        while (!r_split->isLeaf())
         {
             if (r_split->pnt_.y < r)
             { // report right tree
@@ -141,13 +138,8 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
                 r_split = r_split->left_;
             }
         }
-        if (r_split)
-        {
-            for (const auto& p : r_split->pnts_.pnts_xsorted_)
-            {
-                if (p.y >= l && p.y < r)res.push_back(p);
-            }
-        }
+        if (r_split->belongToRangeInY(l, r))
+            res.emplace_back(r_split->pnt_);
     }
 }
 }

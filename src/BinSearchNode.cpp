@@ -24,9 +24,9 @@ void BinSearchNode::reportSubTree(const BinSearchNode* root,
     if (!root)return;
     if (root->isLeaf())
     {
-        //subnodes.emplace_back(root->pnt_);
-        for (auto& p : root->pnts_.pnts_xsorted_)
-            subnodes.push_back(p);
+        subnodes.emplace_back(root->pnt_);
+        //for (auto& p : root->pnts_.pnts_xsorted_)
+        //    subnodes.push_back(p);
     }
     if (root->left_)
         reportSubTree(root->left_, subnodes);

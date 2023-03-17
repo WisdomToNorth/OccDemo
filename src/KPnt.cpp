@@ -34,7 +34,7 @@ void printPntVec(const std::vector<KPt>& pnts)
     for (int i = 0; i < n; ++i)
     {
         pnts[i].print();
-        if (!((i + 1) % 5))
+        if (!((i + 1) % 8))
         {
             std::cout << std::endl;
         }
@@ -50,7 +50,8 @@ bool PntsSorted2D::confirmValid()
 
     std::vector<KPt> p1 = pnts_xsorted_;
     std::vector<KPt> p2 = pnts_ysorted_;
-
+    Sort_XS(p1.begin(), p1.end());
+    Sort_XS(p2.begin(), p2.end());
     for (int i = 0; i < p1.size(); ++i)
     {
         if (!p1[i].isEqual(p2[i]))return false;
@@ -72,7 +73,7 @@ bool mycompx(const KPt& pt1, const KPt& pt2)
     return pt1.x < pt2.x;
 }
 
-KPt PntsSorted2D::getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2)
+KPt PntsSorted2D::getSubPntsByMidX_uneven(PntsSorted2D& p1, PntsSorted2D& p2)
 {
 
     size_t cursize = this->pnts_xsorted_.size();
@@ -113,9 +114,9 @@ bool mycompy(const KPt& pt1, const KPt& pt2)
     return pt1.y < pt2.y;
 }
 
-KPt PntsSorted2D::getSubPntsByMidY(PntsSorted2D& p1, PntsSorted2D& p2)
+KPt PntsSorted2D::getSubPntsByMidY_uneven(PntsSorted2D& p1, PntsSorted2D& p2)
 {
-    size_t cursize = this->pnts_xsorted_.size();
+    size_t cursize = this->size();
     if (cursize == 1)
     {
         p2 = *this;
@@ -144,6 +145,102 @@ KPt PntsSorted2D::getSubPntsByMidY(PntsSorted2D& p1, PntsSorted2D& p2)
     assert(p1.confirmValid() && p2.confirmValid());
 
     return *it;
+}
+
+KPt PntsSorted2D::getSubPntsByMidY(PntsSorted2D& p1, PntsSorted2D& p2)
+{
+    size_t cursize = this->size();
+    if (cursize == 1)
+    {
+        p2 = *this;
+        return this->getOnlyPnt();
+    }
+
+    // 计数的时候添加哨兵会更容易，如果为偶数，
+    // 返回前一组最后一个值。如果奇数，
+    // 返回中间值。中间值归为前一组
+    // -,1,2,3
+    // -,1,2,3,4
+    size_t mid = (cursize + 1) / 2;
+    auto it_y_mid = this->pnts_ysorted_.begin();
+    std::advance(it_y_mid, mid - 1);
+    double pivot = it_y_mid->y;
+
+    p1.pnts_ysorted_.assign(pnts_ysorted_.begin(), it_y_mid + 1);
+    p2.pnts_ysorted_.assign(it_y_mid + 1, pnts_ysorted_.end());
+
+    auto it_x_mid = pnts_xsorted_.begin();
+    std::advance(it_x_mid, mid - 1);
+    auto it_x_pre = std::stable_partition(pnts_xsorted_.begin(), pnts_xsorted_.end(),
+        [&pivot](const KPt& pt)
+        {
+            return pt.y <= pivot;
+        });
+
+    auto it_x_pre_2 = std::stable_partition(pnts_xsorted_.begin(), it_x_pre,
+        [&pivot](const KPt& pt)
+        {
+            return pt.y < pivot;
+        });
+
+    p1.pnts_xsorted_.assign(pnts_xsorted_.begin(), it_x_mid + 1);
+    p2.pnts_xsorted_.assign(it_x_mid + 1, pnts_xsorted_.end());
+
+    Sort_XS(p1.pnts_xsorted_.begin(), p1.pnts_xsorted_.end());
+    Sort_XS(p2.pnts_xsorted_.begin(), p2.pnts_xsorted_.end());
+    assert(p1.confirmValid() && p2.confirmValid());
+
+    return *it_y_mid;
+
+}
+
+KPt PntsSorted2D::getSubPntsByMidX(PntsSorted2D& p1, PntsSorted2D& p2)
+{
+    size_t cursize = this->size();
+    if (cursize == 1)
+    {
+        p1 = *this;
+        return this->getOnlyPnt();
+    }
+
+    // 计数的时候添加哨兵会更容易，如果为偶数，
+    // 返回前一组最后一个值。如果奇数，
+    // 返回中间值。中间值归为前一组
+    // -,1,2,3
+    // -,1,2,3,4
+    size_t mid = (cursize + 1) / 2;
+    auto it_x_mid = this->pnts_xsorted_.begin();
+    std::advance(it_x_mid, mid - 1);
+    double pivot = it_x_mid->x;
+
+
+    p1.pnts_xsorted_.assign(pnts_xsorted_.begin(), it_x_mid + 1);
+    p2.pnts_xsorted_.assign(it_x_mid + 1, pnts_xsorted_.end());
+
+    auto it_y_mid = pnts_ysorted_.begin();
+    std::advance(it_y_mid, mid - 1);
+    auto it_y_pre = std::stable_partition(pnts_ysorted_.begin(), pnts_ysorted_.end(),
+        [&pivot](const KPt& pt)
+        {
+            return pt.x <= pivot;
+        });
+
+    auto it_y_pre_2 = std::stable_partition(pnts_ysorted_.begin(), it_y_pre,
+        [&pivot](const KPt& pt)
+        {
+            return pt.x < pivot;
+        });
+
+    p1.pnts_ysorted_.assign(pnts_ysorted_.begin(), it_y_mid + 1);
+    p2.pnts_ysorted_.assign(it_y_mid + 1, pnts_ysorted_.end());
+
+    Sort_YS(p1.pnts_ysorted_.begin(), p1.pnts_ysorted_.end());
+    Sort_YS(p2.pnts_ysorted_.begin(), p2.pnts_ysorted_.end());
+    assert(p1.confirmValid() && p2.confirmValid());
+
+    return *it_x_mid;
+
+
 }
 
 void PntsSorted2D::print()

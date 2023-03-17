@@ -41,6 +41,11 @@ bool KBoundingBox::ptInRegion(const KPt& pnt_)const//[ )
         (pnt_.y >= lb_.y) &&
         (pnt_.y < ru_.y);
 }
+bool KBoundingBox::ptInRegionExpend(const KPt& pnt_)const//[ )
+{
+    return ((pnt_.x >= lb_.x) && (pnt_.x < ru_.x)) ||
+        ((pnt_.y >= lb_.y) && (pnt_.y < ru_.y));
+}
 
 void KBoundingBox::update(const KPt& pt)
 {

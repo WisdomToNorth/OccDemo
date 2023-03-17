@@ -32,19 +32,28 @@ public:
     bool isCrossWithKLineWithSpace(const KLine& line)const;
     void mergeTest(const KBox&)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
-    void mergeTest(std::vector<KBox>&)
+    void mergeTest(std::vector<KBox>& boxs)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        //std::cout << "\nmerge: ";
+        //for (const auto& box : boxs)
+        //{
+        //    std::cout << box.val_ << ' ';
+        //}
+        //std::cout << std::endl;
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     const KPt& getPt()const { return center_; }
+    KPt leftBottom()const;
+    KPt rightUp()const;
     KBoundingBox getBoundingbox()const;
     KBoundingBox getSpaceBoundingbox()const;
     void setVal(const int& val) { val_ = val; }
     void show();
 
+    int val_ = -1;//label
 private:
     void drawElips();
     void drawBox();
@@ -56,7 +65,7 @@ protected:
     double size_x_;
     double size_y_;
     double space_ = 0.0;// 15;
-    int val_ = -1;//label
+
     enum class ObjType
     {
         Elips, Box

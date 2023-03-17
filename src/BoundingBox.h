@@ -19,6 +19,7 @@ public:
     void update(const KPt& lb);
     bool isCrossKLine(const KLine& line)const;
     bool ptInRegion(const KPt& pnt_)const;//[ )
+    bool ptInRegionExpend(const KPt& pnt_)const;//[ )
 
 public:
     KPt lb_;

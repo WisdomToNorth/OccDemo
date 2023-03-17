@@ -19,6 +19,7 @@ public:
 
     void updateData()override;
     void badWay();
+    void oneCoreUnionSetOld(bool merge = true);
     void oneCoreUnionSet(bool merge = true);
     void optUnionSet(int user_set_num);
 

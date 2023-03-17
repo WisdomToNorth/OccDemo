@@ -24,7 +24,8 @@ public:
         const KRegion& region, std::vector<KPt>& res);
 
 private:
-    static BinSearchNode* buildRangeTreeFromSortedVec(PntsSorted2D& vec);//2D
+    static BinSearchNode* buildRangeTreeFromSortedVec(BinSearchNode* parent,
+        PntsSorted2D& vec);//2D
     // For 1D
 // 输入：树根, 两个数值, x, x', x<=x'
 // 输出：从树根出发分别通往x和x'的两条路径的分叉点v

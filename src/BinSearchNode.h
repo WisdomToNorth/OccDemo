@@ -49,7 +49,7 @@ public:
         return region.ptInRegion(this->pnt_);
     }
 
-    void printBinSearchTree(bool onlyX = false)const;
+    void printBinSearchTree(bool onlyY = false)const;
 
     void reportSubTree(std::vector<KPt>& subnodes)const;
 

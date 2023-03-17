@@ -21,7 +21,12 @@ public:
     int getOneDRange(double l, double r, bool _debug = false);
     int getOneDRangeOri(double l, double r, bool _debug = false);
     int getTwoDRangeOri(const KRegion& r, bool _debug = false);
-    int getTwoDRange(const KRegion& r);
+
+    static int getTwoDRange(const std::vector<KPt>& corner_pnt,
+        const KRegion& r, std::vector<KPt>& res);
+    static int getTwoDExpendRange(const std::vector<KPt>& corner_pnt,
+        const KRegion& r, std::vector<KPt>& res);
+
     int getTwoDRangeRangeTree(const KRegion& r, bool _debug = false);
     void reportRes();
 private:
