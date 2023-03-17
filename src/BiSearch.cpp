@@ -11,6 +11,7 @@ template<typename Iterator>
 BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
     const std::vector<KPt>& vec, Iterator it, int cnt)//1D
 {
+
     assert(cnt > 0);
     if (cnt == 1)
     {
@@ -20,6 +21,7 @@ BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
     //计数的时候添加哨兵会更容易
     // -,1,2,3
     // -,1,2,3,4
+
 
     int cnt_P1 = cnt + 1;
     int leftcnt = cnt_P1 / 2;
@@ -35,48 +37,24 @@ BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
     return parent;
 }
 
-BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent, PntsSorted2D& vec)
-{
-    if (vec.size() == 1)
-    {
-        parent->pnt_ = vec.getOnlyPnt();
-        return parent;
-    }
-
-    PntsSorted2D r1;
-    PntsSorted2D r2;
-    KPt midpt = vec.getSubPntsByMidY(r1, r2);
-
-    //BinSearchNode* node;
-    //if (r1.empty() || r2.empty())
-    //{
-    //    node = new BinSearchNode(midpt);
-    //}
-    //else
-    //{
-    parent->pnt_ = midpt;
-    parent->left_ = buildFromSortedVec(new BinSearchNode(), r1);
-    parent->right_ = buildFromSortedVec(new BinSearchNode(), r2);
-
-    return parent;
-}
-
 // For 1D
 BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
 {
     if (vec.empty())return nullptr;
-    PntsSorted2D pt2d(vec);
+    Sort_YS(vec.begin(), vec.end());
+    //std::cout << "\nAfter sort:" << std::endl;
+    //printPntVec(vec);
+
     BinSearchNode* root = new BinSearchNode();
-    return buildFromSortedVec(root, pt2d);
+    return buildFromSortedVec(root, vec, vec.begin(), vec.size());
 }
 
 // For 1D
 // 输入：树根, 两个数值, x, x', x<=x'
 // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
 const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
-    const double& leftnum, const double& rightnum)//1D
+    double leftnum, double rightnum)//1D
 {
-    //if (!root)return nullptr;
     const BinSearchNode* v = root;
     while (!v->isLeaf() && (rightnum <= v->pnt_.y || leftnum > v->pnt_.y))
     {
@@ -85,11 +63,9 @@ const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
         else
             v = v->right_;
     }
-    //std::cout << "\n## spliter of [" << leftnum << ", "
-    //    << rightnum << ") :\n";
-    //v->printBinSearchTree();
+    //std::cout << "\n####spliter of [" << leftnum << ", " << rightnum << "):\n";
+    //printBinSearchTree(v, true);
     //std::cout << std::endl;
-
     return v;
 }
 
