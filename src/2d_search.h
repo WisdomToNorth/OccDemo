@@ -7,8 +7,6 @@
 #include "DataObserver.h"
 #include "KRegion.h"
 
-#include "RTree.h"
-
 namespace KDebugger
 {
 
