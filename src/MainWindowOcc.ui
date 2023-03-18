@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>591</width>
-    <height>720</height>
+    <width>1176</width>
+    <height>1079</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,8 +44,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>512</width>
-             <height>619</height>
+             <width>1073</width>
+             <height>965</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
@@ -427,33 +427,46 @@
             </item>
             <item>
              <layout class="QGridLayout" name="gridLayout_6">
-              <item row="0" column="0">
-               <widget class="QPushButton" name="pb_Simple1DFind">
-                <property name="text">
-                 <string>Simple1DFind</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
+              <item row="1" column="1">
                <widget class="QPushButton" name="pb_Simple2DFind">
                 <property name="text">
                  <string>Simple2DFind</string>
                 </property>
                </widget>
               </item>
+              <item row="2" column="1">
+               <widget class="QPushButton" name="pb_Test2DFind">
+                <property name="text">
+                 <string>Test2DFind</string>
+                </property>
+               </widget>
+              </item>
               <item row="1" column="0">
+               <widget class="QPushButton" name="pb_Simple1DFind">
+                <property name="text">
+                 <string>Simple1DFind</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
                <widget class="QPushButton" name="pb_Test1DFind">
                 <property name="text">
                  <string>Test1DFind</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QPushButton" name="pb_Test2DFind">
-                <property name="text">
-                 <string>Test2DFind</string>
+              <item row="0" column="0" colspan="2">
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
                 </property>
-               </widget>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </item>
@@ -494,8 +507,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>591</width>
-     <height>21</height>
+     <width>1176</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

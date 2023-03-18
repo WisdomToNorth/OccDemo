@@ -44,8 +44,31 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
 
 {
     ui->setupUi(this);
-    auto con = getUIConfig();
-    this->setStyleSheet(G_GetUiStyleSheet(con));
+
+    this->setStyleSheet(G_GetUiStyleSheet(getUIConfig()));
+
+    info_widget_ = new StatusInfoWidget(this);
+    ui->gl_info->addWidget(info_widget_);
+    auto screenRect = QGuiApplication::screens();
+    auto width = screenRect[0]->geometry().width();
+    auto height = screenRect[0]->geometry().height();
+
+    auto scwidth = width * 3 / 4;
+    auto scheight = height * 3 / 4;
+    this->setGeometry(width * 1 / 8, height / 8, scwidth, scheight);
+
+    iwCustomQListWidget* console_widget = InitConsole(this, this, false);
+    ui->gl_console->addWidget(console_widget);
+
+    QList<int> console_size;
+    console_size << 3500 << 1000;
+    ui->splitter->setSizes(console_size);
+    QList<int> console_size_vert;
+    console_size_vert << 1000 << 3000;
+    ui->splitter_2->setSizes(console_size_vert);
+
+
+    //QWidget* wi=new QWidget(this);
 
 
     cadview_ = new CadView(this);
@@ -56,15 +79,9 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
         this, std::placeholders::_1, std::placeholders::_2);
     cadview_->rightClickCb = std::bind(&MainWindowOcc::handleRightPress,
         this, std::placeholders::_1);
+    ui->gridLayout_view->addWidget(cadview_,0,0,1,1);
 
-
-    info_widget_ = new StatusInfoWidget(this);
-    ui->gl_info->addWidget(info_widget_);
-
-
-    setUpUI();
     data_generator_ = new DataGenerator(cadview_);
-    ui->gridLayout_view->addWidget(cadview_);
     ConsoleLog("Hello!");
     on_pb_generate_pressed();
     on_actionview_triggered();
@@ -145,23 +162,7 @@ void MainWindowOcc::setStatusBar(const double& _1, const double& _2, const doubl
 
 void MainWindowOcc::setUpUI()
 {
-    auto screenRect = QGuiApplication::screens();
-    auto width = screenRect[0]->geometry().width();
-    auto height = screenRect[0]->geometry().height();
 
-    auto scwidth = width * 3 / 4;
-    auto scheight = height * 3 / 4;
-    this->setGeometry(width * 1 / 8, height / 8, scwidth, scheight);
-
-    iwCustomQListWidget* console_widget = InitConsole(this, this, false);
-    ui->gl_console->addWidget(console_widget);
-
-    QList<int> console_size;
-    console_size << 3500 << 1000;
-    ui->splitter->setSizes(console_size);
-    QList<int> console_size_vert;
-    console_size_vert << 1000 << 3000;
-    ui->splitter_2->setSizes(console_size_vert);
 }
 
 void MainWindowOcc::on_actionFitAll_triggered()
@@ -452,7 +453,23 @@ void MainWindowOcc::on_pb_Simple2DFind_pressed()
 {
     std::cout << "\n\n\n############ 2D Search Test Start #############" << std::endl;
     KTimer timer;
-    bool succ = true;
+    ///////////// pre confirm /////////////
+    ran_find2D();
+    std::cout << "\nTime of build range tree: " << std::endl;
+    timer.timeFromLastSee();
+    for (int i = 0; i < 50; i++)
+    {
+        on_pb_RandRange_pressed();
+        if(ori_find2D()!=ran_find2D())
+        {
+            std::cout<<"result mismatching, PLEASE CHECK";
+            return;
+        }
+
+    }
+    std::cout<<"pre confirm succeed!\n";
+    //test//
+    ////////
     for (int i = 0; i < 1000; i++)
     {
         on_pb_RandRange_pressed();
@@ -460,9 +477,7 @@ void MainWindowOcc::on_pb_Simple2DFind_pressed()
     }
     std::cout << "ori: " << std::endl;
     timer.timeFromBegin();
-    ran_find2D();
-    std::cout << "\nTime of build range tree: " << std::endl;
-    timer.timeFromLastSee();
+
     for (int i = 0; i < 1000; i++)
     {
         on_pb_RandRange_pressed();
@@ -471,9 +486,6 @@ void MainWindowOcc::on_pb_Simple2DFind_pressed()
     std::cout << "\nrange tree: " << std::endl;
     timer.timeFromLastSee();
     std::cout << "\n############ 2D Search Test Done #############" << std::endl;
-    std::cout << "test result: " << succ << std::endl;
-
-
 }
 
 void MainWindowOcc::on_pb_Test2DFind_pressed()
@@ -506,7 +518,6 @@ void MainWindowOcc::on_pb_Test2DFind_pressed()
         }
     }
     std::cout << "test 10*100 times in " << timer.timeFromBegin(false) << " ms";
-    std::cout << "\n############ 2D Search Test Done #############" << std::endl;
+    std::cout << "\n############ 2D Search Test Successful #############" << std::endl;
 }
-
 }
