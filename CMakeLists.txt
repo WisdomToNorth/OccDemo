@@ -8,6 +8,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
+#set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
 
 enable_language(C)
 
@@ -22,10 +23,12 @@ find_package(OpenCASCADE REQUIRED)
 # the -I flag in gcc
 include_directories(
   ${OpenCASCADE_INCLUDE_DIR}
+  ${Qt5_INCLUDE_DIR}
 )
 
 link_directories(
     ${OpenCASCADE_LIBRARY_DIR}
+    ${Qt5_LIBRARY_DIR}
     )
 
 #shared src

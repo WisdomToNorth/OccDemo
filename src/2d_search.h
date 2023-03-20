@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include <iostream>
 
+#include <iostream>
 #include <algorithm>
 
 #include "BinSearchNode.h"

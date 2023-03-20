@@ -1,11 +1,14 @@
 ﻿#pragma once
 
-#include <AIS_InteractiveContext.hxx>
-#include <AIS_ColoredShape.hxx>
+
 #include <vector>
+#include <random>
+
 #include <QString>
 #include <QApplication>
-#include <random>
+
+#include <AIS_InteractiveContext.hxx>
+#include <AIS_ColoredShape.hxx>
 
 namespace KDebugger
 {

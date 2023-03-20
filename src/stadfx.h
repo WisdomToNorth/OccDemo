@@ -46,6 +46,7 @@
 #include <Prs3d_DatumAspect.hxx>
 #include <Prs3d_PlaneAspect.hxx>
 #include <Prs3d_TypeOfHighlight.hxx>
+#include <Quantity_Color.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>

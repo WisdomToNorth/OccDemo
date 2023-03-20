@@ -1,6 +1,7 @@
 {
     "editor.formatOnSave": true,
     "clang-format.executable": "/absolute/path/to/clang-format",
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "files.associations": {
         "qapplication": "cpp",
         "functional": "cpp",
@@ -67,6 +68,7 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "qjsondocument": "cpp"
     }
 }

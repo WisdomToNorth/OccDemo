@@ -8,10 +8,9 @@
 
 #include "gptools.h"
 
-#include <Quantity_Color.hxx>
-#include <qjsonarray.h>
-#include <qjsonobject.h>
-#include <qjsondocument.h>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include <QPoint>
 #include <QString>
 #include <QStringList>
