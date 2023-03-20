@@ -48,6 +48,7 @@ private slots:
     void on_pb_Randvalue_pressed();
     void on_pb_appenddata_pressed();
 
+    void on_actionclear_triggered();
     void on_actionFitAll_triggered();
     void on_actionview_triggered();
     void on_actionendCPU_triggered();
@@ -56,6 +57,7 @@ private slots:
     void on_act_unionfind_opt1_triggered();
     void on_act_unionfind_opt2_triggered();
     void on_actionuf_opt3_triggered();
+    void on_pb_TestUnionfind_pressed();
 
     //kdtree
     void on_pb_Test1DFind_pressed();

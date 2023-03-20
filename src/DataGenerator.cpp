@@ -114,7 +114,7 @@ void DataGenerator::generateData(std::vector<KBox>& buffer,
             buffer.emplace_back(l_box);
         }
     }
-    ConsoleLog("Crose range: " + QString::number(param.rowcnt * param.dis) + " * " +
+    KLog("Crose range: " + QString::number(param.rowcnt * param.dis) + " * " +
         QString::number(param.colcnt * param.dis));
     notifyAll();
 }
@@ -128,7 +128,7 @@ void DataGenerator::reGenerateData(const DataParameter& param, bool _view)
         std::vector<KBox> newbuf;
         buf_.swap(newbuf);
     }
-    ConsoleLog("generating...");
+    KLog("generating...");
     KTimer timer;
 
     generateData(buf_, param);
@@ -137,8 +137,8 @@ void DataGenerator::reGenerateData(const DataParameter& param, bool _view)
     {
         viewData();
     }
-    ConsoleLog("generate " + QString::number(param.colcnt * param.rowcnt) +
-        " data cost " + QString::number(timer.timeFromBegin(false))
+    KLog("generate " + QString::number(param.colcnt * param.rowcnt) +
+        " data cost " + QString::number(timer.timeFromBegin(""))
         + " ms.");
     notifyAll();
 }

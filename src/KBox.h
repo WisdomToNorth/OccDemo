@@ -48,6 +48,8 @@ public:
     const KPt& getPt()const { return center_; }
     KPt leftBottom()const;
     KPt rightUp()const;
+    KPt rightBottom()const;
+
     KBoundingBox getBoundingbox()const;
     KBoundingBox getSpaceBoundingbox()const;
     void setVal(const int& val) { val_ = val; }

@@ -61,6 +61,11 @@ KPt KBox::leftBottom()const
 {
     return KPt(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, this);
 }
+
+KPt KBox::rightBottom()const
+{
+    return KPt(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, this);
+}
 KPt KBox::rightUp()const
 {
     return KPt(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, this);

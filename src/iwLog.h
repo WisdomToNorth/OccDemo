@@ -13,7 +13,7 @@ class iwLog
 public:
 
     //! 析构函数
-    virtual ~iwLog() { }
+    virtual ~iwLog() {}
 
     //! 返回唯一静态实例
     static iwLog* instance();
@@ -35,6 +35,8 @@ public:
     };
 
     //! iwLog::logMessage 的静态快捷方式
+    static void LogMessage(const std::string& message, int level);
+
     static void LogMessage(const QString& message, int level);
 
     //! 通用消息记录方法
@@ -57,9 +59,10 @@ public:
         LogMessage(message, LOG_STANDARD);
         return true;
     }
+
     inline static bool print(const std::string& message)
     {
-        LogMessage(QString::fromStdString(message), LOG_STANDARD);
+        LogMessage(message, LOG_STANDARD);
         return true;
     }
 
@@ -71,6 +74,10 @@ public:
 
     //! QString版本的 iwLog::Warning
     inline static bool warning(const QString& message)
+    {
+        LogMessage(message, LOG_WARNING); return false;
+    }
+    inline static bool warning(const std::string& message)
     {
         LogMessage(message, LOG_WARNING); return false;
     }
@@ -86,6 +93,12 @@ public:
     {
         LogMessage(message, LOG_ERROR); return false;
     }
+
+    inline static bool error(const std::string& message)
+    {
+        LogMessage(message, LOG_ERROR); return false;
+    }
+
 };
 
 #endif

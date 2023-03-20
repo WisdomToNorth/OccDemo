@@ -35,7 +35,7 @@ void MultiUniset::updateData()
 {
     buf_ = data_generator_->getData();
 
-    ConsoleLog("Data update in Multi Unionset!");
+    KLog("Data update in Multi Unionset!");
 }
 
 void MultiUniset::badWay()
@@ -63,92 +63,72 @@ void MultiUniset::badWay()
     std::cout << "merge cnt : " << cnt << std::endl;
 }
 
-void MultiUniset::optUnionSet(int user_set_num)
+int MultiUniset::optUnionSet(bool _multi, bool _debug)
 {
-
-}
-
-void MultiUniset::oneCoreUnionSetOld(bool _merge)
-{
-    std::cout << "\n\n-----------unionset single thread------------" << std::endl;
+    //std::cout << "\n\n-----------unionset single thread------------" << std::endl;
     unsigned long long data_count = buf_.size();
-    std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
-    KTimer timer;
-    UnionFind unionfinder(data_count);
-    unsigned long long caculate_cnt = (data_count) * (data_count - 1) / 2;
-    std::cout << "caculate_cnt: " << caculate_cnt << std::endl;
-    caculateUnion(1, caculate_cnt + 1, unionfinder);
-    unionfinder.update();
-
-    timer.timeFromBegin("union single thread build");
-    if (_merge)
-    {
-        int cnt = handleUnionFinder(unionfinder, false);
-        timer.timeFromBegin("union single all");
-        std::cout << "merge count: " << cnt << std::endl;
-    }
-}
-
-void MultiUniset::oneCoreUnionSet(bool _merge)
-{
-    std::cout << "\n\n-----------unionset single thread------------" << std::endl;
-    unsigned long long data_count = buf_.size();
-    std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
+    //std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
     KTimer timer;
     UnionFind finder(data_count);
-
 
     std::vector<KPt> allcorner;
 
     for (auto& box : buf_)
     {
         allcorner.push_back(box.leftBottom());
+        allcorner.push_back(box.rightBottom());
         allcorner.push_back(box.rightUp());
     }
+    BinSearchNode* root = KRangeTree::buildRangeTree(allcorner);
 
-    for (int i = 0; i < data_count; ++i)//
+    for (int i = 0; i < data_count; ++i)
     {
-        std::vector<KPt> to_check;
-        auto it = allcorner.begin();
-        std::advance(it, 2 * i);
-        std::vector<KPt> rescorners(it, allcorner.end());
+        std::vector<KPt>cur_res;
+        KRangeTree::searchRangeTreeFromRoot(root,
+            buf_[i].getBoundingbox(), cur_res);
 
-        TwoDSearch::getTwoDExpendRange(rescorners,
-            buf_[i].getBoundingbox(), to_check);
-
-
-        for (auto& b : to_check)
+        for (auto& b : cur_res)
         {
-            if (!buf_[i].isOut(*b.parent_))
-            {
-                finder.merge(i, b.parent_->val_);
-            }
+            finder.merge(i, b.parent_->val_);
         };
     }
-    /////////////
-
     finder.update();
 
-    timer.timeFromBegin("union single thread build");
-    if (_merge)
-    {
-        int cnt = handleUnionFinder(finder, false);
-        timer.timeFromBegin("union single all");
-        std::cout << "merge count: " << cnt << std::endl;
-    }
+    int cnt = handleUnionFinder(finder, false, _debug);
+
+    return cnt;
 }
 
-void MultiUniset::multiCoreUnionSet(int user_set_num, bool _merge)
+int MultiUniset::oneCoreUnionSet()
 {
+    //std::cout << "\n\n-----------unionset single thread------------" << std::endl;
+    unsigned long long data_count = buf_.size();
+    //std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
+    KTimer timer;
+    UnionFind unionfinder(data_count);
+    unsigned long long caculate_cnt = (data_count) * (data_count - 1) / 2;
+    // std::cout << "caculate_cnt: " << caculate_cnt << std::endl;
+    caculateUnion(1, caculate_cnt + 1, unionfinder);
+    unionfinder.update();
 
-    std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
+    // timer.timeFromBegin("union single thread build");
+
+    int cnt = handleUnionFinder(unionfinder, false);
+    // timer.timeFromBegin("union single all");
+    // std::cout << "merge count: " << cnt << std::endl;
+    return cnt;
+}
+
+int MultiUniset::multiCoreUnionSet(int user_set_num, bool _debug)
+{
+    // std::cout << "\n\n-----------unionset multi thread------------" << std::endl;
     unsigned long long data_count = buf_.size();
     unsigned long long caculate_cnt = (data_count) * (data_count - 1) / 2;
-    std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
-    std::cout << "caculate cnt:" << caculate_cnt << std::endl;
+    // std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
+     //std::cout << "caculate cnt:" << caculate_cnt << std::endl;
 
     unsigned long long num_of_thread = getThreadCount(caculate_cnt, user_set_num);
-    std::cout << "num of thread: " << num_of_thread << std::endl;
+    //std::cout << "num of thread: " << num_of_thread << std::endl;
     unsigned long long block_size = caculate_cnt / num_of_thread;
 
 
@@ -170,23 +150,21 @@ void MultiUniset::multiCoreUnionSet(int user_set_num, bool _merge)
     }
     this->caculateUnion(l_start, caculate_cnt + 1, std::ref(unionfinders[0]));
     std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
-    std::cout << "All thread join, begin to combine!" << std::endl;
+    //std::cout << "All thread join, begin to combine!" << std::endl;
     for (int numofunion = 1; numofunion < num_of_thread; ++numofunion)
     {
         unionfinders[0].merge(unionfinders[numofunion]);
     }
     unionfinders[0].update();
 
-    timer.timeFromBegin("union mutil thread build");
+    //timer.timeFromBegin("union mutil thread build");
 
-    if (_merge)
-    {
-        int cnt = handleUnionFinder(unionfinders[0], true);
-        timer.timeFromBegin("union multi all");
-        std::cout << "merge count: " << cnt << std::endl;
-    }
+
+    int cnt = handleUnionFinder(unionfinders[0], false, _debug);
+    //timer.timeFromBegin("union multi all");
+    //std::cout << "merge count: " << cnt << std::endl;
+    return cnt;
 }
-
 
 unsigned long long MultiUniset::getThreadCount(unsigned long long datasize, int defnum)
 {
@@ -309,9 +287,9 @@ int MultiUniset::handleUnionSetResult(Iterator first, Iterator last, const int i
     return cnt;
 };
 
-int MultiUniset::handleUnionFinder(const UnionFind& finder, bool use_multi)
+int MultiUniset::handleUnionFinder(const UnionFind& finder, bool use_multi, bool _debug)
 {
-    //int cnt = 0;
+    //std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
     if (!use_multi)
     {
         return handleUnionSetResult(finder.final_set_.begin(), finder.final_set_.end(), 0);
@@ -322,9 +300,10 @@ int MultiUniset::handleUnionFinder(const UnionFind& finder, bool use_multi)
             = finder.final_set_;
 
         unsigned long long caculate_cnt = final_set.size();
-        std::cout << "\nfinal set size: " << final_set.size() << std::endl;
+        if (caculate_cnt == 0)return 0;
+        //std::cout << "\nfinal set size: " << final_set.size() << std::endl;
         unsigned long long num_of_thread = getThreadCount(caculate_cnt, 0);//TODO:int user_set_num
-        std::cout << "num of thread: " << num_of_thread << std::endl;
+        //std::cout << "num of thread: " << num_of_thread << std::endl;
         unsigned long long block_size = caculate_cnt / num_of_thread;
         std::vector<std::thread> threads(num_of_thread - 1);
         std::vector<int> threads_res(num_of_thread - 1);

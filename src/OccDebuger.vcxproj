@@ -106,6 +106,7 @@
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="DataObserver.cpp" />
     <ClCompile Include="KAngleMultiLine.cpp" />
+    <ClCompile Include="KBoxObj.cpp" />
     <ClCompile Include="KContext.cpp" />
     <ClCompile Include="KLine.cpp" />
     <ClCompile Include="KRegion.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="DataGenerator.h" />
     <ClInclude Include="DataObserver.h" />
     <ClInclude Include="KAngleMultiLine.h" />
+    <ClInclude Include="KBoxObj.h" />
     <ClInclude Include="KContext.h" />
     <ClInclude Include="KLine.h" />
     <ClInclude Include="KRegion.h" />
@@ -168,7 +170,6 @@
     <ClInclude Include="2d_search.h" />
     <QtMoc Include="statusinfowidget.h" />
     <ClInclude Include="RangeTree.h" />
-    <ClInclude Include="RTree.h" />
     <ClInclude Include="shapetools.h" />
     <ClInclude Include="stadfx.h" />
     <ClInclude Include="test_datastructure.h" />

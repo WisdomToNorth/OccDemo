@@ -15,7 +15,8 @@ struct Message
     Message(const QString& t, int f)
         : text(t)
         , flags(f)
-    {}
+    {
+    }
 
     QString text;
     int flags;
@@ -37,6 +38,10 @@ iwLog* iwLog::instance()
 void iwLog::enableMessageBackup(bool state)
 {
     s_backupEnabled = state;
+}
+void iwLog::LogMessage(const std::string& message, int level)
+{
+    LogMessage(QString::fromStdString(message), level);
 }
 
 void iwLog::LogMessage(const QString& message, int level)

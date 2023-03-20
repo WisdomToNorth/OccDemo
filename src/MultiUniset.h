@@ -19,14 +19,15 @@ public:
 
     void updateData()override;
     void badWay();
-    void oneCoreUnionSetOld(bool merge = true);
-    void oneCoreUnionSet(bool merge = true);
-    void optUnionSet(int user_set_num);
 
-    void multiCoreUnionSet(int user_set_num, bool merge = true);
+    int oneCoreUnionSet();
+    int optUnionSet(bool _multi, bool _debug = false);
+    int multiCoreUnionSet(int user_set_num, bool _debug = false);
+
+private:
     void caculateUnion(unsigned long long l_start, unsigned long long l_end, UnionFind& finder);
     unsigned long long getThreadCount(unsigned long long datasize, int defnum);
-    int handleUnionFinder(const UnionFind& finder, bool use_multi);
+    int handleUnionFinder(const UnionFind& finder, bool use_multi, bool _debug = false);
 
     template <typename Iterator>
     int handleUnionSetResult(Iterator first, Iterator last, const int index);

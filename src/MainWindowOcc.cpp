@@ -79,10 +79,10 @@ MainWindowOcc::MainWindowOcc(QWidget* parent)
         this, std::placeholders::_1, std::placeholders::_2);
     cadview_->rightClickCb = std::bind(&MainWindowOcc::handleRightPress,
         this, std::placeholders::_1);
-    ui->gridLayout_view->addWidget(cadview_,0,0,1,1);
+    ui->gridLayout_view->addWidget(cadview_, 0, 0, 1, 1);
 
     data_generator_ = new DataGenerator(cadview_);
-    ConsoleLog("Hello!");
+    KLog("Hello!");
     on_pb_generate_pressed();
     on_actionview_triggered();
 }
@@ -143,7 +143,8 @@ void MainWindowOcc::handleRightPress(QMouseEvent* event)
     rightMenu->exec(cursor().pos());
 }
 
-void MainWindowOcc::handleMouseMove(const double& _1, const double& _2, const double& _3)
+void MainWindowOcc::handleMouseMove(const double& _1,
+    const double& _2, const double& _3)
 {
     if (curmode_ == AppModeEnum::draw_line)
     {
@@ -155,7 +156,8 @@ void MainWindowOcc::handleMouseMove(const double& _1, const double& _2, const do
     this->setStatusBar(_1, _2, _3);
 }
 
-void MainWindowOcc::setStatusBar(const double& _1, const double& _2, const double& _3)
+void MainWindowOcc::setStatusBar(const double& _1,
+    const double& _2, const double& _3)
 {
     info_widget_->setMessage(_1, _2, _3);
 }
@@ -169,7 +171,11 @@ void MainWindowOcc::on_actionFitAll_triggered()
 {
     cadview_->fitAll();
 }
+void MainWindowOcc::on_actionclear_triggered()
+{
+    std::cout << "\033c";
 
+}
 void MainWindowOcc::on_actionview_triggered()
 {
     data_generator_->viewData();
@@ -187,7 +193,10 @@ void MainWindowOcc::on_act_unionfind_opt1_triggered()
 {
     if (!unionset_)
         unionset_ = new MultiUniset(data_generator_);
-    unionset_->oneCoreUnionSet();
+    KTimer timer;
+    std::cout << "res: " << unionset_->oneCoreUnionSet() << std::endl;
+
+    std::cout << "opt1: "; timer.timeFromBegin("");
 }
 //unionfind
 void MainWindowOcc::on_act_unionfind_opt2_triggered()
@@ -199,8 +208,12 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
     {
         def = ui->sb_core->value();
     }
-    unionset_->multiCoreUnionSet(def);
+    KTimer timer;
+    std::cout << "res: " << unionset_->multiCoreUnionSet(def, true) << std::endl;
+
+    std::cout << "opt2: "; timer.timeFromBegin("");
 }
+
 void MainWindowOcc::on_actionuf_opt3_triggered()
 {
     if (!unionset_)
@@ -210,7 +223,60 @@ void MainWindowOcc::on_actionuf_opt3_triggered()
     {
         def = ui->sb_core->value();
     }
-    unionset_->optUnionSet(def);
+    KTimer timer;
+    std::cout << "res: " << unionset_->optUnionSet(true) << std::endl;//todo:doesn't multi now
+    std::cout << "opt3: "; timer.timeFromBegin("");
+}
+
+void MainWindowOcc::on_pb_TestUnionfind_pressed()
+{
+    if (!unionset_)
+        unionset_ = new MultiUniset(data_generator_);
+    int def = 0;
+    if (ui->sb_core->value() > 0)
+    {
+        def = ui->sb_core->value();
+    }
+    for (int i = 0; i < 10; ++i)
+    {
+        on_pb_Randvalue_pressed();
+        on_pb_generate_pressed();
+
+        int ori = unionset_->oneCoreUnionSet();
+        int opt = unionset_->optUnionSet(def);
+        if (ori == opt)
+        {
+            std::cout << "res: " << ori << std::endl;
+        }
+        else
+        {
+            std::cout << "#### test " << i << " ####\n";
+            std::cout << "data size: " << ui->sb_row->value() << " * "
+                << ui->sb_col->value() << std::endl;
+            std::cout << "ori: " << ori << std::endl;
+            std::cout << "opt: " << opt << std::endl;
+            std::cout << "test failed!";
+            return;
+        }
+    }
+    std::cout << "test " << 10 << " successful!\n";
+    KTimer timer;
+    for (int i = 0; i < 50; ++i)
+    {
+        on_pb_Randvalue_pressed();
+        on_pb_generate_pressed();
+        unionset_->oneCoreUnionSet();
+    }
+    std::cout << "ori time: ";
+    timer.timeFromBegin("");
+    for (int i = 0; i < 50; ++i)
+    {
+        on_pb_Randvalue_pressed();
+        on_pb_generate_pressed();
+        unionset_->multiCoreUnionSet(def);
+    }
+    std::cout << "opt time: ";
+    timer.timeFromLastSee("");
 }
 
 void MainWindowOcc::on_actionbi_find1D_triggered()
@@ -226,7 +292,8 @@ void MainWindowOcc::on_actionori_find1D_triggered()
 int MainWindowOcc::kd_find1D(bool _debug)
 {
     if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    return kdtree_->getOneDRange(ui->dsb_down->value(), ui->dsb_up->value(), _debug);
+    return kdtree_->getOneDRange(ui->dsb_down->value(),
+        ui->dsb_up->value(), _debug);
 }
 int MainWindowOcc::ori_find1D(bool _debug)
 {
@@ -241,15 +308,17 @@ int MainWindowOcc::kd_find2D(bool _debug)
 int MainWindowOcc::ori_find2D(bool _debug)
 {
     if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    return kdtree_->getTwoDRangeOri(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
-        KPt(ui->dsb_right->value(), ui->dsb_up->value())), _debug);
+    return kdtree_->getTwoDRangeOri(KRegion(KPt(ui->dsb_left->value(),
+        ui->dsb_down->value()), KPt(ui->dsb_right->value(),
+            ui->dsb_up->value())), _debug);
 }
 
 int MainWindowOcc::ran_find2D(bool _debug)
 {
     if (!kdtree_)kdtree_ = new TwoDSearch(data_generator_);
-    return kdtree_->getTwoDRangeRangeTree(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
-        KPt(ui->dsb_right->value(), ui->dsb_up->value())), _debug);
+    return kdtree_->getTwoDRangeRangeTree(KRegion(KPt(ui->dsb_left->value(),
+        ui->dsb_down->value()), KPt(ui->dsb_right->value(),
+            ui->dsb_up->value())), _debug);
 }
 void MainWindowOcc::on_actionkd_find2D_triggered()
 {
@@ -420,7 +489,7 @@ void MainWindowOcc::on_pb_Test1DFind_pressed()
             }
         }
     }
-    std::cout << "test 10*100 times in " << timer.timeFromBegin(false) << " ms";
+    std::cout << "test 10*100 times in ";  timer.timeFromBegin("");
     std::cout << "\n############ 1D Search Test Done ###########\n";
 
 }
@@ -445,7 +514,7 @@ void MainWindowOcc::on_pb_Simple1DFind_pressed()
             return;
         }
     }
-    std::cout << "test 100 times in " << timer.timeFromBegin(false) << " ms";
+    std::cout << "test 100 times in "; timer.timeFromBegin("");
     std::cout << "\n############ 1D Search Test Done ###########\n";
 }
 
@@ -460,14 +529,14 @@ void MainWindowOcc::on_pb_Simple2DFind_pressed()
     for (int i = 0; i < 50; i++)
     {
         on_pb_RandRange_pressed();
-        if(ori_find2D()!=ran_find2D())
+        if (ori_find2D() != ran_find2D())
         {
-            std::cout<<"result mismatching, PLEASE CHECK";
+            std::cout << "result mismatching, PLEASE CHECK";
             return;
         }
 
     }
-    std::cout<<"pre confirm succeed!\n";
+    std::cout << "pre confirm succeed!\n";
     //test//
     ////////
     for (int i = 0; i < 1000; i++)
@@ -517,7 +586,8 @@ void MainWindowOcc::on_pb_Test2DFind_pressed()
             }
         }
     }
-    std::cout << "test 10*100 times in " << timer.timeFromBegin(false) << " ms";
+    std::cout << "test 10*100 times in ";
+    timer.timeFromBegin("");
     std::cout << "\n############ 2D Search Test Successful #############" << std::endl;
 }
 }

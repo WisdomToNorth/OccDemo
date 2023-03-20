@@ -29,9 +29,6 @@
     <ClCompile Include="public_function.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="KLogger.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
     <ClCompile Include="BinSearchNode.cpp">
       <Filter>DataStructure</Filter>
     </ClCompile>
@@ -92,6 +89,12 @@
     <ClCompile Include="MultiUniset.cpp">
       <Filter>Manner</Filter>
     </ClCompile>
+    <ClCompile Include="KBoxObj.cpp">
+      <Filter>Manner</Filter>
+    </ClCompile>
+    <ClCompile Include="KLogger.cpp">
+      <Filter>UI\Consolelog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iwLog.h">
@@ -113,9 +116,6 @@
       <Filter>DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="public_function.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="KLogger.h">
       <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="BinSearchNode.h">
@@ -187,8 +187,11 @@
     <ClInclude Include="unionset.h">
       <Filter>DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="RTree.h">
-      <Filter>DataStructure</Filter>
+    <ClInclude Include="KBoxObj.h">
+      <Filter>Manner</Filter>
+    </ClInclude>
+    <ClInclude Include="KLogger.h">
+      <Filter>UI\Consolelog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

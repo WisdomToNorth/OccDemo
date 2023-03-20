@@ -1,12 +1,12 @@
-﻿
-#ifndef _LOGGER_H_
+﻿#ifndef _LOGGER_H_
 #define _LOGGER_H_
 
 #include "iwConsole.h"
 #include <iostream>
 
-#define ConsoleLog iwConsole::print
-#define Cout std::cout<<'['<<__FILE__<<':'<<__LINE__<<']'
+#define KLog iwConsole::print
+#define KWarning iwConsole::warning
+#define KError iwConsole::error
 
 class QMainWindow;
 class iwCustomQListWidget;
