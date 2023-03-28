@@ -24,6 +24,8 @@ find_package(OpenCASCADE REQUIRED)
 include_directories(
   ${OpenCASCADE_INCLUDE_DIR}
   ${Qt5_INCLUDE_DIR}
+  ${PROJECT_SOURCE_DIR}/build/OCC_CONFIG_autogen/include
+
 )
 
 link_directories(
@@ -31,29 +33,6 @@ link_directories(
     ${Qt5_LIBRARY_DIR}
     )
 
-#shared src
-file(GLOB COMMON_CONFIG_FILES
-    "${PROJECT_SOURCE_DIR}/src/ViewData/*.h"
-    "${PROJECT_SOURCE_DIR}/src/ViewData/*.cpp"
-    )
-
-foreach(src_file ${COMMON_CONFIG_FILES})
-  set_source_files_properties(
-    ${src_file}
-    PROPERTIES
-    COMPILE_FLAGS "${COMPILE_FLAGS} ${flags_1} -g"
-  )
-endforeach(src_file ${front-end})
-ADD_LIBRARY(COMMON_CONFIG STATIC ${COMMON_CONFIG_FILES})
-target_link_libraries(COMMON_CONFIG
-    Qt5::Widgets
-    Qt5::Core
-    Qt5::OpenGL
-    Qt5::Gui
-    Qt5::Xml
-    Qt5::Network
-    ${OpenCASCADE_LIBRARIES}
-)
 
 #OccConfig
 file(GLOB OCC_CONFIG_FILES
@@ -70,5 +49,10 @@ endforeach(src_file ${code-gen})
 
 add_executable(OccConfig ${OCC_CONFIG_FILES})
 target_link_libraries(OccConfig PRIVATE
-    COMMON_CONFIG
+Qt5::Widgets
+Qt5::Core
+Qt5::OpenGL
+Qt5::Gui
+Qt5::Xml
+${OpenCASCADE_LIBRARIES}
     )
