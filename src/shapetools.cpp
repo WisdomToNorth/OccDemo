@@ -10,7 +10,7 @@
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRep_Tool.hxx>
-
+#include <GC_MakeCircle.hxx>
 
 #include "global.h"
 
@@ -68,6 +68,13 @@ TopoDS_Wire getWireFromFourPts(const gp_Pnt& lb, const gp_Pnt& rb,
     return BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
 
 }
+
+TopoDS_Edge getCircleFromPt(const gp_Pnt& lb, double r)
+{
+    Handle(Geom_Circle) se = GC_MakeCircle(gp_Ax1(lb, gp_Dir(0, 0, 1)), r);
+    return BRepBuilderAPI_MakeEdge(se);
+}
+
 std::vector<gp_Pnt> getEdgeEndPts(TopoDS_Edge shp)
 {
     std::vector<gp_Pnt> res;

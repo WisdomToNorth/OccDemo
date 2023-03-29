@@ -127,12 +127,15 @@ void MainWindowOcc::handleLeftPress(const double& _1, const double& _2)
 {
     if (curmode_ == AppModeEnum::draw_line)
     {
+
         if (!line_drawer_)
         {
             line_drawer_ = new LineDrawer(gp_Pnt(_1, _2, 0.0));
             return;
         }
-        line_drawer_->appendLine(gp_Pnt(_1, _2, 0.0));
+        double angle = ui->cb_arc45->isChecked() ? 45.0 : 0.0;
+        bool toggle = ui->cb_toggle->isChecked() ? true : false;
+        line_drawer_->appendLine(gp_Pnt(_1, _2, 0.0), angle, toggle);
     }
 }
 
@@ -150,7 +153,9 @@ void MainWindowOcc::handleMouseMove(const double& _1,
     {
         if (line_drawer_)
         {
-            line_drawer_->drawTempLine(gp_Pnt(_1, _2, 0.0));
+            double angle = ui->cb_arc45->isChecked() ? 45.0 : 0.0;
+            bool toggle = ui->cb_toggle->isChecked() ? true : false;
+            line_drawer_->drawTempLine(gp_Pnt(_1, _2, 0.0), angle, toggle);
         }
     }
     this->setStatusBar(_1, _2, _3);

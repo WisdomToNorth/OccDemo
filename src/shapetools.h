@@ -19,5 +19,5 @@ Quantity_Color getRandomColor();
 TopoDS_Wire getWireFromFourPts(const gp_Pnt& lb, const gp_Pnt& rb,
     const gp_Pnt& ru, const gp_Pnt& lu);
 std::vector<gp_Pnt> getEdgeEndPts(TopoDS_Edge shp);
-
+TopoDS_Edge getCircleFromPt(const gp_Pnt& lb, double r = 0.5);
 }

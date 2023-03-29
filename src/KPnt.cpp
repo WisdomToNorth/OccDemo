@@ -7,6 +7,12 @@
 namespace KDebugger
 {
 
+KPt::KPt(const gp_Pnt& pnt) :parent_(nullptr)
+{
+    x = pnt.X();
+    y = pnt.Y();
+}
+
 void KPt::print()const
 {
     std::cout << "{" << x << ", " << y << "}";

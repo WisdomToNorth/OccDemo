@@ -84,10 +84,25 @@ gp_Pnt getCenterOfPnts(const std::vector<gp_Pnt>& ori_pts);
 
 gp_Dir getNormalByThreePnts(const std::vector<gp_Pnt>& ori_pts);
 
-TopoDS_Edge drawLineByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2);
+TopoDS_Edge getEdgeByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2);
+
+TopoDS_Shape getShapeByPts(const std::vector<gp_Pnt>& pnts);
 
 //if curve is not line, may be have several result;
 //the input is line here, so only have one result
 std::vector<gp_Pnt2d> getLineCross(const gp_Lin2d& aLine1, const gp_Lin2d& aLine2);
+
+double getAngle(gp_Pnt ori, gp_Pnt p1, gp_Pnt p2);
+int sameDir(gp_Vec v1, gp_Vec v2);
+
+gp_Pnt getAngledLineByTwoPts(const gp_Vec& last_dir, const gp_Pnt& pA,
+    const gp_Pnt& pB, const double& angle, bool toggle);
+
+gp_Pnt getAngledLineByTwoPtsRandDir(const gp_Vec& last_vec, const gp_Pnt& pA,
+    const gp_Pnt& pB, const double& _angle, bool _toggle);
+
+gp_Pnt getAngledLineByTwoPtsOrth(const gp_Vec& last_dir, const gp_Pnt& pA,
+    const gp_Pnt& pB, const double& angle, bool toggle);
 }
+
 #endif

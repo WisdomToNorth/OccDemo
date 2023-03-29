@@ -14,7 +14,13 @@ namespace KDebugger
 
 class KAngleMultiLine
 {
+
 public:
+    enum class Dir
+    {
+        up, down, left, right
+    };
+
     KAngleMultiLine(const KPt& p1, const KPt& p2);
     KAngleMultiLine(const gp_Pnt& p1, const gp_Pnt& p2);
 
@@ -32,7 +38,7 @@ private:
         gp_Pnt pB, const double& angle);
 
 private:
-    std::list<gp_Pnt>res_;
+    std::list<gp_Pnt> res_;
 
 };
 

@@ -8,6 +8,7 @@ public:
     KTest() {};
     bool testLineCross();
     bool testKPnt2D(int seed);
+    bool testSameAngle();
 };
 
 }

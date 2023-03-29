@@ -17,13 +17,13 @@ class AIS_Shape;
 
 namespace KDebugger
 {
-
-class KBoundingBox;
+struct KBoundingBox;
 class KBox
 {
 public:
 
     KBox(double x, double y, double sizex, double sizey, int type);
+
     ~KBox();
     bool isOut(const KBox& rhs)const;
     bool outBox(const KPt& pt)const;
@@ -49,6 +49,8 @@ public:
     KPt leftBottom()const;
     KPt rightUp()const;
     KPt rightBottom()const;
+    KPt leftUp()const;
+
 
     KBoundingBox getBoundingbox()const;
     KBoundingBox getSpaceBoundingbox()const;
@@ -75,7 +77,4 @@ protected:
     ObjType type_;
 
 };
-
-
-
 }

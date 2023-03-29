@@ -5,7 +5,7 @@
 ** This file is part of RobotConfig software. No part of this file may be
 ** reproduced in any form or means, without the prior written consent of KangYucheng.
 ****************************************************************************/
-
+#include "stadfx.h"
 #include "gptools.h"
 
 #include <QJsonArray>
@@ -15,9 +15,11 @@
 #include <QString>
 #include <QStringList>
 
-#include "stadfx.h"
+#include "KPnt.h"
+#include "BoundingBox.h"
 #include "KLine.h"
 #include "mathUtils.h"
+#include "shapetools.h"
 
 #define EPSILON 0.00000001
 
@@ -301,10 +303,27 @@ gp_Dir getNormalByThreePnts(const std::vector<gp_Pnt>& ori_pts)
     return d1.Crossed(d2);
 }
 
-TopoDS_Edge drawLineByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2)
+TopoDS_Edge getEdgeByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2)
 {
     Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(p1, p2);
     return BRepBuilderAPI_MakeEdge(aSegment1);
+}
+
+TopoDS_Shape getShapeByPts(const std::vector<gp_Pnt>& pnts)
+{
+    TopoDS_Compound t_compound;
+    BRep_Builder t_build_tool;
+    t_build_tool.MakeCompound(t_compound);
+
+    for (size_t i = 0; i < pnts.size() - 1; ++i)
+    {
+        t_build_tool.Add(t_compound, getCircleFromPt(pnts[i], 0.02));
+        if (pnts[i].IsEqual(pnts[i + 1], 0.01))
+            continue;
+        t_build_tool.Add(t_compound, getEdgeByTwoPts(pnts[i], pnts[i + 1]));
+    }
+
+    return t_compound;
 }
 
 //返回离excludePt最远的点
@@ -355,4 +374,158 @@ std::vector<gp_Pnt2d> getLineCross(const gp_Lin2d& aLine1, const gp_Lin2d& aLine
     return res;
 }
 
+double getAngle(gp_Pnt ori, gp_Pnt p1, gp_Pnt p2)
+{
+    gp_Vec v1(ori, p1);
+    gp_Vec v2(ori, p2);
+    return v1.AngleWithRef(v2, gp_Vec(0, 0, 1));
+}
+
+int sameDir(gp_Vec v1, gp_Vec v2)
+{
+    const double& res = v1.Angle(v2);
+    if (fEqual(res, 0))return 1;
+    else if (fEqual(res, M_PI))return -1;
+    else return 0;
+}
+
+double symbol(double num)
+{
+    if (num > 0)return 1.0;
+    else if (num < 0)return -1.0;
+    else return 0;
+}
+
+const double tan_45 = 1.0;
+const double tan_135 = -1.0;
+const double tan_225 = 1.0;
+const double tan_315 = -1.0;
+
+gp_Pnt getAngledLineByTwoPts(const gp_Vec& last_vec, const gp_Pnt& pA,
+    const gp_Pnt& pB, const double& _angle, bool _toggle)
+{
+    if (last_vec.IsEqual(gp_Vec(), 0.01, 0.01))//rand direction
+    {
+        return getAngledLineByTwoPtsRandDir(last_vec, pA, pB, _angle, _toggle);
+    }
+    else if (last_vec.Dot(gp_Vec(1, 0, 0)) == 0 || std::abs(last_vec.Dot(gp_Vec(1, 0, 0))) == 1)
+    {
+        return getAngledLineByTwoPtsOrth(last_vec, pA, pB, _angle, _toggle);
+    }
+    else
+        return pB;
+}
+
+gp_Pnt getAngledLineByTwoPtsRandDir(const gp_Vec& last_vec, const gp_Pnt& pA,
+    const gp_Pnt& pB, const double& _angle, bool _toggle)
+{
+    using namespace KDebugger;
+
+    double dx = std::abs(pA.X() - pB.X());
+    double dy = std::abs(pA.Y() - pB.Y());
+    KPt pC, pD;
+
+    pC.x = dx > dy ? pB.X() : pA.X();
+    pC.y = dx > dy ? pA.Y() : pB.Y();
+    double angle = gp_Vec(1, 0, 0).AngleWithRef(gp_Vec(pA, pB), gp_Vec(0, 0, 1));
+    double temp_angle = angle + 45.0 * M_PI / 180.0;
+    if (Tan(temp_angle) > 0)//等效于dx>dy
+    {
+        pD.x = pC.x - symbol(Sin(temp_angle)) * Tan(_angle) * dy;
+        pD.y = pC.y;
+    }
+    else
+    {
+        pD.x = pC.x;
+        pD.y = pC.y - symbol(Sin(temp_angle)) * Tan(_angle) * dx;
+    }
+    return gp_Pnt(pD.x, pD.y, 0.0);
+}
+
+gp_Pnt getAngledLineByTwoPtsOrth(const gp_Vec& last_vec, const gp_Pnt& pA,
+    const gp_Pnt& pB, const double& _angle, bool _toggle)
+{
+    using namespace KDebugger;
+
+    KBoundingBox _box = KBoundingBox(KPt(pA), KPt(pB));
+
+    double dx = std::abs(pA.X() - pB.X());
+    double dy = std::abs(pA.Y() - pB.Y());
+    KPt pC, pD;
+
+
+
+    double angle = last_vec.AngleWithRef(gp_Vec(pA, pB), gp_Vec(0, 0, 1));
+
+    if ((sameDir(last_vec, gp_Vec(1, 0, 0)) == 1 && !_toggle) ||
+        (sameDir(last_vec, gp_Vec(1, 0, 0)) == -1 && _toggle))
+    {
+        pC.x = _box.right();
+        pC.y = Tan(angle) > 0/*一四象限*/ ? _box.bottom() : _box.top();
+
+        if (dx < dy)
+        {
+            pD.x = pC.x;
+            pD.y = pC.y + symbol(Tan(angle)) * Tan(_angle) * dx;
+        }
+        else//dx>dy
+        {
+            pD.x = pC.x - Tan(_angle) * dy;
+            pD.y = pC.y;
+        }
+    }
+    else if ((sameDir(last_vec, gp_Vec(1, 0, 0)) == 1 && _toggle) ||
+        (sameDir(last_vec, gp_Vec(1, 0, 0)) == -1 && !_toggle))
+    {
+        pC.x = _box.left();
+        pC.y = Tan(angle) > 0 ? _box.top() : _box.bottom();
+
+        if (dx < dy)
+        {
+            pD.x = pC.x;
+            pD.y = pC.y - symbol(Tan(angle)) * Tan(_angle) * dx;
+        }
+        else//dx>dy
+        {
+            pD.x = pC.x + Tan(_angle) * dy;
+            pD.y = pC.y;
+        }
+    }
+    else if ((sameDir(last_vec, gp_Vec(0, 1, 0)) == 1 && !_toggle) ||
+        (sameDir(last_vec, gp_Vec(0, 1, 0)) == -1 && _toggle))
+    {
+        pC.y = _box.top();
+        pC.x = Tan(angle) > 0 ? _box.right() : _box.left();
+
+        if (dx < dy)
+        {
+            pD.x = pC.x;
+            pD.y = pC.y - Tan(_angle) * dx;
+        }
+        else//dx>dy
+        {
+            pD.x = pC.x - symbol(Tan(angle)) * Tan(_angle) * dy;
+            pD.y = pC.y;
+        }
+    }
+    else if ((sameDir(last_vec, gp_Vec(0, 1, 0)) == 1 && _toggle) ||
+        (sameDir(last_vec, gp_Vec(0, 1, 0)) == -1 && !_toggle))
+    {
+        pC.y = _box.bottom();
+        pC.x = Tan(angle) > 0 ? _box.left() : _box.right();
+
+        if (dx < dy)
+        {
+            pD.x = pC.x;
+            pD.y = pC.y + Tan(_angle) * dx;
+        }
+        else//dx>dy
+        {
+            pD.x = pC.x + symbol(Tan(angle)) * Tan(_angle) * dy;
+            pD.y = pC.y;
+        }
+    }
+
+    return gp_Pnt(pD.x, pD.y, 0.0);
+}
 }

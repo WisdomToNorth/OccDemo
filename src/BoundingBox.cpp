@@ -2,11 +2,26 @@
 
 #include <gp_Pnt.hxx>
 
+#include "KBox.h"
 namespace KDebugger
 {
+
+KBoundingBox::KBoundingBox(const KPt& p1, const KPt& p2)
+{
+    lb_.x = std::min(p1.x, p2.x);
+    lb_.y = std::min(p1.y, p2.y);
+    ru_.x = std::max(p1.x, p2.x);
+    ru_.y = std::max(p1.y, p2.y);
+
+    rb_ = KPt(ru_.x, lb_.y);
+    lu_ = KPt(lb_.x, ru_.y);
+}
+
 KBoundingBox::KBoundingBox(const gp_Pnt& pt)
     :lb_(KPt(pt.X(), pt.Y())), ru_(KPt(pt.X(), pt.Y()))
 {
+    rb_ = KPt(ru_.x, lb_.y);
+    lu_ = KPt(lb_.x, ru_.y);
 }
 
 KBoundingBox::KBoundingBox(const KBox& box)

@@ -75,29 +75,75 @@ void LineDrawer::checkDetectedObj(const gp_Pnt& new_pnt)
 
 }
 
-bool LineDrawer::appendLine(const gp_Pnt& new_pnt)
+std::string dir2Str(gp_Vec dir)
+{
+    std::stringbuf strbuf;
+    Standard_OStream os(&strbuf);
+    dir.DumpJson(os);
+
+    return strbuf.str();
+}
+
+void LineDrawer::setCurDirection(const std::vector<gp_Pnt>& pnts)
+{
+    if (pnts.size() < 2)
+        direction_ = gp_Vec();
+    else
+        direction_ = gp_Vec(pnts[pnts.size() - 2], pnts.back()).Normalized();
+
+    std::cout << dir2Str(direction_) << std::endl;
+}
+
+bool LineDrawer::appendLine(const gp_Pnt& new_pnt,
+    double _angle, bool toggle)
 {
     checkDetectedObj(new_pnt);
     //todo: not all new pnts append here
     const gp_Pnt last_pnt = pnt_list_.back();
-    if (last_pnt.IsEqual(new_pnt, 0.01))return false;
-    pnt_list_.emplace_back(new_pnt);
 
-    TopoDS_Edge anEdge1 = OccTools::drawLineByTwoPts(last_pnt, new_pnt);
+    if (last_pnt.IsEqual(new_pnt, 0.01))
+        return false;
+
+    gp_Pnt mid = OccTools::getAngledLineByTwoPts(direction_,
+        last_pnt, new_pnt, _angle * M_PI / 180.0, toggle);
+
+    std::vector<gp_Pnt> pnts{ last_pnt };
+    if (!pnt_list_.back().IsEqual(mid, 0.01))
+    {
+        pnt_list_.emplace_back(mid);
+        pnts.emplace_back(mid);
+    }
+    if (!pnt_list_.back().IsEqual(new_pnt, 0.01))
+    {
+        pnt_list_.emplace_back(new_pnt);
+        pnts.emplace_back(new_pnt);
+    }
+
+    setCurDirection(pnts);
+
+    TopoDS_Shape anEdge1 = OccTools::getShapeByPts(pnts);
 
     Handle(AIS_ColoredShape) line = new AIS_ColoredShape(anEdge1);
     line->SetWidth(3.0);
+
     G_Context->Display(line, true);
     viewmodel_vec_.emplace_back(line);
     return true;
 }
 
-void LineDrawer::drawTempLine(const gp_Pnt& new_pnt)
+void LineDrawer::drawTempLine(const gp_Pnt& new_pnt,
+    double _angle, bool toggle)
 {
     const gp_Pnt last_pnt = pnt_list_.back();
     if (last_pnt.IsEqual(new_pnt, 0.1))return;
 
-    TopoDS_Edge anEdge1 = OccTools::drawLineByTwoPts(last_pnt, new_pnt);
+    gp_Pnt mid = OccTools::getAngledLineByTwoPts(direction_,
+        last_pnt, new_pnt, _angle * M_PI / 180.0, toggle);
+
+    std::vector<gp_Pnt> pnts{ last_pnt, mid, new_pnt };
+
+    TopoDS_Shape anEdge1 = OccTools::getShapeByPts(pnts);
+
 
     G_Context->Remove(temp_line_, false);
     temp_line_ = new AIS_ColoredShape(anEdge1);

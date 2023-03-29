@@ -75,18 +75,18 @@ std::vector<TopoDS_Edge> KAngleMultiLine::getEdge()
     {
         if (!p1_.IsEqual(p2_, 0.01))
         {
-            res.emplace_back(OccTools::drawLineByTwoPts(p1_, p2_));
+            res.emplace_back(OccTools::getEdgeByTwoPts(p1_, p2_));
         }
     }
     else
     {
         if (!p1_.IsEqual(res_.front(), 0.01))
         {
-            res.emplace_back(OccTools::drawLineByTwoPts(p1_, res_.front()));
+            res.emplace_back(OccTools::getEdgeByTwoPts(p1_, res_.front()));
         }
         if (!p2_.IsEqual(res_.front(), 0.01))
         {
-            res.emplace_back(OccTools::drawLineByTwoPts(p2_, res_.front()));
+            res.emplace_back(OccTools::getEdgeByTwoPts(p2_, res_.front()));
         }
     }
     return res;
@@ -155,9 +155,9 @@ std::list<gp_Pnt> KAngleMultiLine::drawAngledLineByTwoPts(gp_Pnt pA,
             res.push_back(gp_Pnt(pA.X(), pB.Y() + dx / tan_a, 0));
         }
     }
-    //std::cout << "\nptC:" << OccTools::ptToStr(res.front()) << std::endl;
-    //std::cout << "ptD:" << OccTools::ptToStr(res.back()) << std::endl;
 
     return res;
 }
+
+
 }

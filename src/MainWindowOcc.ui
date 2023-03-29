@@ -44,8 +44,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1075</width>
-             <height>975</height>
+             <width>1064</width>
+             <height>957</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
@@ -111,6 +111,16 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_5">
                <item row="0" column="0">
+                <widget class="QCheckBox" name="cb_arc45">
+                 <property name="text">
+                  <string>arc 45</string>
+                 </property>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
                 <widget class="QCheckBox" name="cb_debug">
                  <property name="text">
                   <string>DebugOutput</string>
@@ -120,7 +130,17 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
+               <item row="3" column="0">
+                <widget class="QCheckBox" name="cb_wh_same">
+                 <property name="text">
+                  <string>W-H Same</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
                 <layout class="QGridLayout" name="gridLayout_4">
                  <item row="3" column="0">
                   <widget class="QLabel" name="label_4">
@@ -248,12 +268,12 @@
                 </layout>
                </item>
                <item row="1" column="0">
-                <widget class="QCheckBox" name="cb_wh_same">
+                <widget class="QCheckBox" name="cb_toggle">
                  <property name="text">
-                  <string>W-H Same</string>
+                  <string>toggle</string>
                  </property>
                  <property name="checked">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -515,7 +535,7 @@
      <x>0</x>
      <y>0</y>
      <width>1176</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

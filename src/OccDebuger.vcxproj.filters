@@ -89,9 +89,6 @@
     <ClCompile Include="MultiUniset.cpp">
       <Filter>Manner</Filter>
     </ClCompile>
-    <ClCompile Include="KBoxObj.cpp">
-      <Filter>Manner</Filter>
-    </ClCompile>
     <ClCompile Include="KLogger.cpp">
       <Filter>UI\Consolelog</Filter>
     </ClCompile>
@@ -186,9 +183,6 @@
     </ClInclude>
     <ClInclude Include="unionset.h">
       <Filter>DataStructure</Filter>
-    </ClInclude>
-    <ClInclude Include="KBoxObj.h">
-      <Filter>Manner</Filter>
     </ClInclude>
     <ClInclude Include="KLogger.h">
       <Filter>UI\Consolelog</Filter>

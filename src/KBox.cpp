@@ -15,6 +15,7 @@
 #include "global.h"
 #include "shapetools.h"
 #include "BoundingBox.h"
+#include "BoundingBox.h"
 
 namespace KDebugger
 {
@@ -70,6 +71,11 @@ KPt KBox::rightUp()const
 {
     return KPt(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, this);
 }
+KPt KBox::leftUp()const
+{
+    return KPt(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, this);
+}
+
 KBoundingBox KBox::getBoundingbox()const
 {
     KPt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5);

@@ -35,15 +35,20 @@ public:
     void checkDetectedObj(const gp_Pnt& new_pnt);
     void cancelDraw();
     void removeTempViewModel();
-    bool appendLine(const gp_Pnt& pnt);
-    void drawTempLine(const gp_Pnt& new_pnt);
+    bool appendLine(const gp_Pnt& pnt, double _angle, bool toggle);
+    void drawTempLine(const gp_Pnt& new_pnt, double _angle, bool toggle);
     void handleExistPnt(const gp_Pnt& pt);
 
 private:
+    void setCurDirection(const std::vector<gp_Pnt>& pnts);
+
+private:
+
     Mode cur_mode_;
     std::list<gp_Pnt> pnt_list_;
     std::vector<Handle(AIS_ColoredShape)> viewmodel_vec_;
     Handle(AIS_ColoredShape) temp_line_;
+    gp_Vec direction_;
 };
 
 }

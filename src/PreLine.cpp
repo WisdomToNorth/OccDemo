@@ -29,7 +29,7 @@ void PrePline::drawRawPnts(Quantity_Color color)
 
     while (cur_next != raw_pnts_.end())
     {
-        TopoDS_Edge anEdge1 = OccTools::drawLineByTwoPts(*cur, *cur_next);
+        TopoDS_Edge anEdge1 = OccTools::getEdgeByTwoPts(*cur, *cur_next);
         Handle(AIS_ColoredShape) line = new AIS_ColoredShape(anEdge1);
         line->SetWidth(3.0);
         line->SetColor(color);

@@ -8,6 +8,7 @@
 #include <random>
 #include "global.h"
 
+#include "gptools.h"
 
 #include "KPnt.h"
 namespace KDebugger
@@ -65,5 +66,14 @@ bool KTest::testKPnt2D(int seed)
     bool res = p1.confirmValid() && p2.confirmValid();
     std::cout << "res:" << res << std::endl;
     return res;
+}
+
+bool KTest::testSameAngle()
+{
+    using namespace OccTools;
+    std::cout << (sameDir(gp_Vec(1, 0, 0), gp_Dir(-1, 0, 0)) == -1) << std::endl;
+    std::cout << (sameDir(gp_Vec(1, 0, 0), gp_Dir(1, 0, 0)) == 1) << std::endl;
+    std::cout << (sameDir(gp_Vec(1, 0, 0), gp_Dir(0, 1, 0)) == 0) << std::endl;
+    return true;
 }
 }

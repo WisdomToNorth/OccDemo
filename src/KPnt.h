@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <vector>
 
+#include <gp_Pnt.hxx>
+
 namespace KDebugger
 {
 class KBox;
@@ -12,6 +14,8 @@ struct KPt
         x(_x), y(_y), parent_(parent)
     {
     };
+
+    KPt(const gp_Pnt& pnt);
     KPt() :x(0), y(0), parent_(nullptr) {};
     bool isEqual(const KPt& rhs);
     bool operator==(const KPt& rhs);
