@@ -96,13 +96,14 @@ double getAngle(gp_Pnt ori, gp_Pnt p1, gp_Pnt p2);
 int sameDir(gp_Vec v1, gp_Vec v2);
 
 gp_Pnt getAngledLineByTwoPts(const gp_Vec& last_dir, const gp_Pnt& pA,
-    const gp_Pnt& pB, const double& angle, bool toggle);
+    const gp_Pnt& pB, const double& angle, int toggle);
 
 gp_Pnt getAngledLineByTwoPtsRandDir(const gp_Vec& last_vec, const gp_Pnt& pA,
-    const gp_Pnt& pB, const double& _angle, bool _toggle);
-
+    const gp_Pnt& pB, const double& _angle, int _toggle);
+gp_Pnt getAngledLineByTwoPtsIncline(const gp_Vec& last_vec, const gp_Pnt& pA,
+    const gp_Pnt& pB, const double& _angle, int _toggle);//for 45 only
 gp_Pnt getAngledLineByTwoPtsOrth(const gp_Vec& last_dir, const gp_Pnt& pA,
-    const gp_Pnt& pB, const double& angle, bool toggle);
+    const gp_Pnt& pB, const double& angle, int toggle);
 }
 
 #endif

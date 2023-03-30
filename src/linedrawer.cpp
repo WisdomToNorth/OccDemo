@@ -104,8 +104,9 @@ bool LineDrawer::appendLine(const gp_Pnt& new_pnt,
     if (last_pnt.IsEqual(new_pnt, 0.01))
         return false;
 
+    int togg = toggle == false ? 1 : -1;
     gp_Pnt mid = OccTools::getAngledLineByTwoPts(direction_,
-        last_pnt, new_pnt, _angle * M_PI / 180.0, toggle);
+        last_pnt, new_pnt, _angle * M_PI / 180.0, togg);
 
     std::vector<gp_Pnt> pnts{ last_pnt };
     if (!pnt_list_.back().IsEqual(mid, 0.01))
@@ -137,8 +138,9 @@ void LineDrawer::drawTempLine(const gp_Pnt& new_pnt,
     const gp_Pnt last_pnt = pnt_list_.back();
     if (last_pnt.IsEqual(new_pnt, 0.1))return;
 
+    int togg = toggle == false ? 1 : -1;
     gp_Pnt mid = OccTools::getAngledLineByTwoPts(direction_,
-        last_pnt, new_pnt, _angle * M_PI / 180.0, toggle);
+        last_pnt, new_pnt, _angle * M_PI / 180.0, togg);
 
     std::vector<gp_Pnt> pnts{ last_pnt, mid, new_pnt };
 
@@ -147,6 +149,8 @@ void LineDrawer::drawTempLine(const gp_Pnt& new_pnt,
 
     G_Context->Remove(temp_line_, false);
     temp_line_ = new AIS_ColoredShape(anEdge1);
+
+
     G_Context->Display(temp_line_, 1, -1, true);
 }
 
