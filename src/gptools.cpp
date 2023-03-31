@@ -438,7 +438,6 @@ gp_Pnt getAngledLineByTwoPtsReverse(const gp_Vec& last_vec, const gp_Pnt& pA,
     const gp_Pnt& pB, int _toggle)
 {
     double angle = last_vec.AngleWithRef(gp_Vec(pA, pB), gp_Vec(0, 0, 1));
-    double aux_angle = angle + 45 * M_PI / 180.0;
     int is_left = symbol(angle);
     gp_Lin lin = gp_Lin(pA, last_vec);
     double dist = lin.Distance(pB);
