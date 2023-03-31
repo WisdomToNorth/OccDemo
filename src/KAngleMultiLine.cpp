@@ -106,8 +106,10 @@ bool KAngleMultiLine::checkColli(const KBox& box)
         if (box.isCrossWithKLineWithSpace(l1_1) ||
             box.isCrossWithKLineWithSpace(l1_2))
         {
-            res_.erase(it);
+            //res_.erase(it);
+            return true;//这里只找了一条路径。另一条注释掉了。程序崩溃，需要检查原因
         }
+
         it++;
     }
 

@@ -309,6 +309,19 @@ TopoDS_Edge getEdgeByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2)
     return BRepBuilderAPI_MakeEdge(aSegment1);
 }
 
+std::vector<TopoDS_Edge> getEdgesByPts(const std::vector<gp_Pnt>& pnts)
+{
+    std::vector<TopoDS_Edge> res;
+    for (size_t i = 0; i < pnts.size() - 1; ++i)
+    {
+        if (pnts[i].IsEqual(pnts[i + 1], 0.01))
+            continue;
+        res.emplace_back(getEdgeByTwoPts(pnts[i], pnts[i + 1]));
+    }
+
+    return res;
+}
+
 TopoDS_Shape getShapeByPts(const std::vector<gp_Pnt>& pnts)
 {
     TopoDS_Compound t_compound;
@@ -317,6 +330,7 @@ TopoDS_Shape getShapeByPts(const std::vector<gp_Pnt>& pnts)
 
     for (size_t i = 0; i < pnts.size() - 1; ++i)
     {
+
         t_build_tool.Add(t_compound, getCircleFromPt(pnts[i], 0.02));
         if (pnts[i].IsEqual(pnts[i + 1], 0.01))
             continue;

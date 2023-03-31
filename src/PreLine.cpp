@@ -182,7 +182,7 @@ void PrePline::reGenerate(const std::vector<KBox>& context_info)
         }
         else//collision
         {
-            auto temp = cur_next;
+            auto& temp = cur_next;
             temp--;
             cur_vertax = temp;
 

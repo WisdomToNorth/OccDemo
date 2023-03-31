@@ -85,7 +85,7 @@ gp_Pnt getCenterOfPnts(const std::vector<gp_Pnt>& ori_pts);
 gp_Dir getNormalByThreePnts(const std::vector<gp_Pnt>& ori_pts);
 
 TopoDS_Edge getEdgeByTwoPts(const gp_Pnt& p1, const gp_Pnt& p2);
-
+std::vector<TopoDS_Edge> getEdgesByPts(const std::vector<gp_Pnt>& pnts);
 TopoDS_Shape getShapeByPts(const std::vector<gp_Pnt>& pnts);
 
 //if curve is not line, may be have several result;

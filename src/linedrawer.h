@@ -36,11 +36,12 @@ public:
     void cancelDraw();
     void removeTempViewModel();
     bool appendLine(const gp_Pnt& pnt, double _angle, bool toggle);
+    void appendPnt(const gp_Pnt& pnt);
     void drawTempLine(const gp_Pnt& new_pnt, double _angle, bool toggle);
     void handleExistPnt(const gp_Pnt& pt);
 
 private:
-    void setCurDirection(const std::vector<gp_Pnt>& pnts);
+    void setCurDirection(const gp_Pnt& pnt);
 
 private:
 

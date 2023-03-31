@@ -9,6 +9,7 @@
 #include <AIS_ViewCube.hxx>
 #include <StdSelect_BRepOwner.hxx>
 #include <TopoDS.hxx>
+#include <AIS_ColoredShape.hxx>
 
 #include "KLogger.h"
 #include "gptools.h"
@@ -25,6 +26,8 @@ LineDrawer::LineDrawer(const gp_Pnt& pnt)
 
 void LineDrawer::handleExistPnt(const gp_Pnt& pt)
 {
+    //std::cout << " pnt_list_.size()" << pnt_list_.size() << std::endl;
+    //std::cout << " viewmodel_vec_.size()" << viewmodel_vec_.size() << std::endl;
     size_t index = 0;
     auto it = pnt_list_.begin();
     while (it != pnt_list_.end())
@@ -32,12 +35,18 @@ void LineDrawer::handleExistPnt(const gp_Pnt& pt)
         if (it->IsEqual(pt, 0.001))
         {
             std::list<gp_Pnt> _;
-            pnt_list_.splice(_.end(), _, it, pnt_list_.end());
+            it++;
+            _.splice(_.end(), pnt_list_, pnt_list_.begin(), it);
+            pnt_list_.swap(_);
             break;
         }
         ++it;
         ++index;
+        if (it == pnt_list_.end())return;
+        //当前列表没有交点。相交的其他不相关的edge的点
+        //这里设计不太恰当
     }
+
     for (size_t i = index; i < viewmodel_vec_.size(); ++i)
     {
         G_Context->Remove(viewmodel_vec_[i], false);
@@ -46,6 +55,8 @@ void LineDrawer::handleExistPnt(const gp_Pnt& pt)
     std::advance(mi, index);
     std::vector<Handle(AIS_ColoredShape)> spliced(viewmodel_vec_.begin(), mi);
     viewmodel_vec_.swap(spliced);
+    //std::cout << " ###pnt_list_.size()" << pnt_list_.size() << std::endl;
+    //std::cout << " ###viewmodel_vec_.size()" << viewmodel_vec_.size() << std::endl;
 }
 
 void LineDrawer::checkDetectedObj(const gp_Pnt& new_pnt)
@@ -84,12 +95,12 @@ std::string dir2Str(gp_Vec dir)
     return strbuf.str();
 }
 
-void LineDrawer::setCurDirection(const std::vector<gp_Pnt>& pnts)
+void LineDrawer::setCurDirection(const gp_Pnt& pnt)
 {
-    if (pnts.size() < 2)
+    if (pnt_list_.size() < 1)
         direction_ = gp_Vec();
     else
-        direction_ = gp_Vec(pnts[pnts.size() - 2], pnts.back());// .Normalized();
+        direction_ = gp_Vec(pnt_list_.back(), pnt);// .Normalized();
 
     std::cout << dir2Str(direction_) << std::endl;
 }
@@ -108,28 +119,33 @@ bool LineDrawer::appendLine(const gp_Pnt& new_pnt,
     gp_Pnt mid = OccTools::getAngledLineByTwoPts(direction_,
         last_pnt, new_pnt, _angle * M_PI / 180.0, togg);
 
-    std::vector<gp_Pnt> pnts{ last_pnt };
-    if (!pnt_list_.back().IsEqual(mid, 0.01))
+    std::vector<gp_Pnt> pnts{ mid,new_pnt };
+
+    for (const auto& pt : pnts)
     {
-        pnt_list_.emplace_back(mid);
-        pnts.emplace_back(mid);
+        appendPnt(pt);
     }
-    if (!pnt_list_.back().IsEqual(new_pnt, 0.01))
-    {
-        pnt_list_.emplace_back(new_pnt);
-        pnts.emplace_back(new_pnt);
-    }
+    G_Context->Remove(temp_line_, false);
+    return true;
+}
 
-    setCurDirection(pnts);
+void LineDrawer::appendPnt(const gp_Pnt& new_pnt)
+{
+    if (pnt_list_.back().IsEqual(new_pnt, 0.01))return;
 
-    TopoDS_Shape anEdge1 = OccTools::getShapeByPts(pnts);
 
-    Handle(AIS_ColoredShape) line = new AIS_ColoredShape(anEdge1);
+    const TopoDS_Edge& edge = OccTools::getEdgeByTwoPts(pnt_list_.back(), new_pnt);
+
+    //下面两句有顺序依赖。设计得不好
+    setCurDirection(new_pnt);
+    pnt_list_.emplace_back(new_pnt);
+
+    auto line = new AIS_ColoredShape(edge);
     line->SetWidth(3.0);
 
     G_Context->Display(line, true);
     viewmodel_vec_.emplace_back(line);
-    return true;
+
 }
 
 void LineDrawer::drawTempLine(const gp_Pnt& new_pnt,
@@ -150,13 +166,13 @@ void LineDrawer::drawTempLine(const gp_Pnt& new_pnt,
     G_Context->Remove(temp_line_, false);
     temp_line_ = new AIS_ColoredShape(anEdge1);
 
-
     G_Context->Display(temp_line_, 1, -1, true);
 }
 
 void LineDrawer::commitDraw(std::list<gp_Pnt>& pnts)
 {
     pnts.swap(pnt_list_);
+
     removeTempViewModel();
 }
 
