@@ -103,6 +103,8 @@ gp_Pnt getAngledLineByTwoPtsRandDir(const gp_Vec& last_vec, const gp_Pnt& pA,
     const gp_Pnt& pB, const double& _angle, int _toggle);
 gp_Pnt getAngledLineByTwoPtsIncline(const gp_Vec& last_vec, const gp_Pnt& pA,
     const gp_Pnt& pB, const double& _angle, int _toggle);//for 45 only
+gp_Pnt getAngledLineByTwoPtsReverse(const gp_Vec& last_vec, const gp_Pnt& pA,
+    const gp_Pnt& pB, int _toggle);//for 45 only
 gp_Pnt getAngledLineByTwoPtsOrth(const gp_Vec& last_dir, const gp_Pnt& pA,
     const gp_Pnt& pB, const double& angle, int toggle);
 }

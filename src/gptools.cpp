@@ -409,36 +409,47 @@ gp_Pnt getAngledLineByTwoPts(const gp_Vec& last_vec, const gp_Pnt& pA,
     }
     else
     {
-        if (_angle == 0)//这里代码还可以精简，按与x轴夹角距离判断，只分解一次即可
+        //分解为两个正交方向
+        gp_Vec dir_1 = gp_Vec(last_vec.X(), 0, 0);
+        gp_Vec dir_2 = gp_Vec(0, last_vec.Y(), 0);
+        if (last_vec.AngleWithRef(dir_1, gp_Vec(0, 0, 1)) < 0)//确保第一个向量与angle>0的方向一致
         {
-            //分解为两个正交方向
-            gp_Vec dir_1 = gp_Vec(last_vec.X(), 0, 0);
-            gp_Vec dir_2 = gp_Vec(0, last_vec.Y(), 0);
-            if (last_vec.AngleWithRef(dir_1, gp_Vec(0, 0, 1)) < 0)//确保第一个向量与angle>0的方向一致
-            {
-                gp_Vec temp = dir_1; dir_1 = dir_2; dir_2 = temp;
-            }
-
-            double angle = last_vec.AngleWithRef(gp_Vec(pA, pB), gp_Vec(0, 0, 1));
-            if (angle > 0)
-            {
-                return getAngledLineByTwoPtsOrth(dir_1, pA, pB, _angle, _toggle);
-            }
-            else//angle < 0
-            {
-                return getAngledLineByTwoPtsOrth(dir_2, pA, pB, _angle, _toggle);
-            }
-        }
-        else
-        {
-            return getAngledLineByTwoPtsIncline(last_vec, pA, pB, _angle, _toggle);
+            gp_Vec temp = dir_1; dir_1 = dir_2; dir_2 = temp;
         }
 
+        double angle = last_vec.AngleWithRef(gp_Vec(pA, pB), gp_Vec(0, 0, 1));
+
+        if (angle > 0 && angle < 90.0 * M_PI / 180.0)
+        {
+            return getAngledLineByTwoPtsOrth(dir_1, pA, pB, _angle, _toggle);
+        }
+        else if (angle > -90 * M_PI / 180.0 && angle < 0)//angle < 0
+        {
+            return getAngledLineByTwoPtsOrth(dir_2, pA, pB, _angle, _toggle);
+        }
+        else//need reverse
+        {
+            return getAngledLineByTwoPtsReverse(last_vec, pA, pB, _toggle);
+        }
     }
 }
 
+gp_Pnt getAngledLineByTwoPtsReverse(const gp_Vec& last_vec, const gp_Pnt& pA,
+    const gp_Pnt& pB, int _toggle)
+{
+    double angle = last_vec.AngleWithRef(gp_Vec(pA, pB), gp_Vec(0, 0, 1));
+    double aux_angle = angle + 45 * M_PI / 180.0;
+    int is_left = symbol(angle);
+    gp_Lin lin = gp_Lin(pA, last_vec);
+    double dist = lin.Distance(pB);
+    KDebugger::KPt pD;
+    pD.x = pA.X() - is_left * dist * last_vec.Normalized().Y();
+    pD.y = pA.Y() + is_left * dist * last_vec.Normalized().X();
+    return gp_Pnt(pD.x, pD.y, 0.0);
+}
+
 gp_Pnt getAngledLineByTwoPtsIncline(const gp_Vec& last_vec, const gp_Pnt& pA,
-    const gp_Pnt& pB, const double& _angle, int _toggle)//for 45 degree only
+    const gp_Pnt& pB, const double& _angle, int _toggle)
 {
 
     using namespace KDebugger;
@@ -462,14 +473,14 @@ gp_Pnt getAngledLineByTwoPtsIncline(const gp_Vec& last_vec, const gp_Pnt& pA,
         if (dx < dy)
         {
             pD.x = pC.x;
-            if (Tan(aux_angle) < 0)pD.y = pC.y - dx;
-            else pD.y = pC.y + dx;
+            if (Tan(aux_angle) < 0)pD.y = pC.y - Tan(_angle) * dx;
+            else pD.y = pC.y + Tan(_angle) * dx;
         }
         else
         {
             pD.y = pC.y;
-            if (Tan(aux_angle) < 0)pD.x = pC.x - dy;
-            else pD.x = pC.x + dy;
+            if (Tan(aux_angle) < 0)pD.x = pC.x - Tan(_angle) * dy;
+            else pD.x = pC.x + Tan(_angle) * dy;
         }
     }
     else if ((sameDir(last_vec, gp_Vec(1, 1, 0)) == 1 && _toggle == -1) ||
@@ -482,14 +493,14 @@ gp_Pnt getAngledLineByTwoPtsIncline(const gp_Vec& last_vec, const gp_Pnt& pA,
         if (dx < dy)
         {
             pD.x = pC.x;
-            if (Tan(aux_angle) < 0)pD.y = pC.y + dx;
-            else pD.y = pC.y - dx;
+            if (Tan(aux_angle) < 0)pD.y = pC.y + Tan(_angle) * dx;
+            else pD.y = pC.y - Tan(_angle) * dx;
         }
         else
         {
             pD.y = pC.y;
-            if (Tan(aux_angle) < 0)pD.x = pC.x + dy;
-            else pD.x = pC.x - dy;
+            if (Tan(aux_angle) < 0)pD.x = pC.x + Tan(_angle) * dy;
+            else pD.x = pC.x - Tan(_angle) * dy;
         }
     }
     else if ((sameDir(last_vec, gp_Vec(1, -1, 0)) == 1 && _toggle == 1) ||
@@ -502,14 +513,14 @@ gp_Pnt getAngledLineByTwoPtsIncline(const gp_Vec& last_vec, const gp_Pnt& pA,
         if (dx < dy)
         {
             pD.x = pC.x;
-            if (Tan(aux_angle) < 0)pD.y = pC.y + dx;
-            else pD.y = pC.y - dx;
+            if (Tan(aux_angle) < 0)pD.y = pC.y + Tan(_angle) * dx;
+            else pD.y = pC.y - Tan(_angle) * dx;
         }
         else
         {
             pD.y = pC.y;
-            if (Tan(aux_angle) < 0)pD.x = pC.x - dy;
-            else pD.x = pC.x + dy;
+            if (Tan(aux_angle) < 0)pD.x = pC.x - Tan(_angle) * dy;
+            else pD.x = pC.x + Tan(_angle) * dy;
         }
     }
     else if ((sameDir(last_vec, gp_Vec(1, -1, 0)) == 1 && _toggle == -1) ||
@@ -522,14 +533,14 @@ gp_Pnt getAngledLineByTwoPtsIncline(const gp_Vec& last_vec, const gp_Pnt& pA,
         if (dx < dy)
         {
             pD.x = pC.x;
-            if (Tan(aux_angle) < 0)pD.y = pC.y - dx;
-            else pD.y = pC.y + dx;
+            if (Tan(aux_angle) < 0)pD.y = pC.y - Tan(_angle) * dx;
+            else pD.y = pC.y + Tan(_angle) * dx;
         }
         else
         {
             pD.y = pC.y;
-            if (Tan(aux_angle) < 0)pD.x = pC.x + dy;
-            else pD.x = pC.x - dy;
+            if (Tan(aux_angle) < 0)pD.x = pC.x + Tan(_angle) * dy;
+            else pD.x = pC.x - Tan(_angle) * dy;
         }
     }
 
@@ -568,7 +579,7 @@ gp_Pnt getAngledLineByTwoPtsOrth(const gp_Vec& last_vec, const gp_Pnt& pA,
 {
 
     using namespace KDebugger;
-    std::cout << "last dir Orth: " << dir2Str(last_vec) << std::endl;
+    //std::cout << "last dir Orth: " << dir2Str(last_vec) << std::endl;
     KBoundingBox _box = KBoundingBox(KPt(pA), KPt(pB));
 
     double dx = std::abs(pA.X() - pB.X());
