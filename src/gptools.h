@@ -93,6 +93,7 @@ TopoDS_Shape getShapeByPts(const std::vector<gp_Pnt>& pnts);
 std::vector<gp_Pnt2d> getLineCross(const gp_Lin2d& aLine1, const gp_Lin2d& aLine2);
 
 double getAngle(gp_Pnt ori, gp_Pnt p1, gp_Pnt p2);
+
 int sameDir(gp_Vec v1, gp_Vec v2);
 
 gp_Pnt getAngledLineByTwoPts(const gp_Vec& last_dir, const gp_Pnt& pA,

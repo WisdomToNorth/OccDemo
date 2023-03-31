@@ -89,7 +89,7 @@ void LineDrawer::setCurDirection(const std::vector<gp_Pnt>& pnts)
     if (pnts.size() < 2)
         direction_ = gp_Vec();
     else
-        direction_ = gp_Vec(pnts[pnts.size() - 2], pnts.back()).Normalized();
+        direction_ = gp_Vec(pnts[pnts.size() - 2], pnts.back());// .Normalized();
 
     std::cout << dir2Str(direction_) << std::endl;
 }
