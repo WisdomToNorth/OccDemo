@@ -56,7 +56,8 @@ x64/*
 *.exe
 *.out
 *.app
-
+compile_commands.json
+launch.json
 /.vs/*
 /x64/*
 /bin/*

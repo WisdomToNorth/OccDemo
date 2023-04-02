@@ -16,7 +16,6 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-
 #ifdef _WIN32
 #include <WNT_Window.hxx>
 #include <QtOpenGL\QGLWidget>
@@ -65,28 +64,32 @@ private:
         CurAction3d_DynamicRotation
     };
 
-
-    //typedef std::function<void(const Handle(SelectMgr_EntityOwner)&)> leftButtonClickCallBack;
-    typedef std::function<void(QMouseEvent* event)> rightButtonClickCallBack;
-    typedef std::function<void(const double& _1, const double& _2)> leftButtonClickCallBack;
-    typedef std::function<void(const double& _1, const double& _2, const double& _3)> moveInfoCallBack;
-
+    // typedef std::function<void(const Handle(SelectMgr_EntityOwner)&)> leftButtonClickCallBack;
+    typedef std::function<void(QMouseEvent *event)> rightButtonClickCallBack;
+    typedef std::function<void(const double &_1, const double &_2)> leftButtonClickCallBack;
+    typedef std::function<void(const double &_1, const double &_2, const double &_3)> moveInfoCallBack;
 
 public:
     enum class KUpdate
     {
-        Redraw, ZFitAll, Fitall, MustResized
+        Redraw,
+        ZFitAll,
+        Fitall,
+        MustResized
     };
 
-    CadView(QWidget* parent = Q_NULLPTR);
+    CadView(QWidget *parent = Q_NULLPTR);
     ~CadView();
 
     Handle(SelectMgr_EntityOwner) getDetectedObj();
-    void drawTestData(const std::vector<Handle(AIS_Shape)>& all_face_);
-    void drawTestLabelData(const std::vector<Handle(AIS_TextLabel)>& all_labels);
+    void drawTestData(const std::vector<Handle(AIS_Shape)> &all_face_);
+    void drawTestLabelData(const std::vector<Handle(AIS_TextLabel)> &all_labels);
     void fitAll();
     void removeAll();
-    Handle(AIS_InteractiveContext) getContext() { return context_; }
+    Handle(AIS_InteractiveContext) getContext()
+    {
+        return context_;
+    }
     leftButtonClickCallBack leftClickCb = NULL;
     rightButtonClickCallBack rightClickCb = NULL;
     moveInfoCallBack moveInfoCb = NULL;
@@ -96,26 +99,26 @@ public slots:
     void resetAll(bool);
 
 protected:
-    void paintEvent(QPaintEvent*)override;
-    void resizeEvent(QResizeEvent*)override;
-    void mousePressEvent(QMouseEvent* event)override;
-    void mouseReleaseEvent(QMouseEvent* event)override;
-    void mouseMoveEvent(QMouseEvent* event)override;
-    void wheelEvent(QWheelEvent* event)override;
-    void keyPressEvent(QKeyEvent* event)override;
-    QPaintEngine* paintEngine() const;//初始化界面相关
+    void paintEvent(QPaintEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    QPaintEngine *paintEngine() const; // 初始化界面相关
 
 private:
     void initContext();
     void initDefaultHilightAttributes(Prs3d_TypeOfHighlight idx,
-        Standard_Real lineWidth_aspect = 5.0, Quantity_Color theColor = Quantity_NOC_LIGHTBLUE2);
+                                      Standard_Real lineWidth_aspect = 5.0, Quantity_Color theColor = Quantity_NOC_LIGHTBLUE2);
     void initCursors();
     void setViewCube();
     void setOriginTrihedron();
     bool checkDetectedValid();
 
 signals:
-    void cmdSignal(QMouseEvent* event);
+    void cmdSignal(QMouseEvent *event);
 
 private:
     friend class DataGenerator;
@@ -127,12 +130,12 @@ private:
     Handle(V3d_View) view_ = nullptr;
     Handle(AIS_TextLabel) text_ = nullptr;
 
-    CurrentAction3dEnum context_action_mode_;//!三维场景转换模式
-    std::vector<Handle(SelectMgr_EntityOwner)>detected_obj_;//存储点击过的对象，可能是点线面
+    CurrentAction3dEnum context_action_mode_;                 //! 三维场景转换模式
+    std::vector<Handle(SelectMgr_EntityOwner)> detected_obj_; // 存储点击过的对象，可能是点线面
 
-    int mouse_x_record_;    //!记录鼠标平移坐标X
-    int mouse_y_record_;    //!记录鼠标平移坐标Y
+    int mouse_x_record_; //! 记录鼠标平移坐标X
+    int mouse_y_record_; //! 记录鼠标平移坐标Y
     int zoom_scale_control_ = 4;
 };
-}
+} // namespace KDebugger
 #endif // _OCCVIEW_H_
