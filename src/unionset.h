@@ -6,18 +6,19 @@ namespace KDebugger
 {
 class UnionFind
 {
-    //std::mutex locker;
+    // std::mutex locker;
 public:
-    //如果使用vector，则必须连续编号
+    // 如果使用vector，则必须连续编号
     std::unordered_map<int, int> parent_;
     std::unordered_map<int, int> rank_;
     std::vector<std::pair<int, std::unordered_set<int>>> final_set_;
     int count_;
 
 public:
-    UnionFind(int n) :count_(n)
+    UnionFind(int n) :
+        count_(n)
     {
-        //O(N)
+        // O(N)
         for (int a = 0; a < n; ++a)
         {
             parent_[a] = a;
@@ -50,9 +51,9 @@ public:
         }
     }
 
-    void merge(UnionFind& rhs)
+    void merge(UnionFind &rhs)
     {
-        //O(N)
+        // O(N)
         for (int i = 0; i < parent_.size(); ++i)
         {
             merge(this->find(i), rhs.find(i));
@@ -74,7 +75,7 @@ public:
     void update()
     {
         std::unordered_map<int, std::unordered_set<int>> final_set;
-        //O(N)
+        // O(N)
         for (auto it = parent_.begin(); it != parent_.end(); ++it)
         {
             final_set[find((*it).first)].insert((*it).first);
@@ -85,4 +86,4 @@ public:
         }
     }
 };
-}
+} // namespace KDebugger

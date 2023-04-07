@@ -8,16 +8,18 @@ namespace KDebugger
 class KTimer
 {
 public:
-    KTimer() :t1_(std::chrono::steady_clock::now()), t2_(t1_) {}
+    KTimer() :
+        t1_(std::chrono::steady_clock::now()), t2_(t1_)
+    {}
 
-    double timeFromBegin(const std::string& str = "\nTime from start: ")
+    double timeFromBegin(const std::string &str = "\nTime from start: ")
     {
         double res = timeFromBeginP();
         std::cout << str << res << " ms" << std::endl;
         return res;
     }
 
-    double timeFromLastSee(const std::string& str = "\nTime from last see: ")
+    double timeFromLastSee(const std::string &str = "\nTime from last see: ")
     {
         double dr_ms = timeFromLastSeeP();
         std::cout << str << dr_ms << " ms" << std::endl;
@@ -40,9 +42,9 @@ private:
 
         return dr_ms;
     }
+
 private:
     std::chrono::steady_clock::time_point t1_;
     std::chrono::steady_clock::time_point t2_;
-
 };
-}
+} // namespace KDebugger

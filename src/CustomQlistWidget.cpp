@@ -5,12 +5,11 @@
 #include <QColor>
 #include <QKeyEvent>
 
-
-iwCustomQListWidget::iwCustomQListWidget(QWidget* parent)
-    : QListWidget(parent)
+iwCustomQListWidget::iwCustomQListWidget(QWidget *parent) :
+    QListWidget(parent)
 {}
 
-void iwCustomQListWidget::keyPressEvent(QKeyEvent* event)
+void iwCustomQListWidget::keyPressEvent(QKeyEvent *event)
 {
     if (event->matches(QKeySequence::Copy))
     {

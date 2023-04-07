@@ -26,85 +26,87 @@ KBox::KBox(double x, double y, double sizex, double sizey, int type) :
     {
         type_ = ObjType::Box;
     }
-    else type_ = ObjType::Elips;
-
+    else
+        type_ = ObjType::Elips;
 }
 
-bool KBox::isOut(const KBox& rhs)const
+bool KBox::isOut(const KBox &rhs) const
 {
     double cx = (size_x_ + rhs.size_x_) * 0.5;
     double cy = (size_y_ + rhs.size_y_) * 0.5;
 
     if (abs(rhs.center_.x - center_.x) > cx || abs(rhs.center_.y - center_.y) > cy)
         return true;
-    else return false;
+    else
+        return false;
 }
 
-bool KBox::outBox(const KPt& pt)const
+bool KBox::outBox(const KPt &pt) const
 {
-    double cx = (size_x_) * 0.5;
-    double cy = (size_y_) * 0.5;
+    double cx = (size_x_)*0.5;
+    double cy = (size_y_)*0.5;
 
     if (abs(pt.x - center_.x) > cx || abs(pt.y - center_.y) > cy)
         return true;
-    else return false;
+    else
+        return false;
 }
-bool KBox::outBoxWithSpacing(const KPt& pt)const
+bool KBox::outBoxWithSpacing(const KPt &pt) const
 {
-    double cx = (size_x_) * 0.5 + space_;
-    double cy = (size_y_) * 0.5 + space_;
+    double cx = (size_x_)*0.5 + space_;
+    double cy = (size_y_)*0.5 + space_;
 
     if (abs(pt.x - center_.x) > cx || abs(pt.y - center_.y) > cy)
         return true;
-    else return false;
+    else
+        return false;
 }
-KPt KBox::leftBottom()const
+KPt KBox::leftBottom() const
 {
     return KPt(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, this);
 }
 
-KPt KBox::rightBottom()const
+KPt KBox::rightBottom() const
 {
     return KPt(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, this);
 }
-KPt KBox::rightUp()const
+KPt KBox::rightUp() const
 {
     return KPt(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, this);
 }
-KPt KBox::leftUp()const
+KPt KBox::leftUp() const
 {
     return KPt(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, this);
 }
 
-KBoundingBox KBox::getBoundingbox()const
+KBoundingBox KBox::getBoundingbox() const
 {
     KPt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5);
     KPt ru(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5);
     return KBoundingBox(lb, ru);
 }
 
-KBoundingBox KBox::getSpaceBoundingbox()const
+KBoundingBox KBox::getSpaceBoundingbox() const
 {
     KPt lb(center_.x - size_x_ * 0.5 - space_,
-        center_.y - size_y_ * 0.5 - space_);
+           center_.y - size_y_ * 0.5 - space_);
 
     KPt ru(center_.x + size_x_ * 0.5 + space_,
-        center_.y + size_y_ * 0.5 + space_);
+           center_.y + size_y_ * 0.5 + space_);
     return KBoundingBox(lb, ru);
 }
 
-bool KBox::isCrossWithKLine(const KLine& line)const
+bool KBox::isCrossWithKLine(const KLine &line) const
 {
     return getBoundingbox().isCrossKLine(line);
 }
 
-bool KBox::isCrossWithKLineWithSpace(const KLine& line)const
+bool KBox::isCrossWithKLineWithSpace(const KLine &line) const
 {
     return getSpaceBoundingbox().isCrossKLine(line);
 }
 KBox::~KBox()
 {
-
 }
 void KBox::show()
 {
@@ -122,23 +124,20 @@ void KBox::show()
     default:
         break;
     }
-
 }
 
 Handle(AIS_TextLabel) KBox::getText()
 {
-    const KBox& box = *this;
+    const KBox &box = *this;
     gp_Pnt cur(box.center_.x, box.center_.y, 0);
     Handle(AIS_TextLabel) text = new AIS_TextLabel();
     text->SetPosition(cur);
-    std::string text_ = '{' + QString::number(box.val_).toStdString() + '}' +
-        "\n(" + QString::number(box.center_.x).toStdString()
-        + ',' + QString::number(box.center_.y).toStdString() + ')';
+    std::string text_ = '{' + QString::number(box.val_).toStdString() + '}' + "\n(" + QString::number(box.center_.x).toStdString()
+                        + ',' + QString::number(box.center_.y).toStdString() + ')';
     text->SetText(text_.c_str());
     text->SetColor(Quantity_NOC_BLACK);
     text->SetFont("consolas");
     return text;
-
 }
 
 void KBox::drawElips()
@@ -151,15 +150,15 @@ void KBox::drawElips()
     try
     {
         gp_Elips ge;
-        if (size_x_ < size_y_)//major must greater than minor
+        if (size_x_ < size_y_) // major must greater than minor
         {
             ge = gp_Elips(gp_Ax2(loc, dir, dirx), size_y_ * 0.5,
-                size_x_ * 0.5);
+                          size_x_ * 0.5);
         }
         else
         {
             ge = gp_Elips(gp_Ax2(loc, dir, dirx), size_x_ * 0.5,
-                size_y_ * 0.5);
+                          size_y_ * 0.5);
         }
 
         TopoDS_Edge e2 = BRepBuilderAPI_MakeEdge(ge);
@@ -172,10 +171,8 @@ void KBox::drawElips()
         Handle(AIS_TextLabel) text = getText();
 
         G_Context->Display(text, false);
-    }
-    catch (...)
+    } catch (...)
     {
-
     }
 }
 
@@ -186,7 +183,6 @@ void KBox::drawBox()
     gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
     gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
     gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
-
 
     TopoDS_Wire aWire = OccTools::getWireFromFourPts(lb, rb, ur, lu);
 
@@ -204,13 +200,13 @@ void KBox::drawSpacingBox()
 {
     if (G_Context.IsNull()) return;
     gp_Pnt lb(center_.x - size_x_ * 0.5 - space_,
-        center_.y - size_y_ * 0.5 - space_, 0);
+              center_.y - size_y_ * 0.5 - space_, 0);
     gp_Pnt rb(center_.x + size_x_ * 0.5 + space_,
-        center_.y - size_y_ * 0.5 - space_, 0);
+              center_.y - size_y_ * 0.5 - space_, 0);
     gp_Pnt lu(center_.x - size_x_ * 0.5 - space_,
-        center_.y + size_y_ * 0.5 + space_, 0);
+              center_.y + size_y_ * 0.5 + space_, 0);
     gp_Pnt ur(center_.x + size_x_ * 0.5 + space_,
-        center_.y + size_y_ * 0.5 + space_, 0);
+              center_.y + size_y_ * 0.5 + space_, 0);
 
     Handle(AIS_Shape) shp = new AIS_Shape(OccTools::getWireFromFourPts(lb, rb, ur, lu));
     shp->SetColor(Quantity_NOC_GRAY11);
@@ -221,4 +217,4 @@ void KBox::drawSpacingBox()
     G_Context->Display(text, false);
 }
 
-}
+} // namespace KDebugger

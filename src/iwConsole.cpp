@@ -1,12 +1,12 @@
 ﻿#include "iwConsole.h"
 
-//Local
+// Local
 #include "MainWindowOcc.h"
 
-//LAB_Camera
+// LAB_Camera
 #include "iwSingleton.h"
 
-//Qt
+// Qt
 
 #include <QApplication>
 #include <QMessageBox>
@@ -15,15 +15,14 @@
 #include <QThread>
 #include <QTime>
 
-
 //! 唯一的控制台句柄
-static iwSingleton<iwConsole>* s_console = new iwSingleton<iwConsole>();
+static iwSingleton<iwConsole> *s_console = new iwSingleton<iwConsole>();
 
 bool iwConsole::s_showQtMessagesInConsole = true;
 bool iwConsole::s_redirectToStdOut = true;
 
 // iwConsole
-iwConsole* iwConsole::handle(bool autoInit/*=true*/)
+iwConsole *iwConsole::handle(bool autoInit /*=true*/)
 {
     if (!s_console->handle && autoInit)
     {
@@ -34,30 +33,27 @@ iwConsole* iwConsole::handle(bool autoInit/*=true*/)
     return s_console->handle;
 }
 
-void iwConsole::releaseInstance(bool flush/*=true*/)
+void iwConsole::releaseInstance(bool flush /*=true*/)
 {
     if (flush && s_console->handle)
     {
-        //DGM: just in case some messages are still in the queue
+        // DGM: just in case some messages are still in the queue
         s_console->handle->refresh();
     }
     iwLog::registerInstance(nullptr);
     s_console->release();
 }
 
-iwConsole::iwConsole()
-    : text_display_(nullptr)
-    , parent_widget_(nullptr)
-    , parent_window_(nullptr)
-    , log_stream_(nullptr)
+iwConsole::iwConsole() :
+    text_display_(nullptr), parent_widget_(nullptr), parent_window_(nullptr), log_stream_(nullptr)
 {}
 
 iwConsole::~iwConsole()
 {
-    setLogFile(QString()); //to close/delete any active stream
+    setLogFile(QString()); // to close/delete any active stream
 }
 
-void myMessageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
 #ifndef QT_DEBUG
     if (!iwConsole::QtMessagesEnabled())
@@ -73,11 +69,11 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext& context, const QS
 
     QString message = QString("[%1] ").arg(context.function) + msg; // QString("%1 (%1:%1, %1)").arg(msg).arg(context.file).arg(context.line).arg(context.function);
 
-    //in this function, you can write the message to any stream!
+    // in this function, you can write the message to any stream!
     switch (type)
     {
     case QtDebugMsg:
-        //iwLog::PrintDebug(msg);
+        // iwLog::PrintDebug(msg);
         break;
     case QtWarningMsg:
         message.prepend("[Qt WARNING] ");
@@ -102,17 +98,17 @@ void iwConsole::EnableQtMessages(bool state)
 {
     s_showQtMessagesInConsole = state;
 
-    //save to persistent settings
-    //QSettings settings;
-    //settings.beginGroup(QStringLiteral("Console"));
-    //settings.setValue("QtMessagesEnabled", s_showQtMessagesInConsole);
-    //settings.endGroup();
+    // save to persistent settings
+    // QSettings settings;
+    // settings.beginGroup(QStringLiteral("Console"));
+    // settings.setValue("QtMessagesEnabled", s_showQtMessagesInConsole);
+    // settings.endGroup();
 }
 
-void iwConsole::init(QListWidget* textDisplay/*=0*/,
-    QWidget* parentWidget/*=0*/,
-    QMainWindow* parentWindow/*=0*/,
-    bool redirectToStdOut/*=false*/)
+void iwConsole::init(QListWidget *textDisplay /*=0*/,
+                     QWidget *parentWidget /*=0*/,
+                     QMainWindow *parentWindow /*=0*/,
+                     bool redirectToStdOut /*=false*/)
 {
     // 只能调用一次
     if (s_console->handle)
@@ -125,16 +121,16 @@ void iwConsole::init(QListWidget* textDisplay/*=0*/,
     s_console->handle->parent_widget_ = parentWidget;
     s_console->handle->parent_window_ = parentWindow;
     s_redirectToStdOut = redirectToStdOut;
-    //auto-start
+    // auto-start
     if (textDisplay)
     {
-        //load from persistent settings
+        // load from persistent settings
         QSettings settings;
-        //settings.beginGroup(ccPS::Console());
-        //s_showQtMessagesInConsole = settings.value("QtMessagesEnabled", false).toBool();
-        //settings.endGroup();
+        // settings.beginGroup(ccPS::Console());
+        // s_showQtMessagesInConsole = settings.value("QtMessagesEnabled", false).toBool();
+        // settings.endGroup();
 
-        //install : set the callback for Qt messages
+        // install : set the callback for Qt messages
         qInstallMessageHandler(myMessageOutput);
 
         s_console->handle->setAutoRefresh(true);
@@ -163,19 +159,19 @@ void iwConsole::refresh()
     if ((text_display_ || log_stream_) && !queue_.isEmpty())
     {
         for (QVector<ConsoleItemType>::const_iterator it = queue_.constBegin();
-            it != queue_.constEnd(); ++it)
+             it != queue_.constEnd(); ++it)
         {
-            //destination: log file
+            // destination: log file
             if (log_stream_)
             {
                 *log_stream_ << it->first << Qt::endl;
             }
 
-            //destination: console widget
+            // destination: console widget
             if (text_display_)
             {
-                //it->first = message text
-                QListWidgetItem* item = new QListWidgetItem(it->first);
+                // it->first = message text
+                QListWidgetItem *item = new QListWidgetItem(it->first);
 
                 // 根据消息严重性设置颜色
                 // Error
@@ -190,7 +186,7 @@ void iwConsole::refresh()
                     // 若收到警告消息，强制控制台可见性！
                     if (parent_window_)
                     {
-                        //parent_window_->forceConsoleDisplay();
+                        // parent_window_->forceConsoleDisplay();
                     }
                 }
 
@@ -210,12 +206,12 @@ void iwConsole::refresh()
     mutex_.unlock();
 }
 
-void iwConsole::logMessage(const QString& message, int level)
+void iwConsole::logMessage(const QString &message, int level)
 {
     QString formatedMessage = QStringLiteral("[")
-        + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")
-        + QStringLiteral("] ")
-        + message;
+                              + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")
+                              + QStringLiteral("] ")
+                              + message;
     if (s_redirectToStdOut)
     {
         printf("%s\n", qPrintable(message));
@@ -231,14 +227,13 @@ void iwConsole::logMessage(const QString& message, int level)
     if ((level & LOG_ERROR)
         && qApp
         && parent_widget_
-        && QThread::currentThread() == qApp->thread()
-        )
+        && QThread::currentThread() == qApp->thread())
     {
         QMessageBox::warning(parent_widget_, "Error", message);
     }
 }
 
-bool iwConsole::setLogFile(const QString& filename)
+bool iwConsole::setLogFile(const QString &filename)
 {
     // 关闭之前的文件流
     if (log_stream_)

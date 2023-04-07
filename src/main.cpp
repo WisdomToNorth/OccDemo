@@ -2,7 +2,7 @@
 #include <QtWidgets/QApplication>
 
 #include "MainWindowOcc.h"
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     KDebugger::MainWindowOcc w;
@@ -11,13 +11,13 @@ int main(int argc, char* argv[])
     return a.exec();
 }
 //
-//#include "test_datastructure.h"
-//#include "gptools.h"
-//#include <iostream>
-//#include <gp_Pnt.hxx>
-//using namespace KDebugger;
+// #include "test_datastructure.h"
+// #include "gptools.h"
+// #include <iostream>
+// #include <gp_Pnt.hxx>
+// using namespace KDebugger;
 //
-//int main(int argc, char* argv[])
+// int main(int argc, char* argv[])
 //{
 //    KTest te;
 //

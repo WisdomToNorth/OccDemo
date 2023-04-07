@@ -21,7 +21,7 @@ namespace KDebugger
 {
 Handle(AIS_InteractiveContext) G_Context = nullptr;
 
-bool G_Stop_Program = false;//exit circulation
+bool G_Stop_Program = false; // exit circulation
 
 std::default_random_engine G_Random_Engine;
 
@@ -32,7 +32,7 @@ bool GCheckCpuMode()
 }
 
 unsigned long long G_CoreCount(unsigned long long datasize,
-    unsigned long long min_per_thread)
+                               unsigned long long min_per_thread)
 {
     unsigned long long const max_thread = (datasize + min_per_thread - 1) / min_per_thread;
     unsigned long long const hardware_thread = std::thread::hardware_concurrency();
@@ -62,7 +62,7 @@ bool makeDirAndFile(const QString path, bool isFile)
     return true;
 }
 
-QString loadQString(const std::string& path)
+QString loadQString(const std::string &path)
 {
     QFile file(QString::fromStdString(path));
     if (!file.open(QIODevice::ReadOnly))
@@ -76,7 +76,7 @@ QString loadQString(const std::string& path)
 
     QByteArray allData = file.readAll();
     file.close();
-    return QString(allData);// .toStdString();
+    return QString(allData); // .toStdString();
 }
 
 QString G_GetAppPath()
@@ -90,7 +90,7 @@ QString G_GetDocumentsPath()
     return _path;
 }
 
-QJsonObject loadJson(const std::string& path)
+QJsonObject loadJson(const std::string &path)
 {
     QFile file(QString::fromStdString(path));
     if (!file.open(QIODevice::ReadOnly))
@@ -130,9 +130,9 @@ Appearance getUIConfig()
 
         if (ui_str == "day")
             G_UI_Appearance = Appearance::Day;
-        else if (ui_str == "system")//todo
+        else if (ui_str == "system") // todo
             G_UI_Appearance = Appearance::System;
-        else //if (ui_str == "dark")
+        else // if (ui_str == "dark")
             G_UI_Appearance = Appearance::Dark;
     }
 
@@ -141,34 +141,29 @@ Appearance getUIConfig()
 
 QString G_GetUiStyleSheet(Appearance preset)
 {
-
     QString ui_day_qss_path = G_GetDocumentsPath() + "/daymode.qss";
     QString dayset = loadQString(ui_day_qss_path.toStdString());
 
     switch (preset)
     {
-    case Appearance::Dark:
-    {
+    case Appearance::Dark: {
         std::cout << "Use Dark appearance." << std::endl;
         QString ui_dark_qss_path = G_GetDocumentsPath() + "/darkmode.qss";
         QString darkset = loadQString(ui_dark_qss_path.toStdString());
         return darkset;
     }
-    case Appearance::Day:
-    {
+    case Appearance::Day: {
         std::cout << "Use Day appearance." << std::endl;
         return dayset;
     }
-    case Appearance::System:
-    {
-        std::cout << "Use System appearance." << std::endl;//todo
+    case Appearance::System: {
+        std::cout << "Use System appearance." << std::endl; // todo
         return dayset;
     }
-    default:
-    {
+    default: {
         std::cout << "Invalid setting. Use Day appearance." << std::endl;
         return dayset;
     }
     }
 }
-}
+} // namespace KDebugger

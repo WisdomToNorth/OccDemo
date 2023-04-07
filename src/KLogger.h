@@ -10,8 +10,8 @@
 
 class QMainWindow;
 class iwCustomQListWidget;
-iwCustomQListWidget* InitConsole(QWidget* parentWidget = nullptr,
-    QMainWindow* parentWindow = nullptr,
-    bool redirectToStdOut = false);
+iwCustomQListWidget *InitConsole(QWidget *parentWidget = nullptr,
+                                 QMainWindow *parentWindow = nullptr,
+                                 bool redirectToStdOut = false);
 
 #endif

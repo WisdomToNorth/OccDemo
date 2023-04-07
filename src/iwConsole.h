@@ -1,10 +1,10 @@
 ﻿#pragma once
 #ifndef _IWCONSOLE_H_
 #define _IWCONSOLE_H_
-//Local
+// Local
 #include "iwLog.h"
 
-//Qt
+// Qt
 #include <QFile>
 #include <QListWidget>
 #include <QMutex>
@@ -20,7 +20,6 @@ class iwConsole : public QObject, public iwLog
     Q_OBJECT
 
 public:
-
     //! Destructor
     ~iwConsole() override;
 
@@ -32,15 +31,15 @@ public:
         \param parentWindow 父窗口（可选）
         \param silentCommandLineMode 将日志消息转到 printf（可选）
     **/
-    static void init(QListWidget* textDisplay = nullptr,
-        QWidget* parentWidget = nullptr,
-        QMainWindow* parentWindow = nullptr,
-        bool redirectToStdOut = false);
+    static void init(QListWidget *textDisplay = nullptr,
+                     QWidget *parentWidget = nullptr,
+                     QMainWindow *parentWindow = nullptr,
+                     bool redirectToStdOut = false);
 
     //! 返回唯一静态句柄
     /** \param autoInit 自动初始化控制台实例（没有小部件！） 如果尚未完成
-    **/
-    static iwConsole* handle(bool autoInit = true);
+     **/
+    static iwConsole *handle(bool autoInit = true);
 
     //! 释放唯一句柄
     static void releaseInstance(bool flush = true);
@@ -49,40 +48,44 @@ public:
     void setAutoRefresh(bool state);
 
     //! 设置日志文件
-    bool setLogFile(const QString& filename);
+    bool setLogFile(const QString &filename);
 
     //! 是否使用在控制台使用 Qt 信息 (qDebug / qWarning / etc.)
     static void EnableQtMessages(bool state);
 
     //! 返回是否在控制台中显示 Qt 消息
-    static bool QtMessagesEnabled() { return s_showQtMessagesInConsole; }
+    static bool QtMessagesEnabled()
+    {
+        return s_showQtMessagesInConsole;
+    }
 
     //! 返回父控件
-    inline QWidget* parentWidget() { return parent_widget_; }
+    inline QWidget *parentWidget()
+    {
+        return parent_widget_;
+    }
 
 public:
-
     //! 刷新控制台（显示仍在队列中的所有消息）
     void refresh();
 
 protected:
-
     //! 默认构造
     /** 构造函数受到保护，以避免将此对象用作非静态类
-    **/
+     **/
     iwConsole();
 
     //! 继承自 iwLog
-    void logMessage(const QString& message, int level) override;
+    void logMessage(const QString &message, int level) override;
 
     //! 关联的文本显示控件
-    QListWidget* text_display_;
+    QListWidget *text_display_;
 
     //! 父控件
-    QWidget* parent_widget_;
+    QWidget *parent_widget_;
 
     //! 父窗口
-    QMainWindow* parent_window_;
+    QMainWindow *parent_window_;
 
     //! 控制台的并发线程访问的互斥体
     QMutex mutex_;
@@ -100,7 +103,7 @@ protected:
     QFile log_file_;
 
     //! 日志文件流
-    QTextStream* log_stream_;
+    QTextStream *log_stream_;
 
     //! 是否在控制台中显示 Qt 消息
     static bool s_showQtMessagesInConsole;

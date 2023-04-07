@@ -5,10 +5,10 @@ namespace KDebugger
 class KTest
 {
 public:
-    KTest() {};
+    KTest(){};
     bool testLineCross();
     bool testKPnt2D(int seed);
     bool testSameAngle();
 };
 
-}
+} // namespace KDebugger

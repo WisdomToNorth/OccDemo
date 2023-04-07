@@ -8,10 +8,10 @@
 namespace KDebugger
 {
 
-KAngleMultiLine::KAngleMultiLine(const gp_Pnt& p1, const gp_Pnt& p2) :
+KAngleMultiLine::KAngleMultiLine(const gp_Pnt &p1, const gp_Pnt &p2) :
     p1_(p1), p2_(p2)
 {
-    if (p1_.X() > p2_.X())//confirm A is left to B
+    if (p1_.X() > p2_.X()) // confirm A is left to B
     {
         gp_Pnt temp = p1_;
         p1_ = p2_;
@@ -19,10 +19,10 @@ KAngleMultiLine::KAngleMultiLine(const gp_Pnt& p1, const gp_Pnt& p2) :
     }
 }
 
-KAngleMultiLine::KAngleMultiLine(const KPt& p1, const KPt& p2) :
+KAngleMultiLine::KAngleMultiLine(const KPt &p1, const KPt &p2) :
     p1_(gp_Pnt(p1.x, p1.y, 0)), p2_(gp_Pnt(p2.x, p2.y, 0))
 {
-    if (p1_.X() > p2_.X())//confirm A is left to B
+    if (p1_.X() > p2_.X()) // confirm A is left to B
     {
         gp_Pnt temp = p1_;
         p1_ = p2_;
@@ -35,42 +35,42 @@ void KAngleMultiLine::cpuAvailable(double angle)
     res_ = drawAngledLineByTwoPts(p1_, p2_, angle);
 }
 
-gp_Pnt KAngleMultiLine::getRes()const
+gp_Pnt KAngleMultiLine::getRes() const
 {
     return res_.front();
 }
 
-double cpuAngle(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& pc)
+double cpuAngle(const gp_Pnt &p1, const gp_Pnt &p2, const gp_Pnt &pc)
 {
     gp_Vec v1(pc, p1);
     gp_Vec v2(pc, p2);
     return v1.Angle(v2) * 180.0 / M_PI;
 }
 
-double KAngleMultiLine::getPreviousRes(const KAngleMultiLine& previous_line)
+double KAngleMultiLine::getPreviousRes(const KAngleMultiLine &previous_line)
 {
     return cpuAngle(res_.front(), previous_line.getRes(), p1_);
 }
 
-bool KAngleMultiLine::checkBetterRes(const KAngleMultiLine& previous_line)
+bool KAngleMultiLine::checkBetterRes(const KAngleMultiLine &previous_line)
 {
-
-    //this->p1 is equal to previous_line-> p2
+    // this->p1 is equal to previous_line-> p2
 
     if (res_.size() == 2)
     {
         auto a1 = cpuAngle(res_.front(), previous_line.getRes(), p1_);
         auto a2 = cpuAngle(res_.back(), previous_line.getRes(), p1_);
-        if (a1 < a2)res_.pop_front();
-        else res_.pop_back();
+        if (a1 < a2)
+            res_.pop_front();
+        else
+            res_.pop_back();
     }
     return cpuAngle(res_.front(), previous_line.getRes(), p1_) > 90.0;
-
 }
 
 std::vector<TopoDS_Edge> KAngleMultiLine::getEdge()
 {
-    std::vector<TopoDS_Edge>res;
+    std::vector<TopoDS_Edge> res;
     if (res_.empty())
     {
         if (!p1_.IsEqual(p2_, 0.01))
@@ -92,7 +92,7 @@ std::vector<TopoDS_Edge> KAngleMultiLine::getEdge()
     return res;
 }
 
-bool KAngleMultiLine::checkColli(const KBox& box)
+bool KAngleMultiLine::checkColli(const KBox &box)
 {
     if (res_.empty())
     {
@@ -103,11 +103,10 @@ bool KAngleMultiLine::checkColli(const KBox& box)
     {
         KLine l1_1(p1_, *it);
         KLine l1_2(p2_, *it);
-        if (box.isCrossWithKLineWithSpace(l1_1) ||
-            box.isCrossWithKLineWithSpace(l1_2))
+        if (box.isCrossWithKLineWithSpace(l1_1) || box.isCrossWithKLineWithSpace(l1_2))
         {
-            //res_.erase(it);
-            return true;//这里只找了一条路径。另一条注释掉了。程序崩溃，需要检查原因
+            // res_.erase(it);
+            return true; // 这里只找了一条路径。另一条注释掉了。程序崩溃，需要检查原因
         }
 
         it++;
@@ -116,16 +115,16 @@ bool KAngleMultiLine::checkColli(const KBox& box)
     return res_.empty();
 }
 
-//range of angle: (0~90)
-//return: pnts: pA,pB,pC,pD
+// range of angle: (0~90)
+// return: pnts: pA,pB,pC,pD
 
 std::list<gp_Pnt> KAngleMultiLine::drawAngledLineByTwoPts(gp_Pnt pA,
-    gp_Pnt pB, const double& angle)//todo: handle divide 0
+                                                          gp_Pnt pB, const double &angle) // todo: handle divide 0
 {
     double arc = angle * M_PI / 180.0;
     double tan_a = std::tan(arc);
-    std::list<gp_Pnt>res;// { pA, pB };
-    if (pA.X() > pB.X())//confirm A is left to B
+    std::list<gp_Pnt> res; // { pA, pB };
+    if (pA.X() > pB.X())   // confirm A is left to B
     {
         gp_Pnt temp = pA;
         pA = pB;
@@ -134,8 +133,7 @@ std::list<gp_Pnt> KAngleMultiLine::drawAngledLineByTwoPts(gp_Pnt pA,
     double dx = std::abs(pB.X() - pA.X());
     double dy = std::abs(pB.Y() - pA.Y());
 
-    if (OccTools::fEqual(dx, 0.0, 0.0001) ||
-        OccTools::fEqual(dy, 0.0, 0.0001) || dy / dx == tan_a)
+    if (OccTools::fEqual(dx, 0.0, 0.0001) || OccTools::fEqual(dy, 0.0, 0.0001) || dy / dx == tan_a)
     {
         return res;
     }
@@ -161,5 +159,4 @@ std::list<gp_Pnt> KAngleMultiLine::drawAngledLineByTwoPts(gp_Pnt pA,
     return res;
 }
 
-
-}
+} // namespace KDebugger

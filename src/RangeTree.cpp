@@ -4,22 +4,22 @@
 
 namespace KDebugger
 {
-BinSearchNode* KRangeTree::buildRangeTree(std::vector<KPt>& pnts)
+BinSearchNode *KRangeTree::buildRangeTree(std::vector<KPt> &pnts)
 {
-    if (pnts.empty())return nullptr;
+    if (pnts.empty()) return nullptr;
     Sort_XS(pnts.begin(), pnts.end());
     size_t n = pnts.size();
-    BinSearchNode* root = new BinSearchNode();
+    BinSearchNode *root = new BinSearchNode();
     return buildRangeTreeFromSortedVec(root, pnts, pnts.begin(), pnts.size());
 }
 
 // For 1D
 // 输入：树根, 两个数值, x, x', x<=x'
 // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
-const BinSearchNode* KRangeTree::FindSplitNodeInX(const BinSearchNode* root,
-    double leftnum, double rightnum)//1D
+const BinSearchNode *KRangeTree::FindSplitNodeInX(const BinSearchNode *root,
+                                                  double leftnum, double rightnum) // 1D
 {
-    const BinSearchNode* v = root;
+    const BinSearchNode *v = root;
     while (!v->isLeaf() && (rightnum <= v->pnt_.x || leftnum > v->pnt_.x))
     {
         if (rightnum <= v->pnt_.x)
@@ -27,26 +27,26 @@ const BinSearchNode* KRangeTree::FindSplitNodeInX(const BinSearchNode* root,
         else
             v = v->right_;
     }
-    //std::cout << "\n####spliter of [" << leftnum << ", " << rightnum << "):\n";
-    //printBinSearchTree(v, true);
-    //std::cout << std::endl;
+    // std::cout << "\n####spliter of [" << leftnum << ", " << rightnum << "):\n";
+    // printBinSearchTree(v, true);
+    // std::cout << std::endl;
     return v;
 }
 
-//search Range tree
-//input: root of Range tree, to-search region
-//output: vector of point in region
-void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
-    const KRegion& region, std::vector<KPt>& res)
+// search Range tree
+// input: root of Range tree, to-search region
+// output: vector of point in region
+void KRangeTree::searchRangeTreeFromRoot(BinSearchNode *root,
+                                         const KRegion &region, std::vector<KPt> &res)
 {
-    if (!root)return;
+    if (!root) return;
     double l = region.lb_.x;
     double r = region.ru_.x;
     double u = region.ru_.y;
     double b = region.lb_.y;
     BiSearch helper;
 
-    const BinSearchNode* v_split = FindSplitNodeInX(root, l, r);
+    const BinSearchNode *v_split = FindSplitNodeInX(root, l, r);
     if (v_split->isLeaf())
     {
         if (v_split->belongToRegion(region))
@@ -55,7 +55,7 @@ void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
     else
     {
         // find way to left
-        const BinSearchNode* l_split = v_split->left_;
+        const BinSearchNode *l_split = v_split->left_;
         while (!l_split->isLeaf())
         {
             if (l_split->pnt_.x >= l)
@@ -72,7 +72,7 @@ void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
             res.emplace_back(l_split->pnt_);
 
         // find way to right;
-        const BinSearchNode* r_split = v_split->right_;
+        const BinSearchNode *r_split = v_split->right_;
         while (!r_split->isLeaf())
         {
             if (r_split->pnt_.x < r)
@@ -90,26 +90,26 @@ void KRangeTree::searchRangeTreeFromRoot(BinSearchNode* root,
     }
 }
 
-template<typename Iterator>
-BinSearchNode* KRangeTree::buildRangeTreeFromSortedVec(BinSearchNode* parent,
-    const std::vector<KPt>& vec, Iterator it, size_t cnt)//1D
+template <typename Iterator>
+BinSearchNode *KRangeTree::buildRangeTreeFromSortedVec(BinSearchNode *parent,
+                                                       const std::vector<KPt> &vec, Iterator it, size_t cnt) // 1D
 {
     std::vector<KPt> pnts_y(it, it + cnt);
-    BinSearchNode* aux_tree_ = BiSearch::buildBinSearchTree(pnts_y);
+    BinSearchNode *aux_tree_ = BiSearch::buildBinSearchTree(pnts_y);
 
     assert(cnt > 0);
     if (cnt == 1)
     {
         parent->pnt_ = *it;
-        //appoint aux_node
+        // appoint aux_node
         parent->aux_ = aux_tree_;
         return parent;
     }
-    //else
+    // else
 
-    //计数的时候添加哨兵会更容易
-    // -,1,2,3
-    // -,1,2,3,4
+    // 计数的时候添加哨兵会更容易
+    //  -,1,2,3
+    //  -,1,2,3,4
     int cnt_P1 = cnt + 1;
     int leftcnt = cnt_P1 / 2;
     int rightcnt = cnt - leftcnt;
@@ -119,9 +119,9 @@ BinSearchNode* KRangeTree::buildRangeTreeFromSortedVec(BinSearchNode* parent,
     parent->pnt_ = *mid_it;
     parent->aux_ = aux_tree_;
     parent->left_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
-        vec, it, leftcnt);
+                                                vec, it, leftcnt);
     parent->right_ = buildRangeTreeFromSortedVec(new BinSearchNode(),
-        vec, mid_it + 1, rightcnt);
+                                                 vec, mid_it + 1, rightcnt);
     return parent;
 }
-}
+} // namespace KDebugger

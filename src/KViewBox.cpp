@@ -10,7 +10,6 @@ namespace KDebugger
 KViewBox::KViewBox(double x, double y, double size) :
     KBox(x, y, size, size, 1)
 {
-
 }
 KViewBox::~KViewBox()
 {
@@ -35,7 +34,7 @@ void KViewBox::tempshow()
 
 void KViewBox::temphide()
 {
-    if (temp_obj_.IsNull())return;
+    if (temp_obj_.IsNull()) return;
     G_Context->Remove(temp_obj_, true);
 }
-}
+} // namespace KDebugger

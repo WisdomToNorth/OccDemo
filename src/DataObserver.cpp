@@ -4,12 +4,10 @@
 
 namespace KDebugger
 {
-DataObserver::DataObserver(DataGenerator* generator) :
+DataObserver::DataObserver(DataGenerator *generator) :
     data_generator_(generator)
 {
-
     generator->addToObserverList(this);
-
 }
 
-}
+} // namespace KDebugger

@@ -16,17 +16,17 @@ namespace KDebugger
 class PrePline
 {
 public:
-    PrePline(const std::list<gp_Pnt>& res);
+    PrePline(const std::list<gp_Pnt> &res);
 
     void hide();
 
     void drawRawPnts(Quantity_Color color = Quantity_NOC_BLACK);
     void drawMultiLine(Quantity_Color color = Quantity_NOC_BLACK);
-    void reGenerate(const std::vector<KBox>& context_info);
+    void reGenerate(const std::vector<KBox> &context_info);
     void normlizeSegment();
 
 private:
-    void caculateEnviroment(const std::vector<KBox>& context_info);
+    void caculateEnviroment(const std::vector<KBox> &context_info);
     void updateAABB();
     void printAllPts();
     void postProcessLine();
@@ -44,4 +44,4 @@ private:
     bool have_tried_ = false;
 };
 
-}
+} // namespace KDebugger

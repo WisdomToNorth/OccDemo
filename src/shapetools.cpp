@@ -1,6 +1,5 @@
 ﻿#include "shapetools.h"
 
-
 #include <AIS_Trihedron.hxx>
 #include <Geom_Axis2Placement.hxx>
 #include <TopoDS_Wire.hxx>
@@ -33,8 +32,7 @@ Handle(AIS_Trihedron) createOriginTrihedron()
     aisTrihedron->SetLabel(Prs3d_DP_ZAxis, "");
     aisTrihedron->SetSize(60);
     aisTrihedron->SetTransformPersistence(
-        new Graphic3d_TransformPers(Graphic3d_TMF_ZoomPers, axis->Ax2().Location())
-    );
+        new Graphic3d_TransformPers(Graphic3d_TMF_ZoomPers, axis->Ax2().Location()));
     aisTrihedron->Attributes()->SetZLayer(Graphic3d_ZLayerId_Topmost);
     aisTrihedron->SetInfiniteState(true);
     return aisTrihedron;
@@ -42,19 +40,24 @@ Handle(AIS_Trihedron) createOriginTrihedron()
 
 Quantity_Color getRandomColor()
 {
-    std::uniform_int_distribution<int>c(0, 5);
+    std::uniform_int_distribution<int> c(0, 5);
     int cur = c(KDebugger::G_Random_Engine);
-    if (cur == 0)return Quantity_NOC_BLUE;
-    else if (cur == 1)return Quantity_NOC_RED;
-    else if (cur == 2)return Quantity_NOC_GREEN;
-    else if (cur == 3)return Quantity_NOC_BROWN;
-    else if (cur == 4)return Quantity_NOC_ORANGE;
-    else return Quantity_NOC_BLUE3;
-
+    if (cur == 0)
+        return Quantity_NOC_BLUE;
+    else if (cur == 1)
+        return Quantity_NOC_RED;
+    else if (cur == 2)
+        return Quantity_NOC_GREEN;
+    else if (cur == 3)
+        return Quantity_NOC_BROWN;
+    else if (cur == 4)
+        return Quantity_NOC_ORANGE;
+    else
+        return Quantity_NOC_BLUE3;
 }
 
-TopoDS_Wire getWireFromFourPts(const gp_Pnt& lb, const gp_Pnt& rb,
-    const gp_Pnt& ru, const gp_Pnt& lu)
+TopoDS_Wire getWireFromFourPts(const gp_Pnt &lb, const gp_Pnt &rb,
+                               const gp_Pnt &ru, const gp_Pnt &lu)
 {
     Handle(Geom_TrimmedCurve) aSegment1 = GC_MakeSegment(lb, rb);
     Handle(Geom_TrimmedCurve) aSegment2 = GC_MakeSegment(rb, ru);
@@ -66,10 +69,9 @@ TopoDS_Wire getWireFromFourPts(const gp_Pnt& lb, const gp_Pnt& rb,
     TopoDS_Edge anEdge4 = BRepBuilderAPI_MakeEdge(aSegment4);
 
     return BRepBuilderAPI_MakeWire(anEdge1, anEdge2, anEdge3, anEdge4);
-
 }
 
-TopoDS_Edge getCircleFromPt(const gp_Pnt& lb, double r)
+TopoDS_Edge getCircleFromPt(const gp_Pnt &lb, double r)
 {
     Handle(Geom_Circle) se = GC_MakeCircle(gp_Ax1(lb, gp_Dir(0, 0, 1)), r);
     return BRepBuilderAPI_MakeEdge(se);
@@ -90,4 +92,4 @@ std::vector<gp_Pnt> getEdgeEndPts(TopoDS_Edge shp)
     }
     return res;
 }
-}
+} // namespace OccTools

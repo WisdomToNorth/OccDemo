@@ -15,10 +15,9 @@
 
 namespace KDebugger
 {
-PrePline::PrePline(const std::list<gp_Pnt>& res) :
+PrePline::PrePline(const std::list<gp_Pnt> &res) :
     raw_pnts_(res), aabbox_(KBoundingBox(res.front()))
 {
-
 }
 
 void PrePline::drawRawPnts(Quantity_Color color)
@@ -44,7 +43,6 @@ void PrePline::drawRawPnts(Quantity_Color color)
 
 void PrePline::postProcessLine()
 {
-
 }
 
 void PrePline::drawMultiLine(Quantity_Color)
@@ -55,9 +53,9 @@ void PrePline::drawMultiLine(Quantity_Color)
         if (cur->resSize())
         {
             auto color = OccTools::getRandomColor();
-            const std::vector<TopoDS_Edge>& edges = cur->getEdge();
+            const std::vector<TopoDS_Edge> &edges = cur->getEdge();
 
-            for (const auto& edge : edges)
+            for (const auto &edge : edges)
             {
                 Handle(AIS_ColoredShape) line = new AIS_ColoredShape(edge);
                 line->SetWidth(3.0);
@@ -73,7 +71,7 @@ void PrePline::drawMultiLine(Quantity_Color)
 
 void PrePline::hide()
 {
-    for (auto& obj : viewmodel_vec_)
+    for (auto &obj : viewmodel_vec_)
     {
         G_Context->Remove(obj, false);
     }
@@ -82,7 +80,7 @@ void PrePline::hide()
 
 void PrePline::updateColor(Quantity_Color color)
 {
-    for (auto& obj : viewmodel_vec_)
+    for (auto &obj : viewmodel_vec_)
     {
         obj->SetColor(color);
     }
@@ -97,7 +95,7 @@ void PrePline::updatePreviousColor(Quantity_Color color)
 
 void PrePline::updateAABB()
 {
-    for (const auto& pt : raw_pnts_)
+    for (const auto &pt : raw_pnts_)
     {
         aabbox_.update(KPt(pt.X(), pt.Y()));
     }
@@ -121,25 +119,24 @@ void PrePline::normlizeSegment()
     std::cout << "optimize is " << opt_open_ << std::endl;
 }
 
-void PrePline::caculateEnviroment(const std::vector<KBox>& context_info)
+void PrePline::caculateEnviroment(const std::vector<KBox> &context_info)
 {
     updateAABB();
-    for (const auto& obj : context_info)
+    for (const auto &obj : context_info)
     {
         if (!obj.getBoundingbox().isOut(aabbox_))
         {
             adjacent_objs_.push_back(obj);
         }
     }
-    std::cout << "\nCount of adjacent obj: " <<
-        adjacent_objs_.size() << std::endl;
+    std::cout << "\nCount of adjacent obj: " << adjacent_objs_.size() << std::endl;
 }
 
-void PrePline::reGenerate(const std::vector<KBox>& context_info)
+void PrePline::reGenerate(const std::vector<KBox> &context_info)
 {
     caculateEnviroment(context_info);
 
-    std::list<KAngleMultiLine>temp_newpnt;
+    std::list<KAngleMultiLine> temp_newpnt;
     multiline_list_.swap(temp_newpnt);
 
     auto cur_vertax = raw_pnts_.begin();
@@ -151,56 +148,53 @@ void PrePline::reGenerate(const std::vector<KBox>& context_info)
     KAngleMultiLine last_check(*cur_vertax, *cur_next);
     while (cur_next != raw_pnts_.end())
     {
-        //for debug, break endless loop
-        if (GCheckCpuMode())return;
+        // for debug, break endless loop
+        if (GCheckCpuMode()) return;
 
         bool colli = false;
         KAngleMultiLine cur_check(*cur_vertax, *cur_next);
         cur_check.cpuAvailable(45);
 
-        for (const KBox& obj : adjacent_objs_)
+        for (const KBox &obj : adjacent_objs_)
         {
-            if ((!obj.outBoxWithSpacing(KPt(cur_vertax->X(), cur_vertax->Y()))) ||
-                (!obj.outBoxWithSpacing(KPt(cur_next->X(), cur_next->Y()))))
+            if ((!obj.outBoxWithSpacing(KPt(cur_vertax->X(), cur_vertax->Y()))) || (!obj.outBoxWithSpacing(KPt(cur_next->X(), cur_next->Y()))))
             {
                 std::cout << "pnt in box! unhandled!\n";
-                return;//TODO: draw in box is unhandled currently
+                return; // TODO: draw in box is unhandled currently
             }
 
-
             if (cur_check.checkColli(obj))
-                //碰撞，或者与上一条line呈小夹角，则记录当前的上一个点。
+            // 碰撞，或者与上一条line呈小夹角，则记录当前的上一个点。
             {
                 colli = true;
                 break;
             }
         }
-        if (!colli)//
+        if (!colli) //
         {
             cur_next++;
             last_check = cur_check;
         }
-        else//collision
+        else // collision
         {
-            auto& temp = cur_next;
+            auto &temp = cur_next;
             temp--;
             cur_vertax = temp;
 
             multiline_list_.push_back(last_check);
 
             have_tried_ = false;
-
         }
     }
     multiline_list_.emplace_back(last_check);
 
-    //if (opt_open_)
+    // if (opt_open_)
     //{
-    //    std::cout << "optimize is on\n";
-    //    postProcessLine();
-    //}
+    //     std::cout << "optimize is on\n";
+    //     postProcessLine();
+    // }
 
-    this->updatePreviousColor();//colored previous to gray
+    this->updatePreviousColor(); // colored previous to gray
     this->drawMultiLine();
 }
-}
+} // namespace KDebugger

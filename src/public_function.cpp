@@ -14,10 +14,13 @@
 
 namespace KDebugger
 {
-using std::cout; using std::endl; using std::vector; using std::string;
+using std::cout;
+using std::endl;
+using std::vector;
+using std::string;
 using std::queue;
 
-void printVec(const vector<int>& nums)
+void printVec(const vector<int> &nums)
 {
     for (auto a : nums)
     {
@@ -25,7 +28,7 @@ void printVec(const vector<int>& nums)
     }
     std::cout << '\n';
 }
-void printListNode(ListNode* list)
+void printListNode(ListNode *list)
 {
     while (list)
     {
@@ -35,20 +38,20 @@ void printListNode(ListNode* list)
     cout << endl;
 }
 
-ListNode* initListNode(std::vector<int> vec)
+ListNode *initListNode(std::vector<int> vec)
 {
-    ListNode* listnode = new ListNode(0);
-    ListNode* current = listnode;
+    ListNode *listnode = new ListNode(0);
+    ListNode *current = listnode;
     for (auto a : vec)
     {
-        //listnode->val = a;
+        // listnode->val = a;
         current->next = new ListNode(a);
         current = current->next;
     }
     return listnode->next;
 }
 
-template<typename T>
+template <typename T>
 void printVec2D(vector<vector<T>> vec)
 {
     cout << '[';
@@ -58,24 +61,23 @@ void printVec2D(vector<vector<T>> vec)
         for (auto b = a.cbegin(); b != a.cend(); ++b)
         {
             cout << *b;
-            if (b != --a.cend())cout << ", ";
+            if (b != --a.cend()) cout << ", ";
         }
         cout << ']';
     }
     cout << "]\n";
 }
 
-TreeNode* init_tree(vector<int> vec)
+TreeNode *init_tree(vector<int> vec)
 {
-    TreeNode* res = new TreeNode(vec[0]);
-    std::queue<TreeNode*> aux;
+    TreeNode *res = new TreeNode(vec[0]);
+    std::queue<TreeNode *> aux;
     aux.push(res);
     int cnt = 1;
 
     while (cnt < vec.size())
     {
-
-        TreeNode* cur = aux.front();
+        TreeNode *cur = aux.front();
         aux.pop();
         if (vec[cnt] == 0)
         {
@@ -88,7 +90,7 @@ TreeNode* init_tree(vector<int> vec)
         }
         ++cnt;
 
-        if (cnt == vec.size())return res;
+        if (cnt == vec.size()) return res;
 
         if (vec[cnt] == 0)
         {
@@ -129,4 +131,4 @@ double roundWith(double num, size_t cnt)
     double res = double(int(num * i)) / i;
     return res;
 }
-}
+} // namespace KDebugger

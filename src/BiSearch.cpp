@@ -4,24 +4,23 @@
 
 namespace KDebugger
 {
-BiSearch::BiSearch() {}
+BiSearch::BiSearch()
+{}
 
 // For 1D
-template<typename Iterator>
-BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
-    const std::vector<KPt>& vec, Iterator it, int cnt)//1D
+template <typename Iterator>
+BinSearchNode *BiSearch::buildFromSortedVec(BinSearchNode *parent,
+                                            const std::vector<KPt> &vec, Iterator it, int cnt) // 1D
 {
-
     assert(cnt > 0);
     if (cnt == 1)
     {
         parent->pnt_ = *it;
         return parent;
     }
-    //计数的时候添加哨兵会更容易
-    // -,1,2,3
-    // -,1,2,3,4
-
+    // 计数的时候添加哨兵会更容易
+    //  -,1,2,3
+    //  -,1,2,3,4
 
     int cnt_P1 = cnt + 1;
     int leftcnt = cnt_P1 / 2;
@@ -31,31 +30,31 @@ BinSearchNode* BiSearch::buildFromSortedVec(BinSearchNode* parent,
 
     parent->pnt_ = *mid_it;
     parent->left_ = buildFromSortedVec(new BinSearchNode(),
-        vec, it, leftcnt);
+                                       vec, it, leftcnt);
     parent->right_ = buildFromSortedVec(new BinSearchNode(),
-        vec, mid_it + 1, rightcnt);
+                                        vec, mid_it + 1, rightcnt);
     return parent;
 }
 
 // For 1D
-BinSearchNode* BiSearch::buildBinSearchTree(std::vector<KPt>& vec)//1D
+BinSearchNode *BiSearch::buildBinSearchTree(std::vector<KPt> &vec) // 1D
 {
-    if (vec.empty())return nullptr;
+    if (vec.empty()) return nullptr;
     Sort_YS(vec.begin(), vec.end());
-    //std::cout << "\nAfter sort:" << std::endl;
-    //printPntVec(vec);
+    // std::cout << "\nAfter sort:" << std::endl;
+    // printPntVec(vec);
 
-    BinSearchNode* root = new BinSearchNode();
+    BinSearchNode *root = new BinSearchNode();
     return buildFromSortedVec(root, vec, vec.begin(), vec.size());
 }
 
 // For 1D
 // 输入：树根, 两个数值, x, x', x<=x'
 // 输出：从树根出发分别通往x和x'的两条路径的分叉点v
-const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
-    double leftnum, double rightnum)//1D
+const BinSearchNode *BiSearch::FindSplitNode(const BinSearchNode *root,
+                                             double leftnum, double rightnum) // 1D
 {
-    const BinSearchNode* v = root;
+    const BinSearchNode *v = root;
     while (!v->isLeaf() && (rightnum <= v->pnt_.y || leftnum > v->pnt_.y))
     {
         if (rightnum <= v->pnt_.y)
@@ -63,19 +62,19 @@ const BinSearchNode* BiSearch::FindSplitNode(const BinSearchNode* root,
         else
             v = v->right_;
     }
-    //std::cout << "\n####spliter of [" << leftnum << ", " << rightnum << "):\n";
-    //printBinSearchTree(v, true);
-    //std::cout << std::endl;
+    // std::cout << "\n####spliter of [" << leftnum << ", " << rightnum << "):\n";
+    // printBinSearchTree(v, true);
+    // std::cout << std::endl;
     return v;
 }
 
 // For 1D
 // input: bin search tree, to-search-range [x,x']
 // output: vector<int> {numbers in to-search-range}
-void BiSearch::oneDRangeQuery(const BinSearchNode* root,
-    double l, double r, std::vector<KPt>& res)
+void BiSearch::oneDRangeQuery(const BinSearchNode *root,
+                              double l, double r, std::vector<KPt> &res)
 {
-    const BinSearchNode* v_split = FindSplitNode(root, l, r);
+    const BinSearchNode *v_split = FindSplitNode(root, l, r);
     if (v_split->isLeaf())
     {
         if (v_split->belongToRangeInY(l, r))
@@ -84,7 +83,7 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
     else
     {
         // find way to left
-        const BinSearchNode* l_split = v_split->left_;
+        const BinSearchNode *l_split = v_split->left_;
         while (!l_split->isLeaf())
         {
             if (l_split->pnt_.y >= l)
@@ -101,7 +100,7 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
             res.emplace_back(l_split->pnt_);
 
         // find way to right;
-        const BinSearchNode* r_split = v_split->right_;
+        const BinSearchNode *r_split = v_split->right_;
         while (!r_split->isLeaf())
         {
             if (r_split->pnt_.y < r)
@@ -118,4 +117,4 @@ void BiSearch::oneDRangeQuery(const BinSearchNode* root,
             res.emplace_back(r_split->pnt_);
     }
 }
-}
+} // namespace KDebugger

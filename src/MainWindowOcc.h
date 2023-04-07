@@ -4,7 +4,10 @@
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindowOccClass; };
+namespace Ui
+{
+class MainWindowOccClass;
+};
 QT_END_NAMESPACE
 
 class QSpinBox;
@@ -25,21 +28,22 @@ class MainWindowOcc : public QMainWindow
 private:
     enum class CmdEnum;
     enum class AppModeEnum;
+
 public:
-    MainWindowOcc(QWidget* parent = nullptr);
+    MainWindowOcc(QWidget *parent = nullptr);
     ~MainWindowOcc();
 
 private:
     void setUpUI();
-    void setStatusBar(const double& _1, const double& _2, const double& _3);
-    void handleMouseMove(const double& _1, const double& _2, const double& _3);
-    void handleLeftPress(const double& _1, const double& _2);
-    void handleRightPress(QMouseEvent* event);
-    QMenu* getRightMenu();
+    void setStatusBar(const double &_1, const double &_2, const double &_3);
+    void handleMouseMove(const double &_1, const double &_2, const double &_3);
+    void handleLeftPress(const double &_1, const double &_2);
+    void handleRightPress(QMouseEvent *event);
+    QMenu *getRightMenu();
     void execCmd(CmdEnum _cmd);
 
 private slots:
-    //data
+    // data
 
     void on_pb_generate_pressed();
     void on_pb_valueMax_pressed();
@@ -52,14 +56,14 @@ private slots:
     void on_actionFitAll_triggered();
     void on_actionview_triggered();
     void on_actionendCPU_triggered();
-    //unionfind
+    // unionfind
     void on_act_unionfind_ori_triggered();
     void on_act_unionfind_opt1_triggered();
     void on_act_unionfind_opt2_triggered();
     void on_actionuf_opt3_triggered();
     void on_pb_TestUnionfind_pressed();
 
-    //kdtree
+    // kdtree
     void on_pb_Test1DFind_pressed();
     void on_pb_Test2DFind_pressed();
     void on_pb_Simple1DFind_pressed();
@@ -71,7 +75,7 @@ private slots:
     void on_actionori_find2D_triggered();
     void on_actionran_find2D_triggered();
 
-    //viewdate
+    // viewdate
     void on_action_drawline_triggered();
     void on_action_cpuline_triggered();
     void on_action_normline_triggered();
@@ -84,19 +88,19 @@ private:
     int ran_find2D(bool _debug = false);
 
 private:
-    Ui::MainWindowOccClass* ui;
+    Ui::MainWindowOccClass *ui;
 
-    CadView* cadview_;
+    CadView *cadview_;
 
-    DataGenerator* data_generator_;
-    MultiUniset* unionset_;
-    TwoDSearch* kdtree_;
-    StatusInfoWidget* info_widget_;
-    LineDrawer* line_drawer_ = nullptr;
+    DataGenerator *data_generator_;
+    MultiUniset *unionset_;
+    TwoDSearch *kdtree_;
+    StatusInfoWidget *info_widget_;
+    LineDrawer *line_drawer_ = nullptr;
 
     AppModeEnum curmode_ = AppModeEnum::none;
 
-    std::vector<PrePline*> preline_vec_;
+    std::vector<PrePline *> preline_vec_;
     enum class CmdEnum
     {
         commit_draw,
@@ -108,4 +112,4 @@ private:
         draw_line
     };
 };
-}
+} // namespace KDebugger

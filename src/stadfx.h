@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <AIS_ConnectedInteractive.hxx>
 #include <AIS_InteractiveContext.hxx>
 #include <AIS_InteractiveObject.hxx>

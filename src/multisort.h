@@ -7,45 +7,45 @@
 #include "global.h"
 #include "KPnt.h"
 
-//#define MULTISORT
-//#define DEBUG_OUTPUT
+// #define MULTISORT
+// #define DEBUG_OUTPUT
 
 namespace KDebugger
 {
 
-static bool cmp_x_s(const KPt& a, const KPt& b)
+static bool cmp_x_s(const KPt &a, const KPt &b)
 {
     return (a.x < b.x) || (a.x == b.x && a.y < b.y);
 }
-static bool cmp_x_l(const KPt& a, const KPt& b)
+static bool cmp_x_l(const KPt &a, const KPt &b)
 {
     return (a.x > b.x) || (a.x == b.x && a.y > b.y);
 }
-static bool cmp_y_s(const KPt& a, const KPt& b)
+static bool cmp_y_s(const KPt &a, const KPt &b)
 {
     return (a.y < b.y) || (a.y == b.y && a.x < b.x);
 }
-static bool cmp_y_l(const KPt& a, const KPt& b)
+static bool cmp_y_l(const KPt &a, const KPt &b)
 {
     return (a.y > b.y) || (a.y == b.y && a.x > b.x);
 }
 
-template<typename Iterator>
+template <typename Iterator>
 void F_XS(Iterator start, Iterator end)
 {
     std::sort(start, end, cmp_x_s);
 }
-template<typename Iterator>
+template <typename Iterator>
 void F_XL(Iterator start, Iterator end)
 {
     std::sort(start, end, cmp_x_l);
 }
-template<typename Iterator>
+template <typename Iterator>
 void F_YS(Iterator start, Iterator end)
 {
     std::sort(start, end, cmp_y_s);
 }
-template<typename Iterator>
+template <typename Iterator>
 void F_YL(Iterator start, Iterator end)
 {
     std::sort(start, end, cmp_y_l);
@@ -56,31 +56,31 @@ void merge_xs(Iterator start, int length, int size)
 {
     for (int i = 1; i < size; i++)
         std::inplace_merge(start, start + length * i,
-            start + length * (i + 1), cmp_x_s);
+                           start + length * (i + 1), cmp_x_s);
 }
 template <typename Iterator>
 void merge_xl(Iterator start, int length, int size)
 {
     for (int i = 1; i < size; i++)
         std::inplace_merge(start, start + length * i,
-            start + length * (i + 1), cmp_x_l);
+                           start + length * (i + 1), cmp_x_l);
 }
 template <typename Iterator>
 void merge_ys(Iterator start, int length, int size)
 {
     for (int i = 1; i < size; i++)
         std::inplace_merge(start, start + length * i,
-            start + length * (i + 1), cmp_y_s);
+                           start + length * (i + 1), cmp_y_s);
 }
 template <typename Iterator>
 void merge_yl(Iterator start, int length, int size)
 {
     for (int i = 1; i < size; i++)
         std::inplace_merge(start, start + length * i,
-            start + length * (i + 1), cmp_y_l);
+                           start + length * (i + 1), cmp_y_l);
 }
 
-template<typename Iterator>
+template <typename Iterator>
 void Sort_XS(Iterator start, Iterator end)
 {
 #ifdef MULTISORT
@@ -88,7 +88,7 @@ void Sort_XS(Iterator start, Iterator end)
 
     auto max_thread = G_CoreCount(length);
     const size_t size = length / max_thread;
-    std::vector<std::thread>threads;
+    std::vector<std::thread> threads;
     Iterator block_start = start;
 
     for (size_t i = 0; i < (max_thread - 1); i++)
@@ -99,7 +99,7 @@ void Sort_XS(Iterator start, Iterator end)
         block_start = block_end;
     }
     F_XS(block_start, end);
-    for (auto& i : threads)
+    for (auto &i : threads)
         i.join();
     merge_xs(start, size, max_thread);
 #else
@@ -111,7 +111,7 @@ void Sort_XS(Iterator start, Iterator end)
 #endif // MULTISORT
 }
 
-template<typename Iterator>
+template <typename Iterator>
 void Sort_XL(Iterator start, Iterator end)
 {
 #ifdef MULTISORT
@@ -119,7 +119,7 @@ void Sort_XL(Iterator start, Iterator end)
 
     auto max_thread = G_CoreCount(length);
     const size_t size = length / max_thread;
-    std::vector<std::thread>threads;
+    std::vector<std::thread> threads;
     Iterator block_start = start;
 
     for (size_t i = 0; i < (max_thread - 1); i++)
@@ -130,7 +130,7 @@ void Sort_XL(Iterator start, Iterator end)
         block_start = block_end;
     }
     F_XL(block_start, end);
-    for (auto& i : threads)
+    for (auto &i : threads)
         i.join();
     merge_xl(start, size, max_thread);
 
@@ -142,7 +142,7 @@ void Sort_XL(Iterator start, Iterator end)
 #endif // DEBUG_OUTPUT
 #endif // MULTISORT
 }
-template<typename Iterator>
+template <typename Iterator>
 void Sort_YS(Iterator start, Iterator end)
 {
 #ifdef MULTISORT
@@ -150,7 +150,7 @@ void Sort_YS(Iterator start, Iterator end)
 
     auto max_thread = G_CoreCount(length);
     const size_t size = length / max_thread;
-    std::vector<std::thread>threads;
+    std::vector<std::thread> threads;
     Iterator block_start = start;
 
     for (size_t i = 0; i < (max_thread - 1); i++)
@@ -161,7 +161,7 @@ void Sort_YS(Iterator start, Iterator end)
         block_start = block_end;
     }
     F_YS(block_start, end);
-    for (auto& i : threads)
+    for (auto &i : threads)
         i.join();
     merge_ys(start, size, max_thread);
 #else
@@ -171,11 +171,10 @@ void Sort_YS(Iterator start, Iterator end)
     std::cout << "sortYS" << std::endl;
 #endif // DEBUG_OUTPUT
 
-
 #endif // MULTISORT
 }
 
-template<typename Iterator>
+template <typename Iterator>
 void Sort_YL(Iterator start, Iterator end)
 {
 #ifdef MULTISORT
@@ -183,7 +182,7 @@ void Sort_YL(Iterator start, Iterator end)
 
     auto max_thread = G_CoreCount(length);
     const size_t size = length / max_thread;
-    std::vector<std::thread>threads;
+    std::vector<std::thread> threads;
     Iterator block_start = start;
 
     for (size_t i = 0; i < (max_thread - 1); i++)
@@ -194,7 +193,7 @@ void Sort_YL(Iterator start, Iterator end)
         block_start = block_end;
     }
     F_YL(block_start, end);
-    for (auto& i : threads)
+    for (auto &i : threads)
         i.join();
     merge_yl(start, size, max_thread);
 #else
@@ -204,4 +203,4 @@ void Sort_YL(Iterator start, Iterator end)
 #endif // DEBUG_OUTPUT
 #endif // MULTISORT
 }
-}
+} // namespace KDebugger

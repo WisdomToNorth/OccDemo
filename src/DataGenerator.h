@@ -28,35 +28,42 @@ struct DataParameter
     bool w_h_same;
     bool rand_loc;
     bool rand_size;
-
 };
 
 class DataGenerator
 {
 public:
-    DataGenerator(CadView* view) :cadview_(view) {}
+    DataGenerator(CadView *view) :
+        cadview_(view)
+    {}
 
-    void reGenerateData(const DataParameter& param, bool _view);
+    void reGenerateData(const DataParameter &param, bool _view);
 
     void viewData();
 
-    const std::vector<KBox>& getData() { return buf_; }
-    void getPtData(std::vector<KPt>&);
+    const std::vector<KBox> &getData()
+    {
+        return buf_;
+    }
+    void getPtData(std::vector<KPt> &);
 
-    void addToObserverList(DataObserver* obs);
+    void addToObserverList(DataObserver *obs);
     void notifyAll();
     std::vector<int> getIntNumbers(int min, int max, int count);
     std::vector<double> getFourNumber(double min, double max);
 
 private:
-    void generateData(std::vector<KBox>& buffer,
-        const DataParameter& param);
-    bool checkParam(const DataParameter& param) { return true; }
+    void generateData(std::vector<KBox> &buffer,
+                      const DataParameter &param);
+    bool checkParam(const DataParameter &param)
+    {
+        return true;
+    }
 
 private:
-    CadView* cadview_;
+    CadView *cadview_;
 
     std::vector<KBox> buf_;
-    std::vector<DataObserver*> obs_list_;
+    std::vector<DataObserver *> obs_list_;
 };
-}
+} // namespace KDebugger

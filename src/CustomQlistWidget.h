@@ -9,10 +9,10 @@ class iwCustomQListWidget : public QListWidget
     Q_OBJECT
 
 public:
-    iwCustomQListWidget(QWidget* parent = nullptr);
+    iwCustomQListWidget(QWidget *parent = nullptr);
 
 protected:
-    void keyPressEvent(QKeyEvent* event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif
