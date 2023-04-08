@@ -2,37 +2,55 @@ cmake_minimum_required(VERSION 3.16)
 
 project(occdebuggger VERSION 0.0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
-#set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
 
 enable_language(C)
 
-#qtpropertybrowser does not have good cmake support.
-#address below may need to be changed when installing qtpropertybrowser in a different way
-#other than apt-get install -y libqtpropertybrowser-dev
+if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+    set(QT_ROOT D:/OpenSource/Qt CACHE FILEPATH "")
+endif()
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets Core OpenGL Gui Xml Network)
-find_package(Boost REQUIRED)
-find_package(OpenCASCADE REQUIRED)
+
+
+if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+    message("current platform: Windows ")
+    # Set OpenCASCADE paths to headers, binaries, libraries, resources, tests, samples, data
+    set(OpenCASCADE_INSTALL_PREFIX D:/OpenSource/opencascade-7.7.0)
+    set (OpenCASCADE_LIBRARY_DIR "${OpenCASCADE_INSTALL_PREFIX}/lib")
+    set (OpenCASCADE_INCLUDE_DIR  "${OpenCASCADE_INSTALL_PREFIX}/inc")
+
+    # List of available OpenCASCADE libraries.
+    set (OpenCASCADE_LIBRARIES TKernel;TKMath;TKG2d;TKG3d;TKGeomBase;TKBRep;TKGeomAlgo;TKTopAlgo;TKPrim
+    TKBO;TKShHealing;TKBool;TKHLR;TKFillet;TKOffset;TKFeat;TKMesh;TKXMesh;TKService;TKV3d;TKOpenGl
+    TKMeshVS;TKCDF;TKLCAF;TKCAF;TKBinL;TKXmlL;TKBin;TKXml;TKStdL;TKStd;TKTObj;TKBinTObj;TKXmlTObj
+    TKVCAF;TKXDE;TKXSBase;TKSTEPBase;TKSTEPAttr;TKSTEP209;TKSTEP;TKIGES;TKXCAF;TKXDEIGES;TKXDESTEP
+    TKSTL;TKVRML;TKRWMesh;TKXmlXCAF;TKBinXCAF;TKXDECascade;TKExpress;TKDraw;TKTopTest
+    TKOpenGlTest;TKViewerTest;TKXSDRAW;TKDCAF;TKXDEDRAW;TKTObjDRAW;TKQADraw)
+
+elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
+    message("current platform: Linux ")
+    find_package(OpenCASCADE REQUIRED)
+else()
+	message("current platform: unkonw ")
+endif()
 
 # the -I flag in gcc
 include_directories(
   ${OpenCASCADE_INCLUDE_DIR}
   ${Qt5_INCLUDE_DIR}
   ${PROJECT_SOURCE_DIR}/build/OCC_CONFIG_autogen/include
-
 )
 
 link_directories(
     ${OpenCASCADE_LIBRARY_DIR}
     ${Qt5_LIBRARY_DIR}
     )
-
 
 #OccConfig
 file(GLOB OCC_CONFIG_FILES
@@ -48,11 +66,13 @@ foreach(src_file ${OCC_CONFIG_FILES})
 endforeach(src_file ${code-gen})
 
 add_executable(OccConfig ${OCC_CONFIG_FILES})
-target_link_libraries(OccConfig PRIVATE
-Qt5::Widgets
-Qt5::Core
-Qt5::OpenGL
-Qt5::Gui
-Qt5::Xml
-${OpenCASCADE_LIBRARIES}
+
+target_link_libraries(OccConfig
+PRIVATE
+    Qt5::Widgets
+    Qt5::Core
+    Qt5::OpenGL
+    Qt5::Gui
+    Qt5::Xml
+    "${OpenCASCADE_LIBRARIES}/*.lib"
     )
