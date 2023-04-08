@@ -1,8 +1,8 @@
 ﻿#include "KPnt.h"
 #include <iostream>
 
-#include "mathUtils.h"
 #include "multisort.h"
+#include "KMathUtils.h"
 
 namespace KDebugger
 {
@@ -28,11 +28,11 @@ void KPt::printX() const
 }
 bool KPt::isEqual(const KPt &rhs)
 {
-    return OccTools::fEqual(x, rhs.x) && OccTools::fEqual(y, rhs.y);
+    return fEqual(x, rhs.x) && fEqual(y, rhs.y);
 }
 bool KPt::operator==(const KPt &rhs)
 {
-    return OccTools::fEqual(x, rhs.x) && OccTools::fEqual(y, rhs.y);
+    return fEqual(x, rhs.x) && fEqual(y, rhs.y);
 }
 
 void printPntVec(const std::vector<KPt> &pnts)

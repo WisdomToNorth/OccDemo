@@ -28,7 +28,7 @@ void PrePline::drawRawPnts(Quantity_Color color)
 
     while (cur_next != raw_pnts_.end())
     {
-        TopoDS_Edge anEdge1 = OccTools::getEdgeByTwoPts(*cur, *cur_next);
+        TopoDS_Edge anEdge1 = getEdgeByTwoPts(*cur, *cur_next);
         Handle(AIS_ColoredShape) line = new AIS_ColoredShape(anEdge1);
         line->SetWidth(3.0);
         line->SetColor(color);
@@ -52,7 +52,7 @@ void PrePline::drawMultiLine(Quantity_Color)
     {
         if (cur->resSize())
         {
-            auto color = OccTools::getRandomColor();
+            auto color = getRandomColor();
             const std::vector<TopoDS_Edge> &edges = cur->getEdge();
 
             for (const auto &edge : edges)
@@ -107,7 +107,7 @@ void PrePline::printAllPts()
     auto cur = raw_pnts_.begin();
     while (cur != raw_pnts_.end())
     {
-        std::cout << "\n " << OccTools::ptToStr(*cur);
+        std::cout << "\n " << ptToStr(*cur);
         ++cur;
     }
     std::cout << "\n######";

@@ -18,12 +18,12 @@
 #include "KPnt.h"
 #include "BoundingBox.h"
 #include "KLine.h"
-#include "mathUtils.h"
+#include "KMathUtils.h"
 #include "shapetools.h"
 
 #define EPSILON 0.00000001
 
-namespace OccTools
+namespace KDebugger
 {
 
 std::string trsfToStr(gp_Trsf trsf)
@@ -693,4 +693,4 @@ gp_Pnt getAngledLineByTwoPtsReverse(const gp_Vec &last_vec, const gp_Pnt &pA,
     pD.y = pA.Y() + is_left * dist * last_vec.Normalized().X();
     return gp_Pnt(pD.x, pD.y, 0.0);
 }
-} // namespace OccTools
+} // namespace KDebugger

@@ -13,7 +13,7 @@
 
 #include "global.h"
 
-namespace OccTools
+namespace KDebugger
 {
 Handle(AIS_Trihedron) createOriginTrihedron()
 {
@@ -92,4 +92,4 @@ std::vector<gp_Pnt> getEdgeEndPts(TopoDS_Edge shp)
     }
     return res;
 }
-} // namespace OccTools
+} // namespace KDebugger

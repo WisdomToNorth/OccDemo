@@ -63,7 +63,7 @@ bool KTest::testKPnt2D(int seed)
 
 bool KTest::testSameAngle()
 {
-    using namespace OccTools;
+    using namespace KDebugger;
     std::cout << (sameDir(gp_Vec(1, 0, 0), gp_Dir(-1, 0, 0)) == -1) << std::endl;
     std::cout << (sameDir(gp_Vec(1, 0, 0), gp_Dir(1, 0, 0)) == 1) << std::endl;
     std::cout << (sameDir(gp_Vec(1, 0, 0), gp_Dir(0, 1, 0)) == 0) << std::endl;

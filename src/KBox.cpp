@@ -184,7 +184,7 @@ void KBox::drawBox()
     gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
     gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
 
-    TopoDS_Wire aWire = OccTools::getWireFromFourPts(lb, rb, ur, lu);
+    TopoDS_Wire aWire = getWireFromFourPts(lb, rb, ur, lu);
 
     TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(aWire);
     Handle(AIS_Shape) shp = new AIS_Shape(myFaceProfile);
@@ -208,7 +208,7 @@ void KBox::drawSpacingBox()
     gp_Pnt ur(center_.x + size_x_ * 0.5 + space_,
               center_.y + size_y_ * 0.5 + space_, 0);
 
-    Handle(AIS_Shape) shp = new AIS_Shape(OccTools::getWireFromFourPts(lb, rb, ur, lu));
+    Handle(AIS_Shape) shp = new AIS_Shape(getWireFromFourPts(lb, rb, ur, lu));
     shp->SetColor(Quantity_NOC_GRAY11);
     G_Context->Display(shp, false);
 

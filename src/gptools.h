@@ -33,7 +33,7 @@ class gp_Ax2;
 class gp_Pnt2d;
 class gp_Lin2d;
 
-namespace OccTools
+namespace KDebugger
 {
 
 std::string trsfToStr(gp_Trsf trsf);
@@ -106,6 +106,6 @@ gp_Pnt getAngledLineByTwoPtsReverse(const gp_Vec &last_vec, const gp_Pnt &pA,
                                     const gp_Pnt &pB); // for 45 only
 gp_Pnt getAngledLineByTwoPtsOrth(const gp_Vec &last_dir, const gp_Pnt &pA,
                                  const gp_Pnt &pB, const double &angle, int toggle);
-} // namespace OccTools
+} // namespace KDebugger
 
 #endif

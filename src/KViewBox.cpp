@@ -24,7 +24,7 @@ void KViewBox::tempshow()
     gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
     gp_Pnt ur(center_.x + size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
 
-    TopoDS_Wire aWire = OccTools::getWireFromFourPts(lb, rb, ur, lu);
+    TopoDS_Wire aWire = getWireFromFourPts(lb, rb, ur, lu);
 
     TopoDS_Face myFaceProfile = BRepBuilderAPI_MakeFace(aWire);
     temp_obj_ = new AIS_Shape(myFaceProfile);

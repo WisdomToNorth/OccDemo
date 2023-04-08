@@ -81,7 +81,7 @@ void LineDrawer::checkDetectedObj(const gp_Pnt &new_pnt)
         const TopoDS_Shape &S = aBRepOwner->Shape();
         if (S.ShapeType() != TopAbs_EDGE) return;
         TopoDS_Edge shp = TopoDS::Edge(S);
-        gp_Pnt to_check = OccTools::getEdgeEndPts(shp).front();
+        gp_Pnt to_check = getEdgeEndPts(shp).front();
         if (new_pnt.IsEqual(to_check, 0.2))
             handleExistPnt(to_check);
     }
@@ -117,8 +117,8 @@ bool LineDrawer::appendLine(const gp_Pnt &new_pnt,
         return false;
 
     int togg = toggle == false ? 1 : -1;
-    gp_Pnt mid = OccTools::getAngledLineByTwoPts(direction_,
-                                                 last_pnt, new_pnt, _angle * M_PI / 180.0, togg);
+    gp_Pnt mid = getAngledLineByTwoPts(direction_,
+                                       last_pnt, new_pnt, _angle * M_PI / 180.0, togg);
 
     std::vector<gp_Pnt> pnts{mid, new_pnt};
 
@@ -134,7 +134,7 @@ void LineDrawer::appendPnt(const gp_Pnt &new_pnt)
 {
     if (pnt_list_.back().IsEqual(new_pnt, 0.01)) return;
 
-    const TopoDS_Edge &edge = OccTools::getEdgeByTwoPts(pnt_list_.back(), new_pnt);
+    const TopoDS_Edge &edge = getEdgeByTwoPts(pnt_list_.back(), new_pnt);
 
     // 下面两句有顺序依赖。设计得不好
     setCurDirection(new_pnt);
@@ -154,12 +154,12 @@ void LineDrawer::drawTempLine(const gp_Pnt &new_pnt,
     if (last_pnt.IsEqual(new_pnt, 0.1)) return;
 
     int togg = toggle == false ? 1 : -1;
-    gp_Pnt mid = OccTools::getAngledLineByTwoPts(direction_,
-                                                 last_pnt, new_pnt, _angle * M_PI / 180.0, togg);
+    gp_Pnt mid = getAngledLineByTwoPts(direction_,
+                                       last_pnt, new_pnt, _angle * M_PI / 180.0, togg);
 
     std::vector<gp_Pnt> pnts{last_pnt, mid, new_pnt};
 
-    TopoDS_Shape anEdge1 = OccTools::getShapeByPts(pnts);
+    TopoDS_Shape anEdge1 = getShapeByPts(pnts);
 
     G_Context->Remove(temp_line_, false);
     temp_line_ = new AIS_ColoredShape(anEdge1);

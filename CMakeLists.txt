@@ -12,10 +12,11 @@ set(CMAKE_AUTORCC ON)
 enable_language(C)
 
 if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
-    set(QT_ROOT D:/OpenSource/Qt CACHE FILEPATH "")
+    set(CMAKE_PREFIX_PATH "D:/OpenSource/Qt/5.15.2/msvc2019_64")
+    #list(APPEND CMAKE_PREFIX_PATH "指定版本库的安装路径")
 endif()
 
-find_package(Qt5 REQUIRED COMPONENTS Widgets Core OpenGL Gui Xml Network)
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
 
 if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
     message("current platform: Windows ")
@@ -70,11 +71,10 @@ add_executable(OccConfig ${OCC_CONFIG_FILES})
 
 target_link_libraries(OccConfig
 PRIVATE
-    Qt5::Widgets
     Qt5::Core
+    Qt5::Widgets
     Qt5::OpenGL
     Qt5::Gui
-    Qt5::Xml
     ${OpenCASCADE_LIBRARIES}
     )
 

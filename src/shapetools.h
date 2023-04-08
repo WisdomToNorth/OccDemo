@@ -9,7 +9,7 @@
 class TopoDS_Wire;
 class TopoDS_Edge;
 
-namespace OccTools
+namespace KDebugger
 {
 Handle(AIS_Trihedron) createOriginTrihedron();
 
@@ -20,4 +20,4 @@ TopoDS_Wire getWireFromFourPts(const gp_Pnt &lb, const gp_Pnt &rb,
                                const gp_Pnt &ru, const gp_Pnt &lu);
 std::vector<gp_Pnt> getEdgeEndPts(TopoDS_Edge shp);
 TopoDS_Edge getCircleFromPt(const gp_Pnt &lb, double r = 0.5);
-} // namespace OccTools
+} // namespace KDebugger

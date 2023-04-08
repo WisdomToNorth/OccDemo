@@ -162,7 +162,7 @@ void CadView::initContext()
 
 void CadView::setOriginTrihedron()
 {
-    aisOriginTrihedron_ = OccTools::createOriginTrihedron();
+    aisOriginTrihedron_ = createOriginTrihedron();
     context_->Display(aisOriginTrihedron_, false);
 }
 

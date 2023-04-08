@@ -2,7 +2,7 @@
 
 #include "gptools.h"
 #include "KLine.h"
-#include "mathUtils.h"
+#include "KMathUtils.h"
 #include <gp_Vec.hxx>
 
 namespace KDebugger
@@ -75,18 +75,18 @@ std::vector<TopoDS_Edge> KAngleMultiLine::getEdge()
     {
         if (!p1_.IsEqual(p2_, 0.01))
         {
-            res.emplace_back(OccTools::getEdgeByTwoPts(p1_, p2_));
+            res.emplace_back(getEdgeByTwoPts(p1_, p2_));
         }
     }
     else
     {
         if (!p1_.IsEqual(res_.front(), 0.01))
         {
-            res.emplace_back(OccTools::getEdgeByTwoPts(p1_, res_.front()));
+            res.emplace_back(getEdgeByTwoPts(p1_, res_.front()));
         }
         if (!p2_.IsEqual(res_.front(), 0.01))
         {
-            res.emplace_back(OccTools::getEdgeByTwoPts(p2_, res_.front()));
+            res.emplace_back(getEdgeByTwoPts(p2_, res_.front()));
         }
     }
     return res;
@@ -133,7 +133,7 @@ std::list<gp_Pnt> KAngleMultiLine::drawAngledLineByTwoPts(gp_Pnt pA,
     double dx = std::abs(pB.X() - pA.X());
     double dy = std::abs(pB.Y() - pA.Y());
 
-    if (OccTools::fEqual(dx, 0.0, 0.0001) || OccTools::fEqual(dy, 0.0, 0.0001) || dy / dx == tan_a)
+    if (fEqual(dx, 0.0, 0.0001) || fEqual(dy, 0.0, 0.0001) || dy / dx == tan_a)
     {
         return res;
     }
