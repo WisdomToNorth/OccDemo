@@ -17,7 +17,6 @@ endif()
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets Core OpenGL Gui Xml Network)
 
-
 if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
     message("current platform: Windows ")
     # Set OpenCASCADE paths to headers, binaries, libraries, resources, tests, samples, data
@@ -36,6 +35,7 @@ if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
 elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
     message("current platform: Linux ")
     find_package(OpenCASCADE REQUIRED)
+
 else()
 	message("current platform: unkonw ")
 endif()
@@ -57,6 +57,7 @@ file(GLOB OCC_CONFIG_FILES
      "${PROJECT_SOURCE_DIR}/src/*.h"
      "${PROJECT_SOURCE_DIR}/src/*.cpp"
 )
+
 foreach(src_file ${OCC_CONFIG_FILES})
   set_source_files_properties(
     ${src_file}
@@ -80,13 +81,13 @@ PRIVATE
     ######################使用多处理器编译########################
 IF (WIN32)
 if(MSVC)
-        OPTION(USE_MP "use multiple" ON)
-        OPTION(ProjectConfig_Global_COMPILE_FLAGS_WITH_MP
-            "Set The Global Option COMPILE_FLAGS /MP to target." ON)
-        if(ProjectConfig_Global_COMPILE_FLAGS_WITH_MP OR USE_MP)
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-        endif()
-        set(VS_STARTUP_PROJECT ${PROJECT_NAME})
+    OPTION(USE_MP "use multiple" ON)
+    OPTION(ProjectConfig_Global_COMPILE_FLAGS_WITH_MP
+        "Set The Global Option COMPILE_FLAGS /MP to target." ON)
+    if(ProjectConfig_Global_COMPILE_FLAGS_WITH_MP OR USE_MP)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+    endif()
+    set(VS_STARTUP_PROJECT ${PROJECT_NAME})
 ENDIF(MSVC)
 ENDIF()

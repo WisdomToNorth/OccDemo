@@ -39,6 +39,7 @@ namespace KDebugger
 MainWindowOcc::MainWindowOcc(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindowOccClass()),
+
     unionset_(nullptr),
     kdtree_(nullptr)
 
@@ -46,9 +47,6 @@ MainWindowOcc::MainWindowOcc(QWidget *parent) :
     ui->setupUi(this);
 
     this->setStyleSheet(G_GetUiStyleSheet(getUIConfig()));
-
-    info_widget_ = new StatusInfoWidget(this);
-    ui->gl_info->addWidget(info_widget_);
     auto screenRect = QGuiApplication::screens();
     auto width = screenRect[0]->geometry().width();
     auto height = screenRect[0]->geometry().height();
@@ -57,29 +55,36 @@ MainWindowOcc::MainWindowOcc(QWidget *parent) :
     auto scheight = height * 3 / 4;
     this->setGeometry(width * 1 / 8, height / 8, scwidth, scheight);
 
-    iwCustomQListWidget *console_widget = InitConsole(this, this, false);
-    ui->gl_console->addWidget(console_widget);
+    cadview_ = new CadView(this),
+    G_Context = cadview_->getContext();
+
+    // ui->widget_param->setMaximumWidth(scwidth / 3);
+    ui->gridLayout_view->addWidget(cadview_);
+
+    QList<int> console_size_vert;
+    console_size_vert << 1000 << 3000;
+    ui->splitter_main->setSizes(console_size_vert);
+    // ui->splitter_main->setChildrenCollapsible(false);
 
     QList<int> console_size;
     console_size << 3500 << 1000;
-    ui->splitter->setSizes(console_size);
-    QList<int> console_size_vert;
-    console_size_vert << 1000 << 3000;
-    ui->splitter_2->setSizes(console_size_vert);
+    ui->splitter_view->setSizes(console_size);
 
-    // QWidget* wi=new QWidget(this);
+    info_widget_ = new StatusInfoWidget(this);
+    ui->gl_info->addWidget(info_widget_);
+    iwCustomQListWidget *console_widget = InitConsole(this, this, false);
+    ui->gl_console->addWidget(console_widget);
+    ui->widget_info->hide();
 
-    cadview_ = new CadView(this);
-    G_Context = cadview_->getContext();
     cadview_->moveInfoCb = std::bind(&MainWindowOcc::handleMouseMove,
                                      this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     cadview_->leftClickCb = std::bind(&MainWindowOcc::handleLeftPress,
                                       this, std::placeholders::_1, std::placeholders::_2);
     cadview_->rightClickCb = std::bind(&MainWindowOcc::handleRightPress,
                                        this, std::placeholders::_1);
-    ui->gridLayout_view->addWidget(cadview_, 0, 0, 1, 1);
 
     data_generator_ = new DataGenerator(cadview_);
+
     KLog("Hello!");
     on_pb_generate_pressed();
     on_actionview_triggered();
@@ -92,6 +97,17 @@ MainWindowOcc::~MainWindowOcc()
 
     delete ui;
 }
+
+void MainWindowOcc::on_action_showLog_triggered()
+{
+    if (ui->widget_info->isVisible())
+    {
+        ui->widget_info->setVisible(false);
+    }
+    else
+        ui->widget_info->show();
+}
+
 void MainWindowOcc::on_action_drawline_triggered()
 {
     curmode_ = AppModeEnum::draw_line;
@@ -161,6 +177,7 @@ void MainWindowOcc::handleMouseMove(const double &_1,
 void MainWindowOcc::setStatusBar(const double &_1,
                                  const double &_2, const double &_3)
 {
+    if (!info_widget_) return;
     info_widget_->setMessage(_1, _2, _3);
 }
 

@@ -43,6 +43,7 @@ private:
     void execCmd(CmdEnum _cmd);
 
 private slots:
+    void on_action_showLog_triggered();
     // data
 
     void on_pb_generate_pressed();

@@ -17,9 +17,9 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_12">
+   <layout class="QGridLayout" name="gridLayout_9">
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="splitter_main">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -44,8 +44,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1064</width>
-             <height>957</height>
+             <width>1086</width>
+             <height>969</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
@@ -503,24 +503,32 @@
         </item>
        </layout>
       </widget>
-      <widget class="QSplitter" name="splitter">
+      <widget class="QSplitter" name="splitter_view">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="QWidget" name="gridLayoutWidget">
         <layout class="QGridLayout" name="gridLayout_view"/>
        </widget>
-       <widget class="QWidget" name="gridLayoutWidget_2">
-        <layout class="QGridLayout" name="gridLayout_Console">
+       <widget class="QWidget" name="widget_info" native="true">
+        <layout class="QGridLayout" name="gridLayout">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_11">
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gl_console"/>
-           </item>
-           <item row="0" column="1">
-            <layout class="QGridLayout" name="gl_info"/>
-           </item>
-          </layout>
+          <layout class="QGridLayout" name="gl_console"/>
+         </item>
+         <item row="0" column="1">
+          <layout class="QGridLayout" name="gl_info"/>
          </item>
         </layout>
        </widget>
@@ -535,7 +543,7 @@
      <x>0</x>
      <y>0</y>
      <width>1176</width>
-     <height>26</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -558,6 +566,7 @@
     <addaction name="action_normline"/>
     <addaction name="actionfind2D"/>
     <addaction name="actionclear"/>
+    <addaction name="action_showLog"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -587,6 +596,7 @@
    <addaction name="act_unionfind_opt1"/>
    <addaction name="act_unionfind_opt2"/>
    <addaction name="actionuf_opt3"/>
+   <addaction name="action_showLog"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionGenerate">
@@ -677,6 +687,11 @@
   <action name="actionclear">
    <property name="text">
     <string>clear</string>
+   </property>
+  </action>
+  <action name="action_showLog">
+   <property name="text">
+    <string>showLog</string>
    </property>
   </action>
  </widget>

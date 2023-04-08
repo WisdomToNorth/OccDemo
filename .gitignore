@@ -29,9 +29,7 @@
 *.svn-base
 .svn/*
 
-*/x64/
-*/x64/*
-x64/*
+
 
 # Precompiled Headers
 *.gch
@@ -56,9 +54,14 @@ x64/*
 *.exe
 *.out
 *.app
-compile_commands.json
+
+settings.json
 launch.json
 /.vs/*
+
+*/x64/
+*/x64/*
+x64/*
 /x64/*
 /bin/*
 /build/*
