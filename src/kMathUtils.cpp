@@ -1,4 +1,4 @@
-﻿#include "KMathUtils.h"
+﻿#include "kMathUtils.h"
 
 #include <cmath>
 

@@ -511,7 +511,7 @@
         <layout class="QGridLayout" name="gridLayout_view"/>
        </widget>
        <widget class="QWidget" name="widget_info" native="true">
-        <layout class="QGridLayout" name="gridLayout">
+        <layout class="QGridLayout" name="gridLayout" columnstretch="6,1">
          <property name="leftMargin">
           <number>0</number>
          </property>

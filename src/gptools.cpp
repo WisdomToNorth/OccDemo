@@ -18,7 +18,7 @@
 #include "KPnt.h"
 #include "BoundingBox.h"
 #include "KLine.h"
-#include "KMathUtils.h"
+#include "kMathUtils.h"
 #include "shapetools.h"
 
 #define EPSILON 0.00000001

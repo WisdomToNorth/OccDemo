@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "multisort.h"
-#include "KMathUtils.h"
+#include "kMathUtils.h"
 
 namespace KDebugger
 {

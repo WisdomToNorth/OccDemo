@@ -2,7 +2,7 @@
 
 #include "gptools.h"
 #include "KLine.h"
-#include "KMathUtils.h"
+#include "kMathUtils.h"
 #include <gp_Vec.hxx>
 
 namespace KDebugger
