@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-#include <QtWidgets/QApplication>
+#include <QApplication>
 
 #include "MainWindowOcc.h"
 int main(int argc, char *argv[])

@@ -21,7 +21,10 @@ struct KPt
     void print() const;
     void printY() const;
     void printX() const;
-
+    double distance(const KPt &rhs) const
+    {
+        return 0.0;
+    } // todo
     double x;
     double y;
 
