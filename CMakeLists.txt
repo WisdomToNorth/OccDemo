@@ -67,7 +67,7 @@ foreach(src_file ${OCC_CONFIG_FILES})
   )
 endforeach(src_file ${code-gen})
 
-add_executable(OccConfig ${OCC_CONFIG_FILES})
+add_executable(OccConfig ${OCC_CONFIG_FILES} ${PROJECT_SOURCE_DIR}/src/OccDebuger.rc)
 
 target_link_libraries(OccConfig
 PRIVATE
