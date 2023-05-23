@@ -33,13 +33,13 @@ struct DataParameter
 class DataGenerator
 {
 public:
-    DataGenerator(CadView *view) :
-        cadview_(view)
-    {}
+    DataGenerator(CadView *view) : cadview_(view)
+    {
+    }
 
     void reGenerateData(const DataParameter &param, bool _view);
 
-    void viewData();
+    bool viewData();
 
     const std::vector<KBox> &getData()
     {
@@ -53,8 +53,7 @@ public:
     std::vector<double> getFourNumber(double min, double max);
 
 private:
-    void generateData(std::vector<KBox> &buffer,
-                      const DataParameter &param);
+    void generateData(std::vector<KBox> &buffer, const DataParameter &param);
     bool checkParam(const DataParameter &param)
     {
         return true;

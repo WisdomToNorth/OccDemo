@@ -36,10 +36,10 @@ AllowShortCaseLabelsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: None
 
 # 允许短的if语句保持在同一行
-AllowShortIfStatementsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: false
 
 # 允许短的循环保持在同一行
-AllowShortLoopsOnASingleLine: true
+AllowShortLoopsOnASingleLine: false
 
 # 总是在返回类型后换行: None, All, TopLevel(顶级函数，不包括在类中的函数),
 # AllDefinitions(所有的定义，不包括声明), TopLevelDefinitions(所有的顶级函数的定义)
@@ -79,15 +79,15 @@ BraceWrapping:
   BeforeCatch: false
   # else之前
   BeforeElse:  true
-  # 缩进大括号
-  IndentBraces: false
-  # 分离空函数
-  SplitEmptyFunction: false
-  # 分离空语句
-  SplitEmptyRecord: false
-  # 分离空命名空间
-  SplitEmptyNamespace: false
 
+# 缩进大括号
+IndentBraces: false
+# 分离空函数
+SplitEmptyFunction: false
+# 分离空语句
+SplitEmptyRecord: false
+# 分离空命名空间
+SplitEmptyNamespace: false
 # 在二元运算符前换行: None(在操作符后换行), NonAssignment(在非赋值的操作符前换行), All(在操作符前换行)
 BreakBeforeBinaryOperators: NonAssignment
 
@@ -95,7 +95,7 @@ BreakBeforeBinaryOperators: NonAssignment
 #   Mozilla(除枚举、函数、记录定义，与Attach类似), Stroustrup(除函数定义、catch、else，与Attach类似),
 #   Allman(总是在大括号前换行), GNU(总是在大括号前换行，并对于控制语句的大括号增加额外的缩进), WebKit(在函数前换行), Custom
 #   注：这里认为语句块也属于函数
-BreakBeforeBraces: Custom
+BreakBeforeBraces: Allman
 
 # 在三元运算符前换行
 BreakBeforeTernaryOperators: false
@@ -103,12 +103,10 @@ BreakBeforeTernaryOperators: false
 # 在构造函数的初始化列表的冒号后换行
 BreakConstructorInitializers: AfterColon
 
-#BreakInheritanceList: AfterColon
-
 BreakStringLiterals: false
 
 # 每行字符的限制，0表示没有限制
-ColumnLimit: 0
+ColumnLimit: 100
 
 CompactNamespaces: true
 
@@ -157,7 +155,7 @@ PointerAlignment: Right
 ReflowComments: true
 
 # 允许排序#include
-SortIncludes: false
+SortIncludes: CaseSensitive
 
 # 允许排序 using 声明
 SortUsingDeclarations: false
@@ -170,12 +168,6 @@ SpaceAfterTemplateKeyword: true
 
 # 在赋值运算符之前添加空格
 SpaceBeforeAssignmentOperators: true
-
-# SpaceBeforeCpp11BracedList: true
-
-# SpaceBeforeCtorInitializerColon: true
-
-# SpaceBeforeInheritanceColon: true
 
 # 开圆括号之前添加一个空格: Never, ControlStatements, Always
 SpaceBeforeParens: ControlStatements
@@ -211,3 +203,4 @@ TabWidth: 4
 
 # 使用tab字符: Never, ForIndentation, ForContinuationAndIndentation, Always
 UseTab: Never
+

@@ -1,37 +1,34 @@
 ﻿#include "CadView.h"
 
 #include <AIS_InteractiveContext.hxx>
-#include <V3d_View.hxx>
-#include <V3d_Viewer.hxx>
+#include <AIS_TextLabel.hxx>
 #include <AIS_ViewCube.hxx>
-#include <AIS_InteractiveContext.hxx>
+#include <Aspect_Handle.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
 #include <OpenGl_GraphicDriver.hxx>
 #include <V3d_View.hxx>
-#include <Graphic3d_GraphicDriver.hxx>
-#include <AIS_TextLabel.hxx>
-#include <Aspect_Handle.hxx>
+#include <V3d_Viewer.hxx>
 
-#include <qclipboard.h>
-#include <QTimer>
-#include <QMenuBar>
 #include <QAction>
-#include <QGuiApplication>
-#include <qinputdialog.h>
 #include <QApplication>
-#include <qmutex.h>
-#include <qpointer.h>
+#include <QGuiApplication>
+#include <QMenuBar>
+#include <QTimer>
+#include <qclipboard.h>
 #include <qcursor.h>
 #include <qdebug.h>
+#include <qinputdialog.h>
+#include <qmutex.h>
+#include <qpointer.h>
 #include <qscreen.h>
 
 #include "KLogger.h"
-#include "stadfx.h"
 #include "shapetools.h"
+#include "stadfx.h"
 
 namespace KDebugger
 {
-CadView::CadView(QWidget *parent) :
-    QWidget(parent)
+CadView::CadView(QWidget *parent) : QWidget(parent)
 {
     setFocusPolicy(Qt::StrongFocus); // 窗口将通过鼠标点击、按tab键等方式获取焦点
     setBackgroundRole(QPalette::NoRole);
@@ -416,23 +413,27 @@ void CadView::mouseMoveEvent(QMouseEvent *event)
     }
     else
     {
-        if (moveInfoCb) moveInfoCb(x, y, z);
+        if (moveInfoCb)
+            moveInfoCb(x, y, z);
     }
 
     switch (context_action_mode_)
     {
-    case CadView::CurrentAction3dEnum::CurAction3d_Nothing: {
+    case CadView::CurrentAction3dEnum::CurAction3d_Nothing:
+    {
         this->setCursor(getCursor(CursorType::def));
         break;
     }
-    case CadView::CurrentAction3dEnum::CurAction3d_DynamicPanning: {
+    case CadView::CurrentAction3dEnum::CurAction3d_DynamicPanning:
+    {
         view_->Pan(event->pos().x() - mouse_x_record_, mouse_y_record_ - event->pos().y());
         mouse_x_record_ = event->pos().x();
         mouse_y_record_ = event->pos().y();
         break;
     }
     case CadView::CurrentAction3dEnum::CurAction3d_DynamicZooming: break;
-    case CadView::CurrentAction3dEnum::CurAction3d_DynamicRotation: {
+    case CadView::CurrentAction3dEnum::CurAction3d_DynamicRotation:
+    {
         view_->Rotation(event->pos().x(), event->pos().y());
         break;
     }
@@ -471,19 +472,23 @@ void CadView::updateView(KUpdate cmd)
 {
     switch (cmd)
     {
-    case CadView::KUpdate::Redraw: {
+    case CadView::KUpdate::Redraw:
+    {
         view_->Redraw();
         break;
     }
-    case CadView::KUpdate::ZFitAll: {
+    case CadView::KUpdate::ZFitAll:
+    {
         view_->ZFitAll();
         break;
     }
-    case CadView::KUpdate::Fitall: {
+    case CadView::KUpdate::Fitall:
+    {
         view_->FitAll();
         break;
     }
-    case CadView::KUpdate::MustResized: {
+    case CadView::KUpdate::MustResized:
+    {
         view_->MustBeResized();
         break;
     }

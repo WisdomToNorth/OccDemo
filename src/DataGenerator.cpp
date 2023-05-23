@@ -1,23 +1,24 @@
 ﻿#include "DataGenerator.h"
 
-#include <iostream>
+#include <algorithm>
 #include <chrono>
-#include <vector>
 #include <ctime>
+#include <iostream>
 #include <random>
 #include <thread>
-#include <algorithm>
+#include <vector>
 
+#include <QMessageBox>
+#include <qdebug.h>
 #include <qguiapplication.h>
 #include <qscreen.h>
-#include <qdebug.h>
 
 #include "CadView.h"
-#include "KTimer.h"
 #include "CustomQlistWidget.h"
-#include "KLogger.h"
-#include "global.h"
 #include "DataObserver.h"
+#include "KLogger.h"
+#include "KTimer.h"
+#include "global.h"
 #include "public_function.h"
 
 namespace KDebugger
@@ -74,13 +75,15 @@ std::vector<double> DataGenerator::getFourNumber(double _min, double _max)
 // void DataGenerator::generateData(std::vector<KBox>& buffer,
 //     int _row_size, int _col_size, double distance, int precision,
 //     double radius, bool same_radius)
-void DataGenerator::generateData(std::vector<KBox> &buffer,
-                                 const DataParameter &param)
+void DataGenerator::generateData(std::vector<KBox> &buffer, const DataParameter &param)
 {
-    if (!checkParam(param)) return;
+    if (!checkParam(param))
+        return;
 
-    std::uniform_real_distribution<double> size_rand_gen(param.defaultpar.rand_size_min, param.defaultpar.rand_size_max); // 尺寸随机范围
-    std::uniform_real_distribution<double> loc_rand_gen(param.defaultpar.rand_loc_min, param.defaultpar.rand_loc_max);    // 位置随机范围
+    std::uniform_real_distribution<double> size_rand_gen(
+        param.defaultpar.rand_size_min, param.defaultpar.rand_size_max); // 尺寸随机范围
+    std::uniform_real_distribution<double> loc_rand_gen(
+        param.defaultpar.rand_loc_min, param.defaultpar.rand_loc_max);   // 位置随机范围
     std::uniform_int_distribution<int> type_rand_gen(0, 5);
 
     for (int i = 0; i < param.colcnt; ++i)
@@ -107,7 +110,8 @@ void DataGenerator::generateData(std::vector<KBox> &buffer,
             buffer.emplace_back(l_box);
         }
     }
-    KLog("Crose range: " + QString::number(param.rowcnt * param.dis) + " * " + QString::number(param.colcnt * param.dis));
+    KLog("Crose range: " + QString::number(param.rowcnt * param.dis) + " * "
+         + QString::number(param.colcnt * param.dis));
     notifyAll();
 }
 //
@@ -129,14 +133,19 @@ void DataGenerator::reGenerateData(const DataParameter &param, bool _view)
     {
         viewData();
     }
-    KLog("generate " + QString::number(param.colcnt * param.rowcnt) + " data cost " + QString::number(timer.timeFromBegin(""))
-         + " ms.");
+    KLog("generate " + QString::number(param.colcnt * param.rowcnt) + " data cost "
+         + QString::number(timer.timeFromBegin("")) + " ms.");
     notifyAll();
 }
 
-void DataGenerator::viewData()
+bool DataGenerator::viewData()
 {
+    if (buf_.size() > 100)
+    {
+        return false;
+    }
     cadview_->removeAll();
+
     for (auto &box : buf_)
     {
         box.show();
@@ -145,5 +154,6 @@ void DataGenerator::viewData()
     cadview_->updateView(CadView::KUpdate::Fitall);
 
     cadview_->update();
+    return true;
 }
 } // namespace KDebugger

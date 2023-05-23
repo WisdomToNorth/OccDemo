@@ -1,46 +1,43 @@
 ﻿#include "MainWindowOcc.h"
 
-#include <iostream>
+#include <algorithm>
 #include <chrono>
-#include <vector>
 #include <ctime>
+#include <iostream>
 #include <random>
 #include <thread>
-#include <algorithm>
+#include <vector>
 
-#include <QGuiApplication>
-#include <QScreen>
-#include <QDebug>
-#include <QSpinBox>
-#include <QLabel>
 #include <QCheckBox>
-#include <QStatusBar>
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QGuiApplication>
+#include <QLabel>
 #include <QMenu>
 #include <QPointer>
-#include <QDesktopWidget>
+#include <QScreen>
+#include <QSpinBox>
+#include <QStatusBar>
 
-#include "CadView.h"
-#include "KTimer.h"
-#include "CustomQlistWidget.h"
-#include "KLogger.h"
-#include "global.h"
-#include "MultiUniset.h"
-#include "DataGenerator.h"
 #include "2d_search.h"
+#include "CadView.h"
+#include "CustomQlistWidget.h"
+#include "DataGenerator.h"
+#include "KLogger.h"
 #include "KPnt.h"
-#include "statusinfowidget.h"
-#include "linedrawer.h"
+#include "KTimer.h"
+#include "MultiUniset.h"
 #include "PreLine.h"
+#include "global.h"
+#include "linedrawer.h"
+#include "statusinfowidget.h"
 
 #include "ui_MainWindowOcc.h"
 
 namespace KDebugger
 {
 MainWindowOcc::MainWindowOcc(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindowOccClass()),
-    unionset_(nullptr),
-    kdtree_(nullptr)
+    QMainWindow(parent), ui(new Ui::MainWindowOccClass()), unionset_(nullptr), kdtree_(nullptr)
 
 {
     ui->setupUi(this);
@@ -54,8 +51,7 @@ MainWindowOcc::MainWindowOcc(QWidget *parent) :
     auto scheight = height * 3 / 4;
     this->setGeometry(width * 1 / 8, height / 8, scwidth, scheight);
 
-    cadview_ = new CadView(this),
-    G_Context = cadview_->getContext();
+    cadview_ = new CadView(this), G_Context = cadview_->getContext();
 
     // ui->widget_param->setMaximumWidth(scwidth / 3);
     ui->gridLayout_view->addWidget(cadview_);
@@ -75,24 +71,27 @@ MainWindowOcc::MainWindowOcc(QWidget *parent) :
     ui->gl_console->addWidget(console_widget);
     ui->widget_info->hide();
 
-    cadview_->moveInfoCb = std::bind(&MainWindowOcc::handleMouseMove,
-                                     this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-    cadview_->leftClickCb = std::bind(&MainWindowOcc::handleLeftPress,
-                                      this, std::placeholders::_1, std::placeholders::_2);
-    cadview_->rightClickCb = std::bind(&MainWindowOcc::handleRightPress,
-                                       this, std::placeholders::_1);
+    cadview_->moveInfoCb = std::bind(&MainWindowOcc::handleMouseMove, this, std::placeholders::_1,
+                                     std::placeholders::_2, std::placeholders::_3);
+    cadview_->leftClickCb = std::bind(&MainWindowOcc::handleLeftPress, this, std::placeholders::_1,
+                                      std::placeholders::_2);
+    cadview_->rightClickCb =
+        std::bind(&MainWindowOcc::handleRightPress, this, std::placeholders::_1);
 
     data_generator_ = new DataGenerator(cadview_);
 
     KLog("Hello!");
     on_pb_generate_pressed();
+
     on_actionview_triggered();
 }
 
 MainWindowOcc::~MainWindowOcc()
 {
-    if (data_generator_) delete data_generator_;
-    if (unionset_) delete unionset_;
+    if (data_generator_)
+        delete data_generator_;
+    if (unionset_)
+        delete unionset_;
 
     delete ui;
 }
@@ -154,12 +153,12 @@ void MainWindowOcc::handleLeftPress(const double &_1, const double &_2)
 void MainWindowOcc::handleRightPress(QMouseEvent *event)
 {
     QPointer<QMenu> rightMenu = getRightMenu();
-    if (rightMenu->isEmpty()) return;
+    if (rightMenu->isEmpty())
+        return;
     rightMenu->exec(cursor().pos());
 }
 
-void MainWindowOcc::handleMouseMove(const double &_1,
-                                    const double &_2, const double &_3)
+void MainWindowOcc::handleMouseMove(const double &_1, const double &_2, const double &_3)
 {
     if (curmode_ == AppModeEnum::draw_line)
     {
@@ -173,10 +172,10 @@ void MainWindowOcc::handleMouseMove(const double &_1,
     this->setStatusBar(_1, _2, _3);
 }
 
-void MainWindowOcc::setStatusBar(const double &_1,
-                                 const double &_2, const double &_3)
+void MainWindowOcc::setStatusBar(const double &_1, const double &_2, const double &_3)
 {
-    if (!info_widget_) return;
+    if (!info_widget_)
+        return;
     info_widget_->setMessage(_1, _2, _3);
 }
 
@@ -194,7 +193,10 @@ void MainWindowOcc::on_actionclear_triggered()
 }
 void MainWindowOcc::on_actionview_triggered()
 {
-    data_generator_->viewData();
+    if (!data_generator_->viewData())
+    {
+        KLog("View data is too large, return.");
+    }
 }
 
 // unionfind
@@ -273,8 +275,8 @@ void MainWindowOcc::on_pb_TestUnionfind_pressed()
         else
         {
             std::cout << "#### test " << i << " ####\n";
-            std::cout << "data size: " << ui->sb_row->value() << " * "
-                      << ui->sb_col->value() << std::endl;
+            std::cout << "data size: " << ui->sb_row->value() << " * " << ui->sb_col->value()
+                      << std::endl;
             std::cout << "ori: " << ori << std::endl;
             std::cout << "opt: " << opt << std::endl;
             std::cout << "test failed!";
@@ -313,15 +315,15 @@ void MainWindowOcc::on_actionori_find1D_triggered()
 
 int MainWindowOcc::kd_find1D(bool _debug)
 {
-    if (!kdtree_) kdtree_ = new TwoDSearch(data_generator_);
-    return kdtree_->getOneDRange(ui->dsb_down->value(),
-                                 ui->dsb_up->value(), _debug);
+    if (!kdtree_)
+        kdtree_ = new TwoDSearch(data_generator_);
+    return kdtree_->getOneDRange(ui->dsb_down->value(), ui->dsb_up->value(), _debug);
 }
 int MainWindowOcc::ori_find1D(bool _debug)
 {
-    if (!kdtree_) kdtree_ = new TwoDSearch(data_generator_);
-    return kdtree_->getOneDRangeOri(ui->dsb_down->value(),
-                                    ui->dsb_up->value(), _debug);
+    if (!kdtree_)
+        kdtree_ = new TwoDSearch(data_generator_);
+    return kdtree_->getOneDRangeOri(ui->dsb_down->value(), ui->dsb_up->value(), _debug);
 }
 int MainWindowOcc::kd_find2D(bool _debug)
 {
@@ -329,21 +331,19 @@ int MainWindowOcc::kd_find2D(bool _debug)
 }
 int MainWindowOcc::ori_find2D(bool _debug)
 {
-    if (!kdtree_) kdtree_ = new TwoDSearch(data_generator_);
-    return kdtree_->getTwoDRangeOri(KRegion(KPt(ui->dsb_left->value(),
-                                                ui->dsb_down->value()),
-                                            KPt(ui->dsb_right->value(),
-                                                ui->dsb_up->value())),
+    if (!kdtree_)
+        kdtree_ = new TwoDSearch(data_generator_);
+    return kdtree_->getTwoDRangeOri(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
+                                            KPt(ui->dsb_right->value(), ui->dsb_up->value())),
                                     _debug);
 }
 
 int MainWindowOcc::ran_find2D(bool _debug)
 {
-    if (!kdtree_) kdtree_ = new TwoDSearch(data_generator_);
-    return kdtree_->getTwoDRangeRangeTree(KRegion(KPt(ui->dsb_left->value(),
-                                                      ui->dsb_down->value()),
-                                                  KPt(ui->dsb_right->value(),
-                                                      ui->dsb_up->value())),
+    if (!kdtree_)
+        kdtree_ = new TwoDSearch(data_generator_);
+    return kdtree_->getTwoDRangeRangeTree(KRegion(KPt(ui->dsb_left->value(), ui->dsb_down->value()),
+                                                  KPt(ui->dsb_right->value(), ui->dsb_up->value())),
                                           _debug);
 }
 void MainWindowOcc::on_actionkd_find2D_triggered()
@@ -437,17 +437,16 @@ QMenu *MainWindowOcc::getRightMenu()
     right_button_menu->setStyleSheet(" ");
     switch (curmode_)
     {
-    case KDebugger::MainWindowOcc::AppModeEnum::none:
-        break;
-    case KDebugger::MainWindowOcc::AppModeEnum::draw_line: {
+    case KDebugger::MainWindowOcc::AppModeEnum::none: break;
+    case KDebugger::MainWindowOcc::AppModeEnum::draw_line:
+    {
         right_button_menu->addAction(tr("commit draw"), this,
                                      [&]() { execCmd(CmdEnum::commit_draw); });
         right_button_menu->addAction(tr("cancel draw"), this,
                                      [&]() { execCmd(CmdEnum::cancel_draw); });
         break;
     }
-    default:
-        break;
+    default: break;
     }
 
     return right_button_menu;
@@ -457,8 +456,10 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
 {
     switch (_cmd)
     {
-    case KDebugger::MainWindowOcc::CmdEnum::commit_draw: {
-        if (!line_drawer_) return;
+    case KDebugger::MainWindowOcc::CmdEnum::commit_draw:
+    {
+        if (!line_drawer_)
+            return;
         std::list<gp_Pnt> res;
         line_drawer_->commitDraw(res);
         PrePline *new_line = new PrePline(res);
@@ -470,16 +471,17 @@ void MainWindowOcc::execCmd(CmdEnum _cmd)
         line_drawer_ = nullptr;
         break;
     }
-    case KDebugger::MainWindowOcc::CmdEnum::cancel_draw: {
-        if (!line_drawer_) return;
+    case KDebugger::MainWindowOcc::CmdEnum::cancel_draw:
+    {
+        if (!line_drawer_)
+            return;
         line_drawer_->cancelDraw();
         curmode_ = AppModeEnum::none;
         delete line_drawer_;
         line_drawer_ = nullptr;
         break;
     }
-    default:
-        break;
+    default: break;
     }
 };
 
@@ -497,8 +499,8 @@ void MainWindowOcc::on_pb_Test1DFind_pressed()
             if (ori_find1D() != kd_find1D())
             {
                 std::cout << "\n\n****** test failed:" << i << " ******" << std::endl;
-                std::cout << "range: [" << ui->dsb_down->value() << ", "
-                          << ui->dsb_up->value() << "): ";
+                std::cout << "range: [" << ui->dsb_down->value() << ", " << ui->dsb_up->value()
+                          << "): ";
                 std::cout << "ori :" << ori_find1D() << std::endl;
                 std::cout << "binfind :" << kd_find1D() << std::endl;
                 std::cout << "ori :";
@@ -523,8 +525,8 @@ void MainWindowOcc::on_pb_Simple1DFind_pressed()
         if (ori_find1D() != kd_find1D())
         {
             std::cout << "\n\n****** test failed:" << i << " ******" << std::endl;
-            std::cout << "range: [" << ui->dsb_down->value() << ", "
-                      << ui->dsb_up->value() << "): ";
+            std::cout << "range: [" << ui->dsb_down->value() << ", " << ui->dsb_up->value()
+                      << "): ";
             std::cout << "ori :" << ori_find1D() << std::endl;
             std::cout << "binfind :" << kd_find1D() << std::endl;
             std::cout << "ori :";
@@ -593,8 +595,8 @@ void MainWindowOcc::on_pb_Test2DFind_pressed()
                 std::cout << "\n\n****** test failed:" << i << " ******" << std::endl;
                 std::cout << "left to right: [" << ui->dsb_left->value() << ", "
                           << ui->dsb_right->value() << ")" << std::endl;
-                std::cout << "down to up: [" << ui->dsb_down->value() << ", "
-                          << ui->dsb_up->value() << ")" << std::endl;
+                std::cout << "down to up: [" << ui->dsb_down->value() << ", " << ui->dsb_up->value()
+                          << ")" << std::endl;
 
                 std::cout << "number of ori :" << ori_find2D() << std::endl;
                 std::cout << "number of range tree :" << ran_find2D() << std::endl;
