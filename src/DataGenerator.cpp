@@ -142,7 +142,7 @@ void DataGenerator::viewData()
         box.show();
     }
 
-    cadview_->fitAll();
+    cadview_->updateView(CadView::KUpdate::Fitall);
 
     cadview_->update();
 }

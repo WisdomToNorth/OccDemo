@@ -142,7 +142,7 @@ Handle(AIS_TextLabel) KBox::getText()
 
 void KBox::drawElips()
 {
-    if (G_Context.IsNull()) return;
+    if (!G_Context) return;
     gp_Dir dir = gp_Dir(0, 0, 1);
     gp_Dir dirx = gp_Dir(1, 0, 0);
 
@@ -178,7 +178,7 @@ void KBox::drawElips()
 
 void KBox::drawBox()
 {
-    if (G_Context.IsNull()) return;
+    if (!G_Context) return;
     gp_Pnt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
     gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
     gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);
@@ -198,7 +198,7 @@ void KBox::drawBox()
 
 void KBox::drawSpacingBox()
 {
-    if (G_Context.IsNull()) return;
+    if (!G_Context) return;
     gp_Pnt lb(center_.x - size_x_ * 0.5 - space_,
               center_.y - size_y_ * 0.5 - space_, 0);
     gp_Pnt rb(center_.x + size_x_ * 0.5 + space_,

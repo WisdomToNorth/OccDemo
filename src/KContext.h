@@ -5,10 +5,10 @@
 
 namespace KDebugger
 {
-class K_Context : public AIS_InteractiveContext
+class KContext : public AIS_InteractiveContext
 {
 public:
-    K_Context(const Handle(V3d_Viewer) & MainViewer) :
+    KContext(const Handle(V3d_Viewer) & MainViewer) :
         AIS_InteractiveContext(MainViewer)
     {}
     void addToSelected(Handle(SelectMgr_EntityOwner) obj)

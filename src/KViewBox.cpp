@@ -18,7 +18,7 @@ KViewBox::~KViewBox()
 
 void KViewBox::tempshow()
 {
-    if (G_Context.IsNull()) return;
+    if (!G_Context) return;
     gp_Pnt lb(center_.x - size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
     gp_Pnt rb(center_.x + size_x_ * 0.5, center_.y - size_y_ * 0.5, 0);
     gp_Pnt lu(center_.x - size_x_ * 0.5, center_.y + size_y_ * 0.5, 0);

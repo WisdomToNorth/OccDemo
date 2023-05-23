@@ -19,7 +19,7 @@
 
 namespace KDebugger
 {
-Handle(AIS_InteractiveContext) G_Context = nullptr;
+KContext *G_Context = nullptr;
 
 bool G_Stop_Program = false; // exit circulation
 
@@ -132,7 +132,7 @@ Appearance getUIConfig()
             G_UI_Appearance = Appearance::Day;
         else if (ui_str == "system") // todo
             G_UI_Appearance = Appearance::System;
-        else // if (ui_str == "dark")
+        else                         // if (ui_str == "dark")
             G_UI_Appearance = Appearance::Dark;
     }
 
