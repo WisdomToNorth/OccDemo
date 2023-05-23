@@ -39,7 +39,6 @@ namespace KDebugger
 MainWindowOcc::MainWindowOcc(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindowOccClass()),
-
     unionset_(nullptr),
     kdtree_(nullptr)
 
@@ -187,7 +186,7 @@ void MainWindowOcc::setUpUI()
 
 void MainWindowOcc::on_actionFitAll_triggered()
 {
-    cadview_->fitAll();
+    cadview_->updateView(CadView::KUpdate::Fitall);
 }
 void MainWindowOcc::on_actionclear_triggered()
 {
@@ -210,6 +209,9 @@ void MainWindowOcc::on_act_unionfind_opt1_triggered()
 {
     if (!unionset_)
         unionset_ = new MultiUniset(data_generator_);
+
+    cadview_->setUserCursor(CadView::CursorType::wait);
+
     KTimer timer;
     std::cout << "res: " << unionset_->oneCoreUnionSet() << std::endl;
 

@@ -45,16 +45,14 @@ class V3d_View;
 class V3d_Viewer;
 class AIS_InteractiveObject;
 class Graphic3d_GraphicDriver;
-class K_Context;
+class KContext;
 enum Prs3d_TypeOfHighlight;
 
 namespace KDebugger
 {
 //! Adapted a QWidget for OpenCASCADE viewer.
-
 class CadView : public QWidget, protected AIS_ViewController
 {
-    Q_OBJECT
 private:
     enum class CurrentAction3dEnum
     {
@@ -64,7 +62,7 @@ private:
         CurAction3d_DynamicRotation
     };
 
-    // typedef std::function<void(const Handle(SelectMgr_EntityOwner)&)> leftButtonClickCallBack;
+    typedef std::function<void(const Handle(SelectMgr_EntityOwner) &)> processClickCallBack;
     typedef std::function<void(QMouseEvent *event)> rightButtonClickCallBack;
     typedef std::function<void(const double &_1, const double &_2)> leftButtonClickCallBack;
     typedef std::function<void(const double &_1, const double &_2, const double &_3)> moveInfoCallBack;
@@ -77,26 +75,32 @@ public:
         Fitall,
         MustResized
     };
-
+    enum class CursorType
+    {
+        def,
+        hand,
+        pan,
+        glob,
+        zoom,
+        rot,
+        wait
+    };
+    void setUserCursor(CursorType type);
     CadView(QWidget *parent = Q_NULLPTR);
     ~CadView();
 
-    Handle(SelectMgr_EntityOwner) getDetectedObj();
-    void drawTestData(const std::vector<Handle(AIS_Shape)> &all_face_);
-    void drawTestLabelData(const std::vector<Handle(AIS_TextLabel)> &all_labels);
-    void fitAll();
-    void removeAll();
-    Handle(AIS_InteractiveContext) getContext()
+    KContext *getContext()
     {
-        return context_;
-    }
+        return context_.get();
+    };
+    Handle(SelectMgr_EntityOwner) getDetectedObj();
+    void updateView(KUpdate);
+    void removeAll(bool redraw = true);
+
+    processClickCallBack processClickCb = NULL;
+    moveInfoCallBack moveInfoCb = NULL;
     leftButtonClickCallBack leftClickCb = NULL;
     rightButtonClickCallBack rightClickCb = NULL;
-    moveInfoCallBack moveInfoCb = NULL;
-
-public slots:
-    void updateView(KUpdate);
-    void resetAll(bool);
 
 protected:
     void paintEvent(QPaintEvent *) override;
@@ -110,32 +114,54 @@ protected:
 
 private:
     void initContext();
-    void initDefaultHilightAttributes(Prs3d_TypeOfHighlight idx,
-                                      Standard_Real lineWidth_aspect = 5.0, Quantity_Color theColor = Quantity_NOC_LIGHTBLUE2);
-    void initCursors();
+    void initHilightAttributes();
+    void initContextAttributes();
+    void setHilightAttribute(Prs3d_TypeOfHighlight idx, double lineWidth_aspect = 5.0,
+                             Quantity_Color theColor = Quantity_NOC_LIGHTBLUE2);
     void setViewCube();
-    void setOriginTrihedron();
     bool checkDetectedValid();
 
-signals:
-    void cmdSignal(QMouseEvent *event);
-
 private:
-    friend class DataGenerator;
-    Handle(K_Context) context_;
+    friend class CursorHelper;
+
+    Handle(KContext) context_ = nullptr;
     Handle(AIS_InteractiveObject) viewcube_ = nullptr;
-    Handle(AIS_InteractiveObject) aisOriginTrihedron_ = nullptr;
-    Handle(V3d_Viewer) viewer_ = nullptr;
+    Handle(V3d_Viewer) v_viewer_ = nullptr;
     Handle(Graphic3d_GraphicDriver) graphic_driver_ = nullptr;
     Handle(V3d_View) view_ = nullptr;
-    Handle(AIS_TextLabel) text_ = nullptr;
 
     CurrentAction3dEnum context_action_mode_;                 //! 三维场景转换模式
     std::vector<Handle(SelectMgr_EntityOwner)> detected_obj_; // 存储点击过的对象，可能是点线面
 
-    int mouse_x_record_; //! 记录鼠标平移坐标X
-    int mouse_y_record_; //! 记录鼠标平移坐标Y
+    int mouse_x_record_;                                      //! 记录鼠标平移坐标X
+    int mouse_y_record_;                                      //! 记录鼠标平移坐标Y
     int zoom_scale_control_ = 4;
+    CursorType cursor_type_ = CursorType::def;
+};
+
+class CursorHelper
+{
+public:
+    CursorHelper(CadView *_viewer, CadView::CursorType type)
+    {
+        view_ = _viewer;
+        if (view_)
+        {
+            previous_ = view_->cursor_type_;
+            view_->setUserCursor(type);
+        }
+    };
+    ~CursorHelper()
+    {
+        if (view_)
+        {
+            view_->setUserCursor(previous_);
+        }
+    };
+
+private:
+    CadView *view_ = nullptr;
+    CadView::CursorType previous_ = CadView::CursorType::def;
 };
 } // namespace KDebugger
 #endif // _OCCVIEW_H_

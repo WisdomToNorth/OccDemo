@@ -6,12 +6,12 @@
 #include <QString>
 #include <QApplication>
 
-#include <AIS_InteractiveContext.hxx>
+#include "KContext.h"
 #include <AIS_ColoredShape.hxx>
 
 namespace KDebugger
 {
-extern Handle(AIS_InteractiveContext) G_Context;
+extern KContext *G_Context;
 
 extern std::default_random_engine G_Random_Engine;
 
