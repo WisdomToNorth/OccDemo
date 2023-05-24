@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <vector>
 #include <QMainWindow>
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -93,7 +93,7 @@ private:
 
     CadView *cadview_;
 
-    DataGenerator *data_generator_;
+    mutable DataGenerator *data_generator_;
     MultiUniset *unionset_;
     TwoDSearch *kdtree_;
     StatusInfoWidget *info_widget_;
@@ -102,6 +102,8 @@ private:
     AppModeEnum curmode_ = AppModeEnum::none;
 
     std::vector<PrePline *> preline_vec_;
+    mutable bool processing_ = true;
+    bool lock_ = false;
     enum class CmdEnum
     {
         commit_draw,
@@ -110,7 +112,8 @@ private:
     enum class AppModeEnum
     {
         none,
-        draw_line
+        draw_line,
+        caculate
     };
 };
 } // namespace KDebugger

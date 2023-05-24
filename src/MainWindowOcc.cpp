@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <chrono>
 #include <ctime>
+#include <future>
 #include <iostream>
 #include <random>
 #include <thread>
@@ -160,6 +161,9 @@ void MainWindowOcc::handleRightPress(QMouseEvent *event)
 
 void MainWindowOcc::handleMouseMove(const double &_1, const double &_2, const double &_3)
 {
+    this->setStatusBar(_1, _2, _3);
+    processing_ = false;
+
     if (curmode_ == AppModeEnum::draw_line)
     {
         if (line_drawer_)
@@ -169,7 +173,33 @@ void MainWindowOcc::handleMouseMove(const double &_1, const double &_2, const do
             line_drawer_->drawTempLine(gp_Pnt(_1, _2, 0.0), angle, toggle);
         }
     }
-    this->setStatusBar(_1, _2, _3);
+    else if (curmode_ == AppModeEnum::caculate)
+    {
+        KTimer timer;
+        int res = 0;
+
+        if (lock_)
+            return;
+        lock_ = true;
+        this->processing_ = true;
+        cadview_->setUserCursor(CadView::CursorType::wait);
+        std::thread t([&, this] { this->unionset_->oneCoreUnionSet(res); });
+        std::cout << ">>thread detach!\n" << std::flush;
+        t.detach();
+        while (unionset_->done_ == false)
+        {
+            QApplication::processEvents();
+            if (!processing_)
+            {
+                unionset_->stop_ = true;
+            }
+        }
+        std::cout << "res: " << res << std::endl;
+
+        timer.timeFromBegin("Opt1: ");
+        lock_ = false;
+        cadview_->setUserCursor(CadView::CursorType::def);
+    }
 }
 
 void MainWindowOcc::setStatusBar(const double &_1, const double &_2, const double &_3)
@@ -209,17 +239,12 @@ void MainWindowOcc::on_act_unionfind_ori_triggered()
 // unionfind
 void MainWindowOcc::on_act_unionfind_opt1_triggered()
 {
+    curmode_ = curmode_ == AppModeEnum::none ? AppModeEnum::caculate : AppModeEnum::none;
+    std::cout << "Set Caculate: " << (curmode_ == AppModeEnum::caculate) << std::endl;
     if (!unionset_)
         unionset_ = new MultiUniset(data_generator_);
-
-    cadview_->setUserCursor(CadView::CursorType::wait);
-
-    KTimer timer;
-    std::cout << "res: " << unionset_->oneCoreUnionSet() << std::endl;
-
-    std::cout << "opt1: ";
-    timer.timeFromBegin("");
 }
+
 // unionfind
 void MainWindowOcc::on_act_unionfind_opt2_triggered()
 {
@@ -231,6 +256,7 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
         def = ui->sb_core->value();
     }
     KTimer timer;
+    // res = this->unionset_->oneCoreUnionSet();
     std::cout << "res: " << unionset_->multiCoreUnionSet(def, true) << std::endl;
 
     std::cout << "opt2: ";
@@ -266,7 +292,8 @@ void MainWindowOcc::on_pb_TestUnionfind_pressed()
         on_pb_Randvalue_pressed();
         on_pb_generate_pressed();
 
-        int ori = unionset_->oneCoreUnionSet();
+        int ori;
+        unionset_->oneCoreUnionSet(ori);
         int opt = unionset_->optUnionSet(def);
         if (ori == opt)
         {
@@ -289,7 +316,8 @@ void MainWindowOcc::on_pb_TestUnionfind_pressed()
     {
         on_pb_Randvalue_pressed();
         on_pb_generate_pressed();
-        unionset_->oneCoreUnionSet();
+        int dummy;
+        unionset_->oneCoreUnionSet(dummy);
     }
     std::cout << "ori time: ";
     timer.timeFromBegin("");

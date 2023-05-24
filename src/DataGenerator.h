@@ -51,6 +51,7 @@ public:
     void notifyAll();
     std::vector<int> getIntNumbers(int min, int max, int count);
     std::vector<double> getFourNumber(double min, double max);
+    bool done = false;
 
 private:
     void generateData(std::vector<KBox> &buffer, const DataParameter &param);

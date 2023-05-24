@@ -8,9 +8,9 @@ namespace KDebugger
 class KTimer
 {
 public:
-    KTimer() :
-        t1_(std::chrono::steady_clock::now()), t2_(t1_)
-    {}
+    KTimer() : t1_(std::chrono::steady_clock::now()), t2_(t1_)
+    {
+    }
     template <typename T = std::milli>
     double timeFromBegin(const std::string &str = "\nTime from start: ")
     {
