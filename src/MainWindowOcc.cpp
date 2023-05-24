@@ -178,27 +178,36 @@ void MainWindowOcc::handleMouseMove(const double &_1, const double &_2, const do
         KTimer timer;
         int res = 0;
 
-        if (lock_)
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        if (!lock_.try_lock())
+        {
+            // std::this_thread::sleep_for(std::chrono::microseconds(1));
+            // QApplication::processEvents();
             return;
-        lock_ = true;
+        }
+
         this->processing_ = true;
+        MultiUniset solver(data_generator_);
         cadview_->setUserCursor(CadView::CursorType::wait);
-        std::thread t([&, this] { this->unionset_->oneCoreUnionSet(res); });
-        std::cout << ">>thread detach!\n" << std::flush;
+        std::thread t([&] { solver.oneCoreUnionSet(res); });
         t.detach();
-        while (unionset_->done_ == false)
+        while (solver.done_ == false)
         {
             QApplication::processEvents();
             if (!processing_)
             {
-                unionset_->stop_ = true;
+                solver.stop_ = true;
+                // lock_.unlock();
+                // return;
             }
         }
-        std::cout << "res: " << res << std::endl;
-
-        timer.timeFromBegin("Opt1: ");
-        lock_ = false;
+        if (processing_)
+        {
+            std::cout << "\nRES: " << res << std::endl;
+            timer.timeFromBegin("Opt1: ");
+        }
         cadview_->setUserCursor(CadView::CursorType::def);
+        lock_.unlock();
     }
 }
 

@@ -103,7 +103,7 @@ private:
 
     std::vector<PrePline *> preline_vec_;
     mutable bool processing_ = true;
-    bool lock_ = false;
+    std::mutex lock_;
     enum class CmdEnum
     {
         commit_draw,

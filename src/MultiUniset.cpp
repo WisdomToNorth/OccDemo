@@ -31,8 +31,11 @@ MultiUniset::MultiUniset(DataGenerator *view) : DataObserver(view)
 
 void MultiUniset::updateData()
 {
-    buf_ = data_generator_->getData();
-
+    const auto &buf = data_generator_->getData();
+    for (auto box : buf)
+    {
+        buf_.push_back(box);
+    }
     KLog("Data update in Multi Unionset!");
 }
 
@@ -115,16 +118,17 @@ int MultiUniset::oneCoreUnionSet(int &res)
 
         int cnt = handleUnionFinder(unionfinder, false);
         // timer.timeFromBegin("union single all");
-        std::cout << "merge count in thread: " << cnt << std::endl;
+        std::cout << "Result in thread: " << cnt << std::endl;
         res = cnt;
         done_ = true;
-        return cnt;
+        return res;
     }
     else
     {
         std::cout << "Caculate break;" << std::endl;
         done_ = true;
-        return -1;
+        res = -1;
+        return res;
     }
 }
 
