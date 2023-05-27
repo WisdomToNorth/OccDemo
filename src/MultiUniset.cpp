@@ -24,7 +24,8 @@
 namespace KDebugger
 {
 
-MultiUniset::MultiUniset(DataGenerator *view) : DataObserver(view)
+MultiUniset::MultiUniset(DataGenerator *view, bool &stop_handle) :
+    DataObserver(view), stop_(stop_handle)
 {
     updateData();
 }
@@ -118,7 +119,7 @@ int MultiUniset::oneCoreUnionSet(int &res)
 
         int cnt = handleUnionFinder(unionfinder, false);
         // timer.timeFromBegin("union single all");
-        std::cout << "Result in thread: " << cnt << std::endl;
+        std::cout << "Win in thread: " << cnt << std::endl;
         res = cnt;
         done_ = true;
         return res;

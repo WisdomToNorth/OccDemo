@@ -314,10 +314,10 @@ void CadView::mousePressEvent(QMouseEvent *event)
     }
     else if (event->buttons() == Qt::RightButton)
     {
-        if (!checkDetectedValid())
-            return;
         if (rightClickCb)
             rightClickCb(event);
+        if (!checkDetectedValid())
+            return;
     }
     else if (event->buttons() & Qt::LeftButton) // 鼠标左键选择模型
     {

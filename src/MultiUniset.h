@@ -14,7 +14,7 @@ struct BinSearchNode;
 class MultiUniset : public DataObserver
 {
 public:
-    MultiUniset(DataGenerator *view);
+    MultiUniset(DataGenerator *view, bool &stop_handle);
 
     void updateData() override;
     void badWay();
@@ -22,7 +22,7 @@ public:
     int oneCoreUnionSet(int &res);
     int optUnionSet(bool _multi, bool _debug = false);
     int multiCoreUnionSet(int user_set_num, bool _debug = false);
-    bool stop_ = false;
+    bool &stop_;
     bool done_ = false;
 
 private:

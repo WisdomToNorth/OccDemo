@@ -162,8 +162,8 @@ void MainWindowOcc::handleRightPress(QMouseEvent *event)
 void MainWindowOcc::handleMouseMove(const double &_1, const double &_2, const double &_3)
 {
     this->setStatusBar(_1, _2, _3);
-    processing_ = false;
-
+    stop_handle_ = true;
+    on_queue_ = false;
     if (curmode_ == AppModeEnum::draw_line)
     {
         if (line_drawer_)
@@ -175,40 +175,31 @@ void MainWindowOcc::handleMouseMove(const double &_1, const double &_2, const do
     }
     else if (curmode_ == AppModeEnum::caculate)
     {
-        KTimer timer;
+        cadview_->setUserCursor(CadView::CursorType::def);
         int res = 0;
 
-        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+        // 移动鼠标时，新的任务加入等待队列，等待旧的退出后，新的进入计算。
+        // 如果有任务在等待，新的任务到来，则新的任务直接把正在等待的任务替换掉
         if (!lock_.try_lock())
         {
-            // std::this_thread::sleep_for(std::chrono::microseconds(1));
-            // QApplication::processEvents();
             return;
         }
 
-        this->processing_ = true;
-        MultiUniset solver(data_generator_);
+        this->stop_handle_ = false;
+        MultiUniset solver(data_generator_, stop_handle_);
         cadview_->setUserCursor(CadView::CursorType::wait);
         std::thread t([&] { solver.oneCoreUnionSet(res); });
         t.detach();
-        while (solver.done_ == false)
-        {
-            QApplication::processEvents();
-            if (!processing_)
-            {
-                solver.stop_ = true;
-                // lock_.unlock();
-                // return;
-            }
-        }
-        if (processing_)
-        {
-            std::cout << "\nRES: " << res << std::endl;
-            timer.timeFromBegin("Opt1: ");
-        }
-        cadview_->setUserCursor(CadView::CursorType::def);
-        lock_.unlock();
     }
+}
+
+void MainWindowOcc::solverReturnCB(int res)
+{
+    std::cout << "\nRES: " << res << std::endl;
+    cadview_->setUserCursor(CadView::CursorType::def);
+    lock_.unlock();
 }
 
 void MainWindowOcc::setStatusBar(const double &_1, const double &_2, const double &_3)
@@ -242,7 +233,7 @@ void MainWindowOcc::on_actionview_triggered()
 void MainWindowOcc::on_act_unionfind_ori_triggered()
 {
     if (!unionset_)
-        unionset_ = new MultiUniset(data_generator_);
+        unionset_ = new MultiUniset(data_generator_, stop_handle_);
     unionset_->badWay();
 }
 // unionfind
@@ -251,14 +242,14 @@ void MainWindowOcc::on_act_unionfind_opt1_triggered()
     curmode_ = curmode_ == AppModeEnum::none ? AppModeEnum::caculate : AppModeEnum::none;
     std::cout << "Set Caculate: " << (curmode_ == AppModeEnum::caculate) << std::endl;
     if (!unionset_)
-        unionset_ = new MultiUniset(data_generator_);
+        unionset_ = new MultiUniset(data_generator_, stop_handle_);
 }
 
 // unionfind
 void MainWindowOcc::on_act_unionfind_opt2_triggered()
 {
     if (!unionset_)
-        unionset_ = new MultiUniset(data_generator_);
+        unionset_ = new MultiUniset(data_generator_, stop_handle_);
     int def = 0;
     if (ui->sb_core->value() > 0)
     {
@@ -275,7 +266,7 @@ void MainWindowOcc::on_act_unionfind_opt2_triggered()
 void MainWindowOcc::on_actionuf_opt3_triggered()
 {
     if (!unionset_)
-        unionset_ = new MultiUniset(data_generator_);
+        unionset_ = new MultiUniset(data_generator_, stop_handle_);
     int def = 0;
     if (ui->sb_core->value() > 0)
     {
@@ -290,7 +281,7 @@ void MainWindowOcc::on_actionuf_opt3_triggered()
 void MainWindowOcc::on_pb_TestUnionfind_pressed()
 {
     if (!unionset_)
-        unionset_ = new MultiUniset(data_generator_);
+        unionset_ = new MultiUniset(data_generator_, stop_handle_);
     int def = 0;
     if (ui->sb_core->value() > 0)
     {

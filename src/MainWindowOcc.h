@@ -80,6 +80,7 @@ private slots:
     void on_action_drawline_triggered();
     void on_action_cpuline_triggered();
     void on_action_normline_triggered();
+    void solverReturnCB(int res);
 
 private:
     int kd_find1D(bool _debug = false);
@@ -102,7 +103,8 @@ private:
     AppModeEnum curmode_ = AppModeEnum::none;
 
     std::vector<PrePline *> preline_vec_;
-    mutable bool processing_ = true;
+    mutable bool stop_handle_ = false;
+    bool on_queue_;
     std::mutex lock_;
     enum class CmdEnum
     {
