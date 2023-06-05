@@ -24,8 +24,7 @@
 namespace KDebugger
 {
 
-MultiUniset::MultiUniset(DataGenerator *view, bool &stop_handle) :
-    DataObserver(view), stop_(stop_handle)
+MultiUniset::MultiUniset(DataGenerator *view) : DataObserver(view)
 {
     updateData();
 }
@@ -101,9 +100,6 @@ int MultiUniset::optUnionSet(bool _multi, bool _debug)
 
 int MultiUniset::oneCoreUnionSet(int &res)
 {
-    done_ = false;
-    stop_ = false;
-
     // std::cout << "\n\n-----------unionset single thread------------" << std::endl;
     unsigned long long data_count = buf_.size();
     // std::cout << "data size: " << data_count << "\ncaculating..." << std::endl;
@@ -121,13 +117,11 @@ int MultiUniset::oneCoreUnionSet(int &res)
         // timer.timeFromBegin("union single all");
         std::cout << "Win in thread: " << cnt << std::endl;
         res = cnt;
-        done_ = true;
         return res;
     }
     else
     {
         std::cout << "Caculate break;" << std::endl;
-        done_ = true;
         res = -1;
         return res;
     }
@@ -234,11 +228,6 @@ bool MultiUniset::caculateUnion(unsigned long long l_start, unsigned long long l
     // std::cout << "\nloc :" << m << "#" << n << "#" << cal_cnt << "//" << std::endl;
     for (int i = m; i < buf_.size(); ++i) //
     {
-        if (this->stop_)
-        {
-            // clean up resource;
-            return false;
-        }
         for (int j = 0; j < m; ++j)
         {
             j = j + n; // 第一次进入循环时，初始化j的位置，后续将n置零

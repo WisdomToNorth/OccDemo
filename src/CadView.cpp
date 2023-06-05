@@ -416,30 +416,32 @@ void CadView::mouseMoveEvent(QMouseEvent *event)
         if (moveInfoCb)
             moveInfoCb(x, y, z);
     }
-
-    switch (context_action_mode_)
+    if (!busy_)
     {
-    case CadView::CurrentAction3dEnum::CurAction3d_Nothing:
-    {
-        this->setCursor(getCursor(CursorType::def));
-        break;
+        switch (context_action_mode_)
+        {
+        case CadView::CurrentAction3dEnum::CurAction3d_Nothing:
+        {
+            this->setCursor(getCursor(CursorType::def));
+            break;
+        }
+        case CadView::CurrentAction3dEnum::CurAction3d_DynamicPanning:
+        {
+            view_->Pan(event->pos().x() - mouse_x_record_, mouse_y_record_ - event->pos().y());
+            mouse_x_record_ = event->pos().x();
+            mouse_y_record_ = event->pos().y();
+            break;
+        }
+        case CadView::CurrentAction3dEnum::CurAction3d_DynamicZooming: break;
+        case CadView::CurrentAction3dEnum::CurAction3d_DynamicRotation:
+        {
+            view_->Rotation(event->pos().x(), event->pos().y());
+            break;
+        }
+        default: break;
+        }
+        //......
     }
-    case CadView::CurrentAction3dEnum::CurAction3d_DynamicPanning:
-    {
-        view_->Pan(event->pos().x() - mouse_x_record_, mouse_y_record_ - event->pos().y());
-        mouse_x_record_ = event->pos().x();
-        mouse_y_record_ = event->pos().y();
-        break;
-    }
-    case CadView::CurrentAction3dEnum::CurAction3d_DynamicZooming: break;
-    case CadView::CurrentAction3dEnum::CurAction3d_DynamicRotation:
-    {
-        view_->Rotation(event->pos().x(), event->pos().y());
-        break;
-    }
-    default: break;
-    }
-    //......
 };
 
 //! 覆写鼠标滚轮事件

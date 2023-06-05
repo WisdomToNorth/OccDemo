@@ -12,26 +12,26 @@
 
 #include <functional>
 
-#include <QWidget>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <QWidget>
 
 #ifdef _WIN32
-#include <WNT_Window.hxx>
 #include <QtOpenGL\QGLWidget>
+#include <WNT_Window.hxx>
 #else
 #undef None
-#include <Xw_Window.hxx>
 #include <QGLWidget>
+#include <Xw_Window.hxx>
 #endif
 
 #include <AIS_InteractiveObject.hxx>
-#include <AIS_ViewController.hxx>
-#include <Prs3d_TypeOfHighlight.hxx>
-#include <V3d_Viewer.hxx>
-#include <Graphic3d_GraphicDriver.hxx>
-#include <V3d_View.hxx>
 #include <AIS_TextLabel.hxx>
+#include <AIS_ViewController.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
+#include <Prs3d_TypeOfHighlight.hxx>
+#include <V3d_View.hxx>
+#include <V3d_Viewer.hxx>
 
 #include "KContext.h"
 
@@ -65,7 +65,8 @@ private:
     typedef std::function<void(const Handle(SelectMgr_EntityOwner) &)> processClickCallBack;
     typedef std::function<void(QMouseEvent *event)> rightButtonClickCallBack;
     typedef std::function<void(const double &_1, const double &_2)> leftButtonClickCallBack;
-    typedef std::function<void(const double &_1, const double &_2, const double &_3)> moveInfoCallBack;
+    typedef std::function<void(const double &_1, const double &_2, const double &_3)>
+        moveInfoCallBack;
 
 public:
     enum class KUpdate
@@ -88,7 +89,7 @@ public:
     void setUserCursor(CursorType type);
     CadView(QWidget *parent = Q_NULLPTR);
     ~CadView();
-
+    bool busy_ = false;
     KContext *getContext()
     {
         return context_.get();
@@ -139,29 +140,5 @@ private:
     CursorType cursor_type_ = CursorType::def;
 };
 
-class CursorHelper
-{
-public:
-    CursorHelper(CadView *_viewer, CadView::CursorType type)
-    {
-        view_ = _viewer;
-        if (view_)
-        {
-            previous_ = view_->cursor_type_;
-            view_->setUserCursor(type);
-        }
-    };
-    ~CursorHelper()
-    {
-        if (view_)
-        {
-            view_->setUserCursor(previous_);
-        }
-    };
-
-private:
-    CadView *view_ = nullptr;
-    CadView::CursorType previous_ = CadView::CursorType::def;
-};
 } // namespace KDebugger
 #endif // _OCCVIEW_H_

@@ -1,8 +1,11 @@
 ﻿#pragma once
 
 #include <QMainWindow>
+
 #include <vector>
 
+#include "KTimer.h"
+#include "solverthread.h"
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
@@ -22,6 +25,7 @@ class TwoDSearch;
 class StatusInfoWidget;
 class LineDrawer;
 class PrePline;
+
 class MainWindowOcc : public QMainWindow
 {
     Q_OBJECT
@@ -43,6 +47,7 @@ private:
     void execCmd(CmdEnum _cmd);
 
 private slots:
+    void onTimeOut();
     void on_action_showLog_triggered();
     // data
 
@@ -80,7 +85,6 @@ private slots:
     void on_action_drawline_triggered();
     void on_action_cpuline_triggered();
     void on_action_normline_triggered();
-    void solverReturnCB(int res);
 
 private:
     int kd_find1D(bool _debug = false);
@@ -93,6 +97,11 @@ private:
     Ui::MainWindowOccClass *ui;
 
     CadView *cadview_;
+    SolverThread *solver_ = nullptr;
+
+    QTimer *timer;
+    KTimer *aux_timer;
+    bool have_result_ = true;
 
     mutable DataGenerator *data_generator_;
     MultiUniset *unionset_;
@@ -103,9 +112,6 @@ private:
     AppModeEnum curmode_ = AppModeEnum::none;
 
     std::vector<PrePline *> preline_vec_;
-    mutable bool stop_handle_ = false;
-    bool on_queue_;
-    std::mutex lock_;
     enum class CmdEnum
     {
         commit_draw,
@@ -117,5 +123,6 @@ private:
         draw_line,
         caculate
     };
+    int g_cnt_ = 0;
 };
 } // namespace KDebugger

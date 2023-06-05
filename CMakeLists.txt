@@ -66,8 +66,10 @@ include_directories(${OpenCASCADE_INCLUDE_DIR} ${Qt5_INCLUDE_DIR}
 link_directories(${OpenCASCADE_LIBRARY_DIR} ${Qt5_LIBRARY_DIR})
 
 # OccConfig
-file(GLOB OCC_CONFIG_FILES "${PROJECT_SOURCE_DIR}/src/*.h"
-     "${PROJECT_SOURCE_DIR}/src/*.cpp")
+file(GLOB OCC_CONFIG_FILES
+"${PROJECT_SOURCE_DIR}/src/*.h"
+     "${PROJECT_SOURCE_DIR}/src/*.cpp"
+     )
 
 foreach(src_file ${OCC_CONFIG_FILES})
   set_source_files_properties(${src_file} PROPERTIES COMPILE_FLAGS " -g")
