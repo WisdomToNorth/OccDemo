@@ -1,7 +1,9 @@
-﻿#include <iostream>
-#include <QtWidgets/QApplication>
+﻿#include <QtWidgets/QApplication>
+#include <iostream>
 
 #include "MainWindowOcc.h"
+#include "lc_struct.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -10,21 +12,13 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-//
-// #include "test_datastructure.h"
-// #include "gptools.h"
-// #include <iostream>
-// #include <gp_Pnt.hxx>
-// using namespace KDebugger;
-//
-// int main(int argc, char* argv[])
-//{
-//    KTest te;
-//
-//    /* for (int i = 0; i < 1; ++i)
-//     {
-//         te.testKPnt2D(i);
-//     }*/
-//    te.testSameAngle();
-//    return 0;
-//}
+
+// #include <queue>
+
+// using namespace std;
+// using namespace LeetCode;
+
+// int main()
+// {
+//     return 0;
+// }

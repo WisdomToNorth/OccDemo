@@ -91,8 +91,8 @@ void DataGenerator::generateData(std::vector<KBox> &buffer, const DataParameter 
         for (int j = 0; j < param.rowcnt; ++j)
         {
             double loc_random = loc_rand_gen(G_Random_Engine);
-            double stx = roundWith(i * param.dis * loc_random, param.precision);
-            double sty = roundWith(j * param.dis * loc_random, param.precision);
+            double stx = LeetCode::roundWith(i * param.dis * loc_random, param.precision);
+            double sty = LeetCode::roundWith(j * param.dis * loc_random, param.precision);
             double x_size, y_size;
 
             x_size = param.defaultpar.base_size * size_rand_gen(G_Random_Engine);

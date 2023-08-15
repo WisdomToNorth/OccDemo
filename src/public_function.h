@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace KDebugger
+namespace LeetCode
 {
 struct ListNode;
 struct TreeNode;
@@ -20,4 +20,4 @@ TreeNode *init_tree(std::vector<int> vec);
 
 int getValue(char ch);
 double roundWith(double num, size_t cnt);
-} // namespace KDebugger
+} // namespace LeetCode

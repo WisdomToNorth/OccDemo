@@ -1,18 +1,18 @@
 ﻿
-#include <iostream>
-#include <vector>
 #include <algorithm>
-#include <unordered_set>
-#include <map>
-#include <stack>
 #include <deque>
+#include <iostream>
+#include <map>
 #include <queue>
+#include <stack>
+#include <unordered_set>
+#include <vector>
 
 #include "lc_struct.h"
 
 #include "public_function.h"
 
-namespace KDebugger
+namespace LeetCode
 {
 using std::cout;
 using std::endl;
@@ -61,7 +61,8 @@ void printVec2D(vector<vector<T>> vec)
         for (auto b = a.cbegin(); b != a.cend(); ++b)
         {
             cout << *b;
-            if (b != --a.cend()) cout << ", ";
+            if (b != --a.cend())
+                cout << ", ";
         }
         cout << ']';
     }
@@ -81,25 +82,26 @@ TreeNode *init_tree(vector<int> vec)
         aux.pop();
         if (vec[cnt] == 0)
         {
-            cur->left_ = nullptr;
+            cur->left = nullptr;
         }
         else
         {
-            cur->left_ = new TreeNode(vec[cnt]);
-            aux.push(cur->left_);
+            cur->left = new TreeNode(vec[cnt]);
+            aux.push(cur->left);
         }
         ++cnt;
 
-        if (cnt == vec.size()) return res;
+        if (cnt == vec.size())
+            return res;
 
         if (vec[cnt] == 0)
         {
-            cur->right_ = nullptr;
+            cur->right = nullptr;
         }
         else
         {
-            cur->right_ = new TreeNode(vec[cnt]);
-            aux.push(cur->right_);
+            cur->right = new TreeNode(vec[cnt]);
+            aux.push(cur->right);
         }
         ++cnt;
     }
@@ -131,4 +133,4 @@ double roundWith(double num, size_t cnt)
     double res = double(int(num * i)) / i;
     return res;
 }
-} // namespace KDebugger
+} // namespace LeetCode

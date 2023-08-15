@@ -1,7 +1,10 @@
 ﻿#pragma once
+#include <iostream>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_set>
-#include <mutex>
+#include <vector>
+
 namespace KDebugger
 {
 class UnionFind
@@ -15,8 +18,7 @@ public:
     int count_;
 
 public:
-    UnionFind(int n) :
-        count_(n)
+    UnionFind(int n) : count_(n)
     {
         // O(N)
         for (int a = 0; a < n; ++a)
