@@ -25,12 +25,12 @@ jobs:
               echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
               source ~/.profile
               which brew
-              brew
+              brew install hello
 
 
         - name: Install Envs
           run: |
-              brew install hello
+              brew install eigen
 
 
 
