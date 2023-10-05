@@ -29,7 +29,6 @@ jobs:
 
         - name: Install Envs
           run: |
-              /home/linuxbrew/.linuxbrew/bin/brew install hello
               /home/linuxbrew/.linuxbrew/bin/brew install opencascade
               /home/linuxbrew/.linuxbrew/bin/brew install orocos-kdl
               /home/linuxbrew/.linuxbrew/bin/brew install assimp
@@ -39,6 +38,7 @@ jobs:
               /home/linuxbrew/.linuxbrew/bin/brew install boost
               /home/linuxbrew/.linuxbrew/bin/brew install ompl
               /home/linuxbrew/.linuxbrew/bin/brew install ninja
+              which ninja
 
 
         - name: Get count of CPU cores
@@ -58,7 +58,7 @@ jobs:
               cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
               -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
               -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Mac_Ninja_Release \
-              -S${{github.workspace}} -G Ninja
+              -S${{github.workspace}}
               cmake -B build
               cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
 
