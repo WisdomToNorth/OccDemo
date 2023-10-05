@@ -24,6 +24,7 @@ jobs:
               test -r ~/.profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
               echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
               source ~/.profile
+              which brew
 
 
         - name: Install Envs
