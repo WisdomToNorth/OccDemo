@@ -25,15 +25,8 @@ jobs:
 
         - name: Install Envs
           run: |
-              linuxbrew install opencascade
-              linuxbrew install orocos-kdl
-              linuxbrew install assimp
-              linuxbrew install googletest
-              linuxbrew install fmt
-              linuxbrew install eigen
-              linuxbrew install boost
-              linuxbrew install ompl
-              linuxbrew install ninja
+              brew install hello
+
 
         - name: Get count of CPU cores
           uses: SimenB/github-actions-cpu-cores@v1
