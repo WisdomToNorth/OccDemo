@@ -18,8 +18,13 @@ jobs:
         - name: Install brew
           run: |
               sudo apt-get install build-essential procps curl file git
-              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-              echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
+              sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+              test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+              test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+              test -r ~/.profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+              echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+              source ~/.profile
+
 
         - name: Install Envs
           run: |
