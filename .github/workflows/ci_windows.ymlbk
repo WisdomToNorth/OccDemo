@@ -1,7 +1,67 @@
-name: Windows
+name: macOS
 
 on: [push]
 
 jobs:
-    build-windows-msvc:
-        runs-on: windows-latest
+    build-macos:
+        runs-on: macos-latest
+
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+
+        - name: Install Qt
+          uses: jurplel/install-qt-action@v3
+          with:
+              version: '6.5.1'
+              cache: true
+              cache-key-prefix: QtCache
+
+        - name: Install Envs
+          run: |
+              brew install opencascade
+              brew install orocos-kdl
+              brew install assimp
+              brew install googletest
+              brew install fmt
+              brew install eigen
+              brew install boost
+              brew install ompl
+              brew install ninja
+
+        - name: Get count of CPU cores
+          uses: SimenB/github-actions-cpu-cores@v1
+          id: cpu-cores
+
+        - name: Ninja build
+          working-directory: ${{github.workspace}}
+          run: |
+              cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
+              -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
+              -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Mac_Ninja_Release \
+              -S${{github.workspace}} -G Ninja
+              cmake -B build
+              cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
+
+        - name: Execute ninja Unit Tests
+          working-directory: ${{github.workspace}}/build/Mac_Ninja_Release
+          run: |
+              ctest -T test -R
+
+        - name: Build
+          working-directory: ${{github.workspace}}
+          run: |
+             cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
+             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
+             -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Mac_Clang_Release \
+             -S${{github.workspace}}
+             cmake -B build
+             cmake --build ${{github.workspace}}/build/Mac_Clang_Release --config Release --target all --
+
+        - name: Execute Unit Tests
+          working-directory: ${{github.workspace}}/build/Mac_Clang_Release
+          run: |
+              ctest -T test -R
+
+
+

@@ -14,12 +14,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v2
 
-        - name: Install Qt
-          uses: jurplel/install-qt-action@v3
-          with:
-              version: ${{matrix.qt_version}}
-              cache: true
-              cache-key-prefix: QtCache
 
         - name: Install brew
           run: |
@@ -31,20 +25,26 @@ jobs:
 
         - name: Install Envs
           run: |
-              brew install opencascade
-              brew install orocos-kdl
-              brew install assimp
-              brew install googletest
-              brew install fmt
-              brew install eigen
-              brew install boost
-              brew install ompl
-              brew install ninja
+              linuxbrew install opencascade
+              linuxbrew install orocos-kdl
+              linuxbrew install assimp
+              linuxbrew install googletest
+              linuxbrew install fmt
+              linuxbrew install eigen
+              linuxbrew install boost
+              linuxbrew install ompl
+              linuxbrew install ninja
 
         - name: Get count of CPU cores
           uses: SimenB/github-actions-cpu-cores@v1
           id: cpu-cores
 
+        - name: Install Qt
+          uses: jurplel/install-qt-action@v3
+          with:
+              version: ${{matrix.qt_version}}
+              cache: true
+              cache-key-prefix: QtCache
         - name: Ninja build
           working-directory: ${{github.workspace}}
           run: |
