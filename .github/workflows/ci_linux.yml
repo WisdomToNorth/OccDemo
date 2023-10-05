@@ -30,15 +30,10 @@ jobs:
         - name: Install Envs
           run: |
               /home/linuxbrew/.linuxbrew/bin/brew install opencascade
-              /home/linuxbrew/.linuxbrew/bin/brew install orocos-kdl
-              /home/linuxbrew/.linuxbrew/bin/brew install assimp
               /home/linuxbrew/.linuxbrew/bin/brew install googletest
               /home/linuxbrew/.linuxbrew/bin/brew install fmt
               /home/linuxbrew/.linuxbrew/bin/brew install eigen
-              /home/linuxbrew/.linuxbrew/bin/brew install boost
-              /home/linuxbrew/.linuxbrew/bin/brew install ompl
               /home/linuxbrew/.linuxbrew/bin/brew install ninja
-              which ninja
 
 
         - name: Get count of CPU cores
