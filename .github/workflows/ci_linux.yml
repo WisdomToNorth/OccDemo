@@ -31,7 +31,15 @@ jobs:
           run: |
             echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
             source ~/.profile
+            brew install opencascade
+            brew install orocos-kdl
+            brew install assimp
+            brew install googletest
+            brew install fmt
             brew install eigen
+            brew install boost
+            brew install ompl
+            brew install ninja
 
 
 
