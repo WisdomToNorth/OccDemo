@@ -1,0 +1,7 @@
+name: Windows
+
+on: [push]
+
+jobs:
+    build-windows-msvc:
+        runs-on: windows-latest
