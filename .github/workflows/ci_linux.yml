@@ -37,7 +37,6 @@ jobs:
             brew install googletest
             brew install fmt
             brew install eigen
-            brew install boost
             brew install ompl
             brew install ninja
 
@@ -47,12 +46,6 @@ jobs:
           uses: SimenB/github-actions-cpu-cores@v1
           id: cpu-cores
 
-        - name: Install Qt
-          uses: jurplel/install-qt-action@v3
-          with:
-            version: ${{matrix.qt_version}}
-            cache: true
-            cache-key-prefix: QtCache
 
         - name: Ninja build
           working-directory: ${{github.workspace}}
