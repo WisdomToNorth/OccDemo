@@ -25,15 +25,13 @@ jobs:
               echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
               source ~/.profile
               which brew
+              brew
 
 
         - name: Install Envs
           run: |
-              /home/linuxbrew/.linuxbrew/bin/brew install opencascade
-              /home/linuxbrew/.linuxbrew/bin/brew install googletest
-              /home/linuxbrew/.linuxbrew/bin/brew install fmt
-              /home/linuxbrew/.linuxbrew/bin/brew install eigen
-              /home/linuxbrew/.linuxbrew/bin/brew install ninja
+              brew install hello
+
 
 
         - name: Get count of CPU cores

@@ -27,4 +27,8 @@
               cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-12 -S${{github.workspace}} -B${{github.workspace}}/build
               cmake -B build
               cmake --build ${{github.workspace}}/build --config Release --target all --
-```
+```              /home/linuxbrew/.linuxbrew/bin/brew install opencascade
+              /home/linuxbrew/.linuxbrew/bin/brew install googletest
+              /home/linuxbrew/.linuxbrew/bin/brew install fmt
+              /home/linuxbrew/.linuxbrew/bin/brew install eigen
+              /home/linuxbrew/.linuxbrew/bin/brew install ninja
