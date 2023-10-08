@@ -1,9 +1,21 @@
 {
-    "name": "My Codespace OCCDemo",
-    "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:0-14",
+    "name": "Ubuntu 22.04 test KYC",
+    "image": "ubuntu:22.04",
     "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools-extension-pack"
     ],
-    "postCreateCommand": "sudo apt-get install build-essential procps curl file git && sh -c \"$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)\" && test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv) && test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && test -r ~/.profile && echo \"eval \\$($(brew --prefix)/bin/brew shellenv)\" >>~/.profile && echo \"eval \\$($(brew --prefix)/bin/brew shellenv)\" >>~/.profile && source ~/.profile"
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "runArgs": [
+        "--privileged"
+    ],
+    "remoteUser": "vscode",
+    "workspaceMount": "source=/path/to/local/folder,target=/workspace,type=bind,consistency=cached",
+    "containerEnv": {
+        "DEBIAN_FRONTEND": "noninteractive"
+    },
+    "postCreateCommand": "apt-get update && apt-get install -y g++ qt5-default cmake ninja-build libompl-dev libfmt-dev libgtest-dev && cd /usr/src/gtest && cmake . && make && cp *.a /usr/lib"
 }
