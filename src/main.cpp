@@ -1,8 +1,6 @@
 ﻿#include <QtWidgets/QApplication>
 #include <iostream>
 
-#include "MainWindowOcc.h"
-
 // int main(int argc, char *argv[])
 // {
 //     QApplication a(argc, argv);
@@ -12,12 +10,13 @@
 //     return a.exec();
 // }
 
-#include "lc_struct.h"
 #include <algorithm>
 #include <queue>
 
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 using namespace std;
-using namespace LeetCode;
 
 struct SubtreeStatus
 {
@@ -25,31 +24,7 @@ struct SubtreeStatus
     int notSelected;
 };
 
-class Solution
-{
-public:
-    SubtreeStatus dfs(TreeNode *node)
-    {
-        if (!node)
-        {
-            return {0, 0};
-        }
-        auto l = dfs(node->left);
-        auto r = dfs(node->right);
-        int selected = node->val + l.notSelected + r.notSelected;
-        int notSelected = max(l.selected, l.notSelected) + max(r.selected, r.notSelected);
-        return {selected, notSelected};
-    }
-
-    int rob(TreeNode *root)
-    {
-        auto rootStatus = dfs(root);
-        return max(rootStatus.selected, rootStatus.notSelected);
-    }
-};
-
 int main()
 {
-    Solution s;
     return 0;
 }
