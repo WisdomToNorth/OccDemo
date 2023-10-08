@@ -1,0 +1,186 @@
+{
+    "name": "My Codespace OCCDemo",
+    "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:0-14",
+    "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+    ],
+    "settings": {
+        //
+        // [[Appearance]]
+        //
+        "window.titleBarStyle": "custom",
+        "terminal.integrated.fontSize": 16, // 集成终端字号
+        "terminal.integrated.defaultProfile.windows": "Git Bash",
+        "terminal.integrated.env.linux": {},
+        "terminal.integrated.inheritEnv": false,
+        "terminal.integrated.fontFamily": "consolas",
+        "terminal.integrated.profiles.windows": {
+            "PowerShell": {
+                "source": "PowerShell",
+                "icon": "terminal-powershell"
+            },
+            "Command Prompt": {
+                "path": [
+                    "${env:windir}\\Sysnative\\cmd.exe",
+                    "${env:windir}\\System32\\cmd.exe"
+                ],
+                "args": [],
+                "icon": "terminal-cmd"
+            },
+            "Git Bash": {
+                "source": "Git Bash"
+            }
+        },
+        // explorer
+        "explorer.confirmDragAndDrop": false, // 移动文件时无需确认
+        "explorer.incrementalNaming": "smart", // 自动保存
+        "explorer.confirmDelete": false,
+        "explorer.enableUndo": true,
+        "explorer.compactFolders": false, // 资源管理器不采用紧凑模式
+        "editor.fontFamily": "JetBrains Mono Medium, LXGW Bright Medium", // 编辑器全局字体
+        "editor.fontLigatures": true, // 启用连字体
+        "editor.fontSize": 16, // 字号
+        "editor.fontWeight": "450", // 字体粗细
+        "editor.lineHeight": 0, // 行高：使用 0 根据字号自动计算行高
+        "editor.bracketPairColorization.enabled": true, // 控制是否对括号着色
+        "editor.bracketPairColorization.independentColorPoolPerBracketType": false, // 各类括号着色等级不独立
+        "editor.guides.bracketPairs": true, // 启用括号指导线
+        "editor.guides.bracketPairsHorizontal": "active", // 启用水平括号指导线
+        "editor.guides.highlightActiveIndentation": false, // 禁用高亮选中的缩进指导线
+        "editor.guides.indentation": false, // 禁用缩进指导线
+        "editor.renderControlCharacters": true, // 启用语义高亮
+        "editor.semanticHighlighting.enabled": true, // 启用语义高亮
+        // 自定义语法高亮示例
+        "editor.semanticTokenColorCustomizations": {
+            "[One Dark Pro]": {
+                "rules": {
+                    // "selfKeyword": {
+                    // "foreground": "#DD94E5",
+                    // "fontStyle": "italic"
+                    // }
+                }
+            }
+        }, // 颜色主题
+        "workbench.iconTheme": "vscode-icons", // 图标主题
+        "workbench.startupEditor": "none", // 在没有从上一个会话恢复出信息的情况下，在启动时不打开编辑器
+        "workbench.view.alwaysShowHeaderActions": true, // 显示视图头部的操作项
+        // 括号颜色
+        "workbench.colorCustomizations": {
+            "[One Dark Pro]": {
+                "editorBracketHighlight.foreground3": "#9CDCFE",
+                "editorBracketHighlight.foreground4": "#F3FD00",
+                "editorBracketHighlight.foreground5": "#F47D9F",
+                "editorBracketHighlight.foreground6": "#A5ADFE"
+            }
+        },
+        "security.workspace.trust.untrustedFiles": "open",
+        "files.trimTrailingWhitespace": true,
+        "[cpp]": {
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true,
+            "editor.wordBasedSuggestions": false,
+            "editor.suggest.insertMode": "replace",
+            "editor.semanticHighlighting.enabled": true,
+            "editor.defaultFormatter": "ms-vscode.cpptools"
+        },
+        //
+        // [[C/C++]]
+        //
+        "breadcrumbs.filePath": "on", // 控制是否及如何在“导航路径”视图中显示文件路径
+        "C_Cpp.codeAnalysis.runAutomatically": false,
+        "C_Cpp.formatting": "default",
+        "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+        "cmake.configureOnOpen": true,
+        "cmake.copyCompileCommands": "",
+        // debug
+        "debug.console.acceptSuggestionOnEnter": "on", // 调试控制台中可以用 enter 接受建议
+        "debug.internalConsoleOptions": "neverOpen", // 从不自动打开内部调试控制台
+        "debug.console.fontSize": 16,
+        "[python]": {
+            "editor.formatOnType": true,
+            "editor.defaultFormatter": "ms-python.autopep8"
+        },
+        "git.openRepositoryInParentFolders": "never",
+        "lldb.suppressUpdateNotifications": true,
+        "workbench.editorAssociations": {
+            "*.ui": "default"
+        },
+        "[jsonc]": {
+            "editor.defaultFormatter": "vscode.json-language-features"
+        },
+        "restructuredtext.preview.fontSize": 16,
+        "markdown.preview.fontSize": 16,
+        "scm.inputFontSize": 16,
+        // 针对输出窗口的部分设置
+        "[plaintext]": {
+            "editor.fontLigatures": false, // 不使用连字体
+            "editor.formatOnSave": true, // 不在保存时自动格式化
+            "editor.wordWrap": "on" // 启用自动换行
+        },
+        //
+        // [[General Settings]]
+        //
+        ////
+        //
+        ////
+        // editor
+        "editor.accessibilityPageSize": 12,
+        "editor.minimap.enabled": false,
+        "editor.acceptSuggestionOnEnter": "on", // 编辑器中可以用 enter 接受建议
+        "editor.defaultFormatter": "ms-vscode.cpptools",
+        "editor.stickyScroll.enabled": true, // 启用粘滞滚动，即显示上一级对应的代码
+        "editor.wordBasedSuggestionsMode": "allDocuments", // 建议所有打开文档中的字词
+        "editor.unicodeHighlight.ambiguousCharacters": false, // 不突出显示可能与基本 ASCII 字符混淆的字符
+        "editor.inlayHints.enabled": "on", // 在编辑器中显示内联提示
+        "editor.formatOnType": false, // 自动格式化
+        "editor.renderWhitespace": "all", // 控制编辑器在空白字符上显示符号的方式
+        "editor.snippetSuggestions": "top", // 代码片段建议置于其他建议之上
+        "editor.stickyTabStops": true, // 使用空格缩进时模拟制表符的行为，可以方便对齐
+        "editor.tabSize": 4, // 一个制表符 = 4个空格
+        "editor.suggest.insertMode": "replace", // 建议的接受方式
+        "editor.suggest.localityBonus": true, // 控制排序时是否提高靠近光标的词语的优先级
+        "editor.suggest.matchOnWordStartOnly": false, // 禁用建议必须匹配开头
+        "editor.suggest.shareSuggestSelections": true,
+        "editor.suggest.showStatusBar": true, // 控制建议小部件底部的状态栏可见
+        "editor.suggestOnTriggerCharacters": true, // 控制在键入触发字符后是否自动显示建议
+        "editor.suggestSelection": "first", // 始终预先选择第一个建议
+        "editor.wordBasedSuggestions": true, // 控制是否根据文档中的文字提供建议列表
+        "editor.autoClosingOvertype": "always", // 控制编辑器应当自动改写左引号或右引号
+        "editor.detectIndentation": false, // 禁用自动检测文件缩进模式和缩进大小，即打开文件后自动将文件更改为 VSCode 配置的缩进格式
+        "editor.formatOnSave": true, // 保存自动格式化代码
+        "editor.formatOnPaste": false, // 粘贴自动格式化
+        "editor.quickSuggestionsDelay": 0, // 控制显示快速建议前的等待时间（毫秒）
+        "editor.inlineSuggest.enabled": true, // 在编辑器中自动显示内联建议
+        "editor.parameterHints.enabled": true, // 是否在输入时显示含有参数文档和类型信息的小面板
+        // 控制是否在键入代码时自动显示建议
+        "editor.quickSuggestions": {
+            "comments": false, // 键入注释时不允许
+            "other": true, // 键入其他时允许
+            "strings": false // 键入字符串时不允许
+        },
+        "files.hotExit": "onExitAndWindowClose", // 在会话间记住未保存的文件,允许在退出编辑器时跳过保存提示 onExitAndWindowClose: 退出或窗口关闭时
+        // 配置排除的文件和文件夹的glob模式,文件资源管理器将根据此设置决定要显示或隐藏的文件和文件夹
+        "files.exclude": {
+            "**/.classpath": true,
+            "**/.factorypath": true,
+            "**/.project": true,
+            "**/.settings": true
+        },
+        "files.associations": {
+            "*.pl": "prolog"
+        },
+        "http.proxySupport": "on",
+        "settingsSync.ignoredExtensions": [],
+        "code-runner.saveFileBeforeRun": true,
+        "vsicons.dontShowNewVersionMessage": true,
+        "git.showCommitInput": true,
+        "git.autofetch": true,
+        "security.allowedUNCHosts": [
+            "wsl.localhost"
+        ],
+        "audioCues.lineHasInlineSuggestion": "on",
+        "cmake.cpptools.intelliSenseMode": "clang-x64",
+        "C_Cpp.intelliSenseEngineFallback": "enabled"
+    }
+}
