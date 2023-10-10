@@ -1,21 +1,31 @@
 {
-    "name": "Ubuntu 22.04 test KYC",
-    "image": "ubuntu:22.04",
-    "extensions": [
-        "ms-vscode.cpptools",
-        "ms-vscode.cmake-tools",
-        "ms-vscode.cpptools-extension-pack"
-    ],
-    "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
+    "name": "Linux",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "VARIANT": "focal"
+        }
     },
     "runArgs": [
-        "--privileged"
+        "--cap-add=SYS_PTRACE",
+        "--security-opt",
+        "seccomp=unconfined"
     ],
-    "remoteUser": "vscode",
-    "workspaceMount": "source=/path/to/local/folder,target=/workspace,type=bind,consistency=cached",
-    "containerEnv": {
-        "DEBIAN_FRONTEND": "noninteractive"
-    },
-    "postCreateCommand": "apt-get update && apt-get install -y g++ qt5-default cmake ninja-build libompl-dev libfmt-dev libgtest-dev && cd /usr/src/gtest && cmake . && make && cp *.a /usr/lib"
+    "extensions": [
+        "ms-vscode.cpptools",
+        "twxs.cmake",
+        "ms-python.python"
+    ],
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "terminal.integrated.shellArgs.linux": [
+            "--login"
+        ],
+        "cmake.configureSettings": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "CMAKE_EXPORT_COMPILE_COMMANDS": "TRUE",
+            "CMAKE_C_COMPILER": "/usr/bin/gcc",
+            "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+        }
+    }
 }
