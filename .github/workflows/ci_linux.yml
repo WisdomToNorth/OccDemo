@@ -17,14 +17,13 @@ jobs:
             sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
             test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
             test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-            test -r ~/.profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+            test -r ~/.profile
             echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+            echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.profile
             source ~/.profile
-
 
         - name: Install Envs
           run: |
-            source ~/.profile
             sudo apt update
             sudo apt install qtbase5-dev qtbase5-dev-tools
             brew install opencascade
@@ -33,7 +32,6 @@ jobs:
         - name: Ninja build Release
           working-directory: ${{github.workspace}}
           run: |
-            source ~/.profile
             cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc \
             -DCMAKE_CXX_COMPILER=/usr/bin/g++ -B${{github.workspace}}/build/Linux_Ninja_Release \
