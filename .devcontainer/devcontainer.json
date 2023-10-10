@@ -4,18 +4,5 @@
     "remoteEnv": {
         "PATH": "/home/linuxbrew/.linuxbrew/bin:$PATH"
     },
-    "containerEnv": {
-        "DISPLAY": "${DISPLAY}"
-    },
-    "mounts": [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
-    ],
-    "runArgs": [
-        "--privileged",
-        "--network=host",
-        "--ipc=host",
-        "--uts=host"
-    ],
-    "preCreateCommand": "sudo apt-get update && sudo apt install build-essential procps curl file git qtbase5-dev qtbase5-dev-tools",
-    "postCreateCommand": "sudo chown -R vscode:vscode /workspace"
+    "preCreateCommand": "sudo apt-get update && sudo apt install build-essential procps curl file git qtbase5-dev qtbase5-dev-tools"
 }
