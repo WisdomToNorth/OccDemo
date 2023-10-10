@@ -28,14 +28,16 @@ jobs:
 
         - name: Install Envs
           run: |
-            sudo apt update
-            sudo apt install qtbase5-dev qtbase5-dev-tools
+            source ~/.profile
             brew install opencascade
             brew install ninja
+            sudo apt update
+            sudo apt install qtbase5-dev qtbase5-dev-tools
 
         - name: Ninja build Release
           working-directory: ${{github.workspace}}
           run: |
+            source ~/.profile
             cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc \
             -DCMAKE_CXX_COMPILER=/usr/bin/g++ -B${{github.workspace}}/build/Linux_Ninja_Release \
