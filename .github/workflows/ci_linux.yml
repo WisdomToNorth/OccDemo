@@ -20,7 +20,11 @@ jobs:
             test -r ~/.profile
             echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
             echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.profile
+            echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.bashrc
+            echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.zshrc
             source ~/.profile
+            source ~/.bashrc
+            source ~/.zshrc
 
         - name: Install Envs
           run: |
