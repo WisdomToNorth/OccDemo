@@ -16,8 +16,6 @@
         "--ipc=host",
         "--uts=host"
     ],
-    "workspaceFolder": "/workspace",
-    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
     "preCreateCommand": "sudo apt-get update && sudo apt install build-essential procps curl file git qtbase5-dev qtbase5-dev-tools",
     "postCreateCommand": "sudo chown -R vscode:vscode /workspace"
 }
