@@ -4,5 +4,5 @@
     "remoteEnv": {
         "PATH": "/home/linuxbrew/.linuxbrew/bin:$PATH"
     },
-    "preCreateCommand": "sudo apt-get update && sudo apt install build-essential procps curl file git qtbase5-dev qtbase5-dev-tools"
+    "preCreateCommand": "sudo apt-get update && sudo apt install build-essential curl git qtbase5-dev qtbase5-dev-tools"
 }
