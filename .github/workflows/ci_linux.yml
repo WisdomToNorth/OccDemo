@@ -13,7 +13,9 @@ jobs:
 
         - name: Install brew
           run: |
-            sudo apt-get install build-essential procps curl file git
+            sudo apt update
+            sudo apt install build-essential procps curl file git
+            sudo apt install qtbase5-dev qtbase5-dev-tools
             sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
             test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
             test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
@@ -31,8 +33,6 @@ jobs:
             source ~/.profile
             brew install opencascade
             brew install ninja
-            sudo apt update
-            sudo apt install qtbase5-dev qtbase5-dev-tools
 
         - name: Ninja build Release
           working-directory: ${{github.workspace}}
