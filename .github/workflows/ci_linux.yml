@@ -1,0 +1,85 @@
+name: Linux
+
+on: [push]
+
+jobs:
+    build-linux:
+        strategy:
+            matrix:
+                qt_version: [5.15.2]
+
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+
+
+        - name: Install brew
+          run: |
+            sudo apt-get install build-essential procps curl file git
+            sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+            test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+            test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            test -r ~/.profile
+            echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+            echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.profile
+            source ~/.profile
+
+        - name: Install Envs
+          run: |
+            sudo apt install gcc-10 g++-10
+            source ~/.profile
+            brew install opencascade
+            brew install orocos-kdl
+            brew install assimp
+            brew install googletest
+            brew install fmt
+            brew install eigen
+            brew install ompl
+            brew install ninja
+          shell: bash
+
+        - name: Install Qt
+          uses: jurplel/install-qt-action@v3
+          with:
+            version: ${{matrix.qt_version}}
+            cache: true
+            cache-key-prefix: QtCache
+
+        - name: Ninja clang build Release
+          working-directory: ${{github.workspace}}
+          run: |
+            source ~/.profile
+            cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-10 \
+            -DCMAKE_CXX_COMPILER=/usr/bin/g++-10 -B${{github.workspace}}/build/Linux_Ninja_Release \
+            -S${{github.workspace}} -G Ninja
+            cmake -B build
+            cmake --build ${{github.workspace}}/build/Linux_Ninja_Release --config Release --target all --
+          shell: bash
+          env:
+            CC: /usr/bin/gcc-10
+            CXX: /usr/bin/g++-10
+
+        - name: Execute Unit Tests
+          working-directory: ${{github.workspace}}/build/Linux_Ninja_Release
+          run: |
+            ctest -T test -R
+
+        - name: Ninja gcc build Debug
+          working-directory: ${{github.workspace}}
+          run: |
+            source ~/.profile
+            cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_CXX_STANDARD=20 \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-10 \
+            -DCMAKE_CXX_COMPILER=/usr/bin/g++-10 -B${{github.workspace}}/build/Linux_Ninja_Debug \
+            -S${{github.workspace}} -G Ninja
+            cmake -B build
+            cmake --build ${{github.workspace}}/build/Linux_Ninja_Debug --config Debug --target all --
+
+
+        - name: Execute Unit Tests
+          working-directory: ${{github.workspace}}/build/Linux_Ninja_Debug
+          run: |
+            ctest -T test -R
