@@ -72,8 +72,8 @@ jobs:
           run: |
             source ~/.profile
             cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_CXX_STANDARD=20 \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-10 \
-            -DCMAKE_CXX_COMPILER=/usr/bin/g++-10 -B${{github.workspace}}/build/Linux_Ninja_Debug \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
+            -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Linux_Ninja_Debug \
             -S${{github.workspace}} -G Ninja
             cmake -B build
             cmake --build ${{github.workspace}}/build/Linux_Ninja_Debug --config Debug --target all --
