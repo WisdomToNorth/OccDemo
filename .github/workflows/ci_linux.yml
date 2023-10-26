@@ -72,8 +72,8 @@ jobs:
             -S${{github.workspace}} -G Ninja
             cmake -B build
             cmake --build ${{github.workspace}}/build/Linux_Ninja_Debug --config Debug --target all --
-         shell: bash
-         env:
+          shell: bash
+          env:
             CC: /usr/bin/clang
             CXX: /usr/bin/clang++
 
