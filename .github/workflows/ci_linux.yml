@@ -30,13 +30,8 @@ jobs:
           run: |
             sudo apt install gcc-10 g++-10
             source ~/.profile
-            brew install opencascade
-            brew install orocos-kdl
-            brew install assimp
-            brew install googletest
             brew install fmt
             brew install eigen
-            brew install ompl
             brew install ninja
           shell: bash
 

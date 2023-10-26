@@ -11,11 +11,28 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 enable_language(C)
 
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
+set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
+set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
+
 # OccConfig
 file(GLOB OCC_CONFIG_FILES
-    "${PROJECT_SOURCE_DIR}/src/math_utils.h"
+    "${PROJECT_SOURCE_DIR}/src/datautils.h"
+    "${PROJECT_SOURCE_DIR}/src/datautils.cpp"
     "${PROJECT_SOURCE_DIR}/src/main.cpp"
      )
 
+
+
 add_executable(OccConfig ${OCC_CONFIG_FILES}
                         )
+
+target_include_directories(OccConfig
+PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+)
+
+target_link_libraries(OccConfig
+PRIVATE
+    ${Qt_LIBRARIES}
+)

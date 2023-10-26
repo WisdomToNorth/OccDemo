@@ -9,13 +9,12 @@
 //     return a.exec();
 // }
 
-#include "math_utils.h"
+#include "datautils.h"
 
-using namespace RFBase;
+using namespace rfbase;
 
 int main()
 {
-    int a = 0, b = 0;
-    cmpEqual(a, b);
+    std::ignore = rfbase::DataUtils::makeDir("test");
     return 0;
 }
