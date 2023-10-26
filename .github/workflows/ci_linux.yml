@@ -72,7 +72,10 @@ jobs:
             -S${{github.workspace}} -G Ninja
             cmake -B build
             cmake --build ${{github.workspace}}/build/Linux_Ninja_Debug --config Debug --target all --
-
+         shell: bash
+         env:
+            CC: /usr/bin/clang
+            CXX: /usr/bin/clang++
 
         - name: Execute Unit Tests
           working-directory: ${{github.workspace}}/build/Linux_Ninja_Debug

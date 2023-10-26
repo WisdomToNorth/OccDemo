@@ -17,9 +17,9 @@ set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
 
 # OccConfig
 file(GLOB OCC_CONFIG_FILES
-    "${PROJECT_SOURCE_DIR}/src/datautils.h"
-    "${PROJECT_SOURCE_DIR}/src/datautils.cpp"
-    "${PROJECT_SOURCE_DIR}/src/main.cpp"
+    "${PROJECT_SOURCE_DIR}/datautils.h"
+    "${PROJECT_SOURCE_DIR}/datautils.cpp"
+    "${PROJECT_SOURCE_DIR}/main.cpp"
      )
 
 
