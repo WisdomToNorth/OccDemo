@@ -22,10 +22,7 @@ file(GLOB OCC_CONFIG_FILES
     "${PROJECT_SOURCE_DIR}/main.cpp"
      )
 
-
-
-add_executable(OccConfig ${OCC_CONFIG_FILES}
-                        )
+add_executable(OccConfig ${OCC_CONFIG_FILES})
 
 target_include_directories(OccConfig
 PRIVATE
