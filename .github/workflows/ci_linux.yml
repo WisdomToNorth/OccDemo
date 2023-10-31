@@ -61,6 +61,11 @@ jobs:
           working-directory: ${{github.workspace}}
           run: |
             sudo apt-get install build-essential procps curl file git
+            test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+            test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            test -r ~/.profile
+            echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+            echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.profile
             source ~/.profile
             cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-10 \
