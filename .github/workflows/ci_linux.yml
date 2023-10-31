@@ -15,8 +15,9 @@ jobs:
           uses: actions/cache@v2
           with:
            path: |
-            ~/.apt
-            ~/linuxbrew/
+             ~/linuxbrew
+             /home/linuxbrew/.linuxbrew
+             /home/linuxbrew/*
            key: brew-cache-occdemo
            restore-keys: |
              brew-cache-occdemo
@@ -43,10 +44,10 @@ jobs:
           id: qt-cache
           uses: actions/cache@v2
           with:
-            path: /home/runner/work/RobotFramework/Qt
-            key: QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-${{ hashFiles('**/lockfiles') }}
+            path: /home/runner/work/OccDemo/Qt
+            key: QtCache-linux-5.15.2
             restore-keys: |
-              QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-
+              QtCache-linux-5.15.2
 
         - name: Install Qt
           if: steps.qt-cache.outputs.cache-hit != 'true'
