@@ -10,24 +10,24 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v2
 
-        - name: Cache Qt
-          id: qt-cache
-          uses: actions/cache@v2
-          with:
-            path: /home/runner/work/RobotFramework/Qt
-            key: QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-${{ hashFiles('**/lockfiles') }}
-            restore-keys: |
-              QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-
+        # - name: Cache Qt
+        #   id: qt-cache
+        #   uses: actions/cache@v2
+        #   with:
+        #     path: /home/runner/work/RobotFramework/Qt
+        #     key: QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-${{ hashFiles('**/lockfiles') }}
+        #     restore-keys: |
+        #       QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-/home/runner/work/OccDemo/Qt-==0.19.*-==2.1.*
 
         - name: Install Qt
           uses: jurplel/install-qt-action@v3
           with:
             version: 5.15.2
-            cache: true
+            cache: false
             cache-key-prefix: QtCache
 
         - name: Cache brew
-          id: brew-cache
+          id: env-cache
           uses: actions/cache@v2
           with:
            path: ~/.linuxbrew
@@ -36,6 +36,7 @@ jobs:
               brew-
 
         - name: Install brew and dependencies
+          if: steps.env-cache.outputs.cache-hit != 'true'
           run: |
             sudo apt-get install build-essential procps curl file git
             sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
