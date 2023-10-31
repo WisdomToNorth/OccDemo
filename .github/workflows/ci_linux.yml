@@ -10,22 +10,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v2
 
-        # - name: Cache Qt
-        #   id: qt-cache
-        #   uses: actions/cache@v2
-        #   with:
-        #     path: /home/runner/work/RobotFramework/Qt
-        #     key: QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-${{ hashFiles('**/lockfiles') }}
-        #     restore-keys: |
-        #       QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-/home/runner/work/OccDemo/Qt-==0.19.*-==2.1.*
-
-        - name: Install Qt
-          uses: jurplel/install-qt-action@v3
-          with:
-            version: 5.15.2
-            cache: false
-            cache-key-prefix: QtCache
-
         - name: Cache brew
           id: env-cache
           uses: actions/cache@v2
@@ -56,6 +40,13 @@ jobs:
             brew install eigen
             brew install ompl
             brew install ninja
+
+        - name: Install Qt
+          uses: jurplel/install-qt-action@v3
+          with:
+            version: 5.15.2
+            cache: false
+            cache-key-prefix: QtCache
 
         - name: Ninja gcc build Release
           working-directory: ${{github.workspace}}
