@@ -16,5 +16,6 @@ using namespace rfbase;
 int main()
 {
     std::ignore = rfbase::DataUtils::makeDir("test");
+    std::cout << std::endl;
     return 0;
 }
