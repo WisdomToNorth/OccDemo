@@ -73,22 +73,22 @@ jobs:
           run: |
             ctest -T test -R
 
-        # - name: Ninja gcc build Debug
-        #   working-directory: ${{github.workspace}}
-        #   run: |
-        #     source ~/.profile
-        #     cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_CXX_STANDARD=20 \
-        #     -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
-        #     -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Linux_Ninja_Debug \
-        #     -S${{github.workspace}} -G Ninja
-        #     cmake -B build
-        #     cmake --build ${{github.workspace}}/build/Linux_Ninja_Debug --config Debug --target all --
-        #   shell: bash
-        #   env:
-        #     CC: /usr/bin/clang
-        #     CXX: /usr/bin/clang++
+        - name: Ninja gcc build Debug
+          working-directory: ${{github.workspace}}
+          run: |
+            source ~/.profile
+            cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_CXX_STANDARD=20 \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
+            -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Linux_Ninja_Debug \
+            -S${{github.workspace}} -G Ninja
+            cmake -B build
+            cmake --build ${{github.workspace}}/build/Linux_Ninja_Debug --config Debug --target all --
+          shell: bash
+          env:
+            CC: /usr/bin/clang
+            CXX: /usr/bin/clang++
 
-        # - name: Execute Unit Tests
-        #   working-directory: ${{github.workspace}}/build/Linux_Ninja_Debug
-        #   run: |
-        #     ctest -T test -R
+        - name: Execute Unit Tests
+          working-directory: ${{github.workspace}}/build/Linux_Ninja_Debug
+          run: |
+            ctest -T test -R
