@@ -50,8 +50,8 @@ jobs:
             test -r ~/.profile
             echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
             echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.profile
-            echo 'export PATH="/home/linuxbrew/.linuxbrew/opt/qt@5/bin:$PATH"' >> ~/.zshrc
-            echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >> ~/.zshrc
+            echo 'export PATH="/home/linuxbrew/.linuxbrew/opt/qt@5/bin:$PATH"' >> ~/.profile
+            echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >> ~/.profile
 
         - name: Ninja gcc build Release
           working-directory: ${{github.workspace}}
