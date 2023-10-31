@@ -14,10 +14,10 @@ jobs:
           id: qt-cache
           uses: actions/cache@v2
           with:
-          path: /home/runner/work/RobotFramework/Qt
-          key: QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-${{ hashFiles('**/lockfiles') }}
-          restore-keys: |
-            QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-
+            path: /home/runner/work/RobotFramework/Qt
+            key: QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-${{ hashFiles('**/lockfiles') }}
+            restore-keys: |
+              QtCache-linux-6.2.0-1015-azure-desktop-5.15.2-
 
         - name: Install Qt
           uses: jurplel/install-qt-action@v3
