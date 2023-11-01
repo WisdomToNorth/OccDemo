@@ -1,0 +1,356 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "windows-msvc-22",
+            "displayName": "msvc 22",
+            "description": "windows msvc 2022",
+            "generator": "Visual Studio 17 2022",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Windows"
+                    ],
+                    "intelliSenseMode": "windows-msvc-x64"
+                }
+            }
+        },
+        {
+            "name": "windows-msvc-19",
+            "displayName": "msvc 19",
+            "description": "windows msvc 2019",
+            "generator": "Visual Studio 16 2019",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Windows"
+                    ],
+                    "intelliSenseMode": "windows-msvc-x64"
+                }
+            }
+        },
+        {
+            "name": "msvc-ninja-release",
+            "displayName": "msvc 22 ninja release",
+            "description": "windows msvc 2022",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "toolset": {
+                "value": "host=x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            },
+            "architecture": {
+                "value": "x64"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Windows"
+                    ],
+                    "intelliSenseMode": "windows-msvc-x64"
+                }
+            }
+        },
+        {
+            "name": "msvc-ninja-debug",
+            "displayName": "msvc 22 ninja debug",
+            "description": "windows msvc 2022",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "toolset": {
+                "value": "host=x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            },
+            "architecture": {
+                "value": "x64"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Windows"
+                    ],
+                    "intelliSenseMode": "windows-msvc-x64"
+                }
+            }
+        },
+        {
+            "name": "gcc_linux_debug",
+            "displayName": "gcc linux debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ],
+                    "intelliSenseMode": "linux-gcc-x64"
+                }
+            }
+        },
+        {
+            "name": "gcc_linux_release",
+            "displayName": "gcc linux release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ],
+                    "intelliSenseMode": "linux-gcc-x64"
+                }
+            }
+        },
+        {
+            "name": "linux_clang_debug",
+            "displayName": "clang linux debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ],
+                    "intelliSenseMode": "linux-gcc-x64"
+                }
+            }
+        },
+        {
+            "name": "linux_clang_release",
+            "displayName": "clang linux release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ],
+                    "intelliSenseMode": "linux-gcc-x64"
+                }
+            }
+        },
+        {
+            "name": "Mac_Clang_Debug",
+            "displayName": "Mac Clang Arm64 Debug",
+            "description": "MacOS",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+            },
+            "architecture": {
+                "value": "x64"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "macOS"
+                    ],
+                    "intelliSenseMode": "ios-clang-arm64"
+                }
+            }
+        },
+        {
+            "name": "Mac_Clang_Release",
+            "displayName": "Mac Clang Arm64 Release",
+            "description": "mac os",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+            },
+            "architecture": {
+                "value": "x64"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "macOS"
+                    ],
+                    "intelliSenseMode": "ios-clang-arm64"
+                }
+            }
+        },
+        {
+            "name": "Mac_Gcc_Release",
+            "displayName": "Mac gcc arm64 release",
+            "description": "macOS",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+            },
+            "architecture": {
+                "value": "x64"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "macOS"
+                    ],
+                    "intelliSenseMode": "ios-clang-arm64"
+                }
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc_debug_19",
+            "configurePreset": "windows-msvc-19",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc_release_19",
+            "configurePreset": "windows-msvc-19",
+            "configuration": "Release"
+        },
+        {
+            "name": "msvc_debug_22",
+            "configurePreset": "windows-msvc-22",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc_release_22",
+            "configurePreset": "windows-msvc-22",
+            "configuration": "Release"
+        },
+        {
+            "name": "msvc_ninja_debug",
+            "configurePreset": "msvc-ninja-debug"
+        },
+        {
+            "name": "msvc_ninja_release",
+            "configurePreset": "msvc-ninja-release"
+        },
+        {
+            "name": "linux_gcc_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "gcc_linux_release"
+        },
+        {
+            "name": "linux_gcc_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "gcc_linux_debug"
+        },
+        {
+            "name": "linux_clang_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "linux_clang_release"
+        },
+        {
+            "name": "linux_clang_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "linux_clang_debug"
+        },
+        {
+            "name": "MacClangRelease",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Mac_Clang_Release",
+            "configuration": "Release"
+        },
+        {
+            "name": "MacClangDebug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Mac_Clang_Debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "MacGccRelease",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Mac_gcc_Debug",
+            "configuration": "Debug"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "test_winninja_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "msvc-ninja-release"
+        },
+        {
+            "name": "test_winninja_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "msvc-ninja-debug"
+        },
+        {
+            "name": "test_mac_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Mac_Clang_Release"
+        },
+        {
+            "name": "test_gcc_linux_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "gcc_linux_debug"
+        },
+        {
+            "name": "test_gcc_linux_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "gcc_linux_release"
+        }
+    ]
+}
