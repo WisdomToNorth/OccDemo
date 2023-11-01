@@ -15,6 +15,11 @@ find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
 set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
 set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
 
+if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
+    message(STATUS "Using Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++20")
+endif()
+
 # OccConfig
 file(GLOB OCC_CONFIG_FILES
     "${PROJECT_SOURCE_DIR}/datautils.h"
