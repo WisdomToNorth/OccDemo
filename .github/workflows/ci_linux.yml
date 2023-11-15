@@ -33,7 +33,8 @@ jobs:
           uses: actions/cache@v2
           with:
            path: |
-             /usr/local/Cellar
+             /usr/local/Cellar/assimp
+             /usr/local/Cellar/ninja
            key: brew-cache-mackey
            restore-keys: |
              brew-cache-mackey
