@@ -33,8 +33,7 @@ jobs:
           uses: actions/cache@v2
           with:
            path: |
-             /usr/local/Cellar/assimp/*
-             /usr/local/Cellar/ninja/*
+             /home/runner/work/RobotFramework/brewenv
            key: brew-cache-mackey
            restore-keys: |
              brew-cache-mackey
@@ -42,9 +41,9 @@ jobs:
         - name: Install brew and dependencies
           if: steps.env-cache-mac.outputs.cache-hit != 'true'
           run: |
+            export HOMEBREW_PREFIX=/home/runner/work/RobotFramework/brewenv
             brew install assimp
             brew install ninja
-            ls /usr/local/Cellar
 
         - name: Build Release
           working-directory: ${{github.workspace}}
