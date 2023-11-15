@@ -33,7 +33,7 @@ jobs:
           uses: actions/cache@v2
           with:
            path: |
-             ~/
+             /usr/local/Cellar
            key: brew-cache-mackey
            restore-keys: |
              brew-cache-mackey
