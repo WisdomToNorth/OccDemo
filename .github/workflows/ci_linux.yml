@@ -1,61 +1,83 @@
-name: macOS
+name: Linux
 
 on: [push]
 
 jobs:
-    build-macos:
-        runs-on: macos-latest
+    build:
+        runs-on: ubuntu-latest
 
         steps:
         - name: Checkout
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
 
-        # We can alse use the following to install Qt, to decrese cache size
-        - name: Cache Qt
-          id: qt-cache
-          uses: actions/cache@v2
-          with:
-            path: /home/runner/work/RobotFramework/Qt
-            key: QtCache-linux-6.5.1
-            restore-keys: |
-              QtCache-linux-6.5.1
-
-        - name: Install Qt
-          if: steps.qt-cache.outputs.cache-hit != 'true'
-          uses: jurplel/install-qt-action@v3
-          with:
-            version: 6.5.1
-            cache: true
-            cache-key-prefix: QtCache
-
-        - name: Cache brew env
-          id: env-cache-mac
-          uses: actions/cache@v2
+        - name: Cache brew
+          id: env-cache
+          uses: actions/cache@v3
           with:
            path: |
-             /home/runner/work/RobotFramework/brewenv
-           key: brew-cache-mackey
+             ~/linuxbrew
+             /home/linuxbrew/.linuxbrew
+             /home/linuxbrew/*
+           key: brew-cache-occdemo
            restore-keys: |
-             brew-cache-mackey
+             brew-cache-occdemo
 
         - name: Install brew and dependencies
-          if: steps.env-cache-mac.outputs.cache-hit != 'true'
+          if: steps.env-cache.outputs.cache-hit != 'true'
           run: |
-            export HOMEBREW_PREFIX=/home/runner/work/RobotFramework/brewenv
+            sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+            test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+            test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            test -r ~/.profile
+            echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+            echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.profile
+            source ~/.profile
+            sudo apt install gcc-10 g++-10
+            source ~/.profile
             brew install assimp
-            brew install ninja
+            brew install qt@5
 
-        - name: Build Release
+        ## We can alse use the following to install Qt, to decrese cache size
+        # - name: Cache Qt
+        #   id: qt-cache
+        #   uses: actions/cache@v2
+        #   with:
+        #     path: /home/runner/work/RobotFramework/Qt
+        #     key: QtCache-linux-5.15.2
+        #     restore-keys: |
+        #       QtCache-linux-5.15.2
+
+        # - name: Install Qt
+        #   if: steps.qt-cache.outputs.cache-hit != 'true'
+        #   uses: jurplel/install-qt-action@v3
+        #   with:
+        #     version: 5.15.2
+        #     cache: true
+        #     cache-key-prefix: QtCache
+
+        - name: Setup Env
           working-directory: ${{github.workspace}}
           run: |
-            cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
-            -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Mac_Ninja_Release \
+            sudo apt-get install build-essential procps curl file git
+            test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+            test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            test -r ~/.profile
+            echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+            echo "export PATH=\"$(brew --prefix)/bin:$PATH\"" >>~/.profile
+            echo 'export PATH="/home/linuxbrew/.linuxbrew/opt/qt@5/bin:$PATH"' >> ~/.profile
+            echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >> ~/.profile
+
+        - name: Ninja gcc build Debug
+          working-directory: ${{github.workspace}}
+          run: |
+            source ~/.profile
+            cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_CXX_STANDARD=20 \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-10 \
+            -DCMAKE_CXX_COMPILER=/usr/bin/g++-10 -B${{github.workspace}}/build/Linux_Ninja_Debug \
             -S${{github.workspace}} -G Ninja
             cmake -B build
-            cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
-
-        # - name: Execute Unit Tests Release
-        #   working-directory: ${{github.workspace}}/build/Mac_Ninja_Release
-        #   run: |
-        #     ctest -T test -R
+            cmake --build ${{github.workspace}}/build/Linux_Ninja_Debug --config Debug --target all --
+          shell: bash
+          env:
+            CC: /usr/bin/gcc-10
+            CXX: /usr/bin/g++-10
