@@ -33,8 +33,7 @@ jobs:
           uses: actions/cache@v2
           with:
            path: |
-             /usr/local/Cellar/assimp
-             /usr/local/Cellar/ninja
+             /usr/local/Cellar/*
            key: brew-cache-mackey
            restore-keys: |
              brew-cache-mackey
@@ -44,6 +43,7 @@ jobs:
           run: |
             brew install assimp
             brew install ninja
+            ls /usr/local/Cellar
 
         - name: Build Release
           working-directory: ${{github.workspace}}
