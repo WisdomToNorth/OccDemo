@@ -1,38 +1,39 @@
-name: C++ Qt Build and Deploy
+name: Test
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build-windows-msvc:
+        strategy:
+            matrix:
+                occ_version: [7.7.0]
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+        runs-on: windows-latest
 
-    #   - name: Setup Qt
-    #     uses: qt-actions/setup-qt@v3
-    #     with:
-    #       qt-version: '5.15.2'
-    #       host: linux
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
 
-      - name: Install Vcpkg
-        run: |
-          git clone https://github.com/Microsoft/vcpkg.git
-          cd vcpkg
-          ./bootstrap-vcpkg.sh
-          ./vcpkg integrate install
-          ./vcpkg install assimp --triplet x64-windows
-          ls
+        #   - name: Setup Qt
+        #     uses: qt-actions/setup-qt@v3
+        #     with:
+        #       qt-version: '5.15.2'
+        #       host: linux
 
-      - name: Cache Vcpkg Packages
-        uses: actions/cache@v2
-        with:
-          path: vcpkg/packages
-          key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg/vcpkg.json') }}
+        - name: Install Vcpkg
+          run: |
+            git clone https://github.com/Microsoft/vcpkg.git
+            cd vcpkg
+            ./bootstrap-vcpkg.sh
+            ./vcpkg integrate install
+            ./vcpkg install assimp --triplet x64-windows
+            ls
+
+        - name: Cache Vcpkg Packages
+          uses: actions/cache@v2
+          with:
+            path: vcpkg/packages
+            key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg/vcpkg.json') }}
 
     #   - name: Build Project
     #     run: |
