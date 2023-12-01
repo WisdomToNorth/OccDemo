@@ -21,12 +21,13 @@ jobs:
         #       host: linux
 
         - name: Install Vcpkg
+          shell: powershell
           run: |
             git clone https://github.com/Microsoft/vcpkg.git
             cd vcpkg
-            ./bootstrap-vcpkg.sh
-            ./vcpkg integrate install
-            ./vcpkg install assimp --triplet x64-windows
+            .\bootstrap-vcpkg.sh
+            .\vcpkg integrate install
+            .\vcpkg install assimp --triplet x64-windows
             ls
 
         - name: Cache Vcpkg Packages
