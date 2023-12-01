@@ -11,7 +11,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 enable_language(C)
 
-find_package(OpenCASCADE REQUIRED)
+find_package(assimp REQUIRED)
 if(WIN32)
     find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
     set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)

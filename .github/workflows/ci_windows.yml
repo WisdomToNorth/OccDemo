@@ -14,11 +14,12 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v2
 
-        #   - name: Setup Qt
-        #     uses: qt-actions/setup-qt@v3
-        #     with:
-        #       qt-version: '5.15.2'
-        #       host: linux
+        - name: Install Qt
+          uses: jurplel/install-qt-action@v3
+          with:
+            version: 5.15.2
+            cache: true
+            cache-key-prefix: QtCache
 
         - name: Install Vcpkg
           shell: powershell
@@ -27,7 +28,15 @@ jobs:
             cd vcpkg
             .\bootstrap-vcpkg.bat
             vcpkg integrate install
+            SETLOCAL
+            SET CONFIGURATION=release
+            echo.set(VCPKG_BUILD_TYPE %CONFIGURATION%)>> .\triplets\x64-windows.cmake
             vcpkg install assimp --triplet x64-windows
+            rm rf buildtrees
+            rm rf downloads
+            rm rf packages
+            rm rf ports
+            rm rf triplets
             ls
 
         - name: Cache Vcpkg Packages
@@ -36,11 +45,17 @@ jobs:
             path: vcpkg/packages
             key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg/vcpkg.json') }}
 
-    #   - name: Build Project
-    #     run: |
-    #       cd path/to/project
-    #       mkdir build
-    #       cd build
-    #       cmake .. -DCMAKE_TOOLCHAIN_FILE=../../vcpkg/scripts/buildsystems/vcpkg.cmake
-    #       make
+        # - name: Build Release
+        #   working-directory: ${{github.workspace}}
+        #   run: |
+        #     cmake --no-warn-unused-cli -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
+        #     -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe \
+        #     -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/Mac_Ninja_Release \
+        #     -S${{github.workspace}} -G Ninja
+        #     cmake -B build
+        #     cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
 
+        # - name: Execute Unit Tests Release
+        #   working-directory: ${{github.workspace}}/build/Mac_Ninja_Release
+        #   run: |
+        #     ctest -T test -R
