@@ -28,9 +28,7 @@ jobs:
             cd vcpkg
             .\bootstrap-vcpkg.bat
             vcpkg integrate install
-            SETLOCAL
-            SET CONFIGURATION=release
-            echo.set(VCPKG_BUILD_TYPE %CONFIGURATION%)>> .\triplets\x64-windows.cmake
+            Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
             vcpkg install assimp --triplet x64-windows
             rm rf buildtrees
             rm rf downloads
