@@ -24,6 +24,7 @@ jobs:
             path: |
               /usr/local/Cellar/googletest
               /usr/local/Cellar/assimp
+              /usr/local/Cellar/ompl
               /usr/local/Cellar/ninja
             key: ${{ runner.os }}-brew-${{ hashFiles('**/ci_linux.yml') }}
             restore-keys: |
