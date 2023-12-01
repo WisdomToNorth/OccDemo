@@ -30,11 +30,11 @@ jobs:
             vcpkg integrate install
             Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
             vcpkg install assimp --triplet x64-windows
-            rm rf buildtrees
-            rm rf downloads
-            rm rf packages
-            rm rf ports
-            rm rf triplets
+            Remove-Item -Recurse -Force buildtrees
+            Remove-Item -Recurse -Force downloads
+            Remove-Item -Recurse -Force packages
+            Remove-Item -Recurse -Force ports
+            Remove-Item -Recurse -Force triplets
             ls
 
         - name: Cache Vcpkg Packages
