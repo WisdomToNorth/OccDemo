@@ -17,21 +17,24 @@ jobs:
             cache: true
             cache-key-prefix: QtCache
 
-        - name: Install brew and dependencies
-          id: brew-deps
-          run: |
-              brew install googletest
-              brew install orocos-kdl
-              brew install assimp
-              brew install ninja
-
         - name: Cache brew dependencies
+          id: env-cache
           uses: actions/cache@v3
           with:
-            path: /usr/local/Cellar
+            path: |
+              /usr/local/Cellar/googletest
+              /usr/local/Cellar/assimp
+              /usr/local/Cellar/ninja
             key: ${{ runner.os }}-brew-${{ hashFiles('**/ci_linux.yml') }}
             restore-keys: |
               ${{ runner.os }}-brew-
+
+        - name: Install brew and dependencies
+          if: steps.env-cache.outputs.cache-hit != 'true'
+          run: |
+              brew install googletest
+              brew install assimp
+              brew install ninja
 
         - name: Build Release
           working-directory: ${{github.workspace}}
