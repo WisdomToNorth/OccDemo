@@ -25,7 +25,9 @@ jobs:
               /usr/local/Cellar/googletest
               /usr/local/Cellar/assimp
               /usr/local/Cellar/ompl
-            key: ${{ runner.os }}-brew-${{ hashFiles('**/ci_linux.yml') }}
+              /usr/local/Cellar/opencascade
+
+            key: ${{ runner.os }}-brew-env
             restore-keys: |
               ${{ runner.os }}-brew-
 
@@ -35,6 +37,7 @@ jobs:
               brew install googletest
               brew install assimp
               brew install ompl
+              brew install opencascade
 
         - name: Build Release
           working-directory: ${{github.workspace}}
@@ -43,7 +46,10 @@ jobs:
             echo "/usr/local/Cellar/googletest/bin" >> $GITHUB_PATH
             echo "/usr/local/Cellar/assimp/bin" >> $GITHUB_PATH
             echo "/usr/local/Cellar/ompl/bin" >> $GITHUB_PATH
-            echo "CMAKE_PREFIX_PATH=/usr/local/Cellar/googletest:/usr/local/Cellar/assimp:/usr/local/Cellar/ompl" >> $GITHUB_ENV
+            echo "/usr/local/Cellar/opencascade/bin" >> $GITHUB_PATH
+            echo "CMAKE_PREFIX_PATH=/usr/local/Cellar/googletest:\
+            /usr/local/Cellar/opencascade:\
+            /usr/local/Cellar/assimp:/usr/local/Cellar/ompl" >> $GITHUB_ENV
             cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
             -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Mac_Ninja_Release \
