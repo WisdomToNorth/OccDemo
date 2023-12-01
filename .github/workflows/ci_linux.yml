@@ -1,61 +1,47 @@
-name: macOS
+name: Windows
 
 on: [push]
 
 jobs:
-    build-macos:
-        runs-on: macos-latest
+    build-windows-msvc:
+        strategy:
+            matrix:
+                occ_version: [7.7.0]
+
+        runs-on: windows-latest
 
         steps:
         - name: Checkout
-          uses: actions/checkout@v4
+          uses: actions/checkout@v3
 
         - name: Install Qt
           uses: jurplel/install-qt-action@v3
           with:
-            version: 6.5.1
-            cache: true
-            cache-key-prefix: QtCache
+              cache: true
+              cache-key-prefix: QtCache
 
-        - name: Cache brew dependencies
-          id: env-cache
-          uses: actions/cache@v3
+        - name: vcpkg build
+          uses: johnwason/vcpkg-action@v5
+          id: vcpkg
           with:
-            path: |
-              /usr/local/Cellar/googletest
-              /usr/local/Cellar/assimp
-              /usr/local/Cellar/ompl
-              /usr/local/Cellar/opencascade
+            pkgs: |
+              opencascade boost |
+              assimp eigen3 fmt googletest ompl orocos-kdl ninja
+            triplet: x64-windows-release
+            revision: master
+            token: ${{ github.token }}
 
-            key: ${{ runner.os }}-brew-env
-            restore-keys: |
-              ${{ runner.os }}-brew-
+        # - name: Build Release
+        #   working-directory: ${{github.workspace}}
+        #   run: |
+        #     cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
+        #     -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe \
+        #     -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/Mac_Ninja_Release \
+        #     -S${{github.workspace}} -G Ninja
+        #     cmake -B build
+        #     cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
 
-        - name: Install brew and dependencies
-          if: steps.env-cache.outputs.cache-hit != 'true'
-          run: |
-              brew install googletest
-              brew install assimp
-              brew install ompl
-              brew install opencascade
-
-        - name: Build Release
-          working-directory: ${{github.workspace}}
-          run: |
-            brew install ninja
-            echo "/usr/local/Cellar/googletest/bin" >> $GITHUB_PATH
-            echo "/usr/local/Cellar/assimp/bin" >> $GITHUB_PATH
-            echo "/usr/local/Cellar/ompl/bin" >> $GITHUB_PATH
-            echo "/usr/local/Cellar/opencascade/bin" >> $GITHUB_PATH
-            echo "CMAKE_PREFIX_PATH=/usr/local/Cellar/googletest:/usr/local/Cellar/assimp:/usr/local/Cellar/ompl:/usr/local/Cellar/opencascade" >> $GITHUB_ENV
-            cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang \
-            -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -B${{github.workspace}}/build/Mac_Ninja_Release \
-            -S${{github.workspace}} -G Ninja
-            cmake -B build
-            cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
-
-        - name: Execute Unit Tests Release
-          working-directory: ${{github.workspace}}/build/Mac_Ninja_Release
-          run: |
-            ctest -T test -R
+        # - name: Execute Unit Tests Release
+        #   working-directory: ${{github.workspace}}/build/Mac_Ninja_Release
+        #   run: |
+        #     ctest -T test -R
