@@ -1,0 +1,44 @@
+name: C++ Qt Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+    #   - name: Setup Qt
+    #     uses: qt-actions/setup-qt@v3
+    #     with:
+    #       qt-version: '5.15.2'
+    #       host: linux
+
+      - name: Install Vcpkg
+        run: |
+          git clone https://github.com/Microsoft/vcpkg.git
+          cd vcpkg
+          ./bootstrap-vcpkg.sh
+          ./vcpkg integrate install
+          ./vcpkg install assimp --triplet x64-windows --release
+          ls
+
+      - name: Cache Vcpkg Packages
+        uses: actions/cache@v2
+        with:
+          path: vcpkg/packages
+          key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg/vcpkg.json') }}
+
+    #   - name: Build Project
+    #     run: |
+    #       cd path/to/project
+    #       mkdir build
+    #       cd build
+    #       cmake .. -DCMAKE_TOOLCHAIN_FILE=../../vcpkg/scripts/buildsystems/vcpkg.cmake
+    #       make
+
