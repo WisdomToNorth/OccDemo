@@ -11,7 +11,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 enable_language(C)
 
-find_package(assimp REQUIRED)
 if(WIN32)
     find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
     set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
@@ -34,12 +33,21 @@ if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++20")
 endif()
 
+include_directories(
+    ${Qt_INCLUDE_DIR}
+    ${PROJECT_SOURCE_DIR}/src
+)
+
 # OccConfig
-file(GLOB OCC_CONFIG_FILES
-    "${PROJECT_SOURCE_DIR}/datautils.h"
-    "${PROJECT_SOURCE_DIR}/datautils.cpp"
-    "${PROJECT_SOURCE_DIR}/main.cpp"
-     )
+set(OCC_CONFIG_FILES
+    src/public_function.h
+    src/public_function.cpp
+    src/testdata.h
+    src/lc_struct.h
+    datautils.h
+    datautils.cpp
+    main.cpp
+    )
 
 add_executable(OccConfig ${OCC_CONFIG_FILES})
 

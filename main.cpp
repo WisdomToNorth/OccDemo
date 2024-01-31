@@ -1,21 +1,19 @@
-﻿#include <iostream>
+﻿#include "lc_struct.h"
+#include <iostream>
+#include <vector>
 
-// int main(int argc, char *argv[])
-// {
-//     QApplication a(argc, argv);
-//     KDebugger::MainWindowOcc w;
-//     w.show();
+using namespace std;
 
-//     return a.exec();
-// }
-
-#include "datautils.h"
-
-using namespace rfbase;
+class Solution
+{
+public:
+    vector<int> distinctDifferenceArray(vector<int> &nums)
+    {
+        return {};
+    }
+};
 
 int main()
 {
-    std::ignore = rfbase::DataUtils::makeDir("test");
-    std::cout << std::endl;
     return 0;
 }
