@@ -155,7 +155,60 @@ PointerAlignment: Right
 ReflowComments: true
 
 # 允许排序#include
-SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+
+# Ui Frame
+  - Regex: '^<(Q[A-Z]).*'
+    Priority: 4
+    SortPriority: 0
+    CaseSensitive: true
+
+# third party
+  - Regex: '^<(kdbindings/|magic_enum/|assimp/|ompl/|gtest/|boost/|kdl/|Eigen/).*>'
+    Priority: 5
+    SortPriority: 0
+    CaseSensitive: true
+
+# Generated headfile
+  - Regex: '^\"(rfshape/|rfio/|rflog/|rfrobot/|rfbase/|rfapp/|rfdb/|generated/).*\.h\"'
+    Priority: 6
+    SortPriority: 0
+    CaseSensitive: true
+
+# third party without folder(like occ)
+  - Regex: '^<.*(\.hpp|\.hxx)>'
+    Priority: 5
+    SortPriority: 0
+    CaseSensitive: false
+
+# C++ std includings
+  - Regex: '^<.*'
+    Priority: 3
+    SortPriority: 0
+    CaseSensitive: false
+
+# stdafx.h
+  - Regex: '^"stdafx\.h"$'
+    Priority: 1
+    SortPriority: 0
+    CaseSensitive: false
+
+# .h with .cpp
+  - Regex: '^<.*\.h>'
+    Priority: 1
+    SortPriority: 0
+    CaseSensitive: false
+
+# others
+  - Regex: '.*'
+    Priority: 7
+    SortPriority: 0
+    CaseSensitive: false
+
+IncludeIsMainRegex: '([-_](test|unittest))?$'
+IncludeIsMainSourceRegex: ''
+SortIncludes: true
 
 # 允许排序 using 声明
 SortUsingDeclarations: false

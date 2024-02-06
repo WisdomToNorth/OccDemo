@@ -44,8 +44,6 @@ set(OCC_CONFIG_FILES
     src/public_function.cpp
     src/testdata.h
     src/lc_struct.h
-    datautils.h
-    datautils.cpp
     main.cpp
     )
 
