@@ -12,10 +12,18 @@
             "description": "windows msvc 2022",
             "generator": "Visual Studio 17 2022",
             "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/install/${presetName}",
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            },
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}"
             },
             "vendor": {
+                "jetbrains.com/clion": {
+                    "toolchain": "Visual Studio"
+                },
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
                     "hostOS": [
                         "Windows"
@@ -34,6 +42,9 @@
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}"
             },
             "vendor": {
+                "jetbrains.com/clion": {
+                    "toolchain": "Visual Studio"
+                },
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
                     "hostOS": [
                         "Windows"
@@ -58,10 +69,10 @@
                 "CMAKE_C_COMPILER": "cl.exe",
                 "CMAKE_CXX_COMPILER": "cl.exe"
             },
-            "architecture": {
-                "value": "x64"
-            },
             "vendor": {
+                "jetbrains.com/clion": {
+                    "toolchain": "Visual Studio"
+                },
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
                     "hostOS": [
                         "Windows"
@@ -86,15 +97,53 @@
                 "CMAKE_C_COMPILER": "cl.exe",
                 "CMAKE_CXX_COMPILER": "cl.exe"
             },
-            "architecture": {
-                "value": "x64"
-            },
             "vendor": {
+                "jetbrains.com/clion": {
+                    "toolchain": "Visual Studio"
+                },
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
                     "hostOS": [
                         "Windows"
                     ],
                     "intelliSenseMode": "windows-msvc-x64"
+                }
+            }
+        },
+        {
+            "name": "icc_linux_release",
+            "displayName": "icc linux release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "icx",
+                "CMAKE_CXX_COMPILER": "icpx"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ],
+                    "intelliSenseMode": "linux-gcc-x64"
+                }
+            }
+        },
+        {
+            "name": "icc_linux_debug",
+            "displayName": "icc linux debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "icx",
+                "CMAKE_CXX_COMPILER": "icpx"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ],
+                    "intelliSenseMode": "linux-gcc-x64"
                 }
             }
         },
@@ -106,7 +155,9 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "/usr/bin/gcc",
-                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -125,7 +176,9 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_C_COMPILER": "/usr/bin/gcc",
-                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -144,7 +197,9 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -163,7 +218,30 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ],
+                    "intelliSenseMode": "linux-gcc-x64"
+                }
+            }
+        },
+        {
+            "name": "gcc13_linux_debug",
+            "displayName": "gcc13 linux debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc-13",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++-13",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -183,10 +261,9 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
-            },
-            "architecture": {
-                "value": "x64"
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -207,10 +284,9 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
-            },
-            "architecture": {
-                "value": "x64"
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -231,10 +307,32 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
                 "CMAKE_C_COMPILER": "/usr/bin/gcc",
-                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
             },
-            "architecture": {
-                "value": "x64"
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "macOS"
+                    ],
+                    "intelliSenseMode": "ios-clang-arm64"
+                }
+            }
+        },
+        {
+            "name": "Mac_Gcc_Debug",
+            "displayName": "Mac gcc arm64 debug",
+            "description": "macOS",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -288,6 +386,25 @@
             "configurePreset": "gcc_linux_debug"
         },
         {
+            "name": "linux_icc_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "icc_linux_release"
+        },
+        {
+            "name": "linux_icc_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "icc_linux_debug"
+        },
+        {
+            "name": "linux_gcc13_debug",
+            "configuration": "Debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "gcc13_linux_debug"
+        },
+        {
             "name": "linux_clang_release",
             "description": "",
             "displayName": "",
@@ -317,7 +434,14 @@
             "name": "MacGccRelease",
             "description": "",
             "displayName": "",
-            "configurePreset": "Mac_gcc_Debug",
+            "configurePreset": "Mac_Gcc_Release",
+            "configuration": "Debug"
+        },
+        {
+            "name": "Mac_Gcc_Debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Mac_Gcc_Debug",
             "configuration": "Debug"
         }
     ],
@@ -335,10 +459,28 @@
             "configurePreset": "msvc-ninja-debug"
         },
         {
-            "name": "test_mac_release",
+            "name": "test_mac_clang_release",
             "description": "",
             "displayName": "",
             "configurePreset": "Mac_Clang_Release"
+        },
+        {
+            "name": "test_mac_clang_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Mac_Clang_Debug"
+        },
+        {
+            "name": "test_mac_gcc_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Mac_Gcc_Release"
+        },
+        {
+            "name": "test_mac_gcc_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Mac_Gcc_Debug"
         },
         {
             "name": "test_gcc_linux_debug",
@@ -351,6 +493,36 @@
             "description": "",
             "displayName": "",
             "configurePreset": "gcc_linux_release"
+        },
+        {
+            "name": "test_icc_linux_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "icc_linux_release"
+        },
+        {
+            "name": "test_icc_linux_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "icc_linux_debug"
+        },
+        {
+            "name": "test_clang_linux_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "linux_clang_debug"
+        },
+        {
+            "name": "test_clang_linux_release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "linux_clang_release"
+        },
+        {
+            "name": "test_gcc13_linux_debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "gcc13_linux_debug"
         }
     ]
 }
