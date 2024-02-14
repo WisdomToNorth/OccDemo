@@ -1,4 +1,10 @@
-﻿#include <iostream>
+﻿#include <algorithm>
+#include <climits>
+#include <iostream>
+#include <numeric>
+#include <queue>
+#include <sstream>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -8,12 +14,23 @@
 using namespace std;
 using namespace LeetCode;
 
-class Solution
+class Checkout
 {
 public:
-    ListNode *trainningPlan(ListNode *l1, ListNode *l2)
+    Checkout()
     {
-        return nullptr;
+    }
+
+    int get_max()
+    {
+    }
+
+    void add(int value)
+    {
+    }
+
+    int remove()
+    {
     }
 };
 
