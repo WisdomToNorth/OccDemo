@@ -43,7 +43,7 @@ set(Qt_INCLUDE_DIR ${Qt${QT_VERSION_MAJOR}_INCLUDE_DIRS})
 
 # find_package(GTest REQUIRED)
 # find_package(FMT CONFIG REQUIRED)
-
+find_package(Boost REQUIRED COMPONENTS system)
 # find_package(Boost REQUIRED COMPONENTS system)
 # find_package(Eigen3 CONFIG REQUIRED)
 find_package(ompl CONFIG REQUIRED)

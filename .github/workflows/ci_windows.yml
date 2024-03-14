@@ -28,6 +28,10 @@ jobs:
             triplet: x64-windows-release
             token: ${{ github.token }}
 
+        - name: Install Boost
+          run: |
+              choco install boost-msvc-14.2 --version 1.82.0
+
         - name: Build Release
           working-directory: ${{github.workspace}}
           run: |
