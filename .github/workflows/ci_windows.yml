@@ -24,13 +24,10 @@ jobs:
           uses: johnwason/vcpkg-action@v5
           id: vcpkg
           with:
-            pkgs: ompl eigen3 spdlog
+            pkgs: ompl eigen3 spdlog boost
             triplet: x64-windows-release
             token: ${{ github.token }}
 
-        - name: Install Boost
-          run: |
-             choco install boost-msvc-14.1
 
         - name: Build Release
           working-directory: ${{github.workspace}}
