@@ -24,14 +24,15 @@ jobs:
           id: cache-occ
           uses: actions/cache@v3
           with:
-              path: occt-vc143-64.zip
-              key: occ-7.8.0
+            path: OpenCASCADE-7.8.0-vc14-64.zip
+            key: occ-7.8.0
 
         - name: Download OpenCascade
           if: steps.cache-occ.outputs.cache-hit != 'true'
           uses: carlosperate/download-file-action@v2
           with:
-              file-url: 'https://github.com/Open-Cascade-SAS/OCCT/releases/download/V7_8_0/occt-vc143-64.zip'
+            file-url: 'https://www.fougue.pro/share/bin/OpenCASCADE-7.8.0-vc14-64.zip'
+            sha256: 'beb30920efe5e5384d500d43dcb8ba1f476a76bb65b268b1af32d807b697bdee'
 
         - name: Extract OpenCascade
           run: 7z x occt-vc143-64.zip
@@ -73,7 +74,7 @@ jobs:
             -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 `
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe `
             -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_release `
-            -DOpenCASCADE_DIR=${{github.workspace}}/occt-vc143-64 `
+            -DOpenCASCADE_DIR=${{github.workspace}}/OpenCASCADE-7.8.0-vc14-64/opencascade-7.8.0 `
             -Dassimp_DIR=${{github.workspace}}/assimp-5.3.1/lib/cmake/assimp-5.3 `
             -S${{github.workspace}} -G Ninja
             cmake --build ${{github.workspace}}/build/win_msvc_release --config Release --target all --
