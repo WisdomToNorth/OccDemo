@@ -47,7 +47,7 @@ find_package(assimp REQUIRED)
 find_package(OpenCASCADE CONFIG REQUIRED)
 # find_package(Boost REQUIRED COMPONENTS system)
 # find_package(Eigen3 CONFIG REQUIRED)
-# find_package(ompl CONFIG REQUIRED)
+find_package(ompl CONFIG REQUIRED)
 # find_package(spdlog CONFIG REQUIRED)
 
 # enable_testing()
