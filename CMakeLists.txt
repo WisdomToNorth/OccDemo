@@ -45,6 +45,7 @@ set(Qt_INCLUDE_DIR ${Qt${QT_VERSION_MAJOR}_INCLUDE_DIRS})
 # find_package(FMT CONFIG REQUIRED)
 # #find_package(OpenCASCADE CONFIG REQUIRED)
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(spdlog CONFIG REQUIRED)
 
 # enable_testing()
 # include(GoogleTest)
