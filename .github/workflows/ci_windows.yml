@@ -32,14 +32,14 @@ jobs:
         - name: Build Release
           working-directory: ${{github.workspace}}
           run: |
-            cmake --version
-
             cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
 
-            cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe \
-            -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_release \
+            cmake --version
+            cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 `
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe `
+            -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_release `
             -S${{github.workspace}} -G Ninja
+
             cmake -B build
             cmake --build ${{github.workspace}}/build/win_msvc_release --config Release --target all --
 
@@ -48,48 +48,4 @@ jobs:
           run: |
             ctest -T test -R
 
-
-
-
-        # strategy:
-        #     fail-fast: false
-        #     matrix:
-        #       config:
-        #       - {
-        #           name: "Windows Latest MSVC",
-        #           build_type: "Release",
-        #           cc: "cl",
-        #           cxx: "cl",
-        #           environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
-        #           generator: "Visual Studio 17 2022"
-        #         }
-
-        # steps:
-        #     - uses: actions/checkout@v3
-        #     - uses: ilammy/msvc-dev-cmd@v1
-
-        #     - name: Print env
-        #       run: |
-        #         echo github.event.action: ${{ github.event.action }}
-        #         echo github.event_name: ${{ github.event_name }}
-
-        #     - name: Setup MSVC problem matcher
-        #       uses: ammaraskar/msvc-problem-matcher@master
-
-        #     - name: Install Dependencies For ${{matrix.config.name}}
-        #       run: |
-        #         cmake --version
-        #         cmd "${{matrix.config.environment_script}}"
-
-        #     - name: Configure, Build & Install
-        #       uses: threeal/cmake-action@v1.2.0
-        #       with:
-        #         source-dir: ${{github.workspace}}
-        #         build-dir: ${{github.workspace}}/build
-        #         c-compiler: ${{matrix.config.cc}}
-        #         cxx-compiler: ${{matrix.config.cxx}}
-        #         generator: ${{matrix.config.generator}}
-        #         options: CMAKE_BUILD_TYPE=${{matrix.config.build_type}} TORQUE_APP_NAME=Torque3D TORQUE_TESTING=ON
-        #         run-build: true
-        #         build-args: --config ${{matrix.config.build_type}} --target install
 
