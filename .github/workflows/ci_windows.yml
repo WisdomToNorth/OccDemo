@@ -20,11 +20,11 @@ jobs:
             cache: true
             cache-key-prefix: QtCache
 
-        - name: Install dependencies via vcpkg
+        - name: vcpkg build
           uses: johnwason/vcpkg-action@v5
           id: vcpkg
           with:
-            pkgs: assimp eigen3 fmt googletest ompl orocos-kdl ninja spdlog
+            pkgs: ompl eigen3 spdlog
             triplet: x64-windows-release
             token: ${{ github.token }}
 
