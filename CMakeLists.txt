@@ -41,13 +41,13 @@ set(Qt_LIBRARIES
 set(Qt_LIBRARY_DIR ${Qt${QT_VERSION_MAJOR}_LIBRARY_DIR})
 set(Qt_INCLUDE_DIR ${Qt${QT_VERSION_MAJOR}_INCLUDE_DIRS})
 
-find_package(GTest REQUIRED)
-find_package(FMT CONFIG REQUIRED)
-#find_package(OpenCASCADE CONFIG REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system)
+# find_package(GTest REQUIRED)
+# find_package(FMT CONFIG REQUIRED)
+# #find_package(OpenCASCADE CONFIG REQUIRED)
+# find_package(Boost REQUIRED COMPONENTS system)
 
-enable_testing()
-include(GoogleTest)
+# enable_testing()
+# include(GoogleTest)
 
 
 if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
