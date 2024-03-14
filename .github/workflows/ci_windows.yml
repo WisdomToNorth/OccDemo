@@ -20,40 +20,6 @@ jobs:
             cache: true
             cache-key-prefix: QtCache
 
-        # - name: Cache OpenCascade archive
-        #   id: cache-occ
-        #   uses: actions/cache@v3
-        #   with:
-        #     path: OpenCASCADE-7.8.0-vc14-64.zip
-        #     key: occ-7.8.0
-
-        - name: Download OpenCascade
-          #if: steps.cache-occ.outputs.cache-hit != 'true'
-          uses: carlosperate/download-file-action@v2
-          with:
-            file-url: 'https://www.fougue.pro/share/bin/OpenCASCADE-7.8.0-vc14-64.zip'
-            sha256: 'beb30920efe5e5384d500d43dcb8ba1f476a76bb65b268b1af32d807b697bdee'
-
-        - name: Extract OpenCascade
-          run: 7z x OpenCASCADE-7.8.0-vc14-64.zip
-
-        - name: Cache Assimp archive
-          id: cache-assimp
-          uses: actions/cache@v3
-          with:
-              path: assimp-5.3.1.zip
-              key: assimp-5.3.1
-
-        - name: Download Assimp
-          if: steps.cache-assimp.outputs.cache-hit != 'true'
-          uses: carlosperate/download-file-action@v2
-          with:
-              file-url: 'https://www.fougue.pro/share/bin/assimp-5.3.1.zip'
-              sha256: 'b6097488fa5b7a0cc610e8258e74aaa9552b48a13bc8680eedd66512d788e64f'
-
-        - name: Extract Assimp
-          run: 7z x assimp-5.3.1.zip
-
         - name: vcpkg build
           uses: johnwason/vcpkg-action@v5
           id: vcpkg
@@ -74,8 +40,6 @@ jobs:
             -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 `
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe `
             -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_release `
-            -DOpenCASCADE_DIR=${{github.workspace}}/OpenCASCADE-7.8.0-vc14-64/opencascade-7.8.0 `
-            -Dassimp_DIR=${{github.workspace}}/assimp-5.3.1/lib/cmake/assimp-5.3 `
             -S${{github.workspace}} -G Ninja
             cmake --build ${{github.workspace}}/build/win_msvc_release --config Release --target all --
 
