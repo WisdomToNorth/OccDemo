@@ -30,7 +30,7 @@ jobs:
 
         - name: Install Boost
           run: |
-              choco install boost-msvc-14.2 --version 1.82.0
+             choco install boost-msvc-14.1
 
         - name: Build Release
           working-directory: ${{github.workspace}}
