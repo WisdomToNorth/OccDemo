@@ -10,6 +10,9 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v2
 
+        - name: Configure Compiler
+          uses: ilammy/msvc-dev-cmd@v1
+
         - name: Install Qt
           uses: jurplel/install-qt-action@v3
           with:
