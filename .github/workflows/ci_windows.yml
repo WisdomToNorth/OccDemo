@@ -35,7 +35,7 @@ jobs:
             sha256: 'beb30920efe5e5384d500d43dcb8ba1f476a76bb65b268b1af32d807b697bdee'
 
         - name: Extract OpenCascade
-          run: 7z x occt-vc143-64.zip
+          run: 7z x OpenCASCADE-7.8.0-vc14-64.zip
 
         - name: Cache Assimp archive
           id: cache-assimp
