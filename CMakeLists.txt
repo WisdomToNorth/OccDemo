@@ -11,22 +11,44 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 enable_language(C)
 
-if(WIN32)
-    find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
-    set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
-    set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
+# if(WIN32)
+#     find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
+#     set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
+#     set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
 
-elseif(APPLE)
-    find_package(Qt6 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
-    set(Qt_LIBRARIES Qt6::Core Qt6::Widgets Qt6::Gui)
-    set(Qt_LIBRARY_DIR ${Qt6_LIBRARY_DIR})
-    set(Qt_INCLUDE_DIR ${Qt6_INCLUDE_DIRS})
+# elseif(APPLE)
+#     find_package(Qt6 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
+#     set(Qt_LIBRARIES Qt6::Core Qt6::Widgets Qt6::Gui)
+#     set(Qt_LIBRARY_DIR ${Qt6_LIBRARY_DIR})
+#     set(Qt_INCLUDE_DIR ${Qt6_INCLUDE_DIRS})
 
-elseif(UNIX)
-    find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
-    set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
-    set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
-endif()
+# elseif(UNIX)
+#     find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
+#     set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
+#     set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
+# endif()
+
+
+# QT
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets Gui REQUIRED)
+
+set(Qt_LIBRARIES
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Gui)
+
+set(Qt_LIBRARY_DIR ${Qt${QT_VERSION_MAJOR}_LIBRARY_DIR})
+set(Qt_INCLUDE_DIR ${Qt${QT_VERSION_MAJOR}_INCLUDE_DIRS})
+
+find_package(GTest REQUIRED)
+find_package(FMT CONFIG REQUIRED)
+#find_package(OpenCASCADE CONFIG REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system)
+
+enable_testing()
+include(GoogleTest)
+
 
 if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
     message(STATUS "Using Clang")

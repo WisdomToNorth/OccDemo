@@ -10,41 +10,36 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v2
 
-        # - name: Install Qt
-        #   uses: jurplel/install-qt-action@v3
-        #   with:
-        #     version: 5.15.2
-        #     cache: true
-        #     cache-key-prefix: QtCache
+        - name: Configure Compiler
+          uses: ilammy/msvc-dev-cmd@v1
+
+        - name: Install Qt
+          uses: jurplel/install-qt-action@v3
+          with:
+            version: 5.15.2
+            cache: true
+            cache-key-prefix: QtCache
 
         - name: Install dependencies via vcpkg
           uses: johnwason/vcpkg-action@v5
           id: vcpkg
           with:
-            pkgs: boost-test boost-program-options boost-geometry benchmark
-            triplet: x64-windows-release
-            token: ${{ github.token }}
-
-        - name: vcpkg build
-          uses: johnwason/vcpkg-action@v5
-          id: vcpkg2
-          with:
-            pkgs: boost-program-options boost-geometry boost-locale boost-chrono boost-system boost-filesystem eigen3 cgal gdal
+            pkgs: boost-system assimp eigen3 fmt googletest ompl orocos-kdl ninja spdlog
             triplet: x64-windows-release
             token: ${{ github.token }}
             extra-args: --clean-after-build
 
-        # - name: Build Release
-        #   working-directory: ${{github.workspace}}
-        #   run: |
-        #     cmake --no-warn-unused-cli -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
-        #     -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe \
-        #     -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/Mac_Ninja_Release \
-        #     -S${{github.workspace}} -G Ninja
-        #     cmake -B build
-        #     cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
+        - name: Build Release
+          working-directory: ${{github.workspace}}
+          run: |
+            cmake --no-warn-unused-cli -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe \
+            -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_release \
+            -S${{github.workspace}} -G Ninja
+            cmake -B build
+            cmake --build ${{github.workspace}}/build/win_msvc_release --config Release --target all --
 
-        # - name: Execute Unit Tests Release
-        #   working-directory: ${{github.workspace}}/build/Mac_Ninja_Release
-        #   run: |
-        #     ctest -T test -R
+        - name: Execute Unit Tests Release
+          working-directory: ${{github.workspace}}/build/win_msvc_release
+          run: |
+            ctest -T test -R
