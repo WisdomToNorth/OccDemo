@@ -24,10 +24,30 @@ jobs:
           uses: johnwason/vcpkg-action@v5
           id: vcpkg
           with:
-            pkgs: ompl eigen3 spdlog boost
+            pkgs: ompl eigen3 spdlog
             triplet: x64-windows-release
             token: ${{ github.token }}
 
+        - name: Cache Boost
+          id: cache-boost
+          uses: actions/cache@v3
+          with:
+            path: boost_1_84_0-msvc-14.3-64.exe
+            key: boost_1_84_0-msvc
+
+        - name: Download Boost
+          if: steps.cache-boost.outputs.cache-hit != 'true'
+          uses: carlosperate/download-file-action@v2
+          with:
+            file-url: 'https://jaist.dl.sourceforge.net/project/boost/boost-binaries/1.84.0/boost_1_84_0-msvc-14.3-64.exe'
+
+        - name: Install Boost
+          run: |
+            Start-Process -FilePath .\boost_1_84_0-msvc-14.3-64.exe -ArgumentList '/SILENT', '/SP-', '/SUPPRESSMSGBOXES', '/DIR=C:\boost' -NoNewWindow -Wait
+
+        - name: Set BOOST_ROOT environment variable
+          run: |
+            echo "BOOST_ROOT=C:\boost" | Out-File -FilePath $env:GITHUB_ENV -Append
 
         - name: Build Release
           working-directory: ${{github.workspace}}
