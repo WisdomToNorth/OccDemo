@@ -1,6 +1,11 @@
 name: Test
 
-on: [push]
+
+on:
+    release:
+        types: [published]
+
+# on: [push]
 
 jobs:
     build-windows-msvc:
@@ -20,13 +25,27 @@ jobs:
             cache: true
             cache-key-prefix: QtCache
 
-        - name: vcpkg build
-          uses: johnwason/vcpkg-action@v5
-          id: vcpkg
+        - name: Install Vcpkg
+          shell: powershell
+          run: |
+            git clone https://github.com/Microsoft/vcpkg.git
+            cd vcpkg
+            .\bootstrap-vcpkg.bat
+            vcpkg integrate install
+            Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
+            vcpkg install assimp --triplet x64-windows
+            Remove-Item -Recurse -Force buildtrees
+            Remove-Item -Recurse -Force downloads
+            Remove-Item -Recurse -Force packages
+            Remove-Item -Recurse -Force ports
+            Remove-Item -Recurse -Force triplets
+            ls
+
+        - name: Cache Vcpkg Packages
+          uses: actions/cache@v3
           with:
-            pkgs: ompl eigen3 spdlog
-            triplet: x64-windows-release
-            token: ${{ github.token }}
+            path: vcpkg/packages
+            key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg/vcpkg.json') }}
 
         - name: Cache Boost
           id: cache-boost
