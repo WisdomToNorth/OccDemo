@@ -45,11 +45,8 @@ jobs:
             Remove-Item -Recurse -Force packages
             Remove-Item -Recurse -Force ports
             Remove-Item -Recurse -Force triplets
-            ls
-
-        - name: Build Release
-          working-directory: ${{github.workspace}}
-          run: |
+            cd ..
+            pwd
             cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
             cmake --version
             cmake --no-warn-unused-cli `
