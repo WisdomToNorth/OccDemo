@@ -50,7 +50,7 @@ enable_language(C)
 
 #find_package(Boost REQUIRED COMPONENTS system)
 # find_package(Boost REQUIRED COMPONENTS system)
-find_package(GTest REQUIRED)
+#find_package(GTest REQUIRED)
 find_package(FMT CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
