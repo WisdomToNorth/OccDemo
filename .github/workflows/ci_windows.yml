@@ -1,9 +1,5 @@
 name: Windows
 
-# on:
-#     release:
-#         types: [published]
-
 on:
     [push]
 
@@ -40,13 +36,6 @@ jobs:
             .\vcpkg.exe install eigen3:x64-windows
             .\vcpkg.exe install fmt:x64-windows
             .\vcpkg.exe install spdlog:x64-windows
-            ls
-
-        - name: Debug - List installed vcpkg packages
-          shell: powershell
-          run: |
-            cd vcpkg_ci_env
-            ./vcpkg list
 
         - name: Create cmake toolchain file
           working-directory: ${{github.workspace}}
@@ -54,11 +43,6 @@ jobs:
           run: |
             Set-Content -Path user_setting.cmake -Value 'set(CMAKE_TOOLCHAIN_FILE D:/a/OccDemo/OccDemo/vcpkg_ci_env/scripts/buildsystems/vcpkg.cmake)'
             echo "D:\a\OccDemo\OccDemo\vcpkg_ci_env" >> $GITHUB_PATH
-
-        - name: Debug - Print environment variables
-          shell: powershell
-          run: |
-            Get-ChildItem Env:
 
         - name: Build Release
           working-directory: ${{github.workspace}}
