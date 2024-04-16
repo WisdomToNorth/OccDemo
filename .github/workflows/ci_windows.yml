@@ -53,7 +53,7 @@ jobs:
             cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
             cmake --version
             cmake --no-warn-unused-cli `
-            -DCMAKE_TOOLCHAIN_FILE=D:\a\OccDemo\OccDemo/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            -DCMAKE_TOOLCHAIN_FILE=D:\a\OccDemo\OccDemo/vcpkg_ci_env/scripts/buildsystems/vcpkg.cmake `
             -DVCPKG_TARGET_TRIPLET=x64-windows-release `
             -DVCPKG_MANIFEST_MODE=OFF `
             -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 `
