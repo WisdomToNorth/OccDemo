@@ -31,14 +31,15 @@ jobs:
           if: steps.vcpkg-cache.outputs.cache-hit != 'true'
           shell: powershell
           run: |
+            echo "VCPKG_ROOT=" >> $GITHUB_ENV
             git clone https://github.com/Microsoft/vcpkg.git vcpkg_ci_env
             cd vcpkg_ci_env
             .\bootstrap-vcpkg.bat
-            vcpkg integrate install
+            .\vcpkg integrate install
             Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
-            vcpkg install eigen3:x64-windows
-            vcpkg install fmt:x64-windows
-            vcpkg install spdlog:x64-windows
+            .\vcpkg.exe install eigen3:x64-windows
+            .\vcpkg.exe install fmt:x64-windows
+            .\vcpkg.exe install spdlog:x64-windows
             ls
 
         - name: Debug - List installed vcpkg packages
