@@ -1,4 +1,17 @@
-/bin/*
-/build/*
-/.cache/*
-/.vscode/*
+# Forder
+.vs/*
+.idea/*
+x64/*
+
+out
+build
+
+regressions/output
+regressions/Files
+user_setting.cmake
+launch.json
+settings.json
+
+
+.VSCodeCounter/*
+.DS_Store

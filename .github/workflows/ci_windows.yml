@@ -1,14 +1,14 @@
-name: Test
+name: Windows
 
+# on:
+#     release:
+#         types: [published]
 
 on:
-    release:
-        types: [published]
-
-# on: [push]
+    [push]
 
 jobs:
-    build-windows-msvc:
+    msvc-release:
         runs-on: windows-latest
 
         steps:
@@ -18,55 +18,34 @@ jobs:
         - name: Configure Compiler
           uses: ilammy/msvc-dev-cmd@v1
 
-        - name: Install Qt
-          uses: jurplel/install-qt-action@v3
+        - name: Cache Vcpkg Packages
+          id: vcpkg-cache
+          uses: actions/cache@v3
           with:
-            version: 5.15.2
-            cache: true
-            cache-key-prefix: QtCache
+            path: vcpkg_ci_env
+            key: vcpkg-cache-windowsci
+            restore-keys: |
+              vcpkg-cache-windowsci
 
         - name: Install Vcpkg
+          if: steps.vcpkg-cache.outputs.cache-hit != 'true'
           shell: powershell
           run: |
-            git clone https://github.com/Microsoft/vcpkg.git
-            cd vcpkg
+            git clone https://github.com/Microsoft/vcpkg.git vcpkg_ci_env
+            cd vcpkg_ci_env
             .\bootstrap-vcpkg.bat
             vcpkg integrate install
             Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
-            vcpkg install assimp --triplet x64-windows
+            vcpkg install eigen3 --triplet x64-windows
+            vcpkg install gtest --triplet x64-windows
+            vcpkg install fmt --triplet x64-windows
+            vcpkg install spdlog --triplet x64-windows
             Remove-Item -Recurse -Force buildtrees
             Remove-Item -Recurse -Force downloads
             Remove-Item -Recurse -Force packages
             Remove-Item -Recurse -Force ports
             Remove-Item -Recurse -Force triplets
             ls
-
-        - name: Cache Vcpkg Packages
-          uses: actions/cache@v3
-          with:
-            path: vcpkg/packages
-            key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg/vcpkg.json') }}
-
-        - name: Cache Boost
-          id: cache-boost
-          uses: actions/cache@v3
-          with:
-            path: boost_1_84_0-msvc-14.3-64.exe
-            key: boost_1_84_0-msvc
-
-        - name: Download Boost
-          if: steps.cache-boost.outputs.cache-hit != 'true'
-          uses: carlosperate/download-file-action@v2
-          with:
-            file-url: 'https://jaist.dl.sourceforge.net/project/boost/boost-binaries/1.84.0/boost_1_84_0-msvc-14.3-64.exe'
-
-        - name: Install Boost
-          run: |
-            Start-Process -FilePath .\boost_1_84_0-msvc-14.3-64.exe -ArgumentList '/SILENT', '/SP-', '/SUPPRESSMSGBOXES', '/DIR=C:\boost' -NoNewWindow -Wait
-
-        - name: Set BOOST_ROOT environment variable
-          run: |
-            echo "BOOST_ROOT=C:\boost" | Out-File -FilePath $env:GITHUB_ENV -Append
 
         - name: Build Release
           working-directory: ${{github.workspace}}

@@ -1,5 +1,15 @@
 cmake_minimum_required(VERSION 3.16)
 
+if(WIN32)
+    set(USER_SET_FILE ${CMAKE_CURRENT_SOURCE_DIR}/user_setting.cmake)
+    if(NOT EXISTS ${USER_SET_FILE})
+        file(WRITE ${USER_SET_FILE} "# set(CMAKE_TOOLCHAIN_FILE D:/CODE/vcpkg/scripts/buildsystems/vcpkg.cmake)")
+    endif()
+    include(${USER_SET_FILE})
+endif()
+
+
+
 project(
   occdebuggger
   VERSION 0.0.1
@@ -11,10 +21,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 enable_language(C)
 
-# if(WIN32)
-#     find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
-#     set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
-#     set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
+
 
 # elseif(APPLE)
 #     find_package(Qt6 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
@@ -41,12 +48,11 @@ set(Qt_LIBRARIES
 set(Qt_LIBRARY_DIR ${Qt${QT_VERSION_MAJOR}_LIBRARY_DIR})
 set(Qt_INCLUDE_DIR ${Qt${QT_VERSION_MAJOR}_INCLUDE_DIRS})
 
-# find_package(GTest REQUIRED)
-# find_package(FMT CONFIG REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system)
+#find_package(Boost REQUIRED COMPONENTS system)
 # find_package(Boost REQUIRED COMPONENTS system)
-# find_package(Eigen3 CONFIG REQUIRED)
-find_package(ompl CONFIG REQUIRED)
+find_package(GTest REQUIRED)
+find_package(FMT CONFIG REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
 # enable_testing()
