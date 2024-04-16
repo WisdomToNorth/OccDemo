@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 if(WIN32)
+    message(STATUS "Windows, set user_setting.cmake")
     set(USER_SET_FILE ${CMAKE_CURRENT_SOURCE_DIR}/user_setting.cmake)
     if(NOT EXISTS ${USER_SET_FILE})
         file(WRITE ${USER_SET_FILE} "# set(CMAKE_TOOLCHAIN_FILE D:/CODE/vcpkg/scripts/buildsystems/vcpkg.cmake)")

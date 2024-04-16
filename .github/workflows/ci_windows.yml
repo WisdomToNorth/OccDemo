@@ -45,12 +45,19 @@ jobs:
             Remove-Item -Recurse -Force packages
             Remove-Item -Recurse -Force ports
             Remove-Item -Recurse -Force triplets
-            cd ..
-            pwd
+            ls
+
+        - name: Create cmake toolchain file
+          working-directory: ${{github.workspace}}
+          shell: powershell
+          run: |
+            Set-Content -Path user_setting.cmake -Value 'set(CMAKE_TOOLCHAIN_FILE D:/a/OccDemo/OccDemo/vcpkg_ci_env/scripts/buildsystems/vcpkg.cmake)'
+
+        - name: Build Release
+          working-directory: ${{github.workspace}}
+          run: |
             cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
-            cmake --version
             cmake --no-warn-unused-cli `
-            -DCMAKE_TOOLCHAIN_FILE=D:/a/OccDemo/OccDemo/vcpkg_ci_env/scripts/buildsystems/vcpkg.cmake `
             -DVCPKG_TARGET_TRIPLET=x64-windows-release `
             -DVCPKG_MANIFEST_MODE=OFF `
             -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 `
