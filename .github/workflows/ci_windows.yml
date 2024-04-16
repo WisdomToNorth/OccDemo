@@ -42,9 +42,6 @@ jobs:
             vcpkg install spdlog --triplet x64-windows
             Remove-Item -Recurse -Force buildtrees
             Remove-Item -Recurse -Force downloads
-            Remove-Item -Recurse -Force packages
-            Remove-Item -Recurse -Force ports
-            Remove-Item -Recurse -Force triplets
             ls
 
         - name: Create cmake toolchain file
