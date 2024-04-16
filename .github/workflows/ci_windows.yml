@@ -37,11 +37,8 @@ jobs:
             vcpkg integrate install
             Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
             vcpkg install eigen3 --triplet x64-windows
-            vcpkg install gtest --triplet x64-windows
             vcpkg install fmt --triplet x64-windows
             vcpkg install spdlog --triplet x64-windows
-            Remove-Item -Recurse -Force buildtrees
-            Remove-Item -Recurse -Force downloads
             ls
 
         - name: Create cmake toolchain file
