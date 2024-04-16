@@ -47,11 +47,17 @@ jobs:
             Remove-Item -Recurse -Force triplets
             ls
 
+        - name: explore
+          working-directory: ${{github.workspace}}
+          run: |
+            dir
+            cd vcpkg_ci_env
+            dir
+
         - name: Build Release
           working-directory: ${{github.workspace}}
           run: |
             dir
-            dir OccDemo
             cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
             cmake --version
             cmake --no-warn-unused-cli `
