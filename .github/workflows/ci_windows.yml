@@ -46,11 +46,13 @@ jobs:
           shell: powershell
           run: |
             Set-Content -Path user_setting.cmake -Value 'set(CMAKE_TOOLCHAIN_FILE D:/a/OccDemo/OccDemo/vcpkg_ci_env/scripts/buildsystems/vcpkg.cmake)'
+            echo "D:\a\OccDemo\OccDemo\vcpkg_ci_env" >> $GITHUB_PATH
 
         - name: Build Release
           working-directory: ${{github.workspace}}
           run: |
             cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+            echo "D:\a\OccDemo\OccDemo\vcpkg_ci_env" >> $GITHUB_PATH
             cmake --no-warn-unused-cli `
             -DVCPKG_TARGET_TRIPLET=x64-windows-release `
             -DVCPKG_MANIFEST_MODE=OFF `
