@@ -36,9 +36,9 @@ jobs:
             .\bootstrap-vcpkg.bat
             vcpkg integrate install
             Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
-            vcpkg install eigen3 --triplet x64-windows
-            vcpkg install fmt --triplet x64-windows
-            vcpkg install spdlog --triplet x64-windows
+            vcpkg install eigen3:x64-windows
+            vcpkg install fmt:x64-windows
+            vcpkg install spdlog:x64-windows
             ls
 
         - name: Create cmake toolchain file
