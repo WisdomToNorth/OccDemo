@@ -51,12 +51,29 @@ jobs:
             Set-Content -Path user_setting.cmake -Value 'set(CMAKE_TOOLCHAIN_FILE D:/a/OccDemo/OccDemo/vcpkg_ci_env/scripts/buildsystems/vcpkg.cmake)'
             echo "D:\a\OccDemo\OccDemo\vcpkg_ci_env" >> $GITHUB_PATH
 
+        - name: Install boost
+          uses: MarkusJx/install-boost@v2.4.5
+          id: install-boost
+          with:
+            # REQUIRED: Specify the required boost version
+            # A list of supported versions can be found here:
+            # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
+            boost_version: 1.83.0
+            # OPTIONAL: Specify a custon install location
+            boost_install_dir: ${{github.workspace}}
+            # OPTIONAL: Specify a platform version
+            platform_version: 2022
+            # OPTIONAL: Specify a toolset
+            toolset: msvc
+
         - name: Build Release
           working-directory: ${{github.workspace}}
           run: |
             cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
             echo "D:\a\OccDemo\OccDemo\vcpkg_ci_env" >> $GITHUB_PATH
             cmake -DVCPKG_MANIFEST_MODE=OFF `
+            -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include `
+            -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib `
             -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 `
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe `
             -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_release `
