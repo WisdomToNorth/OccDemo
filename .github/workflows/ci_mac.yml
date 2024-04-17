@@ -47,6 +47,22 @@ jobs:
             boost_install_dir: ${{github.workspace}}
             # OPTIONAL: Specify a toolset
             toolset: clang
-            arch: arm64
+            arch: aarch64
 
+
+        - name: Build Release
+          working-directory: ${{github.workspace}}
+          run: |
+            export PATH="/usr/local/opt/llvm/bin:$PATH"
+            cmake \
+            -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include \
+            -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib \
+            -DCMAKE_BUILD_TYPE:STRING=Release \
+            -DCMAKE_CXX_STANDARD=20 \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
+            -DCMAKE_C_COMPILER:FILEPATH=/usr/local/opt/llvm/bin/clang \
+            -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ \
+            -B${{github.workspace}}/build/Mac_Ninja_Release \
+            -S${{github.workspace}} -G Ninja
+            cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
 
