@@ -33,9 +33,16 @@ jobs:
             .\bootstrap-vcpkg.bat
             .\vcpkg integrate install
             Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
-            .\vcpkg.exe install eigen3:x64-windows
-            .\vcpkg.exe install fmt:x64-windows
-            .\vcpkg.exe install spdlog:x64-windows
+            vcpkg install eigen3 --triplet x64-windows
+            vcpkg install gtest --triplet x64-windows
+            vcpkg install fmt --triplet x64-windows
+            vcpkg install spdlog --triplet x64-windows
+            Remove-Item -Recurse -Force buildtrees
+            Remove-Item -Recurse -Force downloads
+            Remove-Item -Recurse -Force packages
+            Remove-Item -Recurse -Force ports
+            Remove-Item -Recurse -Force triplets
+            ls
 
         - name: Create cmake toolchain file
           working-directory: ${{github.workspace}}
