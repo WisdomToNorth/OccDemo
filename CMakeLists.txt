@@ -57,8 +57,8 @@ find_package(spdlog CONFIG REQUIRED)
 find_package(FMT CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 
-# enable_testing()
-# include(GoogleTest)
+enable_testing()
+include(GoogleTest)
 
 
 if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
