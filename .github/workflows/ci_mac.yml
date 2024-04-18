@@ -42,7 +42,7 @@ jobs:
             # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
             boost_version: 1.83.0
             # OPTIONAL: Specify a platform version
-            platform_version: 15
+            platform_version: 14
             # OPTIONAL: Specify a custom install location
             boost_install_dir: ${{github.workspace}}
 
