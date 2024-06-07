@@ -56,8 +56,8 @@ jobs:
             -DCMAKE_BUILD_TYPE:STRING=Release \
             -DCMAKE_CXX_STANDARD=20 \
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
-            -DCMAKE_C_COMPILER:FILEPATH=/usr/local/opt/llvm/bin/clang \
-            -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ \
+            -DCMAKE_C_COMPILER:FILEPATH=clang \
+            -DCMAKE_CXX_COMPILER=clang++ \
             -B${{github.workspace}}/build/Mac_Ninja_Release \
             -S${{github.workspace}} -G Ninja
             cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
