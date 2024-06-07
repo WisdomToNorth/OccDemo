@@ -45,6 +45,9 @@ set(OCC_CONFIG_FILES
     main.cpp
     )
 
+
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/executable)
+
 add_executable(OccConfig ${OCC_CONFIG_FILES})
 
 target_include_directories(OccConfig
@@ -58,3 +61,6 @@ PRIVATE
     ${Qt_LIBRARIES}
     ${GTEST_LIBRARIES}
 )
+
+gtest_add_tests(TARGET OccConfig
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/executable)

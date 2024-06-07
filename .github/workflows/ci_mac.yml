@@ -22,7 +22,7 @@ jobs:
         - name: Install brew and dependencies
           run: |
             brew install googletest
-        # brew install llvm
+            brew install llvm
         # brew install assimp
         # brew install ompl
         # brew install opencascade
