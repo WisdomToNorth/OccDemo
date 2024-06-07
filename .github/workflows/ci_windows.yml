@@ -66,6 +66,12 @@ jobs:
             -S${{github.workspace}} -G Ninja
             cmake --build ${{github.workspace}}/build/win_msvc_debug --config Debug --target all --
 
+
+        - name: Check DLL dependencies
+          run: |
+             "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29910\bin\Hostx64\x64\dumpbin.exe" /DEPENDENTS ${{github.workspace}}/build/win_msvc_debug/executable/OccConfig.exe
+          shell: cmd
+
         - name: Execute Unit Tests Debug
           working-directory: ${{github.workspace}}/build/win_msvc_debug
           shell: cmd
