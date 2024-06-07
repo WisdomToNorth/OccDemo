@@ -69,7 +69,7 @@ jobs:
 
         - name: Check DLL dependencies
           run: |
-             "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29910\bin\Hostx64\x64\dumpbin.exe" /DEPENDENTS ${{github.workspace}}/build/win_msvc_debug/executable/OccConfig.exe
+             "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x64\dumpbin.exe" /DEPENDENTS ${{github.workspace}}/build/win_msvc_debug/executable/OccConfig.exe
           shell: cmd
 
         - name: Execute Unit Tests Debug
