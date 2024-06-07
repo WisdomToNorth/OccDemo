@@ -70,7 +70,7 @@ jobs:
           working-directory: ${{github.workspace}}/build/win_msvc_debug
           shell: cmd
           env:
-            PATH: ${{env.PATH}};${{github.workspace}}\.github\win_occ\bin;${{github.workspace}}\occt-vc143-64\win64\vc14\bin
+              CTEST_OUTPUT_ON_FAILURE: 1
           run: |
               ctest -T test --output-on-failure -R
 
