@@ -8,10 +8,9 @@ build
 
 regressions/output
 regressions/Files
-user_setting.cmake
+WinUserSetting.cmake
 launch.json
 settings.json
-
 
 .VSCodeCounter/*
 .DS_Store

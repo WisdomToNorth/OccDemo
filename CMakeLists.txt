@@ -1,16 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
 
 if(WIN32)
-    message(STATUS "Windows, set user_setting.cmake")
-    set(USER_SET_FILE ${CMAKE_CURRENT_SOURCE_DIR}/user_setting.cmake)
+    set(USER_SET_FILE ${CMAKE_CURRENT_SOURCE_DIR}/WinUserSetting.cmake)
     if(NOT EXISTS ${USER_SET_FILE})
-        message(STATUS "Create user_setting.cmake")
         file(WRITE ${USER_SET_FILE} "# set(CMAKE_TOOLCHAIN_FILE D:/CODE/vcpkg/scripts/buildsystems/vcpkg.cmake)")
     endif()
     include(${USER_SET_FILE})
 endif()
-
-
 
 project(
   occdebuggger
@@ -23,39 +19,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 enable_language(C)
 
-
-
-# elseif(APPLE)
-#     find_package(Qt6 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
-#     set(Qt_LIBRARIES Qt6::Core Qt6::Widgets Qt6::Gui)
-#     set(Qt_LIBRARY_DIR ${Qt6_LIBRARY_DIR})
-#     set(Qt_INCLUDE_DIR ${Qt6_INCLUDE_DIRS})
-
-# elseif(UNIX)
-#     find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Gui)
-#     set(Qt_LIBRARIES Qt5::Core Qt5::Widgets Qt5::Gui)
-#     set(Qt_LIBRARY_DIR ${Qt5_LIBRARY_DIR})
-# endif()
-
-
-# QT
-# find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Widgets Gui REQUIRED)
-# find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets Gui REQUIRED)
-
-# set(Qt_LIBRARIES
-#     Qt${QT_VERSION_MAJOR}::Core
-#     Qt${QT_VERSION_MAJOR}::Widgets
-#     Qt${QT_VERSION_MAJOR}::Gui)
-
-# set(Qt_LIBRARY_DIR ${Qt${QT_VERSION_MAJOR}_LIBRARY_DIR})
-# set(Qt_INCLUDE_DIR ${Qt${QT_VERSION_MAJOR}_INCLUDE_DIRS})
-
-find_package(Boost REQUIRED COMPONENTS system)
-# find_package(Boost REQUIRED COMPONENTS system)
 find_package(GTest REQUIRED)
-find_package(spdlog CONFIG REQUIRED)
-find_package(FMT CONFIG REQUIRED)
-find_package(Eigen3 CONFIG REQUIRED)
 
 enable_testing()
 include(GoogleTest)
@@ -67,7 +31,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
 endif()
 
 include_directories(
-    ${Qt_INCLUDE_DIR}
     ${PROJECT_SOURCE_DIR}/src
 )
 
@@ -77,6 +40,8 @@ set(OCC_CONFIG_FILES
     src/public_function.cpp
     src/testdata.h
     src/lc_struct.h
+    threadpool.h
+    threadpool.cpp
     main.cpp
     )
 
@@ -85,9 +50,11 @@ add_executable(OccConfig ${OCC_CONFIG_FILES})
 target_include_directories(OccConfig
 PRIVATE
     ${PROJECT_SOURCE_DIR}/include
+    ${GTEST_INCLUDE_DIRS}
 )
 
 target_link_libraries(OccConfig
 PRIVATE
     ${Qt_LIBRARIES}
+    ${GTEST_LIBRARIES}
 )

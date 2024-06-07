@@ -7,33 +7,55 @@
 #include <sstream>
 #include <stack>
 #include <string>
+#include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
+#include <gtest/gtest.h>
+
 #include "lc_struct.h"
 #include "public_function.h"
+#include "threadpool.h"
 
 using namespace std;
 using namespace LeetCode;
 
-int main()
+int task1()
 {
-    std::vector<int> vec{1, 2, 3, 4, 5, 6, 7, 8, 9};
-    // remove number which is 7's multiple
-    vec.erase(std::remove_if(vec.begin(), vec.end(), [](int i) { return i % 7 == 0; }), vec.end());
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    return 1;
+}
 
-    std::vector<int> vec2{1, 2, 3, 4, 5, 6, 7, 8, 9};
+TEST(TestThreadPool, test1)
+{
+    std::cout << "hardware_concurrency: " << std::thread::hardware_concurrency() << '\n';
+    rfbase::ThreadPool pool;
+    for (int i = 0; i < 100; ++i)
+    {
+        auto res = pool.async(task1);
+    }
+    std::vector<std::future<int>> res;
+    for (int i = 0; i < 100; ++i)
+    {
+        res.emplace_back(pool.async(task1));
+    }
+    int sum = 0;
+    for (auto &i : res)
+    {
+        sum += i.get();
+    }
+    std::cout << "sum: " << sum << '\n';
+    EXPECT_EQ(sum, 100);
 
-    // find numbers both in vec and vec2
-    std::vector<int> vec3;
-    std::set_intersection(vec.begin(), vec.end(), vec2.begin(), vec2.end(),
-                          std::back_inserter(vec3));
+    for (int i = 0; i < 100; ++i)
+    {
+        task1();
+    }
+}
 
-    std::vector<int> vec4{1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-    // push vcet4 to vec
-    vec.insert(vec.end(), vec4.begin(), vec4.end());
-
-    return 0;
+int main(int argc, char *argv[])
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

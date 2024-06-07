@@ -19,32 +19,32 @@ jobs:
         #     cache: true
         #     cache-key-prefix: QtCache
 
-        # - name: Install brew and dependencies
-        #   run: |
-        #     brew install llvm
-        #     brew install assimp
-        #     brew install ompl
-        #     brew install opencascade
-        #     brew install orocos-kdl
-        #     brew install mesa
-        #     brew install spdlog
-        #     brew install eigen
-        #     brew install ninja
-        #     brew install googletest
-        #     brew install fmt
+        - name: Install brew and dependencies
+          run: |
+            brew install googletest
+        # brew install llvm
+        # brew install assimp
+        # brew install ompl
+        # brew install opencascade
+        # brew install orocos-kdl
+        # brew install mesa
+        # brew install spdlog
+        # brew install eigen
+        # brew install ninja
+        # brew install fmt
 
-        - name: Install boost
-          uses: MarkusJx/install-boost@v2.4.5
-          id: install-boost
-          with:
-            # REQUIRED: Specify the required boost version
-            # A list of supported versions can be found here:
-            # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
-            boost_version: 1.83.0
-            # OPTIONAL: Specify a platform version
-            platform_version: 14
-            # OPTIONAL: Specify a custom install location
-            boost_install_dir: ${{github.workspace}}
+        # - name: Install boost
+        #   uses: MarkusJx/install-boost@v2.4.5
+        #   id: install-boost
+        #   with:
+        #     # REQUIRED: Specify the required boost version
+        #     # A list of supported versions can be found here:
+        #     # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
+        #     boost_version: 1.83.0
+        #     # OPTIONAL: Specify a platform version
+        #     platform_version: 14
+        #     # OPTIONAL: Specify a custom install location
+        #     boost_install_dir: ${{github.workspace}}
 
         - name: Build Release
           working-directory: ${{github.workspace}}
@@ -62,3 +62,9 @@ jobs:
             -S${{github.workspace}} -G Ninja
             cmake --build ${{github.workspace}}/build/Mac_Ninja_Release --config Release --target all --
 
+
+        # CPU cost on mac is too expensive and the test errors are not able to reported. Forbid now.
+        - name: Execute Unit Tests Release
+          working-directory: ${{github.workspace}}/build/Mac_Ninja_Release
+          run: |
+            ctest -T test -j 4 -V
