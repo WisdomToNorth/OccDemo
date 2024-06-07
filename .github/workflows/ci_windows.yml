@@ -4,7 +4,7 @@ on:
     [push]
 
 jobs:
-    msvc-release:
+    msvc-debug:
         runs-on: windows-latest
 
         steps:
@@ -33,7 +33,7 @@ jobs:
             cd vcpkg_ci_env
             .\bootstrap-vcpkg.bat
             .\vcpkg integrate install
-            Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE release)"
+            Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE debug)"
             vcpkg install eigen3 --triplet x64-windows
             vcpkg install gtest --triplet x64-windows
             Remove-Item -Recurse -Force buildtrees
@@ -52,7 +52,7 @@ jobs:
 
 
 
-        - name: Build Release
+        - name: Build Debug
           working-directory: ${{github.workspace}}
           run: |
             cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
@@ -60,14 +60,14 @@ jobs:
             -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include `
             -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib `
             -DVCPKG_MANIFEST_MODE=OFF `
-            -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_STANDARD=20 `
+            -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_CXX_STANDARD=20 `
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe `
-            -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_release `
+            -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_debug `
             -S${{github.workspace}} -G Ninja
-            cmake --build ${{github.workspace}}/build/win_msvc_release --config Release --target all --
+            cmake --build ${{github.workspace}}/build/win_msvc_debug --config Debug --target all --
 
-        - name: Execute Unit Tests Release
-          working-directory: ${{github.workspace}}/build/win_msvc_release
+        - name: Execute Unit Tests Debug
+          working-directory: ${{github.workspace}}/build/win_msvc_debug
           shell: cmd
           env:
             PATH: ${{env.PATH}};${{github.workspace}}\.github\win_occ\bin;${{github.workspace}}\occt-vc143-64\win64\vc14\bin
