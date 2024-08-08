@@ -1,0 +1,7 @@
+{
+    "name": "Linux",
+    "remoteUser": "root",
+    "remoteEnv": {
+        "PATH": "/home/linuxbrew/.linuxbrew/bin:$PATH"
+    }
+}

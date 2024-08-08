@@ -1,0 +1,82 @@
+name: Windows
+
+on:
+    [push]
+
+jobs:
+    msvc-debug:
+        runs-on: windows-latest
+
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+
+        - name: Configure Compiler
+          uses: ilammy/msvc-dev-cmd@v1
+
+
+        - name: Cache Vcpkg Packages
+          id: vcpkg-cache
+          uses: actions/cache@v3
+          with:
+            path: vcpkg_ci_env
+            key: vcpkg-cache-windowsci
+            restore-keys: |
+              vcpkg-cache-windowsci
+
+        - name: Install Vcpkg
+          if: steps.vcpkg-cache.outputs.cache-hit != 'true'
+          shell: powershell
+          run: |
+            echo "VCPKG_ROOT=" >> $GITHUB_ENV
+            git clone https://github.com/Microsoft/vcpkg.git vcpkg_ci_env
+            cd vcpkg_ci_env
+            .\bootstrap-vcpkg.bat
+            .\vcpkg integrate install
+            Add-Content -Path .\triplets\x64-windows.cmake -Value "set(VCPKG_BUILD_TYPE debug)"
+            vcpkg install eigen3 --triplet x64-windows
+            vcpkg install gtest --triplet x64-windows
+            Remove-Item -Recurse -Force buildtrees
+            Remove-Item -Recurse -Force downloads
+            Remove-Item -Recurse -Force packages
+            Remove-Item -Recurse -Force ports
+            Remove-Item -Recurse -Force triplets
+            ls
+
+        - name: Create cmake toolchain file
+          working-directory: ${{github.workspace}}
+          shell: powershell
+          run: |
+            Set-Content -Path WinUserSetting.cmake -Value 'set(CMAKE_TOOLCHAIN_FILE D:/a/OccDemo/OccDemo/vcpkg_ci_env/scripts/buildsystems/vcpkg.cmake)'
+            echo "${{github.workspace}}\vcpkg_ci_env" >> $GITHUB_PATH
+
+
+
+        - name: Build Debug
+          working-directory: ${{github.workspace}}
+          run: |
+            cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+            cmake -DOpenCASCADE_DIR=${{github.workspace}}/occt-vc143-64/cmake `
+            -DBoost_INCLUDE_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}/include `
+            -DBoost_LIBRARY_DIRS=${{steps.install-boost.outputs.BOOST_ROOT}}/lib `
+            -DVCPKG_MANIFEST_MODE=OFF `
+            -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_CXX_STANDARD=20 `
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=cl.exe `
+            -DCMAKE_CXX_COMPILER=cl.exe -B${{github.workspace}}/build/win_msvc_debug `
+            -S${{github.workspace}} -G Ninja
+            cmake --build ${{github.workspace}}/build/win_msvc_debug --config Debug --target all --
+
+
+        - name: Check DLL dependencies
+          run: |
+             "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.30.30705\bin\Hostx64\x64\dumpbin.exe" /DEPENDENTS ${{github.workspace}}/build/win_msvc_debug/executable/OccConfig.exe
+          shell: cmd
+
+        - name: Execute Unit Tests Debug
+          working-directory: ${{github.workspace}}/build/win_msvc_debug
+          shell: cmd
+          env:
+              CTEST_OUTPUT_ON_FAILURE: 1
+          run: |
+              ctest -T test --output-on-failure -R
+
