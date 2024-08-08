@@ -1,0 +1,16 @@
+# Forder
+.vs/*
+.idea/*
+x64/*
+
+out
+build
+
+regressions/output
+regressions/Files
+WinUserSetting.cmake
+launch.json
+settings.json
+
+.VSCodeCounter/*
+.DS_Store
